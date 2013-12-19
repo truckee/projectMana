@@ -1,0 +1,12 @@
+{% if household.addresses|length > 0 %}
+{%for address in household.addresses%}
+<ul class="formblock">
+    <li><b>Address Type: </b>{{ address.addresstype.addresstype }}</li>
+    <li><b>Address:</b> {{ address.line1 }}{%if address.line2 is not null %}, {{ address.line2 }}{% endif%} 
+    {% if address.city is not null %}, {{ address.city }} {%endif %}
+    {% if address.county.county is defined %}, {{ address.county.county }} County{% endif %} 
+    {% if address.state.state is defined %}, {{ address.state.state }}{% endif %} {{ address.zip }}</li>
+</ul>
+{%endfor%}
+</table>
+{% endif %}

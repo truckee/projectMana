@@ -1,0 +1,51 @@
+<div class="section">Members</div>
+<p style="font-size: 9pt;">Note: Last name of <span class="head">head of household</span> cannot be changed.<br>Other members without a last name entered will be assigned the last name of the head of household.</p>
+{% if flags.v1 %}
+<div class="title">NOTICE: Head of household missing data MUST be corrected
+{% if not flags.oneMember %}
+    <br>Please select new head of household from included members
+{% endif %}
+</div>
+{% endif %}
+{% set member_error = false %}
+{% for member in form.members %}
+    {% if form_errors(member.fname) or form_errors(member.dob) or form_errors(member.sex) or form_errors(member.ethnicity) %}
+    {% set member_error = true %}
+    {% endif %}
+{% endfor %}
+{{ form_errors(form.members) }}
+<div class="errors">
+    {% if member_error == true %}Member errors below{% endif %}
+</div>
+{#{% if errorString is defined %}{{ errorString }}{% endif %}#}
+<input type="hidden" id="headId" name="household[headId]" value="{% if household.head is not null %}{{ household.head.id }}{% endif %}">
+<div id="member-list" data-prototype="{% filter escape %}{% include 'ManaClientBundle:Member:memberPrototype.html.twig' with {'form': form.members.vars.prototype} %}{% endfilter %}">
+{% for member in form.members %}
+    {% set isHead = false  %}
+    {% if member.vars.value.id == household.hohId %}
+        {% set isHead = true %}
+    {% endif %}
+    <div class="border" onclick="showHideIncludeHead()" >
+        <div class="errors">{{ form_errors(member.fname) }}
+{{ form_errors(member.dob) }}
+{{ form_errors(member.sex) }}
+{{ form_errors(member.ethnicity) }}</div>
+        <ul class="formblock" id="member-form">
+    {% if member.vars.value.include == '1' %}
+            <li id="radioHead"><b>Head?</b> <input class="smallform" type="radio" id="isHead" name="household[isHead]" 
+                                                   value="{% if formType == 'Add' %}{{ loop.index0 }}{% else %}{{ member.vars.value.id }}{% endif %}" {% if isHead == true %}checked="checked"{% endif %}>
+                <input type="hidden" name="household[members][{{loop.index0}}][id]" value="{{member.vars.value.id}}">
+            </li>
+    {#{% if formType != 'Add' %}#}
+            <li id="included"><b>Include? </b>{{ form_widget(member.include, {'attr': {'class':'smallform'}}) }}</li>
+    {#{% endif %}#}
+            {% include 'ManaClientBundle:Member:memberRequired.html.twig' %}
+            {% include 'ManaClientBundle:Member:memberNotRequired.html.twig' %}
+    {% else %}
+    {% include 'ManaClientBundle:Member:excluded.html.twig' %}
+    {% endif %}
+        </ul>
+    </div>
+{% endfor %}
+</div>
+<p><a class="smallbutton" href="#" id="add-member">Add member</a></p>

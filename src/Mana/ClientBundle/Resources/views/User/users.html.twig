@@ -1,0 +1,16 @@
+{% block users %}
+<div class="title">Edit user</div>
+    {% for person in users %}
+<div class="border">
+    <ul class="formblock">
+            <li><b>Username:</b> {{ person.username }}</li>
+            <li><b>Last name:</b> {{ person.sname }}</li>
+            <li><b>First name:</b> {{ person.fname }}</li>
+            <li><b>Enabled?</b> {% if person.isActive == 1 %}Yes{% else %}No{% endif %}</li>
+        <li colspan="4"><a class="tinybutton" href="{{ path('user_edit', {'id':person.id}) }}">User</a>
+                <a class="tinybutton" href="{{ path('pwd_edit', {'id':person.id}) }}">Password</a>
+            <a class="tinybutton" href="{{ path('user_delete', {'id':person.id}) }}">Delete</a></li>
+        </ul>
+        </div>
+    {% endfor %}
+{% endblock %}

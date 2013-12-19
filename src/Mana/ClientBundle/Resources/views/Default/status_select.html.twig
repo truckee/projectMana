@@ -1,0 +1,18 @@
+{% extends "ManaClientBundle:Default:layout.html.twig" %}
+{% form_theme form 'ManaClientBundle:Form:fields.html.twig' %}
+{% block body %}
+<div class="title">Change clients' status</div>
+<form method="post" action="{{ path('status_check') }}">
+<table class="width40">
+    <tr>
+        <td>For the year of last contact: {{ form_widget(form.years) }}</td>
+    </tr>
+    <tr>
+        <td>Change all clients to status Active = {{ form_widget(form.status) }}</td>
+    </tr>
+    <tr>
+        <td><input class="smallbutton" type="submit" value="Submit"></td>
+    </tr>
+</table>
+</form>
+{% endblock %}

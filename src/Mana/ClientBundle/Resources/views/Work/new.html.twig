@@ -1,0 +1,18 @@
+
+{% extends 'ManaClientBundle:Default:layout.html.twig' %}
+
+
+{% block body -%}
+<div class="title">Work creation</div>
+<div class="width40">
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('work') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+</div>
+{% endblock %}

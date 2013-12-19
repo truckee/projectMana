@@ -1,0 +1,47 @@
+
+{% extends 'ManaClientBundle:Default:layout.html.twig' %}
+
+
+{% block body -%}
+<div class="title">Reason list</div>
+<div class="width40">
+    
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Reason</th>
+                <th>Enabled</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('reason_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.reason }}</td>
+                <td>{% if entity.enabled %}Yes{%else%}No{%endif%}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('reason_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('reason_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('reason_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    </div>
+{% endblock %}

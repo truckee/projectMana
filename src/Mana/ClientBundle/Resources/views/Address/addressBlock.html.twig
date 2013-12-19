@@ -1,0 +1,14 @@
+<div class="section">Addresses</div>
+<div id="address-list" data-prototype="{% filter escape %}{% include 'ManaClientBundle:Address:address_prototype.html.twig' with {'form': form.addresses.vars.prototype} %}{% endfilter %}">
+{%for address in form.addresses%}
+    <ul class="formblock" id="address-form">
+    <li><b>Address type: </b>{{ form_widget(address.addresstype, {'attr': {'class':'smallform'}}) }} </li>
+    <li><b>Address: </b>{{ form_widget(address.line1, {'attr': {'class':'smallform'}}) }} {{ form_widget(address.line2, {'attr': {'class':'smallform'}}) }}</li>
+    <li><b>City: </b>{{ form_widget(address.city, {'attr': {'class':'smallform'}}) }}</li>
+    <li><b>County: </b>{{ form_widget(address.county, {'attr': {'class':'smallform'}}) }}</li>
+    <li><b>State: </b>{{ form_widget(address.state, {'attr': {'class':'smallform'}}) }}</li>
+    <li><b>Zip: </b>{{ form_widget(address.zip, {'attr': {'class':'smallform'}}) }}</li>
+    </ul>
+{%endfor%}
+</div>
+<p><a class="smallbutton" href="#" id="add-address">Add address</a></p>

@@ -1,0 +1,40 @@
+{% extends "ManaClientBundle:Default:layout.html.twig" %}
+{% block body %}
+<div class="column1">
+    <p class="section">Status changes</p>
+    <p>The active status of a household is useful when searching for or entering a new
+        head of household.  An inactive household is less likely to be a duplicate
+        of a new household. One may still access all of the data, though, of inactive households.
+        It just takes an extra step or two.</p>
+    <p>
+        The column to the right shows the active status and number of households
+        by the year of last contact.  To change the status of all households in 
+        a give year from Active to Inactive simply click on the radio button to the
+        right of the Active column.</p>
+    <p>Please be aware that changing status for many records can take a minute or more.</p>
+</div>
+<div class="column2">
+<style>.rightAlign td {text-align:right;}</style>
+<form action="{{ path('status_change') }}" method="post">
+<table class="rightAlign">
+    <tr>
+        <td>Year</td>
+        <td>Active</td>
+        <td>->Inactive</td>
+        <td>Inactive</td>
+        <td>->Active</td>
+    </tr>
+{% for key, year in statusYears %}
+    <tr>
+        <td>{{ key }}</td>
+        <td>{{ year.Active }}</td>
+        <td><input type="radio" name="status[{{ key }}]" value="inactive"></td>
+        <td>{{ year.Inactive }}</td>
+        <td><input type="radio" name="status[{{ key }}]" value="active"></td>
+    </tr>
+{% endfor %}
+</table>
+      <input type="submit" value="Submit"><input type="reset">
+</form>
+</div>
+{% endblock %}

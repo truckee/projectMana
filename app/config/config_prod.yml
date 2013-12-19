@@ -1,0 +1,18 @@
+imports:
+    - { resource: config.yml }
+
+monolog:
+    handlers:
+        mail:
+            type:         fingers_crossed
+            action_level: critical
+            handler:      buffered
+        buffered:
+            type:    buffer
+            handler: swift
+        swift:
+            type:       swift_mailer
+            from_email: vhost0@projectmana.org
+            to_email:   truckeetrout@yahoo.com
+            subject:    sym says YIKES!
+            level:      debug

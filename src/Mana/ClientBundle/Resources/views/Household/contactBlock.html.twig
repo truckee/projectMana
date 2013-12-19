@@ -1,0 +1,15 @@
+        {% if contacts|length > 0 %}
+        <div class="section">5 Most Recent Contacts</div>
+        <table class="width80">
+            <tr>
+                <td><b>Date:</b></td><td><b>Type:</b></td><td><b>Site:</b></td><td><b>County:</b></td>
+            </tr>
+            {% for i in 0..4 %}
+                {% if contacts[i] is defined %}
+            <tr><td>{{ contacts[i].contactDate|date('m/d/Y') }}</td>
+            <td>{{ contacts[i].contactDesc.contactDesc }}</td>
+            <td>{% if contacts[i].center is not null %}{{ contacts[i].center.center }}{% endif %}</td><td>{% if contacts[i].center is not null %}{{ contacts[i].center.county.county }}{% elseif contacts[i].county.county is not null %}{{ contacts[i].county.county }}{% endif %}</td>
+            </tr>    {% endif %}
+            {% endfor %}
+        </table>
+        {% endif %}
