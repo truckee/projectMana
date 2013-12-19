@@ -2,15 +2,15 @@ parameters:
     database_driver: pdo_mysql
     database_host: localhost
     database_port: null
-    database_name: projectmana
-    database_user: projectmana
-    database_password: OrangeWhite
+    database_name: db_name
+    database_user: db_user
+    database_password: db_password
     mailer_transport: smtp
     mailer_host: localhost
-    mailer_user: developer@bogus.info
-    mailer_password: aardvark
+    mailer_user: developer_email
+    mailer_password: mailer_password
     locale: en
-    secret: 34d3b18854545256088f00913e0e45a02f39708c
+    secret: something_very_secret
     database_path: null
     statistics.class: Mana\ClientBundle\Statistics\Statistics
     entity.manager: Doctrine\ORM\EntityManager
