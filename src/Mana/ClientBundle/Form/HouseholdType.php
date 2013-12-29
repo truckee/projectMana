@@ -60,7 +60,7 @@ class HouseholdType extends AbstractType {
                     'property' => 'center',
                     'constraints' => array(new NotBlank(array('message' => 'First site not selected')),),
                     'empty_value' => 'Select first site',
-                    'attr' => array("class" => "smallform"),
+//                    'attr' => array("class" => "smallform"),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
                                 ->orderBy('c.center', 'ASC')
@@ -250,13 +250,7 @@ class HouseholdType extends AbstractType {
             'cascade_validation' => true,
             'csrf_protection' => false,
             'required' => false,
-//            'validation_groups' => function(FormInterface $form) {
-//        $data = $form->getData();
-//        //arrivalMonth is null for new household only
-//        if (!is_null($data->getArrivalMonth())) {
-//            return array('full', 'Default');
-//        }
-//    },
+            'attr' => array("class" => "smallform"),
         ));
     }
 

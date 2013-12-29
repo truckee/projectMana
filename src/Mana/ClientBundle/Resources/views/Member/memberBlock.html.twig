@@ -37,7 +37,7 @@
                 <input type="hidden" name="household[members][{{loop.index0}}][id]" value="{{member.vars.value.id}}">
             </li>
     {#{% if formType != 'Add' %}#}
-            <li id="included"><b>Include? </b>{{ form_widget(member.include, {'attr': {'class':'smallform'}}) }}</li>
+            <li id="included"><b>Include? </b>{{ form_widget(member.include) }}</li>
     {#{% endif %}#}
             {% include 'ManaClientBundle:Member:memberRequired.html.twig' %}
             {% include 'ManaClientBundle:Member:memberNotRequired.html.twig' %}

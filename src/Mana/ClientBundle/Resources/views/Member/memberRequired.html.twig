@@ -1,8 +1,8 @@
-<li><b>First name: </b>{{ form_widget(member.fname, {'attr': {'class':'smallform'}}) }}</li>
-<li><b>Last name: </b>{{ form_widget(member.sname, {'attr': {'class':'smallform'}}) }}</li>
+<li><b>First name: </b>{{ form_widget(member.fname) }}</li>
+<li><b>Last name: </b>{{ form_widget(member.sname) }}</li>
 {# if dob is not present, this is v1 member as head of household #}
 {% if not flags.v1 or (flags.oneMember and flags.v1)  or (not isHead and flags.v1)%}
-<li><b>Date of birth<br>(mm/dd/yyyy): </b>{{ form_widget(member.dob, {'attr': {'class':'smallform'}}) }}</li>
-<li><br><b>Gender: </b>{{ form_widget(member.sex, {'attr': {'class':'smallform'}}) }}</li>
-<li><br><b>Ethnicity: </b>{{ form_widget(member.ethnicity, {'attr': {'class':'smallform'}}) }}</li>
+<li><b>Date of birth<br>(mm/dd/yyyy): </b>{{ form_widget(member.dob) }}</li>
+<li><br><b>Gender: </b>{{ form_widget(member.sex) }}</li>
+<li><br><b>Ethnicity: </b>{{ form_widget(member.ethnicity) }}</li>
 {% endif %}

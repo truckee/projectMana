@@ -2,7 +2,6 @@
 
 <html>
     <head>
-        {#{% include "ManaClientBundle:Default:jqueryBlock.html.twig" %}#}
         <meta Name="description"
               Content="Project M.A.N.A. aims to dramatically reduce the incidence of hunger and its effects on the communities on the north and west shores of Lake Tahoe and Truckee. We believe that adequate food for the maintenance of physical, emotional and mental health is a basic human right and in the overall best interest of our community.">
         <meta Name="keywords"
@@ -16,9 +15,11 @@
         <script src="{{ asset('js/foodstamps.js') }}" type="text/javascript"></script>
         <script src="{{ asset('js/mana.js') }}" type="text/javascript"></script>
         <script src="{{ asset('js/showHideHeadInclude.js') }}" type="text/javascript"></script>
-        {% stylesheets 'bundles/manaclient/css/*' filter='cssrewrite' %}
-        <link rel="stylesheet" href="{{ asset_url }}">
-        {% endstylesheets %}
+        {% block stylesheets %}
+            <link href="{{ asset('/css/cssframes.css') }}" rel="stylesheet" />
+            <link href="{{ asset('/css/mana.css') }}" rel="stylesheet" />
+            <link href="{{ asset('/css/tables.css') }}" rel="stylesheet" />
+        {% endblock %}
      </head>
     <body>
         <div id="wrap">

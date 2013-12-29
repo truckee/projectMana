@@ -18,6 +18,7 @@ class AddressType extends AbstractType {
                 ->add('addresstype', 'entity', array(
                     'class' => 'ManaClientBundle:AddressType',
                     'property' => 'addresstype',
+                    'attr' => array("class" => "smallform"),
                     'expanded' => false,
                     'empty_value' => '',
                     'error_bubbling'    => true,
@@ -30,11 +31,13 @@ class AddressType extends AbstractType {
                 ->add('line1', 'text', array(
                     'attr' => array(
                         'size' => 20,
+                        "class" => "smallform"
                     )
                 ))
                 ->add('line2', 'text', array(
                     'attr' => array(
                         'size' => 20,
+                        "class" => "smallform"
                     )
                 ))
                 ->add('city')
@@ -43,6 +46,7 @@ class AddressType extends AbstractType {
                     'property' => 'county',
                     'expanded' => false,
                     'empty_value' => 'County',
+                    'attr' => array("class" => "smallform"),
                     'error_bubbling'    => true,
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
@@ -55,6 +59,7 @@ class AddressType extends AbstractType {
                     'property' => 'state',
                     'expanded' => false,
                     'empty_value' => 'State',
+                    'attr' => array("class" => "smallform"),
                     'error_bubbling'    => true,
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('s')
@@ -65,6 +70,7 @@ class AddressType extends AbstractType {
                 ->add('zip', 'text', array(
                     'attr' => array(
                         'size' => 5,
+                        "class" => "smallform"
                     )
                 ))
                 ;
@@ -80,6 +86,7 @@ class AddressType extends AbstractType {
             'cascade_validation' => true,
             'csrf_protection' => false,
             'required' => false,
+            
         ));
     }
 }
