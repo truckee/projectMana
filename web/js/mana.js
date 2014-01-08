@@ -1,4 +1,3 @@
-var memberCount = $('#member-form').length;
 $(document).ready(function() {
     // for household members
     var memberList = $('#member-list');
@@ -6,16 +5,13 @@ $(document).ready(function() {
 
     $('#add-member').click(function() {
         //allow for adding members in client edit
-        var includeCount = $('#member-list li#included').length;
-        var excludeCount = $('#member-list li#excluded').length;
-        newMember = memberCount + includeCount + excludeCount;
-        //remove existing members correction
-        memberWidget = newMemberWidget.replace(/__name__/g, newMember);
+        var memberCount = $("ul[id^=member-]").length;
+        memberWidget = newMemberWidget.replace(/__name__/g, memberCount);
         memberList.append($(memberWidget));
         return false;
     });
 
-    // for househnold addresses
+    // for household addresses
     var addressCount = $('#address-form').length;
     var addressList = $('#address-list');
     var newAddressWidget = addressList.attr('data-prototype');

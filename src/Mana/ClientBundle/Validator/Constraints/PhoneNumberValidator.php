@@ -11,7 +11,7 @@ class PhoneNumberValidator extends ConstraintValidator
     {
 //        $now = new \DateTime();
         
-        if (!preg_match('/([0-9]{3})[ .-]([0-9]{4})/', $value)) {
+        if (!(preg_match('/([0-9]{3})[ .-]([0-9]{4})/', $value) || empty($value))) {
  
             $this->context->addViolation($constraint->message);
  

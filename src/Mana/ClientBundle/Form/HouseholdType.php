@@ -50,7 +50,7 @@ class HouseholdType extends AbstractType {
                 ))
                 ->add('arrivalmonth', new Type\MonthType(), array(
                     'empty_value' => false,
-                    'data' => date('n'),
+//                    'data' => date('n'),
                 ))
                 ->add('arrivalyear', new Type\YearType(), array(
                     'empty_value' => false,
@@ -64,7 +64,8 @@ class HouseholdType extends AbstractType {
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
                                 ->orderBy('c.center', 'ASC')
-                            ->where('c.enabled=1');
+//                            ->where('c.enabled=1')
+                                ;
                     },
                 ))
                 ->add('compliance', 'choice', array(
@@ -221,7 +222,7 @@ class HouseholdType extends AbstractType {
                             $dob = $member['dob'];
                             $sex = $member['sex'];
                             $ethnicity = $member['ethnicity'];
-                        } elseif ($member['id'] == $formerHeadId && is_null($member['dob'])) {
+                        } elseif ($member['id'] == $formerHeadId && !array_key_exists('dob', $member)) {
                             $v1 = true;
                         }
                     }

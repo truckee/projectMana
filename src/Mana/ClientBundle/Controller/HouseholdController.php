@@ -267,6 +267,7 @@ class HouseholdController extends Controller {
                 if ($member->getInclude() == 'No' && empty($excluded)) {
                     $member->setExcludeDate(new \DateTime);
                 }
+                $em->persist($member);
             }
             $em->persist($household);
             $em->flush();
