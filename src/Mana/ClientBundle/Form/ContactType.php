@@ -36,8 +36,7 @@ class ContactType extends AbstractType
                     'attr' => array("class" => "smallform"),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
-                                ->orderBy('c.center', 'ASC')
-                            ->where('c.enabled=1');
+                                ->orderBy('c.center', 'ASC');
                     },
                 ))
             ->add('household', 'choice', array(

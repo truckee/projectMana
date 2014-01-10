@@ -20,11 +20,11 @@ class CenterType extends AbstractType
             ->add('center', null, array(
                 'constraints' => array(new NotBlank(array('message' => 'Center may not be blank')),),
             ))
-            ->add('enabled', 'choice', array(
-                    'choices' => array(
-                1 => 'Yes',
-                0 => 'No')
-            ))
+//            ->add('enabled', 'choice', array(
+//                    'choices' => array(
+//                1 => 'Yes',
+//                0 => 'No')
+//            ))
                 ->add('county', 'entity', array(
                     'constraints' => array(new NotBlank(array('message' => 'County may not be blank')),),
                     'class' => 'ManaClientBundle:County',

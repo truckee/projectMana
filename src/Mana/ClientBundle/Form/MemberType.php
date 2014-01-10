@@ -19,7 +19,6 @@ class MemberType extends AbstractType {
                     'choices' => array(1 => 'Yes', 0 => 'No'),
                     'empty_value' => false,
                     'attr' => array("class" => "smallform"),
-//                    'data' => 1,
                 ))
                 ->add('fname', 'text', array(
                     'attr' => array(
@@ -52,8 +51,7 @@ class MemberType extends AbstractType {
                     'empty_value' => '',
                     'query_builder' => function(EntityRepository $er) {
                 return $er->createQueryBuilder('e')
-                        ->orderBy('e.abbreviation', 'ASC')
-                            ->where('e.enabled=1');
+                        ->orderBy('e.abbreviation', 'ASC');
             },
                 ))
                 ->add('offences', 'entity', array(
