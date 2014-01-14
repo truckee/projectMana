@@ -7,7 +7,7 @@
 <div class="errors">{{ form_errors(form.contactDate) }}
 {{ form_errors(form.contactDesc) }}</div>
 <div>
-    <form action="{{ path("contacts_add") }}" method="post">
+    <form id="latestContacts" action="{{ path("contacts_add") }}" method="post">
         <div class="column1">
             <table>
                 <tr>
