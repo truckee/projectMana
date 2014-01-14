@@ -4,7 +4,6 @@
 
 {% block body -%}
 <div class="title">Site list</div>
-<div class="title">Note: required field items cannot be disabled</div>
 <div class="width40">
     
     <table class="records_list">
@@ -12,7 +11,7 @@
             <tr>
                 <th>Id</th>
                 <th>Site</th>
-                <th>County</th>
+                <th>Enabled</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -21,7 +20,7 @@
             <tr>
                 <td><a href="{{ path('center_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.center }}</td>
-                <td>{{ entity.county.county }}</td>
+                <td>{% if entity.enabled %}Yes{%else%}No{%endif%}</td>
                 <td>
                 <ul>
                     <li>

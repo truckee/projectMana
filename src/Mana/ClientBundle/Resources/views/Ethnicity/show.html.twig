@@ -19,6 +19,10 @@
                 <th>Abbreviation</th>
                 <td>{{ entity.abbreviation }}</td>
             </tr>
+            <tr>
+                <th>Enabled</th>
+                <td>{% if entity.enabled %}Yes{%else%}No{%endif%}</td>
+            </tr>
         </tbody>
     </table>
 

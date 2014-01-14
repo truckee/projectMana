@@ -19,11 +19,11 @@ class EthnicityType extends AbstractType
             ->add('ethnicity', null, array(
                 'constraints' => array(new NotBlank(array('message' => 'Ethnicity may not be blank')),),
             ))
-//            ->add('enabled', 'choice', array(
-//                    'choices' => array(
-//                1 => 'Yes',
-//                0 => 'No')
-//            ))
+            ->add('enabled', 'choice', array(
+                    'choices' => array(
+                1 => 'Yes',
+                0 => 'No')
+            ))
             ->add('abbreviation', null, array(
                 'constraints' => array(new NotBlank(array('message' => 'Abbreviationeviation may not be blank')),),
             ))

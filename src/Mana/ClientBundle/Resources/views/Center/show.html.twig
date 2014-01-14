@@ -17,8 +17,8 @@
                 <td>{{ entity.center }}</td>
             </tr>
             <tr>
-                <th>County</th>
-                <td>{{ entity.county.county }}</td>
+                <th>Enabled</th>
+                <td>{% if entity.enabled %}Yes{%else%}No{%endif%}</td>
             </tr>
         </tbody>
     </table>
