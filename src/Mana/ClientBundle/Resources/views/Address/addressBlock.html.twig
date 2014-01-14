@@ -1,6 +1,10 @@
 <div class="section">Addresses</div>
 <div id="address-list" data-prototype="{% filter escape %}{% include 'ManaClientBundle:Address:address_prototype.html.twig' with {'form': form.addresses.vars.prototype} %}{% endfilter %}">
 {%for address in form.addresses%}
+    <div class="errors">
+        {{ form_errors(address.line1) }}
+        {{ form_errors(address.city) }}
+    </div>
     <ul class="formblock" id="address-form">
     <li><b>Address type: </b>{{ form_widget(address.addresstype) }} </li>
     <li><b>Address: </b>{{ form_widget(address.line1) }} {{ form_widget(address.line2) }}</li>

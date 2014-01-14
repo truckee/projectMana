@@ -183,3 +183,13 @@ function showContactSubmitButton() {
 function col2Reset() {
     $("#column2").height(400);
 }
+function submitTest() {
+
+$(document).keypress(function(e) {
+  if(e.which === 13) {
+    alert('Enter pressed');
+  }
+});
+
+    
+}

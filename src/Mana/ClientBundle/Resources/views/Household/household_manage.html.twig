@@ -5,11 +5,10 @@
 <div class="title">Household {{formType}}<br>
     ID: {{household.id}}; Head: {{household.head.fname}} {{household.head.sname}}</div>
 <div class="errors">
-{% for phone in form.phones %} 
-{{ form_errors(phone.phoneNumber) }} 
-{{ form_errors(phone.areacode) }} 
-{% endfor %}
-{{ form_errors(form.complianceDate) }}{{ form_errors(form.sharedDate) }}</div>
+    {% if hasErrors %}
+    Please correct errors below
+    {%endif%}
+</div>
 {% if formType != 'Add' %}
     <form action="{{ path('household_edit', { 'id': household.id }) }}" method="post">
 {% else %}

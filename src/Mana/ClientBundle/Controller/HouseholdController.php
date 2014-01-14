@@ -237,6 +237,11 @@ class HouseholdController extends Controller {
             $id = $member->getId();
             $idArray[$id] = $id;
         }
+        
+        if (count($household->getPhones()) == 0) {
+            $phone = new Phone();
+            $household->addPhone($phone);
+        }
 
         $flags['oneMember'] = (count($members) == 1);
         $flags['newHead'] = ($newHeadId <> $formerHeadId);
@@ -273,6 +278,10 @@ class HouseholdController extends Controller {
             $em->flush();
             return $this->redirect($this->generateUrl('household_show', array('id' => $household->getId())));
         }
+        $hasErrors = false;
+        if ($request->getMethod() == 'POST') {
+            $hasErrors = true;
+        }
         $errorString = $form->getErrorsAsString();
         return array(
             'form' => $form->createView(),
@@ -281,6 +290,7 @@ class HouseholdController extends Controller {
             'household' => $household,
             'flags' => $flags,
             'errorString' => $errorString,
+            'hasErrors' => $hasErrors,
         );
     }
 

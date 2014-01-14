@@ -7,29 +7,19 @@
 {% endif %}
 </div>
 {% endif %}
-{% set member_error = false %}
-{% for member in form.members %}
-    {% if form_errors(member.fname) or form_errors(member.dob) or form_errors(member.sex) or form_errors(member.ethnicity) %}
-    {% set member_error = true %}
-    {% endif %}
-{% endfor %}
-{{ form_errors(form.members) }}
-<div class="errors">
-    {% if member_error == true %}Member errors below{% endif %}
-</div>
-{#{% if errorString is defined %}{{ errorString }}{% endif %}#}
 <input type="hidden" id="headId" name="household[headId]" value="{% if household.head is not null %}{{ household.head.id }}{% endif %}">
 <div id="member-list" data-prototype="{% filter escape %}{% include 'ManaClientBundle:Member:memberPrototype.html.twig' with {'form': form.members.vars.prototype} %}{% endfilter %}">
 {% for member in form.members %}
+    <div class="errors">{{ form_errors(member.fname) }}
+{{ form_errors(member.dob) }}
+{{ form_errors(member.sex) }}
+{{ form_errors(member.ethnicity) }}</div>
     {% set isHead = false  %}
     {% if member.vars.value.id == household.hohId %}
         {% set isHead = true %}
     {% endif %}
     <div class="border" onclick="showHideIncludeHead()" >
-        <div class="errors">{{ form_errors(member.fname) }}
-{{ form_errors(member.dob) }}
-{{ form_errors(member.sex) }}
-{{ form_errors(member.ethnicity) }}</div>
+
         <ul class="formblock" id="member-form">
     {% if member.vars.value.include == '1' %}
             <li id="radioHead"><b>Head?</b> <input class="smallform" type="radio" id="isHead" name="household[isHead]" 

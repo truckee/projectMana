@@ -3,6 +3,7 @@
 namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Address
@@ -25,6 +26,7 @@ class Address
      * @var string
      *
      * @ORM\Column(name="line1", type="string", length=45, nullable=true)
+     * @Assert\NotBlank(message = "Address may not be blank")
      */
     protected $line1;
 
@@ -35,10 +37,12 @@ class Address
      */
     protected $line2;
 
+//    @Assert\NotBlank(message = "City may not be blank")
     /**
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=45, nullable=true)
+     * @Assert\NotBlank(message = "City may not be blank")
      */
     protected $city;
 
@@ -59,7 +63,7 @@ class Address
     /**
      * @var \Mana\ClientBundle\Entity\Household
      *
-     * @ORM\ManyToOne(targetEntity="Mana\ClientBundle\Entity\Household", inversedBy="addresses")
+     * @ORM\ManyToOne(targetEntity="Mana\ClientBundle\Entity\Household", inversedBy="addresses", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="household_id", referencedColumnName="id")
      * })

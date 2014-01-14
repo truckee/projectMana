@@ -20,8 +20,6 @@ class AddressType extends AbstractType {
                     'property' => 'addresstype',
                     'attr' => array("class" => "smallform"),
                     'expanded' => false,
-                    'empty_value' => '',
-                    'error_bubbling'    => true,
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('a')
                                 ->orderBy('a.id', 'ASC')
@@ -45,9 +43,8 @@ class AddressType extends AbstractType {
                     'class' => 'ManaClientBundle:County',
                     'property' => 'county',
                     'expanded' => false,
-                    'empty_value' => 'County',
+                    'empty_value' => '',
                     'attr' => array("class" => "smallform"),
-                    'error_bubbling'    => true,
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
                                 ->orderBy('c.county', 'ASC')
@@ -58,9 +55,8 @@ class AddressType extends AbstractType {
                     'class' => 'ManaClientBundle:State',
                     'property' => 'state',
                     'expanded' => false,
-                    'empty_value' => 'State',
+                    'empty_value' => '',
                     'attr' => array("class" => "smallform"),
-                    'error_bubbling'    => true,
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('s')
                                 ->orderBy('s.state', 'ASC')
@@ -83,7 +79,6 @@ class AddressType extends AbstractType {
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'Mana\ClientBundle\Entity\Address',
-            'cascade_validation' => true,
             'csrf_protection' => false,
             'required' => false,
             

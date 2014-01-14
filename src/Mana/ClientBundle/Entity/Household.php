@@ -108,6 +108,7 @@ class Household {
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\OneToMany(targetEntity="Address", mappedBy="household",cascade={"persist"})
+     * @Assert\Valid
      */
     protected $addresses;
 

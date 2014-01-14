@@ -1,13 +1,17 @@
 <div class="section">Household</div>
-{#{{ errorString }}#}
+<div class="errors">
+{% for phone in form.phones %} 
+{{ form_errors(phone.phoneNumber) }} 
+{{ form_errors(phone.areacode) }} 
+{% endfor %}
+</div>
 <ul class="formblock">
     <li><b>ID:</b> {{ household.id }}</li>
     <li id="dateAdded"><b>Date added:</b> {% if household.dateAdded is not null %}{{ household.dateAdded|date('m/d/Y') }}<input type="hidden" name="household[dateAdded]" value="{{ household.dateAdded|date('m/d/Y') }}">{% endif %}</li>
     <li><b>Active?:</b> {{ form_widget(form.active) }}</li>
-{#    <li><b>Pregnancy<br>in household?:</b>{{ form_widget(form.pregnant) }}</li>
-    <li><b>Special needs<br>in household?: </b>{{ form_widget(form.specialneed) }}</li>
-    <li><b>WIC: </b>{{ form_widget(form.wic) }}</li>#}
-    <li><b>Phone: </b>{% for phone in form.phones %}({{ form_widget(phone.areacode) }}) {{ form_widget(phone.phoneNumber) }}{% endfor %}</li>
+    <li><b>Phone: </b>{% for phone in form.phones %}
+        ({{ form_widget(phone.areacode) }}) {{ form_widget(phone.phoneNumber) }}
+{% endfor %}</li>
     <li><b>Food stamps?</b>{{ form_widget(form.foodStamps) }} 
     {{ form_label(form.fsamount) }}{{ form_widget(form.fsamount) }}
     {{ form_label(form.notfoodstamp) }}{{ form_widget(form.notfoodstamp) }} 

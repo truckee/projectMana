@@ -25,7 +25,6 @@ class ContactType extends AbstractType
                 ))
             ->add('contactDate', 'date', array(
                 'format' => 'M/d/y',
-                'data' => date_create(),
                 'label' => '<b>Date:</b> ',
                 'years' => range(date('Y'), date('Y') - 5),
             ))

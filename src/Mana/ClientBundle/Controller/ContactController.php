@@ -129,25 +129,30 @@ class ContactController extends Controller {
             $contactCenter = $data->getCenter();
             $contactDesc = $data->getContactDesc();
             $n = count($households);
-            foreach ($households as $id) {
-                $household = $em->getRepository('ManaClientBundle:Household')->find($id);
-                $houseContacts = $household->getContacts();
-                $nContacts = count($houseContacts);
-                $first = ($nContacts > 0) ? 0 : 1;
-                $county = $contactCenter->getCounty();
-                $contact = new Contact();
-                $contact->setContactDate($contactDate);
-                $contact->setCenter($contactCenter);
-                $contact->setContactDesc($contactDesc);
-                $contact->setCounty($county);
-                $contact->setFirst($first);
-                $household->addContact($contact);
-                $em->persist($household);
+            if ($n !== 0) {
+                foreach ($households as $id) {
+                    $household = $em->getRepository('ManaClientBundle:Household')->find($id);
+                    $houseContacts = $household->getContacts();
+                    $nContacts = count($houseContacts);
+                    $first = ($nContacts > 0) ? 0 : 1;
+                    $county = $contactCenter->getCounty();
+                    $contact = new Contact();
+                    $contact->setContactDate($contactDate);
+                    $contact->setCenter($contactCenter);
+                    $contact->setContactDesc($contactDesc);
+                    $contact->setCounty($county);
+                    $contact->setFirst($first);
+                    $household->addContact($contact);
+                    $em->persist($household);
+                }
+                $em->flush();
+                $message = "$n $desc contacts added for $center";
+            } else {
+                $message = 'No contacts were added';
             }
-            $em->flush();
             $center = $contactCenter->getCenter();
             $desc = $contactDesc->getContactDesc();
-            $message = "$n $desc contacts added for $center";
+            
         }
         return array(
             'form' => $form->createView(),
@@ -242,8 +247,9 @@ class ContactController extends Controller {
             }
             return array('multi' => $multi,
                 'title' => 'Multiple contacts',
-                );
+            );
         }
         return array();
     }
+
 }
