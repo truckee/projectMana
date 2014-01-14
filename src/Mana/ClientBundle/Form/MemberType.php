@@ -53,7 +53,8 @@ class MemberType extends AbstractType {
                     'query_builder' => function(EntityRepository $er) {
                 return $er->createQueryBuilder('e')
                         ->orderBy('e.abbreviation', 'ASC')
-                            ->where('e.enabled=1');
+//                            ->where('e.enabled=1')
+                        ;
             },
                 ))
                 ->add('offences', 'entity', array(

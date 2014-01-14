@@ -20,7 +20,8 @@ class ContactType extends AbstractType
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
                                 ->orderBy('c.contactDesc', 'ASC')
-                            ->where('c.enabled=1');
+//                            ->where('c.enabled=1')
+                                ;
                     },
                 ))
             ->add('contactDate', 'date', array(
@@ -36,7 +37,8 @@ class ContactType extends AbstractType
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
                                 ->orderBy('c.center', 'ASC')
-                            ->where('c.enabled=1');
+//                            ->where('c.enabled=1')
+                                ;
                     },
                 ))
             ->add('household', 'choice', array(
