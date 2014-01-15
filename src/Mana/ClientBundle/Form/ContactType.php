@@ -20,13 +20,11 @@ class ContactType extends AbstractType
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
                                 ->orderBy('c.contactDesc', 'ASC')
-//                            ->where('c.enabled=1')
                                 ;
                     },
                 ))
             ->add('contactDate', 'date', array(
                 'format' => 'M/d/y',
-                'label' => '<b>Date:</b> ',
                 'years' => range(date('Y'), date('Y') - 5),
             ))
             ->add('center', 'entity', array(
@@ -37,7 +35,6 @@ class ContactType extends AbstractType
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
                                 ->orderBy('c.center', 'ASC')
-//                            ->where('c.enabled=1')
                                 ;
                     },
                 ))

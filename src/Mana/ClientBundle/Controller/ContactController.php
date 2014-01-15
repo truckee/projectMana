@@ -118,7 +118,8 @@ class ContactController extends Controller {
      * @Template("ManaClientBundle:Contact:latestContacts.html.twig")
      */
     public function addContactsAction(Request $request) {
-        $form = $this->createForm(new ContactType());
+        $contact = new Contact();
+        $form = $this->createForm(new ContactType(), $contact);
         $form->handleRequest($request);
         $message = "";
         if ($form->isValid()) {

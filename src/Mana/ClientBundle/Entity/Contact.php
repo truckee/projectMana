@@ -15,6 +15,10 @@ use Mana\ClientBundle\Validator\Constraints as ManaAssert;
  */
 class Contact
 {
+    
+    public function __construct() {
+        $this->contactDate = new \DateTime();
+    }
     /**
      * @var integer
      *
