@@ -1,0 +1,43 @@
+html, body {
+    margin:0;
+    padding:0;
+    height:100%; /* 100 % height */
+}
+
+html>body #wrap {
+    height:100%;
+} /* 100 % height */
+
+#header {
+    width:100%;
+    height:6em;
+}
+
+html>body #header {
+    position:fixed;
+    background-color: #FFFFFF;
+    z-index:10; /* Prevent certain problems with form controls */
+}
+
+html>body #content-wrap {
+    height:100%;
+} /* 100 % height */
+
+html>body #content {
+/*    float: right;*/
+    padding:7em 2em 7em 0;
+    margin-left: 180px;
+} /* 6em = height of #header and #footer + 1em, 1em = give the content some breathing space */
+
+#footer {
+    width:100%;
+    height:6em;
+    background-color: #FFFFFF;
+}
+
+html>body #footer {
+    clear: both;
+    position:fixed;
+    bottom:0;
+    z-index:10; /* Prevent certain problems with form controls */
+}
