@@ -1,0 +1,29 @@
+mana_household:
+    resource: "@ManaClientBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+login_check:
+    pattern:   /login_check
+
+login_path:
+  pattern: /login
+
+logout:
+    pattern:   /logout
+
+root:
+    pattern: /
+    defaults:  { _controller: ManaClientBundle:Default:index }
+       
+home:
+    pattern: /home
+    defaults:  { _controller: ManaClientBundle:Default:index }
+# Internal routing configuration to handle ESI
+# ****** WARNING ******
+# This route should be enabled with caution as it can open a security vulnerability
+# see http://symfony.com/blog/security-release-symfony-2-0-20-and-2-1-5-released for more information
+# ****** WARNING ******
+#_internal:
+#    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
+#    prefix:   /_internal

@@ -1,0 +1,32 @@
+{% extends "ManaClientBundle:Default:layout.html.twig" %}
+{% form_theme form 'ManaClientBundle:Form:fields.html.twig' %}
+{% block body %}
+<div class="title">Edit user: {{ user.username }}</div>
+    {{ form_errors(form) }}
+    {{ form_errors(form.fname) }}
+    {{ form_errors(form.sname) }}
+    <div style="margin-left:25%;">
+    <form method="post" action="{{ path('user_update', {'id': user.id}) }}">
+        <table style="margin:0 5em;">
+        <tr>
+            <td>{{ form_widget(form.isActive) }}
+        <tr>
+            <td>First name: <font color="green">(req'd) </font>{{ form_widget(form.fname) }}
+        <tr>
+            <td>Last name: <font color="green">(req'd) </font>{{ form_widget(form.sname) }}</td>
+        <tr>
+            <td>E-mail: {{ form_widget(form.email) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_widget(form.role) }}</td>
+        </tr>
+        <tr>
+            <td><input class="smallbutton" type="submit" value="Submit"> <input class="smallbutton" type="reset" name="reset" value="Cancel" onclick="history.go(-1);return false;"></td>
+        </tr>
+    </table>
+ </form>
+</div>
+{% endblock %}
+{% block menu %}
+{{ knp_menu_render('ManaClientBundle:Builder:adminMenu') }}
+{% endblock menu %}

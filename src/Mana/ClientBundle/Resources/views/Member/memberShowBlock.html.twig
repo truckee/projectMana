@@ -1,0 +1,21 @@
+<div class="section">Members</div>
+{% for member in household.members %}
+{% if member.id == household.hohId %}{% set isHead = true %}{% else %}{% set isHead = false %}{% endif %}
+<div class="border">
+    <ul class="formblock">
+        <li {% if isHead %}id="headShow"{% endif %}>{% if isHead %}<b>Head </b>{%else%}<b>Include: </b>{% if member.include == 1 %}Yes{%else%}No{%endif%}{% endif%}</li>
+        <li><b>First name:</b> {{ member.fname }}</li>
+        <li><b>Last name:</b> {{ member.sname }}</li>
+        <li><b>Date of birth<br>(mm/dd/yyyy):</b> {% if member.dob %}{{ member.dob|date('m/d/Y') }}{% endif %}</li>
+        <li><b>Gender:</b> {{ member.sex }}</li>
+        <li><b>Ethnicity:</b> {{ member.ethnicity.abbreviation }}</li>
+        <li><br><b>Relation:</b> {% if member.relation is not null %}{{ member.relation.relation }}{% endif %}</li>
+        <li><br><b>Work:</b> {% if member.work is not null %}{{ member.work.work }}{% endif %}</li>
+        {% set n = member.offences|length %}{% for offence in member.offences if n > 0 and isHead %}<li><b>Offences:</b> 
+{{offence.offence}}{% if loop.index < n %}, {% endif %}</li>{% endfor %}
+        {#<li><br><b>Insurance:</b> {% if member.insurance is not null %}{{ member.insurance.insurance }}{% endif %}</li>
+        <li><br><b>Shots:</b> {% if member.shots is not null %}{{ member.shots.shots }}{% endif %}</li>#}
+        {% if member.excludeDate is not null %}<li>{{ member.excludeDate|date('m/d/Y') }}</li>{% endif %}
+    </ul>
+</div>
+{% endfor %}

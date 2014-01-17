@@ -1,0 +1,31 @@
+{# src/Mana/ClientBundle/Resources/views/Member/match_results.html.twig #}
+{% extends "ManaClientBundle:Default:layout.html.twig" %}
+{% block body %}
+
+<div align="center">
+    <div class="title">Add new head of house or view existing households</div>
+    <p>* = Household is inactive</p>
+        <table class="width80">
+            <tr>
+                <td class="searchbody" width="5%">Select<br>one</td>
+                <td class="searchbody" width="5%">ID</td>
+                <td class="searchbody" width="20%">Name/Head</td>
+                <td class="searchbody" width="10%">DOB</td>
+                <td class="searchbody" width="60%">Address</td>
+            </tr>
+            <tr>
+                <td colspan="5" class="section">New Member
+            <tr>
+                <td class="searchbody"><a class="tinybutton" href="{{ path('household_add') }}">Select</a></td>
+                <td class="searchbody">
+                <td class="searchbody">{{ newadd.sname }}, {{ newadd.fname }}</td>
+                <td class="searchbody">{{ newadd.dob|date('m/d/Y') }}</td>
+                <td class="searchbody">&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="5" class="section">Possible matches
+            </tr>
+{% include "ManaClientBundle:Household:matchBlock.html.twig" %}
+        </table>
+</div>
+{% endblock %}

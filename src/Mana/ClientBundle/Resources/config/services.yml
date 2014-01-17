@@ -1,0 +1,17 @@
+services:
+  form.type.dob_age:
+    class: Mana\ClientBundle\Form\Type\DobAgeType
+    tags:
+      - {name:form.type, alias:dob_age}
+  searches:
+    class: Mana\ClientBundle\Utilities\Searches
+    arguments: 
+      em: @doctrine.orm.entity_manager
+  reports:
+    class: Mana\ClientBundle\Utilities\Reports
+    arguments:
+      conn: @doctrine.dbal.default_connection
+  status:
+    class: Mana\ClientBundle\Utilities\Status
+    arguments:
+      conn: @doctrine.dbal.default_connection

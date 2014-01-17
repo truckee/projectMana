@@ -1,0 +1,25 @@
+{% extends "ManaClientBundle:Default:layout.html.twig" %}
+{% block body %}
+<table class="width80">
+    <tr>
+        <td colspan="5" class="section">Multiple Same Date Contacts</td>
+    </tr>
+    <tr>
+        <td>ID</td>
+        <td>Head of household</td>
+        <td>Site</td>
+        <td>Date</td>
+        <td>Contact</td>
+    </tr>
+    {#{{ dump(multi) }}#}
+{% for contact in multi %}
+    <tr>
+        <td>{{ contact.id }}</td>
+        <td>{{ contact.fname }} {{ contact.sname }}</td>
+        <td>{{ contact.center }}</td>
+        <td>{{ contact.contact_date }}</td>
+        <td>{{ contact.contact_desc }}</td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,36 @@
+<pdf>
+    <dynamic-page>
+        <placeholders>
+            <header>
+                <div height="110px" width="100%">
+                    <div text-align="center" font-size="14"><p><b>Latest Contacts for {{ center }} on {{ date|date('m/d/Y') }}</b></p></div>
+                </div>
+            </header>
+            <footer>
+                <div height="20px" text-align="center">
+                    <page-info offset="0" format="Page %s of %s" />
+                </div>
+            </footer>
+        </placeholders>
+        <div margin="0 100">
+            <table class="contact">
+                <tr>
+                    <td></td>
+                    <td>Name</td>
+                    <td>ID</td>
+                    <td>DOB</td>
+                </tr>
+{% for member in roster %}
+                <tr>
+                    <td width="20"><img src="{{ pdf_image('ManaClientBundle:unchecked.png') }}" /></td>
+                    <td>{{ member.head }}</td>
+                    <td>{{ member.id }}</td>
+                    <td>{% if member.dob is not empty %}{{ member.dob|date('m/d/Y') }}{% else %}___________{% endif %}</td>
+                </tr>
+{% endfor %}
+            </table>
+            <br />
+
+        </div>
+    </dynamic-page>
+</pdf>

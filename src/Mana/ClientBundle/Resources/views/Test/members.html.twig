@@ -1,0 +1,14 @@
+<table>
+    <tr>
+        <td>Household ID</td>
+        <td>Name</td>
+        <td>Head of houehold</td>
+    </tr>
+{% for member in found %}
+    <tr>
+        <td>{{ member.household.id }}</td>
+        <td>{{ member.fname }} {{ member.sname }}</td>
+        <td>{{ member.household.head.fname }} {{ member.household.head.sname }}</td>
+    </tr>
+{% endfor  %}
+</table>

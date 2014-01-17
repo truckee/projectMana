@@ -1,0 +1,25 @@
+<div class="section">Household</div>
+<div class="errors">
+{% for phone in form.phones %} 
+{{ form_errors(phone.phoneNumber) }} 
+{{ form_errors(phone.areacode) }} 
+{% endfor %}
+</div>
+<ul class="formblock">
+    <li><b>ID:</b> {{ household.id }}</li>
+    <li id="dateAdded"><b>Date added:</b> {% if household.dateAdded is not null %}{{ household.dateAdded|date('m/d/Y') }}<input type="hidden" name="household[dateAdded]" value="{{ household.dateAdded|date('m/d/Y') }}">{% endif %}</li>
+    <li><b>Active?:</b> {{ form_widget(form.active) }}</li>
+    <li><b>Phone: </b>{% for phone in form.phones %}
+        ({{ form_widget(phone.areacode) }}) {{ form_widget(phone.phoneNumber) }}
+{% endfor %}</li>
+    <li><b>Food stamps?</b>{{ form_widget(form.foodStamps) }} 
+    {{ form_label(form.fsamount) }}{{ form_widget(form.fsamount) }}
+    {{ form_label(form.notfoodstamp) }}{{ form_widget(form.notfoodstamp) }} 
+    </li>
+    <li><b>{{ form_label(form.incomeSource) }}: </b>{{ form_widget(form.incomeSource, {'attr': {'class':'smallform-checkbox'}}) }}</li>
+    <li><b>Income: </b>{{ form_widget(form.income) }}</li>
+    <li><b>Housing: </b>{{ form_widget(form.housing) }}</li>
+    <li><b>{{ form_label(form.appliances) }}: </b>{{ form_widget(form.appliances, {'attr': {'class':'smallform-checkbox'}}) }}</li>
+    <li><b>{{ form_label(form.reasons) }}: </b>{{ form_widget(form.reasons, {'attr': {'class':'smallform-checkbox'}}) }}</li>
+    <li></li>
+</ul>

@@ -1,0 +1,10 @@
+{% extends "ManaClientBundle:Default:layout.html.twig" %}
+{% block body %}
+<form method="post" action="{{ path('status_update') }}">
+    <input type="hidden" name="status" value="{{ status }}">
+    <input type="hidden" name="year" value="{{ year }}">
+<div class="title">Confirm status change</div>
+<div align="center">Confirm change status of {{ n }} clients to {{ status }} for last contact year {{ year }}</div>
+<div align="center"><input class="smallbutton" type="submit" name="submit" value="Confirm"> <input class="smallbutton" type="reset" name="reset" value="Cancel" onclick="history.go(-1);return false;">
+</form>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% for key,data in details.details %}
+<div class="section60">{{ key }}</div>
+<table class="width60">
+    <tr>
+        <td></td>
+        <td>Unique<br>Individuals<br>Served</td>
+        <td>Total<br>Individuals<br>Served</td>
+        <td>Unique<br>Households<br>Served</td>
+        <td>Total<br>Households<br>Served</td>
+    </tr>
+{% for key, type in data %}
+    <tr>
+        <td>{{ key }}</td>
+        {#<td>{{ dump(type) }}</td#}>
+        <td>{{ type.uniqInd }}</td>
+        <td>{{ type.totalInd }}</td>
+        <td>{{ type.uniqHouse }}</td>
+        <td>{{ type.totalHouse }}</td>
+    </tr>
+{% endfor %}
+</table>
+{% endfor %}

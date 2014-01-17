@@ -1,0 +1,18 @@
+
+{% extends 'ManaClientBundle:Default:layout.html.twig' %}
+
+
+{% block body -%}
+<div class="title">Appliance creation</div>
+<div class="width40">
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('appliance') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+</div>
+{% endblock %}

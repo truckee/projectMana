@@ -1,0 +1,14 @@
+/logs/
+/nbproject/
+/sql/
+/src/Mana/ClientBundle/HoldingPen/
+/web/bundles/
+/app/bootstrap*
+/app/cache/*
+/app/logs/*
+/vendor/
+/app/config/parameters.yml
+/web/
+/clearcache.cmd
+/w.cmd
+/bin/

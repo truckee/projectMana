@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<root>
+    <id>{{ household.id }}</id>
+    <name>{{ household.head.fname }} {{ household.head.sname }}</name>
+    <dob>{% if household.head.dob is not null %}{{ household.head.dob|date('m/d/Y') }}{% endif %}</dob>
+    <code>{% if code != "" %}{{code}}{% endif %}</code>
+{% for member in household.members if member.id != household.hohId %}
+    <member>
+        <name>{{ member.fname }} {{ member.sname }}</name>
+        <dob>{% if member.dob is not null %}{{ member.dob|date('m/d/Y') }}{% endif %}</dob>
+    </member>
+{% endfor %}
+</root>

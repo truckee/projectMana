@@ -1,0 +1,24 @@
+{% extends "ManaClientBundle:Default:layout.html.twig" %}
+{% form_theme form 'ManaClientBundle:Form:fields.html.twig' %}
+{% block body %}
+{#{{ errorString }}#}
+<div class="title">Household {{formType}}<br>
+    ID: {{household.id}}; Head: {{household.head.fname}} {{household.head.sname}}</div>
+<div class="errors">
+    {% if hasErrors %}
+    Please correct errors below
+    {%endif%}
+</div>
+{% if formType != 'Add' %}
+    <form action="{{ path('household_edit', { 'id': household.id }) }}" method="post">
+{% else %}
+    <form action="{{ path("household_create") }}" method="post">
+{% endif %}
+{% include "ManaClientBundle:Member:memberBlock.html.twig" %}
+{% include "ManaClientBundle:Address:addressBlock.html.twig" %}
+{% include "ManaClientBundle:Household:householdBlock.html.twig" %}
+{% include "ManaClientBundle:Household:householdRequired.html.twig" %}
+        <div align="center"><input class="smallbutton" type="submit" value="Submit">
+    <input class="smallbutton" type="reset"></div>
+</form>
+{% endblock %}

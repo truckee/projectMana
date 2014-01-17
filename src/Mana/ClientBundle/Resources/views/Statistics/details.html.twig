@@ -1,0 +1,27 @@
+{% block body %}
+{% set start = specs.startDate|date('F Y') %}
+{% set end = specs.endDate|date('F Y') %}
+<div class="title">Distribution Details for {{ start }}
+    {% if (start != end) %} through {{ end }}{% endif %}</div>
+{% for key,data in details.details %}
+<div class="section70">{{ key }}</div>
+{#<table class="width60">#}
+    <div class="stats">
+        <div>&nbsp;</div>
+        <div>Unique<br>Individuals<br>Served</div>
+        <div>Total<br>Individuals<br>Served</div>
+        <div>Unique<br>Households<br>Served</div>
+        <div>Total<br>Households<br>Served</div>
+    </div>
+{% for desc, type in data %}
+    <div class="stats">
+        <div>{{ desc }}</div>
+        <div>{{ type.uniqInd }}</div>
+        <div>{{ type.totalInd }}</div>
+        <div>{{ type.uniqHouse }}</div>
+        <div>{{ type.totalHouse }}</div>
+    </div>
+{% endfor %}
+{#</table>#}
+{% endfor %}
+{% endblock %}

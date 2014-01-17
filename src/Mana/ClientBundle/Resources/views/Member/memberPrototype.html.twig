@@ -1,0 +1,15 @@
+<div class="border">
+    <ul class="formblock" id="member-form">
+        <li><input type="hidden" name="household[members][__name__][include]" value="1">
+            <b>First name: </b>{{ form_widget(form.fname) }}</li>
+        <li><b>Last name: </b>{{ form_widget(form.sname) }}</li>
+        <li><b>Date of birth<br>(mm/dd/yyyy): </b>{{ form_widget(form.dob) }}</li>
+        <li><br><b>Gender: </b>{{ form_widget(form.sex) }}</li>
+        <li><br><b>Ethnicity: </b>{{ form_widget(form.ethnicity) }}</li>
+        <li><br><b>Relation:</b>{{ form_widget(form.relation) }}</li>
+        <li><br><b>Work:</b>{{ form_widget(form.work) }}</li>
+        {#<li><br><b>Insurance:</b>{{ form_widget(form.insurance) }}</li>
+        <li><br><b>Shots:</b>{{ form_widget(form.shots) }}</li>#}
+        <li><a id="removeTr" class="smallbutton" href="#" onclick="removeMember(this)">Remove</a>
+    </ul>
+</div>

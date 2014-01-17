@@ -1,0 +1,43 @@
+
+{% extends 'ManaClientBundle:Default:layout.html.twig' %}
+
+
+{% block body -%}
+<div class="title">IncomeSource</div>
+<div class="width40">
+    
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Income Source</th>
+                <td>{{ entity.incomeSource }}</td>
+            </tr>
+            {#<tr>
+                <th>Incomeabbreviation</th>
+                <td>{{ entity.incomeAbbreviation }}</td>
+            </tr>#}
+            <tr>
+                <th>Enabled</th>
+                <td>{% if entity.enabled %}Yes{%else%}No{%endif%}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('incsource') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('incsource_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+</ul>
+    </div>
+{% endblock %}

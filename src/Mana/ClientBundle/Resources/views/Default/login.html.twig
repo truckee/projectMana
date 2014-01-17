@@ -1,0 +1,20 @@
+{% extends "ManaClientBundle:Default:layout.html.twig" %}
+{% block body %}
+<div align="center">
+    <div class="title">Please enter your login credentials:</div>
+{#    <div>dork = {{ dork }}</div>#}
+{% if error  %}
+    <div class="errors">{{ error.message }}</div>
+{% endif %}
+    <form action="{{ path('login_check') }}" name="loginform" method="post">
+        <table>
+            <tr>
+                <td class="body"><label for="username">Username:</label>
+                    <input type="text" id="username" name="_username" value="{{ last_username }}"  class="smallform"/>
+                <td class="body">    <label for="password">Password:</label>
+                    <input type="password" id="password" name="_password"  class="smallform" />
+        </table><br>
+        <input class="smallbutton" type="submit" name="submit" value="Login">
+    </form>
+</div>
+{% endblock %}

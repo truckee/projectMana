@@ -1,0 +1,22 @@
+<li id="excluded"><b>Include? </b>No
+        <input type="hidden" id="household_members_{{ loop.index0 }}_include" name="household[members][{{ loop.index0 }}][include]" value="{{ member.vars.value.include }}">
+        <input type="hidden" id="household_members_{{ loop.index0 }}_id" name="household[members][{{ loop.index0 }}][id]" value="{{ member.vars.value.id }}">
+    </li>
+    <li><b>First name: </b>{{ member.vars.value.fname }}
+        <input type="hidden" id="household_members_{{ loop.index0 }}_fname" name="household[members][{{ loop.index0 }}][fname]" value="{{ member.vars.value.fname }}">
+    </li>
+    <li><b>Last name: </b>{{ member.vars.value.sname }}
+        <input type="hidden" id="household_members_{{ loop.index0 }}_sname" name="household[members][{{ loop.index0 }}][sname]" value="{{ member.vars.value.sname }}">
+    </li>
+    <li><b>Date of birth: </b>{{ member.vars.value.dob|date('m/d/Y') }}
+        <input type="hidden" id="household_members_{{ loop.index0 }}_dob" name="household[members][{{ loop.index0 }}][dob]" value="{{ member.vars.value.dob|date('m/d/Y') }}">
+    </li>
+    <li><br><b>Gender: </b>{{ member.vars.value.sex }}
+        <input type="hidden" id="household_members_{{ loop.index0 }}_sex" name="household[members][{{ loop.index0 }}][sex]" value="{{ member.vars.value.sex }}">
+    </li>
+    <li><br><b>Ethnicity: </b>{{ member.vars.value.ethnicity.abbreviation }}
+        <input type="hidden" id="household_members_{{ loop.index0 }}_ethnicity" name="household[members][{{ loop.index0 }}][ethnicity]" value="{{ member.vars.value.ethnicity.id }}">
+    </li>
+    <li><br><b>Excluded on: </b>{{ member.vars.value.excludeDate|date('m/d/Y') }}
+        <input type="hidden" id="household_members_{{ loop.index0 }}_excludeDate" name="household[members][{{ loop.index0 }}][excludeDate]" value="{{ member.vars.value.excludeDate|date('m/d/Y') }}">
+    </li>

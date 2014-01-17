@@ -1,0 +1,9 @@
+<ul class="formblock" id="address-form">
+    <li><b>Address type: </b>{{ form_widget(form.addresstype) }}</li>
+    <li><b>Address:</b>{{ form_widget(form.line1) }} {{ form_widget(form.line2) }}
+    <b>City:</b>{{ form_widget(form.city) }}
+    <b>County:</b>{{ form_widget(form.county) }}
+    <b>State:</b>{{ form_widget(form.state) }}
+    <b>Zip:</b>{{ form_widget(form.zip) }}</li>
+    <li><a id="removeAddress" class="smallbutton" href="#" onclick="removeAddress(this)">Remove</a></li>
+</ul>
