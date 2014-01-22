@@ -6,7 +6,7 @@
 {% if specs.type is not sameas(0) %}Type = {{ specs.type }}{% if  specs.county is not sameas(0) or specs.center is not sameas(0) %}; {% endif %}{% endif %}
 {% if  specs.county is not sameas(0) %}Location = {{ specs.county }} county{% endif %}{% if specs.center is not sameas(0) %}Site = {{ specs.center }}{% endif %}
 
-    <br>Note: Some inconsistencies may exist due to clients with missing data<br>
+    <br>Note: Some inconsistencies may exist due to households with missing data<br>
 </div>
 <div  class="section70">General statistics</div>
 
@@ -49,10 +49,10 @@
     <div>{{ statistics['Unique New Individuals']|number_format }}</div>
 </div>
 
-<div class="section70">Client ethnicity distribution</div>
+<div class="section70">Member ethnicity distribution</div>
 <div class="stats">
     <div><b>White</b><br>
-                {% if statistics['White'] is defined %}{{ statistics['White']|number_format }}{% else %}0{% endif %}</div>
+                {% if statistics['Caucasian'] is defined %}{{ statistics['Caucasian']|number_format }}{% else %}0{% endif %}</div>
     <div><b>African-American</b><br>
                 {% if statistics['African-American'] is defined %}{{ statistics['African-American']|number_format }}{% else %}0{% endif %}</div>
     <div><b>Asian</b><br>
