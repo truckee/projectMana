@@ -40,9 +40,10 @@ class ContactController extends Controller {
             $nContacts = count($household->getContacts());
             $first = ($nContacts > 0) ? 0 : 1;
             $contact->setFirst($first);
-            $center = $contact->getCenter();
-            $county = $center->getCounty();
-            $contact->setCounty($county);
+//            $center = $contact->getCenter();
+//            $county = $center->getCounty();
+//            $contact->setCounty($county);
+            $contact->setCounty($contact->getCenter()->getCounty());
             $household->addContact($contact);
             $em->persist($household);
             $em->flush();
@@ -73,9 +74,10 @@ class ContactController extends Controller {
 
         if ($form->isValid()) {
             $data = $form->getData();
-            $contactCenter = $data->getCenter();
-            $county = $contactCenter->getCounty();
-            $contact->setCounty($county);
+//            $contactCenter = $data->getCenter();
+//            $county = $contactCenter->getCounty();
+//            $contact->setCounty($county);
+            $contact->setCounty($contact->getCenter()->getCounty());
             $em->persist($contact);
             $em->flush();
             $hid = $contact->getHousehold()->getId();
@@ -127,8 +129,10 @@ class ContactController extends Controller {
             $households = $this->getRequest()->request->get('contact_household');
             $data = $form->getData();
             $contactDate = $data->getContactDate();
-            $contactCenter = $data->getCenter();
+            $center = $data->getCenter();
             $contactDesc = $data->getContactDesc();
+            $desc = $contactDesc->getContactDesc();
+            $centerName = $center->getCenter();
             $n = count($households);
             if ($n !== 0) {
                 foreach ($households as $id) {
@@ -136,23 +140,23 @@ class ContactController extends Controller {
                     $houseContacts = $household->getContacts();
                     $nContacts = count($houseContacts);
                     $first = ($nContacts > 0) ? 0 : 1;
-                    $county = $contactCenter->getCounty();
+//                    $county = $center->getCounty();
                     $contact = new Contact();
                     $contact->setContactDate($contactDate);
-                    $contact->setCenter($contactCenter);
+                    $contact->setCenter($center);
                     $contact->setContactDesc($contactDesc);
-                    $contact->setCounty($county);
+                    $contact->setCounty($center->getCounty());
                     $contact->setFirst($first);
                     $household->addContact($contact);
                     $em->persist($household);
                 }
                 $em->flush();
-                $message = "$n $desc contacts added for $center";
+                $message = "$n $desc contacts added for $centerName";
             } else {
                 $message = 'No contacts were added';
             }
-            $center = $contactCenter->getCenter();
-            $desc = $contactDesc->getContactDesc();
+            
+            
             
         }
         return array(
