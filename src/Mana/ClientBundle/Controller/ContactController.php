@@ -74,9 +74,6 @@ class ContactController extends Controller {
 
         if ($form->isValid()) {
             $data = $form->getData();
-//            $contactCenter = $data->getCenter();
-//            $county = $contactCenter->getCounty();
-//            $contact->setCounty($county);
             $contact->setCounty($contact->getCenter()->getCounty());
             $em->persist($contact);
             $em->flush();
@@ -140,7 +137,6 @@ class ContactController extends Controller {
                     $houseContacts = $household->getContacts();
                     $nContacts = count($houseContacts);
                     $first = ($nContacts > 0) ? 0 : 1;
-//                    $county = $center->getCounty();
                     $contact = new Contact();
                     $contact->setContactDate($contactDate);
                     $contact->setCenter($center);
@@ -155,9 +151,6 @@ class ContactController extends Controller {
             } else {
                 $message = 'No contacts were added';
             }
-            
-            
-            
         }
         return array(
             'form' => $form->createView(),
