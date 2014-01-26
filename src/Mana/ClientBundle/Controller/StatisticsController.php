@@ -169,9 +169,6 @@ class StatisticsController extends Controller {
      */
     public function excelAction() {
 
-//        $session = $this->getRequest()->getSession();
-//        $session->set('message', 'The Save as Excel feature is out for repair');
-//        return $this->redirect($this->generateUrl("message"));
         $session = $this->getRequest()->getSession();
         $report = $session->get('report');
         $specs = $report['specs'];
