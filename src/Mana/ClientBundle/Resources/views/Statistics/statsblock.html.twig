@@ -13,64 +13,66 @@
 <table class="stats">
     <tr>
         <td>&nbsp;</td>
-    <td><b>Intdiduals Served</b></td>
-    <td><b>Unique Intdiduals Served</b></td>
-    <td>&nbsp;</td>
+        <td><b>Intdiduals Served</b></td>
+        <td><b>Unique Intdiduals Served</b></td>
+        <td>&nbsp;</td>
     <tr>
-    <td>&nbsp;</td>
-    <td>{{ statistics.IS|number_format }}</td>
-    <td>{{ statistics.UIS|number_format }}</td>
-    <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>{{ statistics.IS|number_format }}</td>
+        <td>{{ statistics.UIS|number_format }}</td>
+        <td>&nbsp;</td>
 </table>
 <hr style="width:70%; margin-left: 15%;">
-<div class="stats">
-    <div>&nbsp;</div>
-    <div><b>Total Households Served</b></div>
-    <div><b>Unique Households Served</b></div>
-    <div>&nbsp;</div>
-</div>
-<div class="stats">
-    <div>&nbsp;</div>
-    <div>{{ statistics.THS|number_format }}</div>
-    <div>{{ statistics.UHS|number_format }}</div>
-    <div>&nbsp;</div>
-</div>
+<table class="stats">
+    <tr>
+        <td>&nbsp;</td>
+        <td><b>Total Households Served</b></td>
+        <td><b>Unique Households Served</b></td>
+        <td>&nbsp;</td>
+    <tr>
+        <td>&nbsp;</td>
+        <td>{{ statistics.THS|number_format }}</td>
+        <td>{{ statistics.UHS|number_format }}</td>
+        <td>&nbsp;</td>
+</table>
 <hr style="width:70%; margin-left: 15%;">
-<div class="stats">
-    <div>&nbsp;</div>
-    <div>{% if specs.type is not sameas(0) %}<b>New {{ specs.type }}</b>{% else %}&nbsp;{% endif %}</div>
-    <div><b>New Households<br>(all types)</b></div>
-    <div><b>Unique New Individuals<br>(all types)</b></div>
-</div>
-<div class="stats">
-    <div>&nbsp;</div>
-    <div>{% if specs.type is not sameas(0) %}{{ statistics['NewByType']|number_format }}{% else %}&nbsp;{% endif %}</div>
-    <div>{{ statistics['NewHouseholds'] }}</div>
-    <div>{{ statistics['Unique New Individuals']|number_format }}</div>
-</div>
+<table class="stats">
+    <tr>
+        <td>&nbsp;</td>
+        <td>{% if specs.type is not sameas(0) %}<b>New {{ specs.type }}</b>{% else %}&nbsp;{% endif %}</td>
+        <td><b>New Households<br>(all types)</b></td>
+        <td><b>Unique New Intdiduals<br>(all types)</b></td>
+
+    <tr>
+        <td>&nbsp;</td>
+        <td>{% if specs.type is not sameas(0) %}{{ statistics['NewByType']|number_format }}{% else %}&nbsp;{% endif %}</td>
+        <td>{{ statistics['NewHouseholds'] }}</td>
+        <td>{{ statistics['Unique New Intdiduals']|number_format }}</td>
+</table>
 
 <div class="section70">Member ethnicity distribution</div>
-<div class="stats">
-    <div><b>Caucasian</b><br>
-                {% if statistics['Caucasian'] is defined %}{{ statistics['Caucasian']|number_format }}{% else %}0{% endif %}</div>
-    <div><b>African-American</b><br>
-                {% if statistics['African-American'] is defined %}{{ statistics['African-American']|number_format }}{% else %}0{% endif %}</div>
-    <div><b>Asian</b><br>
-                {% if statistics['Asian'] is defined %}{{ statistics['Asian']|number_format }}{% else %}0{% endif %}</div>
-    <div><b>Hispanic</b><br>
-                {% if statistics['Hispanic'] is defined %}{{ statistics['Hispanic'] }}{% else %}0{% endif %}</div>
-</div>
+<table class="stats">
+    <tr>
+    <td><b>Caucasian</b><br>
+                {% if statistics['Caucasian'] is defined %}{{ statistics['Caucasian']|number_format }}{% else %}0{% endif %}</td>
+    <td><b>African-American</b><br>
+                {% if statistics['African-American'] is defined %}{{ statistics['African-American']|number_format }}{% else %}0{% endif %}</td>
+    <td><b>Asian</b><br>
+                {% if statistics['Asian'] is defined %}{{ statistics['Asian']|number_format }}{% else %}0{% endif %}</td>
+    <td><b>Hispanic</b><br>
+                {% if statistics['Hispanic'] is defined %}{{ statistics['Hispanic'] }}{% else %}0{% endif %}</td>
+</table>
 <hr style="width:70%; margin-left: 15%;">
-<div class="stats">
-    <div><b>Native American</b><br>
-                {% if statistics['Native American'] is defined %}{{ statistics['Native American']|number_format }}{% else %}0{% endif %}</div>
-    <div><b>Hawaiian/Pacific Islander</b><br>
-                {% if statistics['Hawaiian/Pacific Islander'] is defined %}{{ statistics['Hawaiian/Pacific Islander']|number_format }}{% else %}0{% endif %}</div>
-    <div><b>Other</b><br>
-                {% if statistics['Other'] is defined %}{{ statistics['Other'] }}{% else %}0{% endif %}</div>
-    <div><b>Unknown</b><br>
-                {% if statistics['Unknown'] is defined %}{{ statistics['Unknown'] }}{% else %}0{% endif %}</div>
-</div>
+<table class="stats">
+    <td><b>Native American</b><br>
+                {% if statistics['Native American'] is defined %}{{ statistics['Native American']|number_format }}{% else %}0{% endif %}</td>
+    <td><b>Hawaiian/Pacific Islander</b><br>
+                {% if statistics['Hawaiian/Pacific Islander'] is defined %}{{ statistics['Hawaiian/Pacific Islander']|number_format }}{% else %}0{% endif %}</td>
+    <td><b>Other</b><br>
+                {% if statistics['Other'] is defined %}{{ statistics['Other'] }}{% else %}0{% endif %}</td>
+    <td><b>Unknown</b><br>
+                {% if statistics['Unknown'] is defined %}{{ statistics['Unknown'] }}{% else %}0{% endif %}</td>
+</table>
 <div  class="section70">Age distribution</div>
 <div class="stats">
     <div><b>Under 6</b><br>{{ statistics['Under 6']|number_format }}</div>
