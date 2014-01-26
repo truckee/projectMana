@@ -169,26 +169,28 @@ class StatisticsController extends Controller {
      */
     public function excelAction() {
 
-//        $response = new Response();
-        $session = $this->getRequest()->getSession();
-        $report = $session->get('report');
-        $specs = $report['specs'];
-        $block = $report['block'];
-        $filename = ($block == 'statsblock') ? 'General_' : 'Details_';
-        $center = !empty($specs['center']) ? $specs['center'] : '';
-        $type = !empty($specs['type']) ? $specs['type'] : '';
-        $county = !empty($specs['county']) ? $specs['county'] : '';
-        $startText = $specs['startDate']->format('MY');
-        $endText = $specs['endDate']->format('MY');
-        $filename .= ($startText == $endText) ? $startText : $startText . '-' . $endText;
-        $filename .= $center . $county . $type . '.xls';
-
-        $response = $this->render("ManaClientBundle:Statistics:" . $block . ".html.twig", $report);
-        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
-        $response->headers->set('Content-Disposition', 'attachment; filename=' . $filename);
-        $response->headers->set('Pragma', 'public');
-        $response->headers->set('Cache-Control', 'maxage=1');
-        return $response;
+        return $this->redirect($this->generateUrl("message", array(
+            'message' => 'The Save as Excel feature is out for repair'
+        )));
+//        $session = $this->getRequest()->getSession();
+//        $report = $session->get('report');
+//        $specs = $report['specs'];
+//        $block = $report['block'];
+//        $filename = ($block == 'statsblock') ? 'General_' : 'Details_';
+//        $center = !empty($specs['center']) ? $specs['center'] : '';
+//        $type = !empty($specs['type']) ? $specs['type'] : '';
+//        $county = !empty($specs['county']) ? $specs['county'] : '';
+//        $startText = $specs['startDate']->format('MY');
+//        $endText = $specs['endDate']->format('MY');
+//        $filename .= ($startText == $endText) ? $startText : $startText . '-' . $endText;
+//        $filename .= $center . $county . $type . '.xls';
+//
+//        $response = $this->render("ManaClientBundle:Statistics:" . $block . ".html.twig", $report);
+//        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+//        $response->headers->set('Content-Disposition', 'attachment; filename=' . $filename);
+//        $response->headers->set('Pragma', 'public');
+//        $response->headers->set('Cache-Control', 'maxage=1');
+//        return $response;
     }
 
     /**
