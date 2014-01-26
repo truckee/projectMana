@@ -13,8 +13,8 @@
 <table class="stats">
     <tr>
         <td>&nbsp;</td>
-        <td><b>Intdiduals Served</b></td>
-        <td><b>Unique Intdiduals Served</b></td>
+        <td><b>Individuals Served</b></td>
+        <td><b>Unique Individuals Served</b></td>
         <td>&nbsp;</td>
     <tr>
         <td>&nbsp;</td>
@@ -41,13 +41,13 @@
         <td>&nbsp;</td>
         <td>{% if specs.type is not sameas(0) %}<b>New {{ specs.type }}</b>{% else %}&nbsp;{% endif %}</td>
         <td><b>New Households<br>(all types)</b></td>
-        <td><b>Unique New Intdiduals<br>(all types)</b></td>
+        <td><b>Unique New Individuals<br>(all types)</b></td>
 
     <tr>
         <td>&nbsp;</td>
         <td>{% if specs.type is not sameas(0) %}{{ statistics['NewByType']|number_format }}{% else %}&nbsp;{% endif %}</td>
         <td>{{ statistics['NewHouseholds'] }}</td>
-        <td>{{ statistics['Unique New Intdiduals']|number_format }}</td>
+        <td>{{ statistics['Unique New Individuals']|number_format }}</td>
 </table>
 
 <div class="section70">Member ethnicity distribution</div>
