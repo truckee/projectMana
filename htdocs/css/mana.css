@@ -304,8 +304,11 @@ ul.formblock {
        width: 70%;
     margin: 0 15%;
     table-layout: fixed;
-    text-align: right;
     /*margin-bottom: 20px;*/
+}
+
+.stats td {
+    text-align: right;
 }
 
 .stats > div {
