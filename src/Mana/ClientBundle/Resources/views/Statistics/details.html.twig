@@ -6,21 +6,23 @@
 {% for key,data in details.details %}
 <div class="section70">{{ key }}</div>
 {#<table class="width60">#}
-    <div class="stats">
-        <div>&nbsp;</div>
-        <div>Unique<br>Individuals<br>Served</div>
-        <div>Total<br>Individuals<br>Served</div>
-        <div>Unique<br>Households<br>Served</div>
-        <div>Total<br>Households<br>Served</div>
-    </div>
+    <table class="stats">
+        <tr>
+        <td>&nbsp;</td>
+        <td>Unique<br>Individuals<br>Served</td>
+        <td>Total<br>Individuals<br>Served</td>
+        <td>Unique<br>Households<br>Served</td>
+        <td>Total<br>Households<br>Served</td>
+    </table>
 {% for desc, type in data %}
-    <div class="stats">
-        <div>{{ desc }}</div>
-        <div>{{ type.uniqInd }}</div>
-        <div>{{ type.totalInd }}</div>
-        <div>{{ type.uniqHouse }}</div>
-        <div>{{ type.totalHouse }}</div>
-    </div>
+    <table class="stats">
+        <tr>
+        <td>{{ desc }}</td>
+        <td>{{ type.uniqInd }}</td>
+        <td>{{ type.totalInd }}</td>
+        <td>{{ type.uniqHouse }}</td>
+        <td>{{ type.totalHouse }}</td>
+    </table>
 {% endfor %}
 {#</table>#}
 {% endfor %}
