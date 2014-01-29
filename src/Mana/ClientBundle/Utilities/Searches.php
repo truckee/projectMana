@@ -17,47 +17,6 @@ class Searches {
         $this->em = $em;
     }
 
-    /**
-     * Get households whose heads match input
-     * @param type $qtext
-     * @return array
-     */
-    public function getMatches($qtext) {
-        $name = explode(' ', $qtext);
-        if (empty($qtext) || !array_key_exists(1, $name)) {
-            return false;
-        }
-
-        $name = explode(' ', $qtext);
-        $incoming['fname'] = $name[0];
-        $incoming['sname'] = $name[1];
-        $fname1 = '%' . $incoming['fname'] . '%';
-        $sname1 = $incoming['sname'];
-        $fname2 = $incoming['fname'];
-        $sname2 = '%' . $incoming['sname'] . '%';
-
-        $fname1 = '%' . $incoming['fname'] . '%';
-        $sname1 = $incoming['sname'];
-        $fname2 = $incoming['fname'];
-        $sname2 = '%' . $incoming['sname'] . '%';
-
-        $sql = "select h from ManaClientBundle:Household h 
-            join ManaClientBundle:Member c WITH h.hohId = c.id
-            where (c.fname like :fname1 and soundex(c.sname) = soundex(:sname1))
-            or
-            (soundex(c.fname) = soundex(:fname2) and c.sname like :sname2)
-            order by c.sname, c.fname";
-        $query = $this->em->createQuery($sql)
-                ->setParameters(array(
-            'fname1' => $fname1,
-            'sname1' => $sname1,
-            'fname2' => $fname2,
-            'sname2' => $sname2,
-        ));
-
-        return $query->getResult();
-    }
-
     public function getLatest() {
         $latestContacts = array();
         $query = $this->em->createQuery("select r.id from ManaClientBundle:Center r");
