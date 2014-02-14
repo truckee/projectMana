@@ -48,7 +48,8 @@ class HouseholdController extends Controller {
     public function newAction(Request $request) {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        if (!empty($session->get('household'))) {
+        $houseTest = $session->get('household');
+        if (!empty($houseTest)) {
             //household appears in session if new data selected in match_results
             $household = $em->merge($session->get('household'));
             $member = $em->merge($session->get('member'));
