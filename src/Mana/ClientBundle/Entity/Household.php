@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Household
  *
  * @ORM\Table(name="household")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\HouseholdRepository")
  */
 class Household {
 

@@ -5,13 +5,12 @@ namespace Mana\ClientBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Mana\ClientBundle\Validator\Constraints as ManaAssert;
-//use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Client
  *
  * @ORM\Table(name="member", indexes={@ORM\Index(name="idx_client_household_idx", columns={"household_id"}), @ORM\Index(name="idx_client_ethnicity_idx", columns={"ethnicity_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\MemberRepository")
  */
 class Member
 {
