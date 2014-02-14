@@ -74,11 +74,6 @@ class Searches {
                 $i++;
             }
         }
-//        $members = array();
-//        foreach ($contactSet as $key => $row) {
-//            $members[$key] = $row['head'];
-//        }
-//        array_multisort($members, SORT_ASC, $contactSet);
         return $contactSet;
     }
 
@@ -128,12 +123,6 @@ class Searches {
             $members[$key] = $row['head'];
         }
         array_multisort($members, SORT_ASC, $contactSet);
-//$price = array();
-//foreach ($inventory as $key => $row)
-//{
-//    $price[$key] = $row['price'];
-//}
-//array_multisort($price, SORT_DESC, $inventory);
         return array(
             'latestDate' => $latestDate,
             'contactSet' => $contactSet);
@@ -145,36 +134,19 @@ class Searches {
      * @return array
      */
     public function getMembers($qtext) {
+        $name = trim($qtext);
         $length = strpos($qtext, ' ');
         if (empty($length)) {
             return null;
         }
-        $incoming['fname'] = substr($qtext, 0, $length);
-        $incoming['sname'] = substr($qtext, $length + 1);
-        $fname1 = '%' . $incoming['fname'] . '%';
-        $sname1 = $incoming['sname'];
-        $fname2 = $incoming['fname'];
-        $sname2 = '%' . $incoming['sname'] . '%';
-
-        $fname1 = '%' . $incoming['fname'] . '%';
-        $sname1 = $incoming['sname'];
-        $fname2 = $incoming['fname'];
-        $sname2 = '%' . $incoming['sname'] . '%';
-
-        $sql = "select c from ManaClientBundle:Member c 
-            where (c.fname like :fname1 and soundex(c.sname) = soundex(:sname1))
-            or
-            (soundex(c.fname) = soundex(:fname2) and c.sname like :sname2)
-            order by c.sname, c.fname";
-        $query = $this->em->createQuery($sql)
-                ->setParameters(array(
-            'fname1' => $fname1,
-            'sname1' => $sname1,
-            'fname2' => $fname2,
-            'sname2' => $sname2,
-        ));
-        $found = $query->getResult();
-
+        $conn = $this->em->getConnection();
+        $sql = 'select m.id from member m where match(m.fname, m.sname) against (quote("' . $name .'"))';
+        $stmt = $conn->query($sql);
+        $members = $stmt->fetchAll();
+        foreach ($members as $member) {
+            $found[] = $this->em->getRepository('ManaClientBundle:Member')->find($member['id']);
+        }
+        
         return $found;
     }
 

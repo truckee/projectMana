@@ -6,17 +6,17 @@
 <form action=""  method="post">
     <input type="hidden" name="household[headId]" value="0">
     <div class="errors">
-{{ form_errors(form.center) }}
-{{ form_errors(form.complianceDate) }}
-{{ form_errors(form.sharedDate) }}
-        {#{{ errorString }}#}
-{{ form_errors(form) }}
+{{ form_errors(form.center) -}}
+{{ form_errors(form.complianceDate) -}}
+{{ form_errors(form.sharedDate) -}}
+        {#{{ errorString -}}#}
+{{ form_errors(form) -}}
 {% for member in form.members %}
-{{ form_errors(member.fname) }}
-{{ form_errors(member.sname) }}
-{{ form_errors(member.dob) }}
-{{ form_errors(member.sex) }}
-{{ form_errors(member.ethnicity) }}
+{{ form_errors(member.fname) -}}
+{{ form_errors(member.sname) -}}
+{{ form_errors(member.dob) -}}
+{{ form_errors(member.sex) -}}
+{{ form_errors(member.ethnicity) -}}
     {% endfor %}</div>
 {#    {{ dump(form.members) }}#}
 {% for member in form.members %}
