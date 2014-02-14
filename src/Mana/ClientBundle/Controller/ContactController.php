@@ -40,9 +40,6 @@ class ContactController extends Controller {
             $nContacts = count($household->getContacts());
             $first = ($nContacts > 0) ? 0 : 1;
             $contact->setFirst($first);
-//            $center = $contact->getCenter();
-//            $county = $center->getCounty();
-//            $contact->setCounty($county);
             $contact->setCounty($contact->getCenter()->getCounty());
             $household->addContact($contact);
             $em->persist($household);
@@ -73,7 +70,6 @@ class ContactController extends Controller {
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $data = $form->getData();
             $contact->setCounty($contact->getCenter()->getCounty());
             $em->persist($contact);
             $em->flush();
@@ -125,28 +121,15 @@ class ContactController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $households = $this->getRequest()->request->get('contact_household');
             $data = $form->getData();
-            $contactDate = $data->getContactDate();
+            $contactData['date'] = $data->getContactDate();
             $center = $data->getCenter();
-            $contactDesc = $data->getContactDesc();
-            $desc = $contactDesc->getContactDesc();
+            $contactData['center'] = $center;
+            $contactData['desc'] = $data->getContactDesc();
+            $desc = $contactData['desc']->getContactDesc();
             $centerName = $center->getCenter();
             $n = count($households);
             if ($n !== 0) {
-                foreach ($households as $id) {
-                    $household = $em->getRepository('ManaClientBundle:Household')->find($id);
-                    $houseContacts = $household->getContacts();
-                    $nContacts = count($houseContacts);
-                    $first = ($nContacts > 0) ? 0 : 1;
-                    $contact = new Contact();
-                    $contact->setContactDate($contactDate);
-                    $contact->setCenter($center);
-                    $contact->setContactDesc($contactDesc);
-                    $contact->setCounty($center->getCounty());
-                    $contact->setFirst($first);
-                    $household->addContact($contact);
-                    $em->persist($household);
-                }
-                $em->flush();
+                $em->getRepository("ManaClientBundle:Household")->addContacts($households, $contactData);
                 $message = "$n $desc contacts added for $centerName";
             } else {
                 $message = 'No contacts were added';
@@ -212,7 +195,6 @@ class ContactController extends Controller {
                 'Content-Disposition' => 'attachment; filename=' . $filename
             ));
         }
-//        $errors = $form->getErrorsAsString();
         return array(
             'title' => 'Select center',
             'form' => $form->createView()
@@ -225,16 +207,12 @@ class ContactController extends Controller {
      */
     public function multiAction(Request $request) {
         $criteria = $request->request->get('report_criteria');
-
         if (empty($criteria)) {
             $session = $this->getRequest()->getSession();
             $session->set('message', 'Report criteria not available');
             return $this->forward("ManaClientBundle:Default:message");
         }
-
         $form = $this->createForm(new ReportCriteriaType());
-
-        $dest = $request->request->get('dest');
         $form->handlerequest($request);
         if ($form->isValid()) {
             $reports = $this->get('reports');
@@ -249,5 +227,4 @@ class ContactController extends Controller {
         }
         return array();
     }
-
 }

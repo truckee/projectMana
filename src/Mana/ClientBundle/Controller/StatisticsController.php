@@ -21,7 +21,6 @@ class StatisticsController extends Controller {
      * @Template("ManaClientBundle:Statistics:report_criteria.html.twig")
      */
     public function criteriaAction($dest = null) {
-        $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(new ReportCriteriaType());
         return array(
             'form' => $form->createView(),
@@ -134,7 +133,6 @@ class StatisticsController extends Controller {
             ));
         }
 
-        $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(new ReportCriteriaType());
         $form->handlerequest($request);
         if ($form->isValid()) {

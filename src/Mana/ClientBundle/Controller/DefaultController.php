@@ -3,7 +3,6 @@
 namespace Mana\ClientBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-//use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -65,12 +64,5 @@ class DefaultController extends Controller {
         $message = $session->get('message');
         $session->set('message', '');
         return array('message' => $message);
-    }
-
-    /**
-     * @Route("/error", name="exception")
-     */
-    public function exceptionAction() {
-        throw $this->createNotFoundException('Welcome to Wally World!');
     }
 }
