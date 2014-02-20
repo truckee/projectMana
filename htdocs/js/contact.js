@@ -132,7 +132,7 @@ $(document).ready(function() {
             autoOpen: false,
             height: 100,
             width: 200,
-            modal: true,
+            modal: true
         });
     }
 
