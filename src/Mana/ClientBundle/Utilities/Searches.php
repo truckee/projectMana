@@ -139,7 +139,7 @@ class Searches {
         if (empty($length)) {
             return null;
         }
-        $name = preg_replace("/[^-A-Za-z0-9 ]/", '', $string);
+        $name = preg_replace("/[^-'A-Za-z0-9 ]/", '', $string);
         $conn = $this->em->getConnection();
         $sql = "select m.id from member m where match(m.fname, m.sname) against (quote('$name'))";
         $stmt = $conn->query($sql);
