@@ -145,6 +145,7 @@ class Searches {
         $sql = "select m.id from member m where match(m.fname, m.sname) against (quote('$name'))";
         $stmt = $conn->query($sql);
         $members = $stmt->fetchAll();
+        $found = array();
         foreach ($members as $member) {
             $found[] = $this->em->getRepository('ManaClientBundle:Member')->find($member['id']);
         }
