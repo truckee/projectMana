@@ -205,7 +205,7 @@ class Reports {
         $sql = "INSERT INTO temp_household
             (id, hoh_id, res, size, date_added)
             select distinct h.id, hoh_id,
-            12*(year('2013-08-01') - cast(arrivalYear as signed)) + (month('2013-08-01') - cast(arrivalMonth as signed)) as 'res',
+            12*(year(now()) - cast(arrivalYear as signed)) + (month(now()) - cast(arrivalMonth as signed)) as 'res',
             size, date_added from household h 
 			join 
 			(select household_id, if(count(dob)=0,1,count(dob)) size  from member 
