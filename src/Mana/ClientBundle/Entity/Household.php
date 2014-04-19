@@ -90,7 +90,7 @@ class Household {
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Member", mappedBy="household", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Member", mappedBy="household", cascade={"persist", "remove"}, orphanRemoval=true,  fetch="EAGER"  )
      * @ORM\OrderBy({"dob" = "ASC"})
      * @Assert\Valid
      */
@@ -323,7 +323,6 @@ class Household {
      */
     public function removeMember(Member $member) {
         $this->members->removeElement($member);
-        $member->setHousehold(null);
     }
 
     /**
