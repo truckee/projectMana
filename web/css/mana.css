@@ -307,6 +307,10 @@ ul.formblock {
     /*margin-bottom: 20px;*/
 }
 
+.stats td {
+    text-align: right;
+}
+
 .stats > div {
     display: table-cell;
     /*border: 1px dotted red;*/
