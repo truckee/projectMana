@@ -75,7 +75,7 @@ class HouseholdType extends AbstractType {
                 ->add('complianceDate', 'date', array(
                     'widget' => 'single_text',
                     'format' => 'MM/dd/yyyy',
-                    'data' => date_create()
+//                    'data' => date_create()
                 ))
                 ->add('dateAdded', 'date', array(
                     'widget' => 'single_text',
@@ -189,7 +189,7 @@ class HouseholdType extends AbstractType {
                 ->add('sharedDate', 'date', array(
                     'widget' => 'single_text',
                     'format' => 'MM/dd/yyyy',
-                    'data' => date_create()
+//                    'data' => date_create()
                 ))
 //                ->add('specialneed', 'entity', array(
 //                    'class' => 'ManaClientBundle:Specialneed',
