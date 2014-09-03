@@ -13,6 +13,7 @@ use Mana\ClientBundle\Entity\Housing;
 use Mana\ClientBundle\Entity\IncomeSource;
 use Mana\ClientBundle\Entity\FsAmount;
 use Symfony\Component\Validator\Constraints as Assert;
+use Mana\ClientBundle\Validator\Constraints as ManaAssert;
 
 /**
  * Household
@@ -768,8 +769,7 @@ class Household {
      * @var boolean
      *
      * @ORM\Column(name="compliance_date", type="date", nullable=true)
-     * @Assert\Date(message="Compliance date invalid")
-     * @Assert\NotBlank(message="Compliance date may not be empty")
+     * @ManaAssert\ComplianceDate
      */
     protected $complianceDate;
 
@@ -826,19 +826,18 @@ class Household {
      * @var boolean
      *
      * @ORM\Column(name="shared_date", type="date", nullable=true)
-     * @Assert\Date(message="Shared date invalid")
-     * @Assert\NotBlank(message="Shared date may not be empty")
+     * @ManaAssert\SharedDate
      */
-    protected $shareddate;
+    protected $sharedDate;
 
     /**
      * Set shareddate
      *
-     * @param boolean $shareddate
+     * @param date $shareddate
      * @return shareddate
      */
-    public function setShareddate($shareddate) {
-        $this->shareddate = $shareddate;
+    public function setSharedDate($sharedDate) {
+        $this->sharedDate = $sharedDate;
 
         return $this;
     }
@@ -848,8 +847,8 @@ class Household {
      *
      * @return boolean 
      */
-    public function getShareddate() {
-        return $this->shareddate;
+    public function getSharedDate() {
+        return $this->sharedDate;
     }
 
 
