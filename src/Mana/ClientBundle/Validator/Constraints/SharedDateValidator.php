@@ -17,8 +17,6 @@ class SharedDateValidator extends ConstraintValidator
         $shared = $data->getShared();
         $shareddate = $data->getSharedDate();
         $isDateObj = is_object($shareddate);
-
-        // $complianceDate required only if $compliance = 'Yes'
         if (( 1 === $shared && !$isDateObj )) {
 
             $this->context->addViolation($constraint->message, array('%string%' => $value));
@@ -28,5 +26,4 @@ class SharedDateValidator extends ConstraintValidator
 
         return true;
     }
-
 }
