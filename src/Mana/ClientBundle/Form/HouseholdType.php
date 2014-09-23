@@ -66,7 +66,7 @@ class HouseholdType extends AbstractType {
                     },
                 ))
                 ->add('compliance', 'choice', array(
-                    'choices' => array('1' => 'Yes', '0' => 'No'),
+                    'choices' => array('0' => 'No', '1' => 'Yes'),
                 ))
                 ->add('complianceDate', 'date', array(
                     'widget' => 'single_text',
@@ -171,7 +171,7 @@ class HouseholdType extends AbstractType {
             },
                 ))
                 ->add('shared', 'choice', array(
-                    'choices' => array('1' => 'Yes', '0' => 'No'),
+                    'choices' => array('0' => 'No', '1' => 'Yes'),
                 ))
                 ->add('sharedDate', 'date', array(
                     'widget' => 'single_text',
