@@ -1,5 +1,5 @@
 imports:
-    - { resource: @ManaClientBundle/Resources/config/parameters.yml }
+    - { resource: parameters.yml }
     - { resource: @ManaClientBundle/Resources/config/security.yml }
     - { resource: @ManaClientBundle/Resources/config/services.yml }
 

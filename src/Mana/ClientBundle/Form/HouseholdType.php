@@ -50,6 +50,7 @@ class HouseholdType extends AbstractType {
                 ))
                 ->add('arrivalmonth', new Type\MonthType(), array(
                     'empty_value' => false,
+//                    'data' => date('n'),
                 ))
                 ->add('arrivalyear', new Type\YearType(), array(
                     'empty_value' => false,
@@ -59,18 +60,22 @@ class HouseholdType extends AbstractType {
                     'property' => 'center',
                     'constraints' => array(new NotBlank(array('message' => 'First site not selected')),),
                     'empty_value' => 'Select first site',
+//                    'attr' => array("class" => "smallform"),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
                                 ->orderBy('c.center', 'ASC')
+//                            ->where('c.enabled=1')
                                 ;
                     },
                 ))
                 ->add('compliance', 'choice', array(
-                    'choices' => array('0' => 'No', '1' => 'Yes'),
+                    'choices' => array('1' => 'Yes', '0' => 'No'),
+                    'data' => 1,
                 ))
                 ->add('complianceDate', 'date', array(
                     'widget' => 'single_text',
                     'format' => 'MM/dd/yyyy',
+//                    'data' => date_create()
                 ))
                 ->add('dateAdded', 'date', array(
                     'widget' => 'single_text',
@@ -110,6 +115,7 @@ class HouseholdType extends AbstractType {
                     'empty_value' => '',
                     'query_builder' => function(EntityRepository $er) {
                 return $er->createQueryBuilder('i')
+//                                ->orderBy('i.income', 'ASC')
                         ->where("i.enabled=1");
             },
                 ))
@@ -156,7 +162,13 @@ class HouseholdType extends AbstractType {
                     'allow_add' => true,
                     'allow_delete' => false,
                     'by_reference' => false,
+//                    'prototype' => true,
+//                    'prototype_name' => '__address__',
                 ))
+//                ->add('pregnant', 'choice', array(
+//                    'choices' => array('0' => 'No', '1' => 'Yes'),
+//                    'empty_value' => '',
+//                ))
                 ->add('reasons', 'entity', array(
                     'class' => 'ManaClientBundle:Reason',
                     'property' => 'reason',
@@ -171,12 +183,28 @@ class HouseholdType extends AbstractType {
             },
                 ))
                 ->add('shared', 'choice', array(
-                    'choices' => array('0' => 'No', '1' => 'Yes'),
+                    'choices' => array('1' => 'Yes', '0' => 'No'),
+                    'data' => 1,
                 ))
                 ->add('sharedDate', 'date', array(
                     'widget' => 'single_text',
                     'format' => 'MM/dd/yyyy',
+//                    'data' => date_create()
                 ))
+//                ->add('specialneed', 'entity', array(
+//                    'class' => 'ManaClientBundle:Specialneed',
+//                    'property' => 'need',
+//                    'empty_value' => '',
+//                    'query_builder' => function(EntityRepository $er) {
+//                        return $er->createQueryBuilder('s')
+//                                ->orderBy('s.order', 'ASC')
+//                            ->where("s.enabled=1");
+//                    },
+//                ))
+//                ->add('wic', 'choice', array(
+//                    'choices' => array('0' => 'No', '1' => 'Yes', '2' => 'Appl.'),
+//                    'empty_value' => '',
+//                ))
         ;
         // if a head of household is necessarily being replaced, copy
         // required data from member to head of household
@@ -185,6 +213,7 @@ class HouseholdType extends AbstractType {
             if ($data['headId'] <> 0) {
                 $formerHeadId = $data['headId'];  //original hoh_id
                 $newHeadId = $data['isHead'];  //new hoh_id
+//                        $flags = $data['flags'];
                 if ($newHeadId <> $formerHeadId) {
                     //get the updated values
                     $v1 = false;

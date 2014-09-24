@@ -15,7 +15,7 @@
 {{offence.offence}}{% if loop.index < n %}, {% endif %}</li>{% endfor %}
         {#<li><br><b>Insurance:</b> {% if member.insurance is not null %}{{ member.insurance.insurance }}{% endif %}</li>
         <li><br><b>Shots:</b> {% if member.shots is not null %}{{ member.shots.shots }}{% endif %}</li>#}
-        {% if member.excludeDate is not null %}<li><br><b>Excluded: </b>{{ member.excludeDate|date('m/d/Y') }}</li>{% endif %}
+        {% if member.excludeDate is not null %}<li>{{ member.excludeDate|date('m/d/Y') }}</li>{% endif %}
     </ul>
 </div>
 {% endfor %}
