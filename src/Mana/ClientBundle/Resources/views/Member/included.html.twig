@@ -1,0 +1,6 @@
+<li id="radioHead"><b>Head?</b> <input class="smallform" type="radio" id="isHead" name="household[isHead]" 
+    value="{% if formType == 'Add' %}{{ loop.index0 }}{% else %}{{ member.vars.value.id }}{% endif %}" 
+    {% if isHead == true %}checked="checked"{% endif %}>
+    <input type="hidden" name="household[members][{{loop.index0}}][id]" value="{{member.vars.value.id}}">
+</li>
+<li id="included"><b>Include? </b>{{ form_widget(member.include) }}</li>
