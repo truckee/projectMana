@@ -21,7 +21,7 @@
             <ul class="formblock" id="member-form">
                 {% if member.vars.value.include == '1' %}
                     {% include 'ManaClientBundle:Member:included.html.twig' %}
-                    {% include 'ManaClientBundle:Member:memberRequired.html.twig' %}
+                    {% include 'ManaClientBundle:Member:v1MemberRequired.html.twig' %}
                     {% include 'ManaClientBundle:Member:memberNotRequired.html.twig' %}
                 {% else %}
                     {% include 'ManaClientBundle:Member:excluded.html.twig' %}
