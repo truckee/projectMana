@@ -16,8 +16,8 @@ class SharedDateValidator extends ConstraintValidator
 
         $shared = $data->getShared();
         $shareddate = $data->getSharedDate();
-        // $complianceDate required only if $compliance = 'Yes'
-        if (( 1 === $shared && !$this->validateDate($shareddate))) {
+        $isDateObj = is_object($shareddate);
+        if (( 1 === $shared && !$isDateObj )) {
 
             $this->context->addViolation($constraint->message, array('%string%' => $value));
 
@@ -26,13 +26,4 @@ class SharedDateValidator extends ConstraintValidator
 
         return true;
     }
-
-    public function validateDate($date, $format = 'm/d/Y')
-    {
-        $d = \DateTime::createFromFormat($format, $date);
-        return $d && $d->format($format) == $date;
-    }
-
 }
-
-?>

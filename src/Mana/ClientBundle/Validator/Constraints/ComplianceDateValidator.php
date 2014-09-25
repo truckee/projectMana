@@ -16,8 +16,8 @@ class ComplianceDateValidator extends ConstraintValidator
 
         $compliance = $data->getCompliance();
         $complianceDate = $data->getComplianceDate();
-        // $complianceDate required only if $compliance = 'Yes'
-        if (( 1 === $compliance && !$this->validateDate($complianceDate))) {
+        $isDateObj = is_object($complianceDate);
+        if (( 1 === $compliance && !$isDateObj)) {
 
             $this->context->addViolation($constraint->message, array('%string%' => $value));
 
@@ -26,13 +26,4 @@ class ComplianceDateValidator extends ConstraintValidator
 
         return true;
     }
-
-    public function validateDate($date, $format = 'm/d/Y')
-    {
-        $d = \DateTime::createFromFormat($format, $date);
-        return $d && $d->format($format) == $date;
-    }
-
 }
-
-?>
