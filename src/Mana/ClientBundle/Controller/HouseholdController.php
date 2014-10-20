@@ -122,8 +122,8 @@ class HouseholdController extends Controller {
         $formerHeadId = $h['headId'];  //former head id
 
         $flags = array();
-        $dateAdded = $household->getDateAdded();
-        $flags['v1'] = empty($dateAdded);
+        $headDob = $household->getHead()->getDob();
+        $flags['v1'] = empty($headDob);
         $members = $household->getMembers();
         //$idArray required for isHead radio choices
         $idArray = array();
