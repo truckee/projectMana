@@ -144,16 +144,16 @@ class HouseholdController extends Controller {
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            if ($newHeadId <> $formerHeadId && $flags['v1'] == 1) {
-                //a v1 head received a member's data; member to be removed
-                $removeThis = $em->getRepository('ManaClientBundle:Member')->find($newHeadId);
-                $household->removeMember($removeThis);
-                $household->setDateAdded(new \DateTime());
-                $hoh = $em->getRepository('ManaClientBundle:Member')->find($formerHeadId);
-            } else {
+            if ($flags['newHead']) {
+                if ($flags['v1']) {
+                    //a v1 head received a member's data; member to be removed
+                    $removeThis = $em->getRepository('ManaClientBundle:Member')->find($formerHeadId);
+                    $household->removeMember($removeThis);
+                    $household->setDateAdded(new \DateTime());
+                }
                 $hoh = $em->getRepository('ManaClientBundle:Member')->find($newHeadId);
+                $household->setHead($hoh);
             }
-            $household->setHead($hoh);
             $em->getRepository('ManaClientBundle:Member')->initialize($household);
             $em->persist($household);
             $em->flush();
