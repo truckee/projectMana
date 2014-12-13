@@ -1,0 +1,30 @@
+{% extends "ManaClientBundle:Default:layout.html.twig" %}
+{% form_theme form 'ManaClientBundle:Form:fields.html.twig' %}
+{% block body %}
+    {{ errorString }}
+    <div class="title">Household Edit<br>
+        ID: {{household.id}}; Head: {{household.head.fname}} {{household.head.sname}}</div>
+    <div class="title">NOTICE: Head of household missing data MUST be corrected before other editing
+        <br>Please select new head of household from included members
+    </div>
+    <form action="{{ path('household_edit', { 'id': household.id }) }}" method="post">
+        <input type="hidden" id="headId" name="household[headId]" value="{{ household.head.id }}">
+        {% for member in form.members if member.vars.value.include %}
+            <input type="hidden" name="household[members][{{loop.index0}}][include]" value="{{ member.vars.value.include }}">
+            <input type="hidden" name="household[members][{{loop.index0}}][id]" value="{{member.vars.value.id}}">
+            <div class="border" onclick="showHideIncludeHead()" >
+                <ul id="member-form" class="formblock">
+                    <li id="radioHead"><b>Head?</b><input class="smallform" type="radio" id="isHead" name="household[isHead]" 
+                        value="{{ member.vars.value.id }}" {% if member.vars.value.id == household.hohId %}checked="checked"{% endif %}></li>
+                    <li><b>First name: </b>{{ form_row(member.fname) }}</li>
+                    <li><b>Last name: </b>{{ form_row(member.sname) }}</li>
+                    <li><b>Date of birth<br>(mm/dd/yyyy): </b>{{ form_row(member.dob) }}</li>
+                    <li><br><b>Gender: </b>{{ form_row(member.sex) }}</li>
+                    <li><br><b>Ethnicity: </b>{{ form_row(member.ethnicity) }}</li>
+                </ul>
+            </div>
+        {% endfor %}
+        <div align="center"><input class="smallbutton" type="submit" value="Submit">
+            <input class="smallbutton" type="reset"></div>
+    </form>
+{% endblock %}

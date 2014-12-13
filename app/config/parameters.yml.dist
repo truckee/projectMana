@@ -12,5 +12,3 @@ parameters:
     locale: en
     secret: something_very_secret
     database_path: null
-    statistics.class: Mana\ClientBundle\Statistics\Statistics
-    entity.manager: Doctrine\ORM\EntityManager

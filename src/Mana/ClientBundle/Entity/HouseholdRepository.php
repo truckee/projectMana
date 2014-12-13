@@ -4,7 +4,8 @@ namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 
-class HouseholdRepository extends EntityRepository {
+class HouseholdRepository extends EntityRepository
+{
 
     /**
      * Set initial values for household entity
@@ -14,7 +15,8 @@ class HouseholdRepository extends EntityRepository {
      * @param type $session
      * @return mixed
      */
-    public function initialize($household, $member, $session = null) {
+    public function initialize($household, $member, $session = null)
+    {
         $em = $this->getEntityManager();
         //phone added here because it's configured for 1:n but used as 1:1
         $phone = new Phone();
@@ -37,7 +39,8 @@ class HouseholdRepository extends EntityRepository {
         return $id;
     }
 
-    public function addContacts($households, $contactData) {
+    public function addContacts($households, $contactData)
+    {
         $em = $this->getEntityManager();
         foreach ($households as $id) {
             $household = $em->getRepository('ManaClientBundle:Household')->find($id);
@@ -54,6 +57,29 @@ class HouseholdRepository extends EntityRepository {
             $em->persist($household);
         }
         $em->flush();
+    }
+
+    /**
+     * Household version flags:
+     * 0: version 2
+     * 1: v1, single member
+     * >1: v1, more than 1 member
+     * @param type $id
+     */
+    public function getHouseholdVersionFlag($id)
+    {
+        $em = $this->getEntityManager();
+        $size = $em->createQuery(
+                "select count(m.fname) size from ManaClientBundle:Member m "
+                . "where m.household =  $id")
+                ->getSingleScalarResult();
+        $dob = $em->createQuery(
+                " select m.dob from  ManaClientBundle:Member m "
+                . "join ManaClientBundle:Household h with h.head = m "
+                . "where h.id =  $id")
+                ->getSingleScalarResult();
+        return (!empty($dob)) ?  0 : $size;
+
     }
 
 }
