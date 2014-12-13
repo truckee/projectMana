@@ -28,7 +28,7 @@ class HouseholdV1ManyController extends Controller
 
     /**
      * @Route("/single/{id}")
-     * @Template()
+     * @Template("ManaClientBundle:HouseholdV1Many:edit.html.twig")
      */
     public function editAction(Request $request, $id)
     {
@@ -38,13 +38,20 @@ class HouseholdV1ManyController extends Controller
         $members = $household->getMembers();
         //$idArray required for isHead radio choices
         $idArray = array();
+        $i = 0;
         foreach ($members as $member) {
-            $idArray[] = $member->getId();
+            $id = $member->getId();
+            $idArray[$i] = $id;
+            $i++;
         }
         $form = $this->createForm(new HouseholdMembersType($idArray), $household);
-//            dump($household);
-//            die;
         $form->handleRequest($request);
+//        if ($request->getMethod() == "POST") {
+//            $headData = $request->request->get('household');
+//            var_dump($headData);die;
+//        }
+        
+        
         if ($form->isValid()) {
             $em->persist($household);
             $em->flush();

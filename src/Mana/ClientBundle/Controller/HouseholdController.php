@@ -121,15 +121,20 @@ class HouseholdController extends Controller
         }
         //flag - 0: v2; 1: v1, single member; >1: v1, >1 member
         $flag = $em->getRepository('ManaClientBundle:Household')->getHouseholdVersionFlag($id);
-
-        switch ($flag) {
-            case 0;
-                break;
-            case 1:
-                return $this->forward('ManaClientBundle:HouseholdV1Single:edit', ['id' => $id]);
-            default:
-                return $this->forward('ManaClientBundle:HouseholdV1Many:edit',  ['id' => $id]);
+//        var_dump($flag);die;
+        if ( 1 === $flag) {
+            return $this->forward('ManaClientBundle:HouseholdV1Single:edit', ['id' => $id]);
+        } elseif ( $flag > 1 ) {
+            return $this->forward('ManaClientBundle:HouseholdV1Many:edit',  ['id' => $id]);
         }
+//        switch ($flag) {
+//            case 0;
+//                break;
+//            case 1:
+//                return $this->forward('ManaClientBundle:HouseholdV1Single:edit', ['id' => $id]);
+//            default:
+//                return $this->forward('ManaClientBundle:HouseholdV1Many:edit',  ['id' => $id]);
+//        }
 //        var_dump($flag);die;
         // set head of household template flags
         // $v1 = true if date_added is null

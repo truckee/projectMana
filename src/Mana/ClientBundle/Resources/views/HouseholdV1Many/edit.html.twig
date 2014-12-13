@@ -1,7 +1,7 @@
 {% extends "ManaClientBundle:Default:layout.html.twig" %}
 {% form_theme form 'ManaClientBundle:Form:fields.html.twig' %}
 {% block body %}
-    {{ errorString }}
+    {#{{ errorString }}#}
     <div class="title">Household Edit<br>
         ID: {{household.id}}; Head: {{household.head.fname}} {{household.head.sname}}</div>
     <div class="title">NOTICE: Head of household missing data MUST be corrected before other editing
@@ -10,7 +10,7 @@
     <form action="{{ path('household_edit', { 'id': household.id }) }}" method="post">
         <input type="hidden" id="headId" name="household[headId]" value="{{ household.head.id }}">
         {% for member in form.members if member.vars.value.include %}
-            <input type="hidden" name="household[members][{{loop.index0}}][include]" value="{{ member.vars.value.include }}">
+            <input type="hidden" name="household[members][{{loop.index0}}][include]" value="1">
             <input type="hidden" name="household[members][{{loop.index0}}][id]" value="{{member.vars.value.id}}">
             <div class="border" onclick="showHideIncludeHead()" >
                 <ul id="member-form" class="formblock">

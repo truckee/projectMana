@@ -66,7 +66,7 @@ class HouseholdMembersType extends AbstractType
                 }
             }
             $event->setData($data);
-            dump($data);
+            var_dump($data);die;
         });
     }
 
@@ -79,11 +79,11 @@ class HouseholdMembersType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Mana\ClientBundle\Entity\Household',
-            'error_bubbling' => false,
-            'cascade_validation' => true,
-            'csrf_protection' => false,
-            'required' => false,
-            'attr' => array("class" => "smallform"),
+//            'error_bubbling' => false,
+//            'cascade_validation' => true,
+//            'csrf_protection' => false,
+//            'required' => false,
+//            'attr' => array("class" => "smallform"),
         ));
     }
 
