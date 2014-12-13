@@ -22,22 +22,22 @@ class HouseholdMembersType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('members', 'collection', array(
-                    'type' => new MemberType(),
-                    'allow_add' => true,
-                    'allow_delete' => true,
-                    'by_reference' => false,
-                    'error_bubbling' => false,
-                    'cascade_validation' => true,
-                    'prototype' => true,
-                ))
-                ->add('headId', 'hidden', array(
-                    'mapped' => false,
-                ))
                 ->add('isHead', 'choice', array(
                     'expanded' => true,
                     'mapped' => false,
                     'choices' => $this->idArray,
+                ))
+                ->add('headId', 'hidden', array(
+                    'mapped' => false,
+                ))
+                ->add('members', 'collection', array(
+                    'type' => new MemberType(),
+//                    'allow_add' => true,
+//                    'allow_delete' => true,
+//                    'by_reference' => false,
+//                    'error_bubbling' => false,
+//                    'cascade_validation' => true,
+//                    'prototype' => true,
                 ))
         ;
         // if a head of household is necessarily being replaced, copy
@@ -47,26 +47,28 @@ class HouseholdMembersType extends AbstractType
             $formerHeadId = $data['headId'];  //original hoh_id
             $newHeadId = $data['isHead'];  //new hoh_id
             if ($newHeadId <> $formerHeadId) {
-                //get the updated values
-                foreach ($data['members'] as $member) {
-                    if ($member['id'] == $newHeadId) {
-                        $dob = $member['dob'];
-                        $sex = $member['sex'];
-                        $ethnicity = $member['ethnicity'];
+                    //get the updated values
+//                    $v1 = false;
+                    foreach ($data['members'] as $member) {
+                        if ($member['id'] == $newHeadId) {
+                            $dob = $member['dob'];
+                            $sex = $member['sex'];
+                            $ethnicity = $member['ethnicity'];
+                        } 
+//                        elseif ($member['id'] == $formerHeadId && !array_key_exists('dob', $member)) {
+//                            $v1 = true;
+//                        }
+                    }
+                    for ($index = 0; $index < count($data['members']); $index++) {
+                        //set the new values
+                        if ($data['members'][$index]['id'] == $formerHeadId) {
+                            $data['members'][$index]['dob'] = $dob;
+                            $data['members'][$index]['sex'] = $sex;
+                            $data['members'][$index]['ethnicity'] = $ethnicity;
+                        }
                     }
                 }
-
-                for ($index = 0; $index < count($data['members']); $index++) {
-                    //set the new values
-                    if ($data['members'][$index]['id'] == $formerHeadId) {
-                        $data['members'][$index]['dob'] = $dob;
-                        $data['members'][$index]['sex'] = $sex;
-                        $data['members'][$index]['ethnicity'] = $ethnicity;
-                    }
-                }
-            }
             $event->setData($data);
-            var_dump($data);die;
         });
     }
 
@@ -81,8 +83,8 @@ class HouseholdMembersType extends AbstractType
             'data_class' => 'Mana\ClientBundle\Entity\Household',
 //            'error_bubbling' => false,
 //            'cascade_validation' => true,
-//            'csrf_protection' => false,
-//            'required' => false,
+            'csrf_protection' => false,
+            'required' => false,
 //            'attr' => array("class" => "smallform"),
         ));
     }

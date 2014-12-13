@@ -121,57 +121,31 @@ class HouseholdController extends Controller
         }
         //flag - 0: v2; 1: v1, single member; >1: v1, >1 member
         $flag = $em->getRepository('ManaClientBundle:Household')->getHouseholdVersionFlag($id);
-//        var_dump($flag);die;
-        if ( 1 === $flag) {
+        if ( '1' === $flag) {
             return $this->forward('ManaClientBundle:HouseholdV1Single:edit', ['id' => $id]);
         } elseif ( $flag > 1 ) {
             return $this->forward('ManaClientBundle:HouseholdV1Many:edit',  ['id' => $id]);
         }
-//        switch ($flag) {
-//            case 0;
-//                break;
-//            case 1:
-//                return $this->forward('ManaClientBundle:HouseholdV1Single:edit', ['id' => $id]);
-//            default:
-//                return $this->forward('ManaClientBundle:HouseholdV1Many:edit',  ['id' => $id]);
-//        }
-//        var_dump($flag);die;
-        // set head of household template flags
-        // $v1 = true if date_added is null
-        // $oneMember = single member household
 
         $members = $household->getMembers();
         //$idArray required for isHead radio choices
-        $idArray = array();
         foreach ($members as $member) {
-            $idArray[] = $member->getId();
+            $memberId = $member->getId();
+            $idArray["$memberId"] = "$memberId";
         }
-        $headData = $request->request->get('household');
-        $newHeadId = $headData['isHead'];  //new head id
-        $formerHeadId = $headData['headId'];  //former head id
-
-        $flags = array();
-        $headDob = $household->getHead()->getDob();
-        $flags['v1'] = empty($headDob);
-
         if (count($household->getPhones()) == 0) {
             $phone = new Phone();
             $household->addPhone($phone);
         }
 
-//        $flags['oneMember'] = (count($members) == 1);
-        $newHead = ($newHeadId <> $formerHeadId);
-
         $form = $this->createForm(new HouseholdType($idArray), $household);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            if ($newHead && $flag) {
-                    $removeThis = $em->getRepository('ManaClientBundle:Member')->find($formerHeadId);
-                    $household->removeMember($removeThis);
-                    $household->setDateAdded(new \DateTime());
-                } 
-                elseif ($newHead && !$flag) {
+            $headData = $request->request->get('household');
+            $newHeadId = $headData['isHead'];  //new head id
+            $formerHeadId = $headData['headId'];  //former head id
+            if ($newHead <> $formerHeadId) {
                 $hoh = $em->getRepository('ManaClientBundle:Member')->find($newHeadId);
                 $household->setHead($hoh);
             }
@@ -187,8 +161,6 @@ class HouseholdController extends Controller
             'title' => 'Edit Household',
             'formType' => 'Edit',
             'household' => $household,
-            'flag' => $flag,
-//            'flags' => $flags,
             'errorString' => $errorString,
             'hasErrors' => $hasErrors,
         );

@@ -19,16 +19,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Mana\ClientBundle\Form\HouseholdMembersType;
 
 /**
- * Description of HouseholdV1Single
- * @Route("/v1")
+ * Description of HouseholdV1ManyController
  * @author George Brooks <truckeesolutions@gmail.com>
  */
 class HouseholdV1ManyController extends Controller
 {
 
     /**
-     * @Route("/single/{id}")
-     * @Template("ManaClientBundle:HouseholdV1Many:edit.html.twig")
+     * @Template()
      */
     public function editAction(Request $request, $id)
     {
@@ -37,30 +35,30 @@ class HouseholdV1ManyController extends Controller
 
         $members = $household->getMembers();
         //$idArray required for isHead radio choices
-        $idArray = array();
-        $i = 0;
         foreach ($members as $member) {
-            $id = $member->getId();
-            $idArray[$i] = $id;
-            $i++;
+            $memberId = $member->getId();
+            $idArray["$memberId"] = "$memberId";
         }
         $form = $this->createForm(new HouseholdMembersType($idArray), $household);
         $form->handleRequest($request);
-//        if ($request->getMethod() == "POST") {
-//            $headData = $request->request->get('household');
-//            var_dump($headData);die;
-//        }
-        
-        
+
         if ($form->isValid()) {
+            $headData = $request->request->get('household');
+            $newHeadId = $headData['isHead'];  //new head id
+            $removeThis = $em->getRepository('ManaClientBundle:Member')->find($newHeadId);
+            $household->removeMember($removeThis);
+            $household->setDateAdded(new \DateTime());
             $em->persist($household);
             $em->flush();
+
             return $this->redirect($this->generateUrl('household_edit', ['id' => $id]));
         }
         $errorString = $form->getErrorsAsString();
+
         return [
             'household' => $household,
-            'form'      => $form->createView(),
+            'form' => $form->createView(),
+            'title' => 'Edit Household',
             'errorString' => $errorString,
         ];
     }

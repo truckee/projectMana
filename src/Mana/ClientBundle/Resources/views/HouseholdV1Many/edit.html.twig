@@ -9,18 +9,19 @@
     </div>
     <form action="{{ path('household_edit', { 'id': household.id }) }}" method="post">
         <input type="hidden" id="headId" name="household[headId]" value="{{ household.head.id }}">
-        {% for member in form.members if member.vars.value.include %}
+        {% for member in form.members %}
             <input type="hidden" name="household[members][{{loop.index0}}][include]" value="1">
             <input type="hidden" name="household[members][{{loop.index0}}][id]" value="{{member.vars.value.id}}">
             <div class="border" onclick="showHideIncludeHead()" >
                 <ul id="member-form" class="formblock">
-                    <li id="radioHead"><b>Head?</b><input class="smallform" type="radio" id="isHead" name="household[isHead]" 
-                        value="{{ member.vars.value.id }}" {% if member.vars.value.id == household.hohId %}checked="checked"{% endif %}></li>
-                    <li><b>First name: </b>{{ form_row(member.fname) }}</li>
-                    <li><b>Last name: </b>{{ form_row(member.sname) }}</li>
-                    <li><b>Date of birth<br>(mm/dd/yyyy): </b>{{ form_row(member.dob) }}</li>
-                    <li><br><b>Gender: </b>{{ form_row(member.sex) }}</li>
-                    <li><br><b>Ethnicity: </b>{{ form_row(member.ethnicity) }}</li>
+                    <li id="radioHead"><b>Head?</b> <input class="smallform" type="radio" id="isHead" name="household[isHead]" 
+                                                           value="{{ member.vars.value.id }}" {% if member.vars.value.id == household.hohId %}checked="checked"{% endif %}></li>
+                        {% if member.vars.value.id != household.hohId %}
+                            {% include "ManaClientBundle:Member:memberRequired.html.twig" %}
+                        {% else %}
+                        <li><b>First name: </b>{{ form_widget(member.fname, {'attr':{'readonly':'true'}}) }}</li>
+                        <li><b>Last name: </b>{{ form_widget(member.sname, {'attr':{'readonly':'true'}}) }}</li>
+                        {% endif %}
                 </ul>
             </div>
         {% endfor %}
