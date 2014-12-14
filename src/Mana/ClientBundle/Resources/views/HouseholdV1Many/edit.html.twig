@@ -1,0 +1,31 @@
+{% extends "ManaClientBundle:Default:layout.html.twig" %}
+{% form_theme form 'ManaClientBundle:Form:fields.html.twig' %}
+{% block body %}
+    {#{{ errorString }}#}
+    <div class="title">Household Edit<br>
+        ID: {{household.id}}; Head: {{household.head.fname}} {{household.head.sname}}</div>
+    <div class="title">NOTICE: Head of household missing data MUST be corrected before other editing
+        <br>Please select new head of household from included members
+    </div>
+    <form action="{{ path('household_edit', { 'id': household.id }) }}" method="post">
+        <input type="hidden" id="headId" name="household[headId]" value="{{ household.head.id }}">
+        {% for member in form.members %}
+            <input type="hidden" name="household[members][{{loop.index0}}][include]" value="1">
+            <input type="hidden" name="household[members][{{loop.index0}}][id]" value="{{member.vars.value.id}}">
+            <div class="border" onclick="showHideIncludeHead()" >
+                <ul id="member-form" class="formblock">
+                    <li id="radioHead"><b>Head?</b> <input class="smallform" type="radio" id="isHead" name="household[isHead]" 
+                                                           value="{{ member.vars.value.id }}" {% if member.vars.value.id == household.hohId %}checked="checked"{% endif %}></li>
+                        {% if member.vars.value.id != household.hohId %}
+                            {% include "ManaClientBundle:Member:memberRequired.html.twig" %}
+                        {% else %}
+                        <li><b>First name: </b>{{ form_widget(member.fname, {'attr':{'readonly':'true'}}) }}</li>
+                        <li><b>Last name: </b>{{ form_widget(member.sname, {'attr':{'readonly':'true'}}) }}</li>
+                        {% endif %}
+                </ul>
+            </div>
+        {% endfor %}
+        <div align="center"><input class="smallbutton" type="submit" value="Submit">
+            <input class="smallbutton" type="reset"></div>
+    </form>
+{% endblock %}

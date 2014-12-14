@@ -1,8 +1,0 @@
-<li><b>First name: </b>{{ form_widget(member.fname) }}</li>
-<li><b>Last name: </b>{{ form_widget(member.sname) }}</li>
-{# if dob is not present, this is v1 member as head of household #}
-{% if flags.oneMember or not isHead %}
-<li><b>Date of birth<br>(mm/dd/yyyy): </b>{{ form_widget(member.dob) }}</li>
-<li><br><b>Gender: </b>{{ form_widget(member.sex) }}</li>
-<li><br><b>Ethnicity: </b>{{ form_widget(member.ethnicity) }}</li>
-{% endif %}
