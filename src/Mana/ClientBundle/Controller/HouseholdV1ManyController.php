@@ -39,7 +39,8 @@ class HouseholdV1ManyController extends Controller
             $memberId = $member->getId();
             $idArray["$memberId"] = "$memberId";
         }
-        $form = $this->createForm(new HouseholdMembersType($idArray), $household);
+        $newHead = $this->container->get('mana.head.replacement');
+        $form = $this->createForm(new HouseholdMembersType($newHead, $idArray), $household);
         $form->handleRequest($request);
 
         if ($form->isValid()) {

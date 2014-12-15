@@ -16,9 +16,11 @@ use Doctrine\ORM\EntityRepository;
 class HouseholdType extends AbstractType {
 
     private $idArray;
+    private $service;
 
-    public function __construct($idArray = null) {
+    public function __construct($service, $idArray = null) {
         $this->idArray = $idArray;
+        $this->service = $service;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
@@ -183,30 +185,8 @@ class HouseholdType extends AbstractType {
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $data = $event->getData();
             if ($data['headId'] <> 0) {
-                $formerHeadId = $data['headId'];  //original hoh_id
-                $newHeadId = $data['isHead'];  //new hoh_id
-                if ($newHeadId <> $formerHeadId) {
-                    //get the updated values
-                    $v1 = false;
-                    foreach ($data['members'] as $member) {
-                        if (array_key_exists('id', $member) && $member['id'] == $newHeadId) {
-                            $dob = $member['dob'];
-                            $sex = $member['sex'];
-                            $ethnicity = $member['ethnicity'];
-                        } elseif ($member['id'] == $formerHeadId && !array_key_exists('dob', $member)) {
-                            $v1 = true;
-                        }
-                    }
-                    for ($index = 0; $index < count($data['members']); $index++) {
-                        //set the new values
-                        if (array_key_exists('id', $data['members'][$index]) && $data['members'][$index]['id'] == $formerHeadId && $v1 == true) {
-                            $data['members'][$index]['dob'] = $dob;
-                            $data['members'][$index]['sex'] = $sex;
-                            $data['members'][$index]['ethnicity'] = $ethnicity;
-                        }
-                    }
-                }
-                $event->setData($data);
+                $newData = $this->service->replaceHeadData($data);
+                $event->setData($newData);
             }
         });
     }

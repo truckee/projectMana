@@ -63,7 +63,8 @@ class HouseholdController extends Controller
         $member = new Member();
         $household->addMember($member);
         $household->setHead($member);
-        $form = $this->createForm(new HouseholdType(), $household);
+        $newHead = $this->container->get('mana.head.replacement');
+        $form = $this->createForm(new HouseholdType($newHead), $household);
         $form->handleRequest($request);
         if ($form->isValid()) {
             // new head is not persisted until we know it's not a duplicate
@@ -137,8 +138,8 @@ class HouseholdController extends Controller
             $phone = new Phone();
             $household->addPhone($phone);
         }
-
-        $form = $this->createForm(new HouseholdType($idArray), $household);
+        $newHead = $this->container->get('mana.head.replacement');
+        $form = $this->createForm(new HouseholdType($newHead, $idArray), $household);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
