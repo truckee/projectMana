@@ -19,6 +19,7 @@ class ContactType extends AbstractType
                     'attr' => array("class" => "smallform"),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
+                                ->where("c.contactDesc <> 'N/A'")
                                 ->orderBy('c.contactDesc', 'ASC')
                                 ;
                     },
@@ -34,6 +35,7 @@ class ContactType extends AbstractType
                     'attr' => array("class" => "smallform"),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
+                                ->where("c.center <> 'N/A'")
                                 ->orderBy('c.center', 'ASC')
                                 ;
                     },

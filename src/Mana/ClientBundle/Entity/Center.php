@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Center
  *
  * @ORM\Table(name="center")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\CenterRepository")
  */
 class Center
 {

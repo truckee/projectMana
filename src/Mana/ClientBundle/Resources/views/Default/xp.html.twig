@@ -1,0 +1,21 @@
+{%- set rowValue = fields.rowValue -%}
+{%- set colValue = fields.colValue -%}
+<table>
+    <tr>
+        <td></td>
+        {%- for c in colKeys -%}
+            <th>{{ attribute(c, colValue) }} </th>
+            {%- endfor -%}
+    </tr>
+    {% for r in rowKeys -%}
+        <tr>
+            <td>{{ attribute(r, rowValue) }}
+                {%- for c in colKeys -%}
+                    <td style="text-align: right">
+                    {%- if profile[attribute(r, rowValue)][attribute(c, colValue)] is defined -%}
+                    {{ profile[attribute(r, rowValue)][attribute(c, colValue)]|format() }}{%- else -%}
+                    0{%- endif -%}
+                {% endfor %}
+        </tr>
+    {%- endfor -%}
+</table>
