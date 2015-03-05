@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new Mana\ClientBundle\ManaClientBundle(),
             new Ps\PdfBundle\PsPdfBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+            new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
