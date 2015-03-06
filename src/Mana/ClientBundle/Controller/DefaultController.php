@@ -80,14 +80,14 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $xp = $this->container->get('mana.crosstab');
 
-        $sql = "SELECT r.center colValue, i.income rowValue, COUNT(DISTINCT h.id) N " .
+        $sql = "SELECT r.center colLabel, i.income rowLabel, COUNT(DISTINCT h.id) N " .
                 "FROM household h " .
                 "JOIN contact c ON c.household_id = h.id " .
                 "LEFT JOIN center r ON r.id = c.center_id " .
                 "LEFT JOIN income i ON h.income_id = i.id " .
                 "WHERE c.contact_date BETWEEN __DATE_CRITERIA__ " .
                 "AND i.enabled = TRUE " .
-                "GROUP BY colValue, rowValue";
+                "GROUP BY colLabel, rowLabel";
 
         $rowKeys = $em->getRepository('ManaClientBundle:Income')->findBy(['enabled' => true], ['id' => 'ASC']);
         $colKeys = $em->getRepository('ManaClientBundle:Center')->activeCenters();
@@ -95,8 +95,8 @@ class DefaultController extends Controller
         $colArray = ['keys' => $colKeys, 'method' => 'getCenter'];
 
         $templateFields = [
-            'rowValue' => 'income',
-            'colValue' => 'center',
+            'rowLabel' => 'income',
+            'colLabel' => 'center',
         ];
         $criteria = [
             'startMonth' => '07',
@@ -108,8 +108,13 @@ class DefaultController extends Controller
 
         return ['profile' => $profile,
             'fields' => $templateFields,
+            'rowHeader' => 'Income bracket',
             'rowKeys' => $rowKeys,
-            'colKeys' => $colKeys];
+            'colKeys' => $colKeys,
+            'reportTitle' => 'Profile: Income by Distribution Site',
+            'reportSubTitle' => 'Fiscal Year to date: ',
+            'date' => new \DateTime(),
+            ];
     }
 
 }

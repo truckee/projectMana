@@ -7,7 +7,7 @@ namespace Mana\ClientBundle\Utilities;
 use Doctrine\ORM\EntityManager;
 
 /**
- * Description of Experiment
+ * Description of Crosstab
  *
  * @author George
  */
@@ -15,14 +15,13 @@ class Crosstab
 {
     private $em;
 
-
     public function __construct(EntityManager $em) {
         $this->em = $em;
     }
 
     /**
      * 
-     * @param string $query = name of SQL statement string
+     * @param string $query = SQL statement string
      * @param array $rowArray ['keys', 'method']
      * @param array $colArray ['keys', 'method']
      * @return array
@@ -33,11 +32,28 @@ class Crosstab
         $profile = $this->profileArray($rowArray, $colArray);
         $conn = $this->em->getConnection();
         $queryResults = $conn->fetchAll($query);
-        $profile = [];
         foreach ($queryResults as $array) {
-            $profile[$array['rowValue']][$array['colValue']] = $array['N'];
+            if (!array_key_exists('total', $profile[$array['rowLabel']])) {
+                $profile[$array['rowLabel']]['total'] = 0;
+            }
+            $profile[$array['rowLabel']][$array['colLabel']] = $array['N'];
+            $profile[$array['rowLabel']]['total'] += $array['N'];
         }
-        
+        foreach ($profile as $key => $array) {
+            if (!array_key_exists('total', $array)) {
+                $profile[$key]['total'] = 0;
+            }
+        }
+        $profile['total'] = [];
+        foreach ($profile as $row => $array) {
+            foreach ($array as $key => $value) {
+                if (!array_key_exists($key, $profile['total'])) {
+                    $profile['total'][$key] = 0;
+                }
+                $profile['total'][$key] += $value;
+            }
+        }
+         
         return $profile; 
     }
 
@@ -49,13 +65,13 @@ class Crosstab
         $colFn = $colArray['method'];
         $colKeys = [];
         foreach ($cols as $col) {
-            $colValue = $col->$colFn();
-            $colKeys[$colValue] = 0;
+            $colLabel = $col->$colFn();
+            $colKeys[$colLabel] = 0;
         }
         $profile = [];
         foreach ($rows as $row) {
-            $rowValue = $row->$rowFn();
-            $profile[$rowValue] = $colKeys;
+            $rowLabel = $row->$rowFn();
+            $profile[$rowLabel] = $colKeys;
         }
         
         return $profile;
