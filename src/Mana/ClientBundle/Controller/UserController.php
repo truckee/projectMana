@@ -31,8 +31,7 @@ class UserController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $sql = "SELECT u FROM ManaClientBundle:User u WHERE u.role <> 'ROLE_SUPER_ADMIN'";
         $users = $em->createQuery($sql)->getResult();
-//        $users = $em->getRepository('ManaClientBundle:User')->findBy(
-//                array(), array('sname' => 'ASC'));
+
         return array(
             'form' => $form->createView(),
             'user' => $user,

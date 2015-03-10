@@ -96,7 +96,6 @@ class Work {
 
     public function addMember(Member $member) {
         $this->members[] = $member;
-//        $member->addWork($this);
     }
 
     public function getMembers() {

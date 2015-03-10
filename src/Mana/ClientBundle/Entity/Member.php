@@ -47,7 +47,7 @@ class Member
      * @ManaAssert\NotFutureDate
      */
     protected $dob;
-//, groups={"v2", "add"}
+
     /**
      * @var string
      *
@@ -329,64 +329,7 @@ class Member
     public function getRelation()
     {
         return $this->relation;
-    }
-
-//    /**
-//     * @var boolean
-//     *
-//     * @ORM\Column(name="shots", type="boolean", nullable=true)
-//     */
-//    protected $shots;
-//
-//    /**
-//     * Set shots
-//     *
-//     * @param boolean $shots
-//     * @return shots
-//     */
-//    public function setShots($shots) {
-//        $this->shots = $shots;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get shots
-//     *
-//     * @return boolean 
-//     */
-//    public function getShots() {
-//        return $this->shots;
-//    }
-
-//    /**
-//     * @var boolean
-//     *
-//     * @ORM\Column(name="insurance", type="boolean", nullable=true)
-//     */
-//    protected $insurance;
-//
-//    /**
-//     * Set insurance
-//     *
-//     * @param boolean $insurance
-//     * @return insurance
-//     */
-//    public function setInsurance($insurance) {
-//        $this->insurance = $insurance;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get insurance
-//     *
-//     * @return boolean 
-//     */
-//    public function getInsurance() {
-//        return $this->insurance;
-//    }
-    
+    }    
  
     /**
      * @var \Doctrine\Common\Collections\Collection

@@ -96,7 +96,6 @@ class Reason {
 
     public function addHousehold(Household $household) {
         $this->households[] = $household;
-//        $household->addReason($this);
     }
 
     public function getHouseholds() {

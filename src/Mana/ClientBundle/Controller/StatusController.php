@@ -32,10 +32,11 @@ class StatusController extends Controller {
      * @Template("ManaClientBundle:Default:status_select.html.twig") 
      */
     public function changeAction(Request $request) {
-//        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $data = $this->get('request')->request->get('status');
         $status = $this->get('status');
         $status->setStatus($data);
+
         return $this->redirect($this->generateUrl("status"));
     }
 

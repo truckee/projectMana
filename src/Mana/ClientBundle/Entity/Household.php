@@ -53,13 +53,6 @@ class Household {
      */
     protected $dateAdded;
 
-//    /**
-//     * @var integer
-//     *
-//     * @ORM\Column(name="wic", type="boolean", nullable=true)
-//     */
-//    protected $wic;
-
     /**
      * @var integer
      *
@@ -121,19 +114,6 @@ class Household {
      */
     protected $phones;
 
-//    /**
-//     * @var \Doctrine\Common\Collections\Collection
-//     *
-//     * @ORM\OneToMany(targetEntity="Referral", mappedBy="household", cascade={"persist"}, orphanRemoval=true)
-//     */
-//    protected $referrals;
-//    /**
-//     * @var \Doctrine\Common\Collections\Collection
-//     *
-//     * @ORM\OneToMany(targetEntity="Note", mappedBy="household", cascade={"persist"})
-//     */
-//    protected $notes;
-
     /**
      * Constructor
      */
@@ -142,9 +122,6 @@ class Household {
         $this->contacts = new ArrayCollection();
         $this->addresses = new ArrayCollection();
         $this->phones = new ArrayCollection();
-//        $this->referrals = new ArrayCollection();
-//        $this->notes = new ArrayCollection();
-//        $this->incomeHistories = new ArrayCollection();
         $this->appliances = new ArrayCollection();
         $this->reasons = new ArrayCollection();
     }
@@ -220,27 +197,6 @@ class Household {
     public function getDateAdded() {
         return $this->dateAdded;
     }
-
-//    /**
-//     * Set wic
-//     *
-//     * @param boolean $wic
-//     * @return Household
-//     */
-//    public function setWic($wic) {
-//        $this->wic = $wic;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get wic
-//     *
-//     * @return boolean 
-//     */
-//    public function getWic() {
-//        return $this->wic;
-//    }
 
     /**
      * Set foodStamps
@@ -425,66 +381,6 @@ class Household {
         return $this->phones;
     }
 
-//    /**
-//     * Add referrals
-//     *
-//     * @param \Mana\ClientBundle\Entity\Referral $referrals
-//     * @return Household
-//     */
-//    public function addReferral(\Mana\ClientBundle\Entity\Referral $referrals) {
-//        $this->referrals[] = $referrals;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Remove referrals
-//     *
-//     * @param \Mana\ClientBundle\Entity\Referral $referrals
-//     */
-//    public function removeReferral(\Mana\ClientBundle\Entity\Referral $referrals) {
-//        $this->referrals->removeElement($referrals);
-//    }
-//
-//    /**
-//     * Get referrals
-//     *
-//     * @return \Doctrine\Common\Collections\Collection 
-//     */
-//    public function getReferrals() {
-//        return $this->referrals;
-//    }
-//
-//    /**
-//     * Add notes
-//     *
-//     * @param \Mana\ClientBundle\Entity\Note $notes
-//     * @return Household
-//     */
-//    public function addNote(\Mana\ClientBundle\Entity\Note $notes) {
-//        $this->notes[] = $notes;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Remove notes
-//     *
-//     * @param \Mana\ClientBundle\Entity\Note $notes
-//     */
-//    public function removeNote(\Mana\ClientBundle\Entity\Note $notes) {
-//        $this->notes->removeElement($notes);
-//    }
-//
-//    /**
-//     * Get notes
-//     *
-//     * @return \Doctrine\Common\Collections\Collection 
-//     */
-//    public function getNotes() {
-//        return $this->notes;
-//    }
-
     public function setHead($member) {
         $this->head = $member;
         return $this;
@@ -541,27 +437,6 @@ class Household {
     public function getIncomeSource() {
         return $this->incomeSource;
     }
-//
-//    /**
-//     * Set incomeSource
-//     *
-//     * @param \Mana\ClientBundle\Entity\IncomeSource $incomeSource
-//     * @return Contact
-//     */
-//    public function setIncomeSource(IncomeSource $incomeSource = null) {
-//        $this->incomeSource = $incomeSource;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get incomeSource
-//     *
-//     * @return \Mana\ClientBundle\Entity\IncomeSource 
-//     */
-//    public function getIncomeSource() {
-//        return $this->incomeSource;
-//    }
 
     /**
      * @var \Mana\ClientBundle\Entity\Housing
@@ -675,67 +550,6 @@ class Household {
     public function getReasons() {
         return $this->reasons;
     }
-//
-//    /**
-//     * @var boolean
-//     *
-//     * @ORM\Column(name="pregnant", type="boolean", nullable=true)
-//     */
-//    protected $pregnant;
-//
-//    /**
-//     * Set pregnant
-//     *
-//     * @param boolean $pregnant
-//     * @return Household
-//     */
-//    public function setPregnant($pregnant) {
-//        $this->pregnant = $pregnant;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get pregnant
-//     *
-//     * @return boolean 
-//     */
-//    public function getPregnant() {
-//        return $this->pregnant;
-//    }
-
-//    /**
-//     * @var \Mana\ClientBundle\Entity\Specialneed
-//     *
-//     * @ORM\ManyToOne(targetEntity="Specialneed", inversedBy="households")
-//     * @ORM\JoinColumns({
-//     *   @ORM\JoinColumn(name="specialneed_id", referencedColumnName="id")
-//     * })
-//     */
-//    protected $specialneed;
-//
-//    /**
-//     * Set specialneed
-//     *
-//     * @param \Mana\ClientBundle\Entity\Specialneed $specialneed
-//     * @return Contact
-//     */
-//    public function setSpecialneed(Specialneed $specialneed = null)
-//    {
-//        $this->specialneed = $specialneed;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get specialneed
-//     *
-//     * @return \Mana\ClientBundle\Entity\Specialneed 
-//     */
-//    public function getSpecialneed()
-//    {
-//        return $this->specialneed;
-//    }
 
     /**
      * @var boolean

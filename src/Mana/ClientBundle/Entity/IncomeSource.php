@@ -3,7 +3,6 @@
 namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * IncomeSource
@@ -29,13 +28,6 @@ class IncomeSource
      */
     protected $incomeSource;
 
-//    /**
-//     * @var string
-//     *
-//     * @ORM\Column(name="income_abbr", type="string", length=45, nullable=true)
-//     */
-//    protected $incomeAbbreviation;
-
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
@@ -57,15 +49,6 @@ class IncomeSource
      * @ORM\Column(name="enabled", type="integer", nullable=true)
      */
     protected $enabled;
-
-//    /**
-//     * Constructor
-//     */
-//    public function __construct()
-//    {
-//        $this->incomeHistories = new ArrayCollection();
-//    }
-
 
     /**
      * Get id
@@ -123,60 +106,4 @@ class IncomeSource
     {
         return $this->enabled;
     }
-//
-//    /**
-//     * Set incomeAbbreviation
-//     *
-//     * @param string $incomeAbbreviation
-//     * @return IncomeSource
-//     */
-//    public function setIncomeAbbreviation($incomeAbbreviation)
-//    {
-//        $this->incomeAbbreviation = $incomeAbbreviation;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get incomeAbbreviation
-//     *
-//     * @return string 
-//     */
-//    public function getIncomeAbbreviation()
-//    {
-//        return $this->incomeAbbreviation;
-//    }
-
-//    /**
-//     * Add incomeHistories
-//     *
-//     * @param \Mana\ClientBundle\Entity\IncomeHistory $incomeHistories
-//     * @return IncomeSource
-//     */
-//    public function addIncomeHistory(\Mana\ClientBundle\Entity\IncomeHistory $incomeHistories)
-//    {
-//        $this->incomeHistories[] = $incomeHistories;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Remove incomeHistories
-//     *
-//     * @param \Mana\ClientBundle\Entity\IncomeHistory $incomeHistories
-//     */
-//    public function removeIncomeHistory(\Mana\ClientBundle\Entity\IncomeHistory $incomeHistories)
-//    {
-//        $this->incomeHistories->removeElement($incomeHistories);
-//    }
-//
-//    /**
-//     * Get incomeHistories
-//     *
-//     * @return \Doctrine\Common\Collections\Collection 
-//     */
-//    public function getIncomeHistories()
-//    {
-//        return $this->incomeHistories;
-//    }
 }

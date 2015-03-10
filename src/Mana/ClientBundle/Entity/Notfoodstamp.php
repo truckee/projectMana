@@ -96,7 +96,6 @@ class Notfoodstamp {
 
     public function addHousehold(Household $household) {
         $this->households[] = $household;
-//        $household->addNotfoodstamp($this);
     }
 
     public function getHouseholds() {

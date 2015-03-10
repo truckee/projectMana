@@ -38,7 +38,6 @@ class Income
 
     public function addHousehold(Household $household) {
         $this->households[] = $household;
-//        $household->addAppliance($this);
     }
 
     public function getHouseholds() {
@@ -50,15 +49,6 @@ class Income
      * @ORM\Column(name="enabled", type="integer", nullable=true)
      */
     protected $enabled;
-
-//    /**
-//     * Constructor
-//     */
-//    public function __construct()
-//    {
-//        $this->incomeHistories = new ArrayCollection();
-//    }
-
 
     /**
      * Get id

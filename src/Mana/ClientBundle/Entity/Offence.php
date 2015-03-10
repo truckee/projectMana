@@ -101,7 +101,6 @@ class Offence
 
     public function addMember(Member $member) {
         $this->members[] = $member;
-//        $member->addAppliance($this);
     }
 
     public function getMembers() {
