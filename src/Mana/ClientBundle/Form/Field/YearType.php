@@ -1,8 +1,8 @@
 <?php
 
-// src\Mana\ClientBundle\Resources\views\Form\Type\YearType.php
+// src\Mana\ClientBundle\Resources\views\Form\Field\YearType.php
 
-namespace Mana\ClientBundle\Form\Type;
+namespace Mana\ClientBundle\Form\Field;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;

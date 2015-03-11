@@ -14,6 +14,7 @@ use Mana\ClientBundle\Entity\Member;
 use Mana\ClientBundle\Entity\Phone;
 use Mana\ClientBundle\Entity\Household;
 use Mana\ClientBundle\Form\HouseholdType;
+//use Mana\ClientBundle\Form\NewHouseholdType;
 
 /**
  * Client controller.

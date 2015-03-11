@@ -1,7 +1,7 @@
 <?php
 // src/Mana/ClientBundle/Form/Type/DobAgeType.php
 // the custom field to convert age to date of birth
-namespace Mana\ClientBundle\Form\Type;
+namespace Mana\ClientBundle\Form\Field;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
