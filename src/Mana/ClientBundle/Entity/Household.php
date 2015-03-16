@@ -21,7 +21,8 @@ use Mana\ClientBundle\Validator\Constraints as ManaAssert;
  * @ORM\Table(name="household")
  * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\HouseholdRepository")
  */
-class Household {
+class Household
+{
 
     /**
      * @var integer
@@ -56,8 +57,10 @@ class Household {
     /**
      * @var integer
      *
-     * @ORM\Column(name="food_stamps", type="integer", nullable=true)
-     */
+     * @ORM\ManyToOne(targetEntity="FsStatus", inversedBy="households")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="food_stamps", referencedColumnName="id")
+     * })     */
     protected $foodStamps;
 
     /**
@@ -117,7 +120,8 @@ class Household {
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->members = new ArrayCollection();
         $this->contacts = new ArrayCollection();
         $this->addresses = new ArrayCollection();
@@ -131,7 +135,8 @@ class Household {
      *
      * @return integer 
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
@@ -141,7 +146,8 @@ class Household {
      * @param integer $hohId
      * @return Household
      */
-    public function setHohId($hohId) {
+    public function setHohId($hohId)
+    {
         $this->hohId = $hohId;
 
         return $this;
@@ -152,7 +158,8 @@ class Household {
      *
      * @return integer 
      */
-    public function getHohId() {
+    public function getHohId()
+    {
         return $this->hohId;
     }
 
@@ -162,7 +169,8 @@ class Household {
      * @param boolean $active
      * @return Household
      */
-    public function setActive($active) {
+    public function setActive($active)
+    {
         $this->active = $active;
 
         return $this;
@@ -173,7 +181,8 @@ class Household {
      *
      * @return boolean 
      */
-    public function getActive() {
+    public function getActive()
+    {
         return $this->active;
     }
 
@@ -183,7 +192,8 @@ class Household {
      * @param \DateTime $dateAdded
      * @return Household
      */
-    public function setDateAdded($dateAdded) {
+    public function setDateAdded($dateAdded)
+    {
         $this->dateAdded = $dateAdded;
 
         return $this;
@@ -194,7 +204,8 @@ class Household {
      *
      * @return \DateTime 
      */
-    public function getDateAdded() {
+    public function getDateAdded()
+    {
         return $this->dateAdded;
     }
 
@@ -204,7 +215,8 @@ class Household {
      * @param boolean $foodStamps
      * @return Household
      */
-    public function setFoodStamps($foodStamps) {
+    public function setFoodStamps($foodStamps)
+    {
         $this->foodStamps = $foodStamps;
 
         return $this;
@@ -215,7 +227,8 @@ class Household {
      *
      * @return boolean 
      */
-    public function getFoodStamps() {
+    public function getFoodStamps()
+    {
         return $this->foodStamps;
     }
 
@@ -225,7 +238,8 @@ class Household {
      * @param integer $arrivalmonth
      * @return Household
      */
-    public function setArrivalmonth($arrivalmonth) {
+    public function setArrivalmonth($arrivalmonth)
+    {
         $this->arrivalmonth = $arrivalmonth;
 
         return $this;
@@ -236,7 +250,8 @@ class Household {
      *
      * @return integer 
      */
-    public function getArrivalmonth() {
+    public function getArrivalmonth()
+    {
         return $this->arrivalmonth;
     }
 
@@ -246,7 +261,8 @@ class Household {
      * @param integer $arrivalyear
      * @return Household
      */
-    public function setArrivalyear($arrivalyear) {
+    public function setArrivalyear($arrivalyear)
+    {
         $this->arrivalyear = $arrivalyear;
 
         return $this;
@@ -257,7 +273,8 @@ class Household {
      *
      * @return integer 
      */
-    public function getArrivalyear() {
+    public function getArrivalyear()
+    {
         return $this->arrivalyear;
     }
 
@@ -267,7 +284,8 @@ class Household {
      * @param \Mana\ClientBundle\Entity\Member $members
      * @return Household
      */
-    public function addMember(Member $member) {
+    public function addMember(Member $member)
+    {
         $this->members[] = $member;
         $member->setHousehold($this);
         return $this;
@@ -278,7 +296,8 @@ class Household {
      *
      * @param \Mana\ClientBundle\Entity\Member $members
      */
-    public function removeMember(Member $member) {
+    public function removeMember(Member $member)
+    {
         $this->members->removeElement($member);
     }
 
@@ -287,7 +306,8 @@ class Household {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getMembers() {
+    public function getMembers()
+    {
         return $this->members;
     }
 
@@ -297,7 +317,8 @@ class Household {
      * @param \Mana\ClientBundle\Entity\Contact $contacts
      * @return Household
      */
-    public function addContact(\Mana\ClientBundle\Entity\Contact $contact) {
+    public function addContact(\Mana\ClientBundle\Entity\Contact $contact)
+    {
         $this->contacts[] = $contact;
         $contact->setHousehold($this);
         return $this;
@@ -308,7 +329,8 @@ class Household {
      *
      * @param \Mana\ClientBundle\Entity\Contact $contacts
      */
-    public function removeContact(\Mana\ClientBundle\Entity\Contact $contact) {
+    public function removeContact(\Mana\ClientBundle\Entity\Contact $contact)
+    {
         $this->contacts->removeElement($contact);
     }
 
@@ -317,7 +339,8 @@ class Household {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getContacts() {
+    public function getContacts()
+    {
         return $this->contacts;
     }
 
@@ -327,7 +350,8 @@ class Household {
      * @param \Mana\ClientBundle\Entity\Address $address
      * @return Household
      */
-    public function addAddress(Address $address) {
+    public function addAddress(Address $address)
+    {
         $this->addresses[] = $address;
         $address->setHousehold($this);
         return $this;
@@ -336,9 +360,10 @@ class Household {
     /**
      * Remove addresses
      *
-     * @param \Mana\ClientBundle\Entity\Address $addresses
+     * @param \Mana\ClientBundle\Entity\Address $address
      */
-    public function removeAddress(\Mana\ClientBundle\Entity\Address $address) {
+    public function removeAddress(\Mana\ClientBundle\Entity\Address $address)
+    {
         $this->addresses->removeElement($address);
     }
 
@@ -347,7 +372,8 @@ class Household {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getAddresses() {
+    public function getAddresses()
+    {
         return $this->addresses;
     }
 
@@ -357,7 +383,8 @@ class Household {
      * @param \Mana\ClientBundle\Entity\Phone $phone
      * @return Household
      */
-    public function addPhone(Phone $phone) {
+    public function addPhone(Phone $phone)
+    {
         $this->phones[] = $phone;
         $phone->setHousehold($this);
         return $this;
@@ -366,9 +393,10 @@ class Household {
     /**
      * Remove phones
      *
-     * @param \Mana\ClientBundle\Entity\Phone $phones
+     * @param \Mana\ClientBundle\Entity\Phone $phone
      */
-    public function removePhone(\Mana\ClientBundle\Entity\Phone $phone) {
+    public function removePhone(\Mana\ClientBundle\Entity\Phone $phone)
+    {
         $this->phones->removeElement($phone);
     }
 
@@ -377,19 +405,21 @@ class Household {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getPhones() {
+    public function getPhones()
+    {
         return $this->phones;
     }
 
-    public function setHead($member) {
+    public function setHead($member)
+    {
         $this->head = $member;
         return $this;
     }
 
-    public function getHead() {
+    public function getHead()
+    {
         return $this->head;
     }
-
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -402,12 +432,14 @@ class Household {
      */
     protected $appliances;
 
-    public function addAppliance(Appliance $appliance) {
+    public function addAppliance(Appliance $appliance)
+    {
         $appliance->addHousehold($this); // synchronously updating inverse side
         $this->appliances[] = $appliance;
     }
 
-    public function getAppliances() {
+    public function getAppliances()
+    {
         return $this->appliances;
     }
 
@@ -418,23 +450,25 @@ class Household {
      */
     protected $incomeSource;
 
-    public function addIncomeSource(IncomeSource $incomeSource) {
+    public function addIncomeSource(IncomeSource $incomeSource)
+    {
         $incomeSource->addHousehold($this); // synchronously updating inverse side
         $this->incomeSource[] = $incomeSource;
     }
 
-
     /**
      * Remove incomesources
      *
-     * @param \Mana\ClientBundle\Entity\IncomeSource $incomeSources
+     * @param \Mana\ClientBundle\Entity\IncomeSource $incomeSource
      */
-    public function removeIncomeSource(IncomeSource $incomeSource) {
+    public function removeIncomeSource(IncomeSource $incomeSource)
+    {
         $this->incomeSources->removeElement($incomeSource);
         $incomeSource->setHousehold(null);
     }
 
-    public function getIncomeSource() {
+    public function getIncomeSource()
+    {
         return $this->incomeSource;
     }
 
@@ -454,7 +488,8 @@ class Household {
      * @param \Mana\ClientBundle\Entity\Housing $housing
      * @return Contact
      */
-    public function setHousing(Housing $housing = null) {
+    public function setHousing(Housing $housing = null)
+    {
         $this->housing = $housing;
 
         return $this;
@@ -465,7 +500,8 @@ class Household {
      *
      * @return \Mana\ClientBundle\Entity\Housing 
      */
-    public function getHousing() {
+    public function getHousing()
+    {
         return $this->housing;
     }
 
@@ -485,7 +521,8 @@ class Household {
      * @param \Mana\ClientBundle\Entity\Notfoodstamp $notfoodstamp
      * @return Contact
      */
-    public function setNotfoodstamp(Notfoodstamp $notfoodstamp = null) {
+    public function setNotfoodstamp(Notfoodstamp $notfoodstamp = null)
+    {
         $this->notfoodstamp = $notfoodstamp;
 
         return $this;
@@ -496,7 +533,8 @@ class Household {
      *
      * @return \Mana\ClientBundle\Entity\Notfoodstamp 
      */
-    public function getNotfoodstamp() {
+    public function getNotfoodstamp()
+    {
         return $this->notfoodstamp;
     }
 
@@ -516,7 +554,8 @@ class Household {
      * @param \Mana\ClientBundle\Entity\FsAmount $fsamount
      * @return Contact
      */
-    public function setFsamount(FsAmount $fsamount = null) {
+    public function setFsamount(FsAmount $fsamount = null)
+    {
         $this->fsamount = $fsamount;
 
         return $this;
@@ -527,7 +566,8 @@ class Household {
      *
      * @return \Mana\ClientBundle\Entity\Fsamount 
      */
-    public function getFsamount() {
+    public function getFsamount()
+    {
         return $this->fsamount;
     }
 
@@ -542,12 +582,14 @@ class Household {
      */
     protected $reasons;
 
-    public function addReason(Reason $reason) {
+    public function addReason(Reason $reason)
+    {
         $reason->addHousehold($this); // synchronously updating inverse side
         $this->reasons[] = $reason;
     }
 
-    public function getReasons() {
+    public function getReasons()
+    {
         return $this->reasons;
     }
 
@@ -564,7 +606,8 @@ class Household {
      * @param boolean $compliance
      * @return compliance
      */
-    public function setCompliance($compliance) {
+    public function setCompliance($compliance)
+    {
         $this->compliance = $compliance;
 
         return $this;
@@ -575,7 +618,8 @@ class Household {
      *
      * @return boolean 
      */
-    public function getCompliance() {
+    public function getCompliance()
+    {
         return $this->compliance;
     }
 
@@ -593,7 +637,8 @@ class Household {
      * @param boolean $complianceDate
      * @return complianceDate
      */
-    public function setComplianceDate($complianceDate) {
+    public function setComplianceDate($complianceDate)
+    {
         $this->complianceDate = $complianceDate;
 
         return $this;
@@ -604,7 +649,8 @@ class Household {
      *
      * @return boolean 
      */
-    public function getComplianceDate() {
+    public function getComplianceDate()
+    {
         return $this->complianceDate;
     }
 
@@ -621,7 +667,8 @@ class Household {
      * @param boolean $shared
      * @return shared
      */
-    public function setShared($shared) {
+    public function setShared($shared)
+    {
         $this->shared = $shared;
 
         return $this;
@@ -632,7 +679,8 @@ class Household {
      *
      * @return boolean 
      */
-    public function getShared() {
+    public function getShared()
+    {
         return $this->shared;
     }
 
@@ -647,10 +695,11 @@ class Household {
     /**
      * Set shareddate
      *
-     * @param date $shareddate
+     * @param date $sharedDate
      * @return shareddate
      */
-    public function setSharedDate($sharedDate) {
+    public function setSharedDate($sharedDate)
+    {
         $this->sharedDate = $sharedDate;
 
         return $this;
@@ -661,10 +710,10 @@ class Household {
      *
      * @return boolean 
      */
-    public function getSharedDate() {
+    public function getSharedDate()
+    {
         return $this->sharedDate;
     }
-
 
     /**
      * @var \Mana\ClientBundle\Entity\Income
@@ -732,4 +781,5 @@ class Household {
     {
         return $this->center;
     }
+
 }

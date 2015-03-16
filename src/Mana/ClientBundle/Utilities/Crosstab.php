@@ -21,18 +21,15 @@ class Crosstab
 
     /**
      * 
-     * @param string $query = SQL statement string
-     * @param array $rowArray ['keys', 'method']
-     * @param array $colArray ['keys', 'method']
+     * @param array $data = data array
+     * @param array $rowLabels
+     * @param array $colLabels
      * @return array
      */
-    public function crosstabQuery($query, $rowArray, $colArray)
+    public function crosstabQuery($data, $rowLabels, $colLabels)
     {
-        
-        $profile = $this->profileArray($rowArray, $colArray);
-        $conn = $this->em->getConnection();
-        $queryResults = $conn->fetchAll($query);
-        foreach ($queryResults as $array) {
+        $profile = $this->profileArray( $rowLabels, $colLabels);
+        foreach ($data as $array) {
             if (!array_key_exists('total', $profile[$array['rowLabel']])) {
                 $profile[$array['rowLabel']]['total'] = 0;
             }
@@ -53,27 +50,21 @@ class Crosstab
                 $profile['total'][$key] += $value;
             }
         }
-         
+        
         return $profile; 
     }
 
-    private function profileArray($rowArray, $colArray)
+    private function profileArray($rows, $cols)
     {
-        $rows = $rowArray['keys'];
-        $rowFn = $rowArray['method'];
-        $cols = $colArray['keys'];
-        $colFn = $colArray['method'];
         $colKeys = [];
         foreach ($cols as $col) {
-            $colLabel = $col->$colFn();
-            $colKeys[$colLabel] = 0;
+            $colKeys[$col] = 0;
         }
         $profile = [];
         foreach ($rows as $row) {
-            $rowLabel = $row->$rowFn();
-            $profile[$rowLabel] = $colKeys;
+            $profile[$row] = $colKeys;
         }
-        
+
         return $profile;
     }
     
@@ -83,7 +74,7 @@ class Crosstab
      * @param array $criteria ['startMonth', 'startYear', 'endMonth', 'endYear']
      * @return string
      */
-    public function setDateCriteria($query, $criteria)
+    public function setDateCriteria($criteria)
     {
         $startMonth = $criteria['startMonth'];
         $startYear = $criteria['startYear'];
@@ -93,9 +84,10 @@ class Crosstab
         $endDate = new \DateTime($endMonth . '/01/' . $endYear);
         $endText = $endDate->format('Y-m-t');
         
-        $dateCriteria = "'$startText' AND '$endText' ";
+        return "'$startText' AND '$endText' ";
+//        $dateCriteria = "'$startText' AND '$endText' ";
         
-        return str_replace('__DATE_CRITERIA__', $dateCriteria, $query);
+//        return str_replace('__DATE_CRITERIA__', $dateCriteria, $query);
         
     }
 }

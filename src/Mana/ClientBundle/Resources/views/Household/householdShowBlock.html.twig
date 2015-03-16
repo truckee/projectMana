@@ -8,7 +8,7 @@
     <li><b>Special needs<br>in household?: </b>{{ household.specialneed }}</li>
     <li><b>WIC: </b>{{ household.wic }}</li>#}
     <li><b>Phone: </b>{% for phone in household.phones %}({{ phone.areacode }}) {{phone.phoneNumber }}{% endfor %}</li>
-    <li><b>Food stamps? </b>{% if household.foodStamps == 1 %}Yes{% else %}No{% endif %}
+    <li><b>Food stamps? </b>{{ household.foodStamps }}
     {% if household.fsamount is not null %}<b>If yes, how much?</b>{{ household.fsamount.amount }}{% endif %}
     {% if household.notfoodstamp is not null %}<b>If no, why not?</b>{{ household.notfoodstamp.notfoodstamp }}{% endif %}
     </li>

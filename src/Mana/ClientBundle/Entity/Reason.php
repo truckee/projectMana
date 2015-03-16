@@ -9,7 +9,7 @@ use Mana\ClientBundle\Entity\Household;
  * Reason
  *
  * @ORM\Table(name="reason")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\ReasonRepository")
  */
 class Reason {
 

@@ -1,46 +1,21 @@
 {% extends "ManaClientBundle:Default:layout.html.twig" %}
 {% form_theme form 'ManaClientBundle:Form:fields.html.twig' %}
 {% block body %}
-{# basic report selection criteria; builds where clause  #}
-
-{% if dest == 'general' %}
-    <div class="title">Select statistics reporting criteria</div>
-    <form action="{{ path('stats_general') }}" method="post">
-{% endif %}
-{% if dest == 'distribution' or dest == '' %}
-    <div class="title">Select distribution details reporting criteria</div>
-    <form action="{{ path('stats_details') }}" method="post">
-{% endif %}
-{% if dest == 'multi' %}
-    <div class="title">Select multiple contacts reporting criteria</div>
-    <form action="{{ path('multi_contacts') }}" method="post">
-{% endif %}
-{{ form_errors(form.startMonth) }}
-{{ form_errors(form) }}
-    <div  class="body">
-
-        <table  class="width80">
-            <tr>
-                <td>Beginning month and year: 
-                <td>{{ form_widget(form.startMonth) }} {{ form_widget(form.startYear) }} 
-            <tr>
-                <td>Through month and year: 
-                <td>{{ form_widget(form.endMonth) }} {{ form_widget(form.endYear) }}
-    {% if dest == 'general' %}
-            <tr>
-                <td>Report type: 
-                <td>{{ form_widget(form.contact_type_id) }}
-            <tr>
-                <td>Either center or county or neither:
-            <tr>
-                <td>Site: 
-                <td id="center_select">{{ form_widget(form.center_id) }}
-            <tr>
-                <td>County:
-                <td id="county_select">{{ form_widget(form.county_id) }}
-{% endif %}</table>
-                    <br>
-                    <div align="center"><input class="smallbutton" type="submit" name="submit" value="Submit"></div>
-            </form>
+    {# basic report selection criteria; builds where clause  #}
+    <div class="title">{{ criteriaHeader }}</div>
+    <form action="{{ path(formPath) }}" method="post">
+        {{ form_errors(form.startMonth) }}
+        {{ form_errors(form) }}
+        <div  class="body">
+            {% include "ManaClientBundle:Statistics:dateCriteria.html.twig" %}
+            {% if extra == 'general' %}
+                {% include "ManaClientBundle:Statistics:typeLocationCriteria.html.twig" %}
+            {% endif %}
+            {% if extra == 'profile' %}
+                {% include "ManaClientBundle:Statistics:profileCriteria.html.twig" %}
+            {% endif %}
+            <br>
+            <div align="center"><input class="smallbutton" type="submit" name="submit" value="Submit"></div>
         </div>
+    </form>
 {% endblock %}

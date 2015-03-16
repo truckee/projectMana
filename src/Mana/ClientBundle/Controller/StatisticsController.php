@@ -3,6 +3,7 @@
 namespace Mana\ClientBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -17,21 +18,6 @@ class StatisticsController extends Controller
 {
 
     /**
-     * collect report criteria
-     * @Route("/{dest}/criteria", name="stats_criteria")
-     * @Template("ManaClientBundle:Statistics:report_criteria.html.twig")
-     */
-    public function criteriaAction($dest = null)
-    {
-        $form = $this->createForm(new ReportCriteriaType());
-        return array(
-            'form' => $form->createView(),
-            'dest' => $dest,
-            'title' => 'Report criteria'
-        );
-    }
-
-    /**
      * General statistics report
      * @param Request $request
      * @param type $dest
@@ -40,61 +26,21 @@ class StatisticsController extends Controller
      */
     public function generalAction(Request $request)
     {
-
-        $criteria = $request->request->get('report_criteria');
-
-        if (empty($criteria)) {
-            $session = $this->getRequest()->getSession();
-            $session->set('message', 'Report criteria not available');
-            return $this->forward("ManaClientBundle:Default:message");
-        }
-
         $form = $this->createForm(new ReportCriteriaType());
-
-        $dest = $request->request->get('dest');
-        $form->handlerequest($request);
+        $criteria = $request->request->get('report_criteria');
+        $form->handleRequest($request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-
             // get specs to pass to template
-            $contact_type_id = (empty($criteria['contact_type_id'])) ? 0 : $criteria['contact_type_id'];
-            if (!empty($contact_type_id)) {
-                $typeObj = $em->getRepository('ManaClientBundle:ContactDesc')->find($contact_type_id);
-                $specs['type'] = $typeObj->getContactDesc();
-            }
-            else {
-                $specs['type'] = 0;
-            }
+            $specs = $this->specs($criteria);
             $center_id = (empty($criteria['center_id'])) ? 0 : $criteria['center_id'];
-            if (!empty($center_id)) {
-                $centerObj = $em->getRepository('ManaClientBundle:Center')->find($center_id);
-                $specs['center'] = $centerObj->getCenter();
-            }
-            else {
-                $specs['center'] = 0;
-            }
             $county_id = (empty($criteria['county_id'])) ? 0 : $criteria['county_id'];
-            if (!empty($county_id)) {
-                $countyObj = $em->getRepository('ManaClientBundle:County')->find($county_id);
-                $specs['county'] = $countyObj->getCounty();
-            }
-            else {
-                $specs['county'] = 0;
-            }
-
             $stats = $this->get('reports');
-
             $stats->setStats($criteria);
-
-            $session = $this->getRequest()->getSession();
-
             $data = $stats->getStats();
-
             $statistics = $data['statistics'];
             $specs = array_merge($specs, $data['specs']);
-
             $counties = $em->getRepository("ManaClientBundle:County")->findByEnabled(1);
-
             $ctyStats = ($county_id) ? 0 : $stats->getCountyStats();
             $ctyPcts = ($county_id || $center_id) ? 0 : $stats->getCountyPcts($statistics, $counties, $ctyStats);
             if ($ctyPcts <> 0 && $ctyStats <> 0) {
@@ -107,20 +53,24 @@ class StatisticsController extends Controller
 
             $report = array(
                 'block' => 'statsblock',
-                'statistics' => $statistics,
                 'specs' => $specs,
+                'statistics' => $statistics,
                 'ctyStats' => $ctyStats,
                 'ctyPcts' => $ctyPcts,
                 'title' => "General statistics"
             );
-
+            $session = $this->getRequest()->getSession();
             $session->set('report', $report);
+
             return $this->render("ManaClientBundle:Statistics:statistics.html.twig", $report);
         }
+        
         return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
                     'form' => $form->createView(),
-                    'dest' => $dest,
-                    'title' => 'Report criteria'
+                    'extra' => general,
+                    'formPath' => "stats_general",
+                    'title' => 'Report criteria',
+                    'criteriaHeader' => 'Select statistics reporting criteria',
         ));
     }
 
@@ -132,15 +82,9 @@ class StatisticsController extends Controller
      */
     public function detailsAction(Request $request)
     {
-
-        $criteria = $request->request->get('report_criteria');
-        if (empty($criteria)) {
-            return $this->render('ManaClientBundle:Default:message.html.twig', array(
-                        'message' => 'Report criteria not available'
-            ));
-        }
         $form = $this->createForm(new ReportCriteriaType());
-        $form->handlerequest($request);
+        $criteria = $request->request->get('report_criteria');
+        $form->handleRequest($request);
         if ($form->isValid()) {
             $stats = $this->get('reports');
             $session = $this->getRequest()->getSession();
@@ -158,8 +102,39 @@ class StatisticsController extends Controller
 
         return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
                     'form' => $form->createView(),
-                    'dest' => 'distribution',
-                    'title' => 'Report criteria'
+                    'extra' => false,
+                    'title' => 'Report criteria',
+                    'criteriaHeader' => 'Select distribution details reporting criteria',
+                    'formPath' => 'stats_details',
+        ));
+    }
+
+    /**
+     * @Route("/multi", name="multi_contacts")
+     * @Template()
+     */
+    public function multiAction(Request $request)
+    {
+        $form = $this->createForm(new ReportCriteriaType());
+        $criteria = $request->request->get('report_criteria');
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $reports = $this->get('reports');
+            $multi = $reports->getMultiContacts($criteria);
+            if (count($multi) == 0) {
+                $session->set('message', 'No instances of multiple same-date contacts found');
+                return $this->forward("ManaClientBundle:Default:message");
+            }
+            return array('multi' => $multi,
+                'title' => 'Multiple contacts',
+            );
+        }
+        return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
+                    'form' => $form->createView(),
+                    'extra' => false,
+                    'title' => 'Report criteria',
+                    'criteriaHeader' => 'Select multiple contacts report criteria',
+                    'formPath' => 'multi_contacts',
         ));
     }
 
@@ -226,52 +201,367 @@ class StatisticsController extends Controller
 
         return $this->render('ManaClientBundle:Statistics:foodbank.html.twig', $report);
     }
-    
+
+    private function specs($criteria)
+    {
+        $em = $this->getDoctrine()->getManager();
+        // get specs to pass to template
+        $contact_type_id = (empty($criteria['contact_type_id'])) ? 0 : $criteria['contact_type_id'];
+        if (!empty($contact_type_id)) {
+            $typeObj = $em->getRepository('ManaClientBundle:ContactDesc')->find($contact_type_id);
+            $specs['type'] = $typeObj->getContactDesc();
+        }
+        else {
+            $specs['type'] = 0;
+        }
+        $center_id = (empty($criteria['center_id'])) ? 0 : $criteria['center_id'];
+        if (!empty($center_id)) {
+            $centerObj = $em->getRepository('ManaClientBundle:Center')->find($center_id);
+            $specs['center'] = $centerObj->getCenter();
+        }
+        else {
+            $specs['center'] = 0;
+        }
+        $county_id = (empty($criteria['county_id'])) ? 0 : $criteria['county_id'];
+        if (!empty($county_id)) {
+            $countyObj = $em->getRepository('ManaClientBundle:County')->find($county_id);
+            $specs['county'] = $countyObj->getCounty();
+        }
+        else {
+            $specs['county'] = 0;
+        }
+
+        return $specs;
+    }
+
     /**
      * @Route("/incomeProfile", name="income_profile")
-     * @Template()
      */
-    public function xpAction()
+    public function incomeProfileAction(Request $request)
+    {
+        $form = $this->createForm(new ReportCriteriaType());
+        $criteria = $request->request->get('report_criteria');
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $response = new Response();
+            $content = $this->income($criteria);
+            $response->setContent($content);
+
+            return $response;
+        }
+
+        return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
+                    'form' => $form->createView(),
+                    'extra' => 'profile',
+                    'formPath' => "income_profile",
+                    'title' => 'Report criteria',
+                    'criteriaHeader' => 'Select income profile reporting criteria',
+        ));
+    }
+
+    /**
+     * @Route("/reasonProfile", name="reason_profile")
+     */
+    public function reasonProfileAction(Request $request)
+    {
+        $form = $this->createForm(new ReportCriteriaType());
+        $criteria = $request->request->get('report_criteria');
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $response = new Response();
+            $content = $this->reason($criteria);
+            $response->setContent($content);
+
+            return $response;
+        }
+
+        return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
+                    'form' => $form->createView(),
+                    'extra' => 'profile',
+                    'formPath' => "reason_profile",
+                    'title' => 'Report criteria',
+                    'criteriaHeader' => 'Select SNAP/CalFresh benefits reporting criteria',
+        ));
+    }
+
+    /**
+     * @Route("/foodstampYesNoProfile", name="foodstampYesNo_profile")
+     */
+    public function foodstampYesNoProfileAction(Request $request)
+    {
+        $form = $this->createForm(new ReportCriteriaType());
+        $criteria = $request->request->get('report_criteria');
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $response = new Response();
+            $content = $this->yesNo($criteria);
+            $response->setContent($content);
+
+            return $response;
+        }
+
+        return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
+                    'form' => $form->createView(),
+                    'extra' => 'profile',
+                    'formPath' => "foodstampYesNo_profile",
+                    'title' => 'Report criteria',
+                    'criteriaHeader' => 'Select SNAP/CalFresh benefits reporting criteria',
+        ));
+    }
+
+    /**
+     * @Route("/foodstampHowMuchProfile", name="foodstampHowMuch_profile")
+     */
+    public function foodstampHowMuchProfileAction(Request $request)
+    {
+
+        $form = $this->createForm(new ReportCriteriaType());
+        $criteria = $request->request->get('report_criteria');
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $response = new Response();
+            $content = $this->howMuch($criteria);
+            $response->setContent($content);
+
+            return $response;
+        }
+
+        return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
+                    'form' => $form->createView(),
+                    'extra' => 'profile',
+                    'formPath' => 'foodstampHowMuch_profile',
+                    'title' => 'Report criteria',
+                    'criteriaHeader' => 'Select SNAP/CalFresh benefits reporting criteria',
+        ));
+    }
+
+    /**
+     * @Route("/notfoodstampProfile", name="notfoodstamp_profile")
+     */
+    public function notfoodstampProfileAction(Request $request)
+    {
+        $form = $this->createForm(new ReportCriteriaType());
+        $criteria = $request->request->get('report_criteria');
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $response = new Response();
+            $content = $this->not($criteria);
+            $response->setContent($content);
+            return $response;
+        }
+
+        return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
+                    'form' => $form->createView(),
+                    'extra' => 'profile',
+                    'formPath' => 'notfoodstamp_profile',
+                    'title' => 'Report criteria',
+                    'criteriaHeader' => 'Select SNAP/CalFresh benefits reporting criteria',
+        ));
+    }
+
+    /**
+     * @Route("/employmentProfile", name="employment_profile")
+     */
+    public function employmentProfileAction(Request $request)
+    {
+        $form = $this->createForm(new ReportCriteriaType());
+        $criteria = $request->request->get('report_criteria');
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $response = new Response();
+            $content = $this->employment($criteria);
+            $response->setContent($content);
+            return $response;
+        }
+
+        return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
+                    'form' => $form->createView(),
+                    'extra' => 'profile',
+                    'formPath' => 'employment_profile',
+                    'title' => 'Report criteria',
+                    'criteriaHeader' => 'Employment profile reporting criteria',
+        ));
+    }
+
+    /**
+     * @Route("/snapProfile", name="snap_profile")
+     */
+    public function snapProfileAction(Request $request)
+    {
+        $form = $this->createForm(new ReportCriteriaType());
+        $criteria = $request->request->get('report_criteria');
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $response = new Response();
+            $content = $this->yesNo($criteria);
+            $content .= $this->howMuch($criteria);
+            $content .= $this->not($criteria);
+            $response->setContent($content);
+            return $response;
+        }
+
+        return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
+                    'form' => $form->createView(),
+                    'extra' => 'profile',
+                    'formPath' => 'snap_profile',
+                    'title' => 'Report criteria',
+                    'criteriaHeader' => 'Select SNAP/CalFresh benefits reporting criteria',
+        ));
+    }
+
+    private function profiler($reportData)
+    {
+        $xp = $this->container->get('mana.crosstab');
+        $profile = $xp->crosstabQuery($reportData['data'], $reportData['rowLabels'], $reportData['colLabels']);
+        $reports = $this->get('reports');
+        $specs = $reports->getSpecs($reportData['criteria']);
+
+
+        return $this->renderView("ManaClientBundle:Statistics:profile.html.twig", ['profile' => $profile,
+                    'rowHeader' => $reportData['rowHeader'],
+                    'rowLabels' => $reportData['rowLabels'],
+                    'colLabels' => $reportData['colLabels'],
+                    'reportTitle' => $reportData['reportTitle'],
+                    'reportSubTitle' => $reportData['reportSubTitle'],
+                    'date' => new \DateTime(),
+                    'specs' => $specs,
+        ]);
+    }
+
+    private function howMuch($criteria)
     {
         $em = $this->getDoctrine()->getManager();
         $xp = $this->container->get('mana.crosstab');
+        $dateCriteria = $xp->setDateCriteria($criteria);
+        $profileType = $criteria['profileType'];
+        $rowLabels = $em->getRepository('ManaClientBundle:FsAmount')->rowLabels($dateCriteria);
+        $colLabels = $em->getRepository('ManaClientBundle:' . $profileType)->colLabels($dateCriteria);
+        $data = $em->getRepository('ManaClientBundle:FsAmount')->crossTabData($dateCriteria, $profileType);
 
-        $sql = "SELECT r.center colLabel, i.income rowLabel, COUNT(DISTINCT h.id) N " .
-                "FROM household h " .
-                "JOIN contact c ON c.household_id = h.id " .
-                "LEFT JOIN center r ON r.id = c.center_id " .
-                "LEFT JOIN income i ON h.income_id = i.id " .
-                "WHERE c.contact_date BETWEEN __DATE_CRITERIA__ " .
-                "AND i.enabled = TRUE " .
-                "GROUP BY colLabel, rowLabel";
-
-        $rowKeys = $em->getRepository('ManaClientBundle:Income')->findBy(['enabled' => true], ['id' => 'ASC']);
-        $colKeys = $em->getRepository('ManaClientBundle:Center')->activeCenters();
-        $rowArray = ['keys' => $rowKeys, 'method' => 'getIncome'];
-        $colArray = ['keys' => $colKeys, 'method' => 'getCenter'];
-
-        $templateFields = [
-            'rowLabel' => 'income',
-            'colLabel' => 'center',
+        $reportData = [
+            'reportTitle' => 'Households receiving SNAP/CalFresh benefits',
+            'reportSubTitle' => 'For the period ',
+            'criteria' => $criteria,
+            'rowHeader' => 'How much',
+            'rowLabels' => $rowLabels,
+            'colLabels' => $colLabels,
+            'data' => $data,
         ];
-        $criteria = [
-            'startMonth' => '07',
-            'startYear' => '2014',
-            'endMonth' => '06',
-            'endYear' => '2015'];
-        $query = $xp->setDateCriteria($sql, $criteria);
-        $profile = $xp->crosstabQuery($query, $rowArray, $colArray);
 
-        return ['profile' => $profile,
-            'fields' => $templateFields,
-            'rowHeader' => 'Income bracket',
-            'rowKeys' => $rowKeys,
-            'colKeys' => $colKeys,
-            'reportTitle' => 'Profile: Income by Distribution Site',
-            'reportSubTitle' => 'Fiscal Year to date: ',
-            'date' => new \DateTime(),
-            ];
+        return $this->profiler($reportData);
     }
-    
+
+    private function not($criteria)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $xp = $this->container->get('mana.crosstab');
+        $dateCriteria = $xp->setDateCriteria($criteria);
+        $profileType = $criteria['profileType'];
+        $rowLabels = $em->getRepository('ManaClientBundle:Notfoodstamp')->rowLabels($dateCriteria);
+        $colLabels = $em->getRepository('ManaClientBundle:' . $profileType)->colLabels($dateCriteria);
+        $data = $em->getRepository('ManaClientBundle:Notfoodstamp')->crossTabData($dateCriteria, $profileType);
+        $reportData = [
+            'reportTitle' => 'Households not receiving SNAP/CalFresh benefits',
+            'reportSubTitle' => 'For the period ',
+            'criteria' => $criteria,
+            'rowHeader' => 'Reason why not',
+            'rowLabels' => $rowLabels,
+            'colLabels' => $colLabels,
+            'data' => $data,
+        ];
+
+        return $this->profiler($reportData);
+    }
+
+    private function yesNo($criteria)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $xp = $this->container->get('mana.crosstab');
+        $dateCriteria = $xp->setDateCriteria($criteria);
+        $profileType = $criteria['profileType'];
+        $rowLabels = ['Yes', 'No'];
+        $colLabels = $em->getRepository('ManaClientBundle:' . $profileType)->colLabels($dateCriteria);
+        $data = $em->getRepository('ManaClientBundle:FsStatus')->crossTabData($dateCriteria, $profileType);
+        $reportData = [
+            'reportTitle' => 'Households receiving SNAP/CalFresh benefits',
+            'reportSubTitle' => 'For the period ',
+            'criteria' => $criteria,
+            'rowHeader' => 'Receiving benefits',
+            'rowLabels' => $rowLabels,
+            'colLabels' => $colLabels,
+            'data' => $data,
+        ];
+
+        return $this->profiler($reportData);
+    }
+
+    private function income($criteria)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $xp = $this->container->get('mana.crosstab');
+        $dateCriteria = $xp->setDateCriteria($criteria);
+        $profileType = $criteria['profileType'];
+        $rowLabels = $em->getRepository('ManaClientBundle:Income')->rowLabels($dateCriteria);
+        $colLabels = $em->getRepository('ManaClientBundle:' . $profileType)->colLabels($dateCriteria);
+        $data = $em->getRepository('ManaClientBundle:Income')->crossTabData($dateCriteria, $profileType);
+
+        $reportData = [
+            'reportTitle' => 'Profile: Income by Distribution Site',
+            'reportSubTitle' => 'For the period ',
+            'criteria' => $criteria,
+            'rowHeader' => 'Income bracket',
+            'rowLabels' => $rowLabels,
+            'colLabels' => $colLabels,
+            'data' => $data,
+        ];
+
+        return $this->profiler($reportData);
+    }
+
+    private function reason($criteria)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $xp = $this->container->get('mana.crosstab');
+        $dateCriteria = $xp->setDateCriteria($criteria);
+        $profileType = $criteria['profileType'];
+        $rowLabels = $em->getRepository('ManaClientBundle:Reason')->rowLabels($dateCriteria);
+        $colLabels = $em->getRepository('ManaClientBundle:' . $profileType)->colLabels($dateCriteria);
+        $data = $em->getRepository('ManaClientBundle:Reason')->crossTabData($dateCriteria, $profileType);
+
+        $reportData = [
+            'reportTitle' => 'Factors contributing to households not having enough food',
+            'reportSubTitle' => 'For the period ',
+            'criteria' => $criteria,
+            'rowHeader' => 'Reason',
+            'rowLabels' => $rowLabels,
+            'colLabels' => $colLabels,
+            'data' => $data,
+        ];
+
+        return $this->profiler($reportData);
+    }
+
+    private function employment($criteria)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $xp = $this->container->get('mana.crosstab');
+        $dateCriteria = $xp->setDateCriteria($criteria);
+        $profileType = $criteria['profileType'];
+        $rowLabels = $em->getRepository('ManaClientBundle:Work')->rowLabels($dateCriteria);
+        $colLabels = $em->getRepository('ManaClientBundle:' . $profileType)->colLabels($dateCriteria);
+        $data = $em->getRepository('ManaClientBundle:Work')->crossTabData($dateCriteria, $profileType);
+
+        $reportData = [
+            'reportTitle' => 'Employment profile (household members)',
+            'reportSubTitle' => 'For the period ',
+            'criteria' => $criteria,
+            'rowHeader' => 'Employment',
+            'rowLabels' => $rowLabels,
+            'colLabels' => $colLabels,
+            'data' => $data,
+        ];
+
+        return $this->profiler($reportData);
+    }
 
 }

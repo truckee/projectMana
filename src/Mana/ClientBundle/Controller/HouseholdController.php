@@ -144,9 +144,13 @@ class HouseholdController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $headData = $request->request->get('household');
-            $newHeadId = $headData['isHead'];  //new head id
-            $formerHeadId = $headData['headId'];  //former head id
+            $houseData = $request->request->get('household');
+            if ('' === $houseData['foodStamps']) {
+                $unk = $em->getRepository("ManaClientBundle:FsStatus")->findOneBy(['status' => 'Unknown']);
+                $household->setFoodStamps($unk);
+            }
+            $newHeadId = $houseData['isHead'];  //new head id
+            $formerHeadId = $houseData['headId'];  //former head id
             if ($newHead <> $formerHeadId) {
                 $hoh = $em->getRepository('ManaClientBundle:Member')->find($newHeadId);
                 $household->setHead($hoh);
@@ -154,8 +158,10 @@ class HouseholdController extends Controller
             $em->getRepository('ManaClientBundle:Member')->initialize($household);
             $em->persist($household);
             $em->flush();
+            
             return $this->redirect($this->generateUrl('household_show', array('id' => $household->getId())));
         }
+
         $hasErrors = ($request->getMethod() == 'POST') ? true : false;
         $errorString = $form->getErrorsAsString();
         return array(

@@ -9,7 +9,7 @@ use Mana\ClientBundle\Entity\Household;
  * Notfoodstamp
  *
  * @ORM\Table(name="notfoodstamp")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\NotfoodstampRepository")
  */
 class Notfoodstamp {
 

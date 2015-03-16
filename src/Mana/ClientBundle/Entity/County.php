@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * County
  *
  * @ORM\Table(name="county")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\CountyRepository")
  */
 class County
 {

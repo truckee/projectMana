@@ -9,7 +9,7 @@ use Mana\ClientBundle\Entity\Household;
  * FsAmount
  *
  * @ORM\Table(name="fs_amount")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\FsAmountRepository")
  */
 class FsAmount {
 

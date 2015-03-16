@@ -69,9 +69,15 @@ class HouseholdType extends AbstractType
                     'widget' => 'single_text',
                     'format' => 'MM/dd/yyyy',
                 ))
-                ->add('foodStamps', 'choice', array(
-                    'choices' => array('0' => 'No', '1' => 'Yes', '2' => 'Appl.'),
+                ->add('foodStamps', 'entity', array(
+                    'class' => 'ManaClientBundle:FsStatus',
+                    'property' => 'status',
                     'empty_value' => '',
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('f')
+                                ->orderBy('f.id', 'ASC')
+                                ;
+                    },
                 ))
                 ->add('fsamount', 'entity', array(
                     'class' => 'ManaClientBundle:FsAmount',

@@ -8,12 +8,15 @@
               Content="hunger, poverty, homelessness, community gardens, nutrition, Hispanic services, outreach, sustainable agriculture, non-profit, kids cooking, food, volunteering, Lake Tahoe, low-income, food pantry, Truckee, soup kitchen, emergency food relief, meals on wheels, gardening">
         <title>Project MANA{% if title is defined %}: {{ title|raw }}{% endif %}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <script src="{{ asset('jquery/jquery-1.10.2.min.js') }}" type="text/javascript"></script>
-        <script src="{{ asset('jquery/jquery-1.10.2.min.map') }}" type="text/javascript"></script>
-        <script src="{{ asset('jquery/jquery-ui-1.10.3.custom.min.js') }}" type="text/javascript"></script>
-        <script src="{{ asset('js/foodstamps.js') }}" type="text/javascript"></script>
-        <script src="{{ asset('js/mana.js') }}" type="text/javascript"></script>
-        <script src="{{ asset('js/showHideHeadInclude.js') }}" type="text/javascript"></script>
+{% block javascripts %}
+    {% javascripts '@ManaClientBundle/Resources/public/jquery/*' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    {% javascripts '@ManaClientBundle/Resources/public/js/*' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
         {% block stylesheets %}
             <link href="{{ asset('/css/cssframes.css') }}" rel="stylesheet" />
             <link href="{{ asset('/css/mana.css') }}" rel="stylesheet" />

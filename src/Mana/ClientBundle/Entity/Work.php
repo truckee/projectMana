@@ -3,13 +3,12 @@
 namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Mana\ClientBundle\Entity\Household;
 
 /**
  * Work
  *
  * @ORM\Table(name="work")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\WorkRepository")
  */
 class Work {
 

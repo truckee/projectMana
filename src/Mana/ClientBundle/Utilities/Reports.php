@@ -508,6 +508,13 @@ class Reports {
         $data['specs'] = $this->specs;
         return $data;
     }
+    
+    public function getSpecs($criteria)
+    {
+        $this->setCriteria($criteria);
+        
+        return $this->specs;
+    }
 
     /**
      * calculate county percentages

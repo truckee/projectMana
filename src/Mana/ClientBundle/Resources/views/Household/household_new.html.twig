@@ -6,9 +6,6 @@
 <form action=""  method="post">
     <input type="hidden" name="household[headId]" value="0">
     <div class="errors">
-{{ form_errors(form.center) -}}
-{{ form_errors(form.complianceDate) -}}
-{{ form_errors(form.sharedDate) -}}
         {#{{ errorString -}}#}
 {{ form_errors(form) -}}
 {% for member in form.members %}

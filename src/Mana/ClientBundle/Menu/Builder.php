@@ -187,20 +187,20 @@ class Builder extends ContainerAware {
         $menu = $factory->createItem('root');
 
         $menu->addChild("General Statistics", array(
-            'route' => 'stats_criteria',
-            'routeParameters' => array('dest' => 'general')
+            'route' => 'stats_general',
+//            'routeParameters' => array('dest' => 'general')
         ));
         $menu["General Statistics"]->setLinkAttribute('class', 'smallbutton');
 
         $menu->addChild("Distribution details", array(
-            'route' => 'stats_criteria',
-            'routeParameters' => array('dest' => 'distribution')
+            'route' => 'stats_details',
+//            'routeParameters' => array('dest' => 'distribution')
         ));
         $menu["Distribution details"]->setLinkAttribute('class', 'smallbutton');
 
         $menu->addChild("Multiple contacts", array(
-            'route' => 'stats_criteria',
-            'routeParameters' => array('dest' => 'multi')
+            'route' => 'multi_contacts',
+//            'routeParameters' => array('dest' => 'multi')
         ));
         $menu["Multiple contacts"]->setLinkAttribute('class', 'smallbutton');
 

@@ -200,31 +200,31 @@ class ContactController extends Controller {
             'form' => $form->createView()
         );
     }
-
-    /**
-     * @Route("/multi", name="multi_contacts")
-     * @Template()
-     */
-    public function multiAction(Request $request) {
-        $criteria = $request->request->get('report_criteria');
-        if (empty($criteria)) {
-            $session = $this->getRequest()->getSession();
-            $session->set('message', 'Report criteria not available');
-            return $this->forward("ManaClientBundle:Default:message");
-        }
-        $form = $this->createForm(new ReportCriteriaType());
-        $form->handlerequest($request);
-        if ($form->isValid()) {
-            $reports = $this->get('reports');
-            $multi = $reports->getMultiContacts($criteria);
-            if (count($multi) == 0) {
-                $session->set('message', 'No instances of multiple same-date contacts found');
-                return $this->forward("ManaClientBundle:Default:message");
-            }
-            return array('multi' => $multi,
-                'title' => 'Multiple contacts',
-            );
-        }
-        return array();
-    }
+//
+//    /**
+//     * @Route("/multi", name="multi_contacts")
+//     * @Template()
+//     */
+//    public function multiAction(Request $request) {
+//        $criteria = $request->request->get('report_criteria');
+//        if (empty($criteria)) {
+//            $session = $this->getRequest()->getSession();
+//            $session->set('message', 'Report criteria not available');
+//            return $this->forward("ManaClientBundle:Default:message");
+//        }
+//        $form = $this->createForm(new ReportCriteriaType());
+//        $form->handlerequest($request);
+//        if ($form->isValid()) {
+//            $reports = $this->get('reports');
+//            $multi = $reports->getMultiContacts($criteria);
+//            if (count($multi) == 0) {
+//                $session->set('message', 'No instances of multiple same-date contacts found');
+//                return $this->forward("ManaClientBundle:Default:message");
+//            }
+//            return array('multi' => $multi,
+//                'title' => 'Multiple contacts',
+//            );
+//        }
+//        return array();
+//    }
 }

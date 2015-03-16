@@ -37,9 +37,6 @@ class ReportCriteriaType extends AbstractType {
                     'data' => $this->month,
                     'empty_value' => false,
                     'attr' => array("class" => "smallform"),
-//                    'constraints' => array(
-//                        new EmptyTable(),
-//                    ),
                         )
                 )
                 ->add('startYear', new YearType(), array(
@@ -62,6 +59,7 @@ class ReportCriteriaType extends AbstractType {
                     'attr' => array("class" => "smallform"),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
+                                ->where('c.enabled = 1')
                                 ->orderBy('c.contactDesc', 'ASC');
                     },
                     'constraints' => array(
@@ -79,18 +77,14 @@ class ReportCriteriaType extends AbstractType {
                                 ->orderBy('c.county', 'ASC');
                     },
                 ))
-                ->add('center_id', 'entity', array(
-                    'class' => 'ManaClientBundle:Center',
-                    'property' => 'center',
-                    'empty_value' => 'Select distribution center',
-                    'error_bubbling' => true,
-                    'attr' => array("class" => "smallform"),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('c')
-                                ->orderBy('c.center', 'ASC');
-                    },
-                ))
+                ->add('center', new Field\CenterEnabledChoiceType())
                 ->add('dest', 'hidden')
+                ->add('profileType', 'choice', [
+                    'mapped' => FALSE,
+                    'choices' => ['Center' => 'By site', 'County' => 'By county'],
+                    'expanded' => TRUE,
+                    'data' => 'Center',
+                ])
         ;
     }
 
@@ -99,6 +93,7 @@ class ReportCriteriaType extends AbstractType {
             'csrf_protection' => false,
             'required' => false,
             'attr' => array("class" => "smallform"),
+            'validation_groups' => array('reports'),
         ));
     }
 

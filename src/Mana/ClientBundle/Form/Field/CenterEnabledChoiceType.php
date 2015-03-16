@@ -26,7 +26,7 @@ class CenterEnabledChoiceType extends AbstractType
                                 ->orderBy('c.center', 'ASC')
                                 ;
                     },
-                    'constraints' => array(new NotBlank(array('message' => 'Site must be selected')),),
+                    'constraints' => array(new NotBlank(array('message' => 'No site elected', 'groups' => array('Default'))))
             ));
     }
 
