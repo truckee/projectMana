@@ -4,6 +4,19 @@ $(document).ready(function() {
     var memberList = $('#member-list');
     var newMemberWidget = memberList.attr('data-prototype');
 
+    $('#menuToggle').click(function() {
+        if ( $("#menuToggle").text() === 'Printable view')  {  
+            $("#menuToggle").text('Menu');
+            $(".menu").hide();
+            $("html>body #content").css('margin-left', 10+'px');
+        } else {
+            $("#menuToggle").text('Printable view');
+            $(".menu").show();
+            $("html>body #content").css('margin-left', 180+'px');
+           
+        }
+    });
+
     $('#add-member').click(function() {
         //allow for adding members in client edit
         var includeCount = $('#member-list li#included').length;

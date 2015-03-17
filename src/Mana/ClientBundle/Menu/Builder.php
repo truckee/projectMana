@@ -83,6 +83,26 @@ class Builder extends ContainerAware {
 
         return $menu;
     }
+    
+    public function profileMenu(FactoryInterface $factory, array $options)
+    {
+        $menu = $factory->createItem('root');
+        $menu->addChild('Employment', array(
+            'route' => 'employment_profile',
+        ))->setLinkAttribute('class', 'smallbutton');
+        $menu->addChild('Income', array(
+            'route' => 'income_profile',
+        ))->setLinkAttribute('class', 'smallbutton');
+        $menu->addChild('Insusfficient food', array(
+            'route' => 'reason_profile',
+        ))->setLinkAttribute('class', 'smallbutton');
+        $menu->addChild('SNAP', array(
+            'route' => 'snap_profile',
+        ))->setLinkAttribute('class', 'smallbutton');
+
+        return $menu;
+       
+    }
 
     public function optionsCol1Menu(FactoryInterface $factory, array $options) {
         $menu = $factory->createItem('root');

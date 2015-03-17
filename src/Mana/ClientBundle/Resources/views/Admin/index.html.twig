@@ -10,10 +10,12 @@
 <table>
     <tr>
         <td class="section">Reports</td>
+        <td class="section">Profiles</td>
         <td class="section">Status Changes</td>
     </tr>
     <tr>
         <td>{{ knp_menu_render('ManaClientBundle:Builder:reportsMenu') }}</td>
+        <td>{{ knp_menu_render('ManaClientBundle:Builder:profileMenu') }}</td>
         <td><a class="smallbutton" href="{{ path("status") }}">Status changes</a></td>
     </tr>
 </table>

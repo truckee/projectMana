@@ -67,7 +67,7 @@ class StatisticsController extends Controller
         
         return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
                     'form' => $form->createView(),
-                    'extra' => general,
+                    'extra' => 'general',
                     'formPath' => "stats_general",
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Select statistics reporting criteria',
@@ -506,7 +506,7 @@ class StatisticsController extends Controller
         $data = $em->getRepository('ManaClientBundle:Income')->crossTabData($dateCriteria, $profileType);
 
         $reportData = [
-            'reportTitle' => 'Profile: Income by Distribution Site',
+            'reportTitle' => 'Household Income',
             'reportSubTitle' => 'For the period ',
             'criteria' => $criteria,
             'rowHeader' => 'Income bracket',
