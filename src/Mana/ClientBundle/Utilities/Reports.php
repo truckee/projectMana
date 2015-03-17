@@ -48,7 +48,7 @@ class Reports {
         $endDate = new \DateTime($endMonth . '/01/' . $endYear);
         $endText = $endDate->format('Y-m-t');
 
-        $contact_type_id = (empty($criteria['contact_type_id'])) ? 0 : $criteria['contact_type_id'];
+        $contact_type_id = (empty($criteria['contact_type'])) ? 0 : $criteria['contact_type'];
         $center_id = (empty($criteria['center_id'])) ? 0 : $criteria['center_id'];
         $county_id = (empty($criteria['county_id'])) ? 0 : $criteria['county_id'];
 

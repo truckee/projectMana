@@ -51,7 +51,7 @@ class ReportCriteriaType extends AbstractType {
                     'attr' => array("class" => "smallform"),
                         )
                 )
-                ->add('contact_type_id', 'entity', array(
+                ->add('contact_type', 'entity', array(
                     'class' => 'ManaClientBundle:ContactDesc',
                     'property' => 'contactDesc',
                     'empty_value' => 'Select contact type',
@@ -66,7 +66,7 @@ class ReportCriteriaType extends AbstractType {
                         new CenterOrCounty(),
                     ),
                 ))
-                ->add('county_id', 'entity', array(
+                ->add('county', 'entity', array(
                     'class' => 'ManaClientBundle:County',
                     'property' => 'county',
                     'empty_value' => 'Select county',
@@ -79,7 +79,7 @@ class ReportCriteriaType extends AbstractType {
                 ))
                 ->add('center', new Field\CenterEnabledChoiceType())
                 ->add('dest', 'hidden')
-                ->add('profileType', 'choice', [
+                ->add('columnType', 'choice', [
                     'mapped' => FALSE,
                     'choices' => ['Center' => 'By site', 'County' => 'By county'],
                     'expanded' => TRUE,

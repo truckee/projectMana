@@ -13,7 +13,6 @@ $(document).ready(function() {
             $("#menuToggle").text('Printable view');
             $(".menu").show();
             $("html>body #content").css('margin-left', 180+'px');
-           
         }
     });
 
@@ -42,7 +41,7 @@ $(document).ready(function() {
     });
 
     //statistics criteria
-    $('#report_criteria_county_id').change(function() {
+    $('#report_criteria_county').change(function() {
         var me = $(this).val();
         if (me !== "") {
             $('#center_select').hide();
@@ -50,7 +49,7 @@ $(document).ready(function() {
             $('#center_select').show();
         }
     });
-    $('#report_criteria_center_id').change(function() {
+    $('#report_criteria_center').change(function() {
         var me = $(this).val();
         if (me !== "") {
             $('#county_select').hide();

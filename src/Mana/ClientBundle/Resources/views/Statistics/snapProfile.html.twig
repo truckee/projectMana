@@ -1,4 +1,4 @@
-{% extends "ManaClientBundle:Default:layout.html.twig" %}
+{% extends "ManaClientBundle:Default:layout.html.twig"%}
 {% block head %}
     {{ parent() }}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,10 +12,13 @@
     {% block button %}
         <button id="menuToggle" class="btn btn-default hidden-print" type="submit" style="margin-top: 10px;">Printable view</button>
     {% endblock %}
-    {% if statistics is defined %}
-        {% include('ManaClientBundle:Statistics:statsblock.html.twig') %}
-    {% else %}
-        {% include('ManaClientBundle:Statistics:details.html.twig') %}
-    {% endif %}
-    <div align="center"><a href="{{ path('stats_excel') }}"><button>Save as Excel file</button></a></div>
-{% endblock %}
+    <div class="container">
+        {% block content %}
+            {{content|raw}}
+        {% endblock %}
+    </div>
+    <!-- jQuery (necessary for Bootstraps JavaScript plugins) -->
+    <script src="{{ asset('js/jquery.js') }}"></script>
+    <!-- Include all JavaScripts, compiled by Assetic -->
+    <script src="{{ asset('js/bootstrap.js') }}"></script>
+{% endblock body %}
