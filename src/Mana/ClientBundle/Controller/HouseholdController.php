@@ -145,10 +145,10 @@ class HouseholdController extends Controller
 
         if ($form->isValid()) {
             $houseData = $request->request->get('household');
-            if ('' === $houseData['foodStamps']) {
-                $unk = $em->getRepository("ManaClientBundle:FsStatus")->findOneBy(['status' => 'Unknown']);
-                $household->setFoodStamps($unk);
-            }
+//            if ('' === $houseData['foodstamp']) {
+//                $unk = $em->getRepository("ManaClientBundle:FsStatus")->findOneBy(['status' => 'Unknown']);
+//                $household->setFoodstamp($unk);
+//            }
             $newHeadId = $houseData['isHead'];  //new head id
             $formerHeadId = $houseData['headId'];  //former head id
             if ($newHead <> $formerHeadId) {

@@ -12,6 +12,7 @@ use Mana\ClientBundle\Entity\Notfoodstamp;
 use Mana\ClientBundle\Entity\Housing;
 use Mana\ClientBundle\Entity\IncomeSource;
 use Mana\ClientBundle\Entity\FsAmount;
+use Mana\ClientBundle\Entity\FsStatus;
 use Symfony\Component\Validator\Constraints as Assert;
 use Mana\ClientBundle\Validator\Constraints as ManaAssert;
 
@@ -53,15 +54,6 @@ class Household
      * @ORM\Column(name="date_added", type="date", nullable=true)
      */
     protected $dateAdded;
-
-    /**
-     * @var integer
-     *
-     * @ORM\ManyToOne(targetEntity="FsStatus", inversedBy="households")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="food_stamps", referencedColumnName="id")
-     * })     */
-    protected $foodStamps;
 
     /**
      * @var integer
@@ -210,26 +202,26 @@ class Household
     }
 
     /**
-     * Set foodStamps
+     * Set foodstamp
      *
-     * @param boolean $foodStamps
+     * @param boolean $foodstamp
      * @return Household
      */
-    public function setFoodStamps($foodStamps)
+    public function setFoodstamp($foodstamp)
     {
-        $this->foodStamps = $foodStamps;
+        $this->foodstamp = $foodstamp;
 
         return $this;
     }
 
     /**
-     * Get foodStamps
+     * Get foodstamp
      *
      * @return boolean 
      */
-    public function getFoodStamps()
+    public function getFoodstamp()
     {
-        return $this->foodStamps;
+        return $this->foodstamp;
     }
 
     /**
@@ -539,9 +531,18 @@ class Household
     }
 
     /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="FsStatus", inversedBy="households")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="foodstamp_id", referencedColumnName="id")
+     * })     */
+    protected $foodstamp;
+
+    /**
      * @var \Mana\ClientBundle\Entity\FsAmount
      *
-     * @ORM\ManyToOne(targetEntity="Mana\ClientBundle\Entity\FsAmount", inversedBy="households")
+     * @ORM\ManyToOne(targetEntity="FsAmount", inversedBy="households")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="fsamount_id", referencedColumnName="id")
      * })

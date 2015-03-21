@@ -19,11 +19,11 @@ class ContactDescType extends AbstractType
             ->add('contactDesc', null, array(
                 'constraints' => array(new NotBlank(array('message' => 'Descriptor may not be blank')),),
             ))
-//            ->add('enabled', 'choice', array(
-//                    'choices' => array(
-//                1 => 'Yes',
-//                0 => 'No')
-//            ))
+            ->add('enabled', 'choice', array(
+                    'choices' => array(
+                1 => 'Yes',
+                0 => 'No')
+            ))
         ;
     }
     

@@ -21,7 +21,7 @@ class ContactType extends AbstractType
                     'attr' => array("class" => "smallform"),
                     'query_builder' => function(EntityRepository $er) {
                 return $er->createQueryBuilder('c')
-                        ->where("c.contactDesc <> 'N/A'")
+                        ->where('c.enabled=1')
                         ->orderBy('c.contactDesc', 'ASC')
                 ;
             },

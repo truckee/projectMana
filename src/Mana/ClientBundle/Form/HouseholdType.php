@@ -69,7 +69,7 @@ class HouseholdType extends AbstractType
                     'widget' => 'single_text',
                     'format' => 'MM/dd/yyyy',
                 ))
-                ->add('foodStamps', 'entity', array(
+                ->add('foodstamp', 'entity', array(
                     'class' => 'ManaClientBundle:FsStatus',
                     'property' => 'status',
                     'empty_value' => '',

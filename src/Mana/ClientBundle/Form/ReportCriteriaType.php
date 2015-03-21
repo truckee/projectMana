@@ -10,7 +10,6 @@ use Mana\ClientBundle\Form\Field\YearType;
 use Doctrine\ORM\EntityRepository;
 use Mana\ClientBundle\Validator\Constraints\CenterOrCounty;
 use Mana\ClientBundle\Validator\Constraints\StartEndDate;
-//use Mana\ClientBundle\Validator\Constraints\EmptyTable;
 
 class ReportCriteriaType extends AbstractType {
 
@@ -81,9 +80,9 @@ class ReportCriteriaType extends AbstractType {
                 ->add('dest', 'hidden')
                 ->add('columnType', 'choice', [
                     'mapped' => FALSE,
-                    'choices' => ['Center' => 'By site', 'County' => 'By county'],
+                    'choices' => ['center' => 'By site', 'county' => 'By county'],
                     'expanded' => TRUE,
-                    'data' => 'Center',
+                    'data' => 'center',
                 ])
         ;
     }

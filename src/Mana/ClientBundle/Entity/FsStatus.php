@@ -43,10 +43,10 @@ class FsStatus
     /**
      * to String
      */
-    public function __toString()
-    {
-        return $this->status;
-    }
+//    public function __toString()
+//    {
+//        return $this->status;
+//    }
     
     /**
      * Set status
@@ -74,7 +74,7 @@ class FsStatus
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Household", mappedBy="foodStamps")
+     * @ORM\OneToMany(targetEntity="Household", mappedBy="foodstamp")
      */
     protected $households;
 

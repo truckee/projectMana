@@ -12,7 +12,7 @@
     <li><b>Phone: </b>{% for phone in form.phones %}
         ({{ form_widget(phone.areacode) }}) {{ form_widget(phone.phoneNumber) }}
 {% endfor %}</li>
-    <li><b>Food stamps?</b>{{ form_widget(form.foodStamps) }} 
+    <li><b>Food stamps?</b>{{ form_widget(form.foodstamp) }} 
     {{ form_label(form.fsamount) }}{{ form_widget(form.fsamount) }}
     {{ form_label(form.notfoodstamp) }}{{ form_widget(form.notfoodstamp) }} 
     </li>
