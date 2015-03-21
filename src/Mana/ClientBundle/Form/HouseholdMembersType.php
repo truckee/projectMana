@@ -33,12 +33,12 @@ class HouseholdMembersType extends AbstractType
                 ))
                 ->add('members', 'collection', array(
                     'type' => new MemberType(),
-//                    'allow_add' => true,
-//                    'allow_delete' => true,
-//                    'by_reference' => false,
-//                    'error_bubbling' => false,
-//                    'cascade_validation' => true,
-//                    'prototype' => true,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'by_reference' => false,
+                    'error_bubbling' => false,
+                    'cascade_validation' => true,
+                    'prototype' => true,
                 ))
         ;
         // if a head of household is necessarily being replaced, copy

@@ -39,14 +39,6 @@ class FsStatus
     {
         return $this->id;
     }
-
-    /**
-     * to String
-     */
-//    public function __toString()
-//    {
-//        return $this->status;
-//    }
     
     /**
      * Set status

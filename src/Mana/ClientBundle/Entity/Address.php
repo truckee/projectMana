@@ -37,7 +37,6 @@ class Address
      */
     protected $line2;
 
-//    @Assert\NotBlank(message = "City may not be blank")
     /**
      * @var string
      *
@@ -46,13 +45,6 @@ class Address
      */
     protected $city;
 
-//    /**
-//     * @var integer
-//     *
-//     * @ORM\Column(name="state_id", type="integer", nullable=true)
-//     */
-//    protected $stateId;
-//
     /**
      * @var string
      *
@@ -161,29 +153,6 @@ class Address
         return $this->city;
     }
 
-//    /**
-//     * Set stateId
-//     *
-//     * @param integer $stateId
-//     * @return Address
-//     */
-//    public function setStateId($stateId)
-//    {
-//        $this->stateId = $stateId;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get stateId
-//     *
-//     * @return integer 
-//     */
-//    public function getStateId()
-//    {
-//        return $this->stateId;
-//    }
-//
     /**
      * Set zip
      *

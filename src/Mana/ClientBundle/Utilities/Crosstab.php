@@ -85,9 +85,6 @@ class Crosstab
         $endText = $endDate->format('Y-m-t');
         
         return "'$startText' AND '$endText' ";
-//        $dateCriteria = "'$startText' AND '$endText' ";
-        
-//        return str_replace('__DATE_CRITERIA__', $dateCriteria, $query);
-        
+               
     }
 }
