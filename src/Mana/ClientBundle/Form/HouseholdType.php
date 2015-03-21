@@ -189,7 +189,8 @@ class HouseholdType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $household = $event->getData();
             $form = $event->getForm();
-            if (empty($household->getCenter())) {
+            $center = $household->getCenter();
+            if (empty($center)) {
                 $form->add('center', new Field\CenterEnabledChoiceType());
             } else {
                 $form->add('center', new Field\CenterAllChoiceType());
