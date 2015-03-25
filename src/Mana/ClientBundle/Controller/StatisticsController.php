@@ -360,7 +360,7 @@ class StatisticsController extends Controller
                     'extra' => 'profile',
                     'formPath' => "reason_profile",
                     'title' => 'Report criteria',
-                    'criteriaHeader' => 'Select SNAP/CalFresh benefits reporting criteria',
+                    'criteriaHeader' => 'Insufficient Food Reporting Criteria',
         ));
     }
 
