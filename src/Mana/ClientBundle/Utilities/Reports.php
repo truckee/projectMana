@@ -36,7 +36,7 @@ class Reports {
         $this->conn = $conn;
     }
 
-    private function setCriteria($criteria, $source = null) {
+    private function setCriteria($criteria) {
         //$start, $end, $vid = 0, $cty_id = 0, $rid = 0
         //$vid -> contact_type_id; $cty_id -> county_id; $rid -> center_id
         $startMonth = $criteria['startMonth'];
