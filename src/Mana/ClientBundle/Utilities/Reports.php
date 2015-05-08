@@ -206,11 +206,7 @@ class Reports {
             (id, hoh_id, res, size, date_added)
             select distinct h.id, hoh_id,
             12*(year(now()) - cast(arrivalYear as signed)) + (month(now()) - cast(arrivalMonth as signed)) as 'res',
-            size, date_added from household h 
-			join 
-			(select household_id, if(count(dob)=0,1,count(dob)) size  from member 
-            group by household_id having count(dob) is not null) B
-			on h.id = B.household_id
+            household_size(h.id, '$this->start'), date_added from household h 
             join temp_contact c on c.household_id = h.id";
         $n = $this->conn->exec($sql);
     }
