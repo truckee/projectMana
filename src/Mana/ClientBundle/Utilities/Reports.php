@@ -203,11 +203,11 @@ class Reports {
         $sql = 'delete from temp_household';
         $this->conn->exec($sql);
         
-        //note use of custom MySQL household_size() function
+        //note use of custom MySQL residency()), household_size() functions
         $sql = "INSERT INTO temp_household
             (id, hoh_id, res, size, date_added)
             select distinct h.id, hoh_id,
-            12*(year(now()) - cast(arrivalYear as signed)) + (month(now()) - cast(arrivalMonth as signed)) as 'res',
+            residency(h.id),
             household_size(h.id, '$this->start'), date_added from household h 
             join temp_contact c on c.household_id = h.id";
         $n = $this->conn->exec($sql);
