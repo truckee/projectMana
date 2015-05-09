@@ -190,11 +190,11 @@ class Reports {
         $sql = 'delete from temp_member';
         $this->conn->exec($sql);
 
+        //note use of custom MySQL age() function
         $sql = "INSERT INTO temp_member
             (id, household_id, sex, age, ethnicity_id)
             select distinct m.id, m.household_id, sex,
-            (year(now()) - year(dob) - (concat(month(now()),'-01') < right(dob,5))) as 'age',
-            ethnicity_id
+            age(m.dob), ethnicity_id
             from member m
             join temp_contact ct on m.household_id = ct.household_id where 
             (exclude_date > '$this->start' or exclude_date is null) and (dob < '$this->start' or dob is null)";
@@ -202,6 +202,8 @@ class Reports {
 
         $sql = 'delete from temp_household';
         $this->conn->exec($sql);
+        
+        //note use of custom MySQL household_size() function
         $sql = "INSERT INTO temp_household
             (id, hoh_id, res, size, date_added)
             select distinct h.id, hoh_id,
