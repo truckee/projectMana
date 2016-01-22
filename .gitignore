@@ -12,7 +12,6 @@
 /clearcache.cmd
 /w.cmd
 /bin/
-src/Mana/ClientBundle/Controller/JTestController.php
-/src/Mana/ClientBundle/Resources/views/Test/
+/src/Mana/ClientBundle/Resources/views/Test/*
 /webify.cmd
 /htdocs/
