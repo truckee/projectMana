@@ -41,7 +41,9 @@
         "braincrafted/bootstrap-bundle": "~2.0",
         "twbs/bootstrap": "3.0.*",
         "jquery/jquery": "1.11.*",
-        "oyejorge/less.php": "~1.5"
+        "oyejorge/less.php": "~1.5",
+        "doctrine/doctrine-fixtures-bundle": "^2.3",
+        "nelmio/alice": "^2.1"
 
     },
     "scripts": {
@@ -85,5 +87,8 @@
                 "url": "http://packagist.org/"
             }
         ]
+    },
+    "require-dev": {
+        "liip/functional-test-bundle": "^1.4"
     }
 }
