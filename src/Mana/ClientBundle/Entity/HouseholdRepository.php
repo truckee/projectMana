@@ -26,6 +26,11 @@ class HouseholdRepository extends EntityRepository
         $member->setInclude(1);
         $relation = $em->getRepository('ManaClientBundle:Relationship')->find(1);
         $member->setRelation($relation);
+        $foodstamp = $household->getFoodstamp();
+        if (empty($foodstamp)){
+            $unk = $em->getRepository("ManaClientBundle:FsStatus")->findOneBy(['status' => 'Unknown']);
+            $household->setFoodstamp($unk);
+        }
         //if from match results, add & set head of household
         if (count($household->getMembers()) == 0) {
             $household->addMember($member);
@@ -70,16 +75,15 @@ class HouseholdRepository extends EntityRepository
     {
         $em = $this->getEntityManager();
         $size = $em->createQuery(
-                "select count(m.fname) size from ManaClientBundle:Member m "
-                . "where m.household =  $id")
+                        "select count(m.fname) size from ManaClientBundle:Member m "
+                        . "where m.household =  $id")
                 ->getSingleScalarResult();
         $dob = $em->createQuery(
-                " select m.dob from  ManaClientBundle:Member m "
-                . "join ManaClientBundle:Household h with h.head = m "
-                . "where h.id =  $id")
+                        " select m.dob from  ManaClientBundle:Member m "
+                        . "join ManaClientBundle:Household h with h.head = m "
+                        . "where h.id =  $id")
                 ->getSingleScalarResult();
-        return (!empty($dob)) ?  0 : $size;
-
+        return (!empty($dob)) ? 0 : $size;
     }
 
 }
