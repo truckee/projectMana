@@ -14,6 +14,7 @@ use Mana\ClientBundle\Entity\Member;
 use Mana\ClientBundle\Entity\Phone;
 use Mana\ClientBundle\Entity\Household;
 use Mana\ClientBundle\Form\HouseholdType;
+
 //use Mana\ClientBundle\Form\NewHouseholdType;
 
 /**
@@ -45,7 +46,8 @@ class HouseholdController extends Controller
             'household' => $household,
             'title' => 'View Household',
             'templates' => $templates,
-        );    }
+        );
+    }
 
     /**
      * Displays a form to create a new Household entity
@@ -128,10 +130,11 @@ class HouseholdController extends Controller
         }
         //flag - 0: v2; 1: v1, single member; >1: v1, >1 member
         $flag = $em->getRepository('ManaClientBundle:Household')->getHouseholdVersionFlag($id);
-        if ( '1' === $flag) {
+        if ('1' === $flag) {
             return $this->forward('ManaClientBundle:HouseholdV1Single:edit', ['id' => $id]);
-        } elseif ( $flag > 1 ) {
-            return $this->forward('ManaClientBundle:HouseholdV1Many:edit',  ['id' => $id]);
+        }
+        elseif ($flag > 1) {
+            return $this->forward('ManaClientBundle:HouseholdV1Many:edit', ['id' => $id]);
         }
 
         $members = $household->getMembers();
@@ -150,10 +153,6 @@ class HouseholdController extends Controller
 
         if ($form->isValid()) {
             $houseData = $request->request->get('household');
-            if ('' === $houseData['foodstamp']) {
-                $unk = $em->getRepository("ManaClientBundle:FsStatus")->findOneBy(['status' => 'Unknown']);
-                $household->setFoodstamp($unk);
-            }
             $newHeadId = $houseData['isHead'];  //new head id
             $formerHeadId = $houseData['headId'];  //former head id
             if ($newHead <> $formerHeadId) {
@@ -163,7 +162,7 @@ class HouseholdController extends Controller
             $em->getRepository('ManaClientBundle:Member')->initialize($household);
             $em->persist($household);
             $em->flush();
-            
+
             return $this->redirect($this->generateUrl('household_show', array('id' => $household->getId())));
         }
 

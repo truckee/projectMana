@@ -18,13 +18,21 @@ security:
         secured_area:
             http_basic:
 
-liip_functional_test:
-    cache_sqlite_db: true
-
+liip_functional_test: ~
+#    cache_sqlite_db: true
+        
 doctrine:
     dbal:
-        default_connection: default
+        default_connection: test
         connections:
-            default:
-                driver:   pdo_sqlite
-                path:     %kernel.cache_dir%/test.db
+            test:
+#        default_connection:   default
+                driver:   pdo_mysql
+                host:     localhost
+                port:     3306
+                dbname:   projectmana_test
+                user:     projectmana
+                password: OrangeWhite
+                charset:  UTF8
+                mapping_types: 
+                    enum:       string 
