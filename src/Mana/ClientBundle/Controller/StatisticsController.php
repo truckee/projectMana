@@ -33,8 +33,8 @@ class StatisticsController extends Controller
             $em = $this->getDoctrine()->getManager();
             // get specs to pass to template
             $specs = $this->specs($criteria);
-            $center_id = (empty($criteria['center_id'])) ? 0 : $criteria['center_id'];
-            $county_id = (empty($criteria['county_id'])) ? 0 : $criteria['county_id'];
+            $center_id = (empty($criteria['center'])) ? 0 : $criteria['center'];
+            $county_id = (empty($criteria['county'])) ? 0 : $criteria['county'];
             $stats = $this->get('reports');
             $stats->setStats($criteria);
             $data = $stats->getStats();
@@ -50,7 +50,7 @@ class StatisticsController extends Controller
                     }
                 }
             }
-//            
+//
             $report = array(
                 'block' => 'statsblock',
                 'specs' => $reportSpecs,
