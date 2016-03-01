@@ -15,8 +15,6 @@ use Mana\ClientBundle\Entity\Phone;
 use Mana\ClientBundle\Entity\Household;
 use Mana\ClientBundle\Form\HouseholdType;
 
-//use Mana\ClientBundle\Form\NewHouseholdType;
-
 /**
  * Client controller.
  *
@@ -182,7 +180,7 @@ class HouseholdController extends Controller
      * Display results of client search
      * @param Request $request
      * @return type
-     * @Route("/_search", name = "_search") 
+     * @Route("/_search", name = "_search")
      */
     public function searchAction(Request $request)
     {

@@ -21,8 +21,8 @@ class DefaultController extends Controller
     /**
      * mail test
      * @return e-mail
-     * 
-     * @Route("/errormail", name="errormail") 
+     *
+     * @Route("/errormail", name="errormail")
      */
     public function errorAction()
     {
@@ -31,7 +31,7 @@ class DefaultController extends Controller
             $recipient = 'developer@bogus.info';
         }
         else {
-            
+
         }
         $recipient = 'truckeetrout@yahoo.com';
         $error = 'The following kerfuffle has occurred.' . "/n";
@@ -60,8 +60,8 @@ class DefaultController extends Controller
     /**
      * @Route("/message", name="message")
      * @Template()
-     * 
-     * @param string $message 
+     *
+     * @param string $message
      */
     public function messageAction()
     {
@@ -77,6 +77,7 @@ class DefaultController extends Controller
      */
     public function xpAction()
     {
+
     }
 
 }

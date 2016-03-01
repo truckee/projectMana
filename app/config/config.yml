@@ -98,9 +98,9 @@ monolog:
             handler: swift
         swift:
             type:       swift_mailer
-            from_email: error@projectmana.org
-            to_email:   truckeetrout@yahoo.com
-            subject:    sym reports error!
+            from_email: projectmana.app@gmail.com
+            to_email:   projectmana.app@gmail.com
+            subject:    MANA reports error!
             level:      debug
 #        custom:
 #            type: service

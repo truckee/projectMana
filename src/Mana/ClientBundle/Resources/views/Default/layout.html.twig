@@ -60,12 +60,9 @@
     </div>
 
     {% block javascripts %}
-        {% javascripts '@ManaClientBundle/Resources/public/jquery/*' %}
-        <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-        {% javascripts '@ManaClientBundle/Resources/public/js/*' %}
-        <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
+        <script src="{{ asset('jquery/jquery-1.10.2.min.js') }}"></script>
+        <script src="{{ asset('jquery/jquery-ui-1.10.3.custom.min.js') }}"></script>
+        <script src="{{ asset('js/mana.js') }}"></script>
     {% endblock %}
     <!-- Include all JavaScripts, compiled by Assetic -->
     <script src="{{ asset('js/bootstrap.js') }}"></script>
