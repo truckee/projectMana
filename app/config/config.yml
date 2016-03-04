@@ -107,4 +107,4 @@ monolog:
 #            id: mana.exception.listener
 
 braincrafted_bootstrap:
-    less_filter: lessphp
+     css_preprocessor: lessphp
