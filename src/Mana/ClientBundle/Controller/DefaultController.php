@@ -33,7 +33,7 @@ class DefaultController extends Controller
         else {
 
         }
-        $recipient = 'truckeetrout@yahoo.com';
+//        $recipient = 'truckeetrout@yahoo.com';
         $error = 'The following kerfuffle has occurred.' . "/n";
         $mail = \Swift_Message::newInstance()
                 ->setSubject('Project MANA error')
@@ -77,7 +77,7 @@ class DefaultController extends Controller
      */
     public function xpAction()
     {
-
+        throw new \Exception('A purposely thrown PHP exception');
     }
 
 }

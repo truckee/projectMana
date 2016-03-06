@@ -69,42 +69,6 @@ swiftmailer:
     host:      "%mailer_host%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
-#    spool:     { type: memory }
-
-monolog:
-    handlers:
-#        main:
-#            type:  stream
-#            path:  %kernel.logs_dir%/%kernel.environment%.log
-#            level: debug
-#            handler: grouped
-#        grouped:
-#            type: group
-#            members: [mail, custom]
-#        main:
-#            type: fingers_crossed
-#            action_level: error
-#            handler: stream
-#        stream:
-#            type:  stream
-#            path:  %kernel.logs_dir%/%kernel.environment%.log
-#            level: debug
-        mail:
-            type:         fingers_crossed
-            action_level: critical
-            handler:      buffered
-        buffered:
-            type:    buffer
-            handler: swift
-        swift:
-            type:       swift_mailer
-            from_email: projectmana.app@gmail.com
-            to_email:   projectmana.app@gmail.com
-            subject:    MANA reports error!
-            level:      debug
-#        custom:
-#            type: service
-#            id: mana.exception.listener
 
 braincrafted_bootstrap:
      css_preprocessor: lessphp

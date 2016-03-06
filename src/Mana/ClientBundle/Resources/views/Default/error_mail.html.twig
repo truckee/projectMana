@@ -1,3 +1,7 @@
 {% block body %}
-We've been looking for you!
+You need to know there was an error with the following:
+code: {{ error.code }}
+message: {{ error.message }}
+file: {{ error.file }}
+line: {{ error.line }}
 {% endblock %}
