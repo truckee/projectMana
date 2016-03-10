@@ -1,4 +1,5 @@
 <?php
+
 namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -9,8 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="relationship")
  * @ORM\Entity
  */
-class Relationship {
-    
+class Relationship
+{
+
     /**
      * @var integer
      *
@@ -26,7 +28,8 @@ class Relationship {
      * @param boolean $id
      * @return id
      */
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
 
         return $this;
@@ -35,14 +38,15 @@ class Relationship {
     /**
      * Get id
      *
-     * @return boolean 
+     * @return boolean
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
-     * @var boolean
+     * @var string
      *
      * @ORM\Column(name="relation", type="string", nullable=true)
      */
@@ -54,7 +58,8 @@ class Relationship {
      * @param boolean $relation
      * @return Member
      */
-    public function setRelation($relation) {
+    public function setRelation($relation)
+    {
         $this->relation = $relation;
 
         return $this;
@@ -63,12 +68,12 @@ class Relationship {
     /**
      * Get relation
      *
-     * @return boolean 
+     * @return boolean
      */
-    public function getRelation() {
+    public function getRelation()
+    {
         return $this->relation;
     }
-
 
     /**
      * @var boolean
@@ -83,7 +88,8 @@ class Relationship {
      * @param boolean $enabled
      * @return enabled
      */
-    public function setEnabled($enabled) {
+    public function setEnabled($enabled)
+    {
         $this->enabled = $enabled;
 
         return $this;
@@ -92,9 +98,10 @@ class Relationship {
     /**
      * Get enabled
      *
-     * @return boolean 
+     * @return boolean
      */
-    public function getEnabled() {
+    public function getEnabled()
+    {
         return $this->enabled;
     }
 
@@ -111,7 +118,8 @@ class Relationship {
      * @param \Mana\ClientBundle\Entity\Member $members
      * @return Member
      */
-    public function addMember(\Mana\ClientBundle\Entity\Member $member) {
+    public function addMember(\Mana\ClientBundle\Entity\Member $member)
+    {
         $this->members[] = $member;
         $member->setRelationship($this);
         return $this;
@@ -122,16 +130,19 @@ class Relationship {
      *
      * @param \Mana\ClientBundle\Entity\Member $members
      */
-    public function removeMember(\Mana\ClientBundle\Entity\Member $member) {
+    public function removeMember(\Mana\ClientBundle\Entity\Member $member)
+    {
         $this->members->removeElement($member);
     }
 
     /**
      * Get members
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getMembers() {
+    public function getMembers()
+    {
         return $this->members;
     }
+
 }

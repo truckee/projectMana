@@ -22,9 +22,3 @@ services:
       class: Mana\ClientBundle\Utilities\Crosstab
       arguments: 
         em: @doctrine.orm.entity_manager
-
-    mana_exception_listener:
-        class: Mana\ClientBundle\Listeners\CustomExceptionListener
-        arguments: ['@twig', '%mailer_user%']
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException}

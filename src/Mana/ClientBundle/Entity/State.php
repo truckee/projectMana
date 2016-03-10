@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class State
 {
+
     /**
      * @var integer
      *
@@ -44,11 +45,10 @@ class State
         $this->addresses = new ArrayCollection;
     }
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -71,7 +71,7 @@ class State
     /**
      * Get state
      *
-     * @return string 
+     * @return string
      */
     public function getState()
     {
@@ -104,7 +104,7 @@ class State
     /**
      * Get addresses
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAddresses()
     {
@@ -112,8 +112,8 @@ class State
     }
 
     /**
-     * @var integer 
-     * @ORM\Column(name="enabled", type="integer", nullable=true)
+     * @var integer
+     * @ORM\Column(name="enabled", type="boolean", nullable=true)
      */
     protected $enabled;
 
@@ -129,14 +129,15 @@ class State
 
         return $this;
     }
-    
+
     /**
      * Get enabled
      *
-     * @return integer 
+     * @return integer
      */
     public function getEnabled()
     {
         return $this->enabled;
     }
+
 }

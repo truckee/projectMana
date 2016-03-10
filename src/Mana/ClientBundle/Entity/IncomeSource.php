@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class IncomeSource
 {
+
     /**
      * @var integer
      *
@@ -35,25 +36,27 @@ class IncomeSource
      */
     protected $household;
 
-    public function addHousehold(Household $household) {
+    public function addHousehold(Household $household)
+    {
         $this->households[] = $household;
 //        $household->addAppliance($this);
     }
 
-    public function getHouseholds() {
+    public function getHouseholds()
+    {
         return $this->households;
-    }    
-    
+    }
+
     /**
-     * @var integer 
-     * @ORM\Column(name="enabled", type="integer", nullable=true)
+     * @var integer
+     * @ORM\Column(name="enabled", type="boolean", nullable=true)
      */
     protected $enabled;
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -76,13 +79,12 @@ class IncomeSource
     /**
      * Get incomeSource
      *
-     * @return string 
+     * @return string
      */
     public function getIncomeSource()
     {
         return $this->incomeSource;
     }
-
 
     /**
      * Set enabled
@@ -96,14 +98,15 @@ class IncomeSource
 
         return $this;
     }
-    
+
     /**
      * Get enabled
      *
-     * @return integer 
+     * @return integer
      */
     public function getEnabled()
     {
         return $this->enabled;
     }
+
 }

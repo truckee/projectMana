@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class County
 {
+
     /**
      * @var integer
      *
@@ -52,11 +53,10 @@ class County
         $this->contacts = new ArrayCollection;
     }
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -79,7 +79,7 @@ class County
     /**
      * Get county
      *
-     * @return string 
+     * @return string
      */
     public function getCounty()
     {
@@ -112,7 +112,7 @@ class County
     /**
      * Get centers
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCenters()
     {
@@ -145,7 +145,7 @@ class County
     /**
      * Get contacts
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getContacts()
     {
@@ -159,14 +159,14 @@ class County
      */
     protected $addresses;
 
-
     /**
      * Add addresses
      *
      * @param \Mana\ClientBundle\Entity\Address $addresses
      * @return Household
      */
-    public function addAddress(\Mana\ClientBundle\Entity\Address $address) {
+    public function addAddress(\Mana\ClientBundle\Entity\Address $address)
+    {
         $this->addresses[] = $address;
         $address->setCounty($this);
         return $this;
@@ -177,16 +177,18 @@ class County
      *
      * @param \Mana\ClientBundle\Entity\Address $addresses
      */
-    public function removeAddress(\Mana\ClientBundle\Entity\Address $address) {
+    public function removeAddress(\Mana\ClientBundle\Entity\Address $address)
+    {
         $this->addresses->removeElement($address);
     }
 
     /**
      * Get addresses
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getAddresses() {
+    public function getAddresses()
+    {
         return $this->addresses;
     }
 
@@ -203,7 +205,8 @@ class County
      * @param boolean $enabled
      * @return enabled
      */
-    public function setEnabled($enabled) {
+    public function setEnabled($enabled)
+    {
         $this->enabled = $enabled;
 
         return $this;
@@ -212,10 +215,16 @@ class County
     /**
      * Get enabled
      *
-     * @return boolean 
+     * @return boolean
      */
-    public function getEnabled() {
+    public function getEnabled()
+    {
         return $this->enabled;
+    }
+
+    public function __toString()
+    {
+        return $this->getCounty();
     }
 
 }

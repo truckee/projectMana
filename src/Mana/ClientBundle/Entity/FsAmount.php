@@ -11,7 +11,8 @@ use Mana\ClientBundle\Entity\Household;
  * @ORM\Table(name="fs_amount")
  * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\FsAmountRepository")
  */
-class FsAmount {
+class FsAmount
+{
 
     /**
      * @var integer
@@ -39,9 +40,10 @@ class FsAmount {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
@@ -51,7 +53,8 @@ class FsAmount {
      * @param integer $amount
      * @return amount
      */
-    public function setAmount($amount) {
+    public function setAmount($amount)
+    {
         $this->fsamount = $amount;
 
         return $this;
@@ -60,9 +63,10 @@ class FsAmount {
     /**
      * Get fsamount
      *
-     * @return integer 
+     * @return integer
      */
-    public function getAmount() {
+    public function getAmount()
+    {
         return $this->amount;
     }
 
@@ -72,7 +76,8 @@ class FsAmount {
      * @param integer $enabled
      * @return enabled
      */
-    public function setEnabled($enabled) {
+    public function setEnabled($enabled)
+    {
         $this->enabled = $enabled;
 
         return $this;
@@ -81,9 +86,10 @@ class FsAmount {
     /**
      * Get enabled
      *
-     * @return integer 
+     * @return integer
      */
-    public function getEnabled() {
+    public function getEnabled()
+    {
         return $this->enabled;
     }
 
@@ -94,13 +100,20 @@ class FsAmount {
      */
     protected $households;
 
-    public function addHousehold(Household $household) {
+    public function addHousehold(Household $household)
+    {
         $this->households[] = $household;
 //        $household->addFsAmount($this);
     }
 
-    public function getHouseholds() {
+    public function getHouseholds()
+    {
         return $this->households;
+    }
+
+    public function bracket()
+    {
+        return $this->amount;
     }
 
 }

@@ -1,0 +1,217 @@
+easy_admin:
+    site_name: 'Manage options'
+    disabled_actions: ['delete']
+    list:
+        max_results: 10
+    design:
+        color_scheme: 'light'
+        menu:
+            - label: 'Contacts'
+              children: 
+                    - { entity: 'ContactType', default: true, params: { sortField: 'contactDesc', sortDirection: 'ASC' }}
+                    - { entity: 'County', params: { sortField: 'county', sortDirection: 'ASC' }}
+                    - { entity: 'Site', params: { sortField: 'center', sortDirection: 'ASC' }}
+            - label: 'Households'
+              children:
+#                    - { entity: 'Appliance', default: true, params: { sortField: 'appliance', sortDirection: 'ASC' } }
+                    - { entity: 'FoodStampBracket', params: { sortField: 'id', sortDirection: 'ASC'}}
+                    - { entity: 'FoodstampStatus', params: { sortField: 'status', sortDirection: 'ASC'}}
+                    - { entity: 'Housing', params: { sortField: 'housing', sortDirection: 'ASC'}}
+                    - { entity: 'Income', params: { sortField: 'id', sortDirection: 'ASC'}}
+#                    - { entity: 'IncomeSource', params: { sortField: 'incomeSource', sortDirection: 'ASC'}}
+                    - { entity: 'InsufficientFood', label: 'Insufficient food', params: { sortField: 'reason', sortDirection: 'ASC'}}
+                    - { entity: 'Notfoodstamp', params: { sortField: 'notfoodstamp', sortDirection: 'ASC'}}
+            - label: 'Members'
+              children:
+                    - { entity: 'Ethnicity', params: { sortField: 'ethnicity', sortDirection: 'ASC' } }
+                    - { entity: 'Offense', params: { sortField: 'offence', sortDirection: 'ASC' } }
+                    - { entity: 'Relationship', params: { sortField: 'relation', sortDirection: 'ASC' } }
+                    - { entity: 'State', params: { sortField: 'state', sortDirection: 'ASC' } }
+                    - { entity: 'Work', params: { sortField: 'work', sortDirection: 'ASC' } }
+            - { label: 'Admin home', route: 'admin_index' }
+
+    entities:
+
+#        prototype:
+#            class: Mana\ClientBundle\Entity\
+#            label:
+#            list:
+#                title: '%%entity_label%%'
+#                fields:
+#            form:
+#                title: '%%entity_label%%'
+#                fields: 
+                    
+        Appliance:
+            class: Mana\ClientBundle\Entity\Appliance
+            label: Appliances
+            list:
+                title: '%%entity_label%%'
+                fields: [appliance, enabled]
+            form:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'appliance', type_options: { by_reference: false }}
+                    - enabled
+
+        Site:
+            class: Mana\ClientBundle\Entity\Center
+            label: Sites
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'center', label: 'Site'}
+                    - enabled
+                    - county
+            form:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'center', label: 'Site'}
+                    - enabled
+                    - {property: 'county', type: 'entity', type_options: { class: Mana\ClientBundle\Entity\County }}
+
+        Ethnicity:
+            class: Mana\ClientBundle\Entity\Ethnicity
+            label: Ethnicities
+            list:
+                title: '%%entity_label%%'
+                fields: [ethnicity, abbreviation, enabled]
+
+        ContactType:
+            class: Mana\ClientBundle\Entity\ContactDesc
+            label: Contact types
+            list:
+                title: '%%entity_label%%'
+                fields: 
+                    - {property: 'contactDesc', label: 'Type'}
+                    - enabled
+
+        County:
+            class: Mana\ClientBundle\Entity\County
+            label: Counties
+            list:
+                title: '%%entity_label%%'
+                fields: [county, enabled]
+
+        FoodStampBracket:
+            class: Mana\ClientBundle\Entity\FsAmount
+            label: Foodstamp brackets
+            list:
+                title: '%%entity_label%%'
+                fields: [bracket, enabled]
+            form:
+                fields:
+                    - {property: amount, label: Bracket}
+                    - enabled
+
+        FoodstampStatus:
+            class: Mana\ClientBundle\Entity\FsStatus
+            label: Foodstamp status
+            list:
+                title: '%%entity_label%%'
+                fields: [status]
+            form:
+                title: '%%entity_label%%'
+                fields: [status]
+
+        Housing:
+            class: Mana\ClientBundle\Entity\Housing
+            label: Housing
+            list:
+                title: '%%entity_label%%'
+                fields: [housing, enabled]
+            form:
+                title: '%%entity_label%%'
+                fields: [housing, enabled]
+
+        Income:
+            class: Mana\ClientBundle\Entity\Income
+            label: Income brackets
+            list:
+                title: '%%entity_label%%'
+                fields: [bracket, enabled]
+            form:
+                title: '%%entity_label%%'
+                fields: [income, enabled]
+
+        IncomeSource:
+            class: Mana\ClientBundle\Entity\IncomeSource
+            label: Income sources
+            list:
+                title: '%%entity_label%%'
+                fields: [incomeSource, enabled]
+            form:
+                title: '%%entity_label%%'
+                fields: [incomeSource, enabled]
+
+        Notfoodstamp:
+            class: Mana\ClientBundle\Entity\Notfoodstamp
+            label: Why not foodstamps
+            list:
+                title: '%%entity_label%%'
+                fields: [notfoodstamp, enabled]
+            form:
+                title: '%%entity_label%%'
+                fields: [notfoodstamp, enabled]
+
+        Offense:
+            class: Mana\ClientBundle\Entity\Offence
+            label: Offense
+            list:
+                title: '%%entity_label%%'
+                fields: 
+                    - {property: 'offence', label: 'Offense'}
+                    - enabled
+            form:
+                title: '%%entity_label%%'
+                fields: 
+                    - {property: 'offence', label: 'Offense', type_options: {by_reference: false}}
+                    - enabled
+
+        InsufficientFood:
+            class: Mana\ClientBundle\Entity\Reason
+            label: 'Insufficient food'
+            list:
+                title: '%%entity_label%%'
+                fields: [reason, enabled]
+            form:
+                title: '%%entity_label%%'
+                fields: [reason, enabled]
+
+        Relationship:
+            class: Mana\ClientBundle\Entity\Relationship
+            label: Relationship
+            list:
+                title: '%%entity_label%%'
+                fields: 
+                    - {property: relation, label: 'Relation to head'}
+                    - enabled
+            form:
+                title: '%%entity_label%%'
+                fields: 
+                    - {property: relation, label: 'Relation to head'}
+                    - enabled
+
+        State:
+            class: Mana\ClientBundle\Entity\State
+            label: State
+            list:
+                title: '%%entity_label%%'
+                fields: [state, enabled]
+            form:
+                title: '%%entity_label%%'
+                fields: 
+                    - {property: 'state', type_options: {by_reference: false}}
+                    - enabled
+
+        Work:
+            class: Mana\ClientBundle\Entity\Work
+            label: Work
+            list:
+                title: '%%entity_label%%'
+                fields: [work, enabled]
+            form:
+                title: '%%entity_label%%'
+                fields: 
+                    - {property: 'work', type_options: {by_reference: false}}
+                    - enabled

@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class ContactDesc
 {
+
     /**
      * @var integer
      *
@@ -44,11 +45,10 @@ class ContactDesc
         $this->contacts = new ArrayCollection();
     }
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -71,7 +71,7 @@ class ContactDesc
     /**
      * Get contactDesc
      *
-     * @return string 
+     * @return string
      */
     public function getContactDesc()
     {
@@ -104,7 +104,7 @@ class ContactDesc
     /**
      * Get contacts
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getContacts()
     {
@@ -112,8 +112,8 @@ class ContactDesc
     }
 
     /**
-     * @var integer 
-     * @ORM\Column(name="enabled", type="integer", nullable=true)
+     * @var integer
+     * @ORM\Column(name="enabled", type="boolean", nullable=true)
      */
     protected $enabled;
 
@@ -129,14 +129,15 @@ class ContactDesc
 
         return $this;
     }
-    
+
     /**
      * Get enabled
      *
-     * @return integer 
+     * @return integer
      */
     public function getEnabled()
     {
         return $this->enabled;
     }
+
 }

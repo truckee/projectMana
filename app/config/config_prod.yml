@@ -1,5 +1,6 @@
 imports:
     - { resource: config.yml }
+    - { resource: @ManaClientBundle/Resources/config/services_prod.yml }
 
 monolog:
     handlers:

@@ -4,18 +4,23 @@ mana_household:
     prefix:   /
 
 login_check:
-    pattern:   /login_check
+    path:   /login_check
 
 login_path:
-  pattern: /login
+  path: /login
 
 logout:
-    pattern:   /logout
+    path:   /logout
 
 root:
-    pattern: /
+    path: /
     defaults:  { _controller: ManaClientBundle:Default:index }
        
 home:
-    pattern: /home
+    path: /home
     defaults:  { _controller: ManaClientBundle:Default:index }
+
+easy_admin_bundle:
+    resource: "@EasyAdminBundle/Controller/"
+    type:     annotation
+    prefix:   /optionsAdmin

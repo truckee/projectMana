@@ -7,9 +7,11 @@ namespace Mana\ClientBundle\Menu;
 use Knp\Menu\FactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
-class Builder extends ContainerAware {
+class Builder extends ContainerAware
+{
 
-    public function mainMenu(FactoryInterface $factory, array $options) {
+    public function mainMenu(FactoryInterface $factory, array $options)
+    {
         $menu = $factory->createItem('root');
 
         $securityContext = $this->container->get('security.context');
@@ -68,13 +70,19 @@ class Builder extends ContainerAware {
         return $menu;
     }
 
-    public function adminMenu(FactoryInterface $factory, array $options) {
+    public function adminMenu(FactoryInterface $factory, array $options)
+    {
         $menu = $factory->createItem('root');
 
         $menu->addChild('Home', array(
             'route' => 'home',
         ));
         $menu['Home']->setLinkAttribute('class', 'smallbutton');
+
+        $menu->addChild("Options maintenance", array(
+            'route' => 'easyadmin',
+        ));
+        $menu['Options maintenance']->setLinkAttribute('class', 'smallbutton');
 
         $menu->addChild("User maintenance", array(
             'route' => 'user_main',
@@ -83,7 +91,7 @@ class Builder extends ContainerAware {
 
         return $menu;
     }
-    
+
     public function profileMenu(FactoryInterface $factory, array $options)
     {
         $menu = $factory->createItem('root');
@@ -101,10 +109,10 @@ class Builder extends ContainerAware {
         ))->setLinkAttribute('class', 'smallbutton');
 
         return $menu;
-       
     }
 
-    public function optionsCol1Menu(FactoryInterface $factory, array $options) {
+    public function optionsCol1Menu(FactoryInterface $factory, array $options)
+    {
         $menu = $factory->createItem('root');
 
         $menu->addChild('Appliances', array(
@@ -130,7 +138,8 @@ class Builder extends ContainerAware {
         return $menu;
     }
 
-    public function optionsCol2Menu(FactoryInterface $factory, array $options) {
+    public function optionsCol2Menu(FactoryInterface $factory, array $options)
+    {
         $menu = $factory->createItem('root');
 
         $menu->addChild('Food stamp brackets', array(
@@ -156,7 +165,8 @@ class Builder extends ContainerAware {
         return $menu;
     }
 
-    public function optionsCol3Menu(FactoryInterface $factory, array $options) {
+    public function optionsCol3Menu(FactoryInterface $factory, array $options)
+    {
         $menu = $factory->createItem('root');
 
         $menu->addChild('Why not foodstamps', array(
@@ -182,7 +192,8 @@ class Builder extends ContainerAware {
         return $menu;
     }
 
-    public function optionsCol4Menu(FactoryInterface $factory, array $options) {
+    public function optionsCol4Menu(FactoryInterface $factory, array $options)
+    {
         $menu = $factory->createItem('root');
 
         $menu->addChild('Sites', array(
@@ -203,7 +214,8 @@ class Builder extends ContainerAware {
         return $menu;
     }
 
-    public function reportsMenu(FactoryInterface $factory, array $options) {
+    public function reportsMenu(FactoryInterface $factory, array $options)
+    {
         $menu = $factory->createItem('root');
 
         $menu->addChild("General Statistics", array(
@@ -226,4 +238,5 @@ class Builder extends ContainerAware {
 
         return $menu;
     }
+
 }

@@ -11,7 +11,8 @@ use Mana\ClientBundle\Entity\Household;
  * @ORM\Table(name="reason")
  * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\ReasonRepository")
  */
-class Reason {
+class Reason
+{
 
     /**
      * @var integer
@@ -23,7 +24,7 @@ class Reason {
     protected $id;
 
     /**
-     * @var boolean
+     * @var string
      *
      * @ORM\Column(name="reason", type="string", nullable=false)
      */
@@ -39,9 +40,10 @@ class Reason {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
@@ -51,7 +53,8 @@ class Reason {
      * @param integer $reason
      * @return reason
      */
-    public function setReason($reason) {
+    public function setReason($reason)
+    {
         $this->reason = $reason;
 
         return $this;
@@ -60,9 +63,10 @@ class Reason {
     /**
      * Get reason
      *
-     * @return integer 
+     * @return integer
      */
-    public function getReason() {
+    public function getReason()
+    {
         return $this->reason;
     }
 
@@ -72,7 +76,8 @@ class Reason {
      * @param integer $enabled
      * @return enabled
      */
-    public function setEnabled($enabled) {
+    public function setEnabled($enabled)
+    {
         $this->enabled = $enabled;
 
         return $this;
@@ -81,9 +86,10 @@ class Reason {
     /**
      * Get enabled
      *
-     * @return integer 
+     * @return integer
      */
-    public function getEnabled() {
+    public function getEnabled()
+    {
         return $this->enabled;
     }
 
@@ -94,11 +100,13 @@ class Reason {
      */
     protected $households;
 
-    public function addHousehold(Household $household) {
+    public function addHousehold(Household $household)
+    {
         $this->households[] = $household;
     }
 
-    public function getHouseholds() {
+    public function getHouseholds()
+    {
         return $this->households;
     }
 
