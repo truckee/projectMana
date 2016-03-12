@@ -1,8 +1,8 @@
 {
-    "name": "symfony/framework-standard-edition",
+    "name": "truckee/projectmana",
     "license": "MIT",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "description": "Project MANA administrative application",
     "autoload": {
         "psr-0": {
             "": "src/"
@@ -45,7 +45,6 @@
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "nelmio/alice": "^2.1",
         "javiereguiluz/easyadmin-bundle": "~1.1"
-
     },
     "scripts": {
         "post-install-cmd": [

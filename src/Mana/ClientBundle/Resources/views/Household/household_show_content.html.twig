@@ -12,12 +12,12 @@
     {% if household.fsamount is not null %}<b>If yes, how much?</b>{{ household.fsamount.amount }}{% endif %}
     {% if household.notfoodstamp is not null %}<b>If no, why not?</b>{{ household.notfoodstamp.notfoodstamp }}{% endif %}
     </li>
-    <li><b>Income source: </b>{% set n = household.incomeSource|length %}
-{% for incomeSource in household.incomeSource if n > 0 %}{{incomeSource.incomeSource}}{% if loop.index < n %}, {% endif %}{% endfor %}</li>
+<!--    <li><b>Income source: </b>{% set n = household.incomeSource|length %}
+{% for incomeSource in household.incomeSource if n > 0 %}{{incomeSource.incomeSource}}{% if loop.index < n %}, {% endif %}{% endfor %}</li>-->
     <li><b>Income: </b>{% if household.income is not null %}{{ household.income.income }}{% endif %}</li>
     <li><b>Housing: </b>{% if household.housing is not null %}{{ household.housing.housing }}{% endif %}</li>
-    <li><b>Appliances:</b> {% set n = household.appliances|length %}
-{% for appliance in household.appliances if n > 0 %}{{appliance.appliance}}{% if loop.index < n %}, {% endif %}{% endfor %}</li>
+<!--    <li><b>Appliances:</b> {% set n = household.appliances|length %}
+{% for appliance in household.appliances if n > 0 %}{{appliance.appliance}}{% if loop.index < n %}, {% endif %}{% endfor %}</li>-->
     <li><b>Insufficient food:</b> {% set n = household.reasons|length %}
 {% for reason in household.reasons if n > 0 %}{{reason.reason}}{% if loop.index < n %}, {% endif %}{% endfor %}</li>
     <li><b>Arrival: </b>{% if household.arrivalmonth > 0 %} {{ (household.arrivalmonth ~ '/1/2000')|date('F') }}, {{ household.arrivalyear }}{% endif %}</li>

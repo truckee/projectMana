@@ -13,12 +13,10 @@ easy_admin:
                     - { entity: 'Site', params: { sortField: 'center', sortDirection: 'ASC' }}
             - label: 'Households'
               children:
-#                    - { entity: 'Appliance', default: true, params: { sortField: 'appliance', sortDirection: 'ASC' } }
                     - { entity: 'FoodStampBracket', params: { sortField: 'id', sortDirection: 'ASC'}}
                     - { entity: 'FoodstampStatus', params: { sortField: 'status', sortDirection: 'ASC'}}
                     - { entity: 'Housing', params: { sortField: 'housing', sortDirection: 'ASC'}}
                     - { entity: 'Income', params: { sortField: 'id', sortDirection: 'ASC'}}
-#                    - { entity: 'IncomeSource', params: { sortField: 'incomeSource', sortDirection: 'ASC'}}
                     - { entity: 'InsufficientFood', label: 'Insufficient food', params: { sortField: 'reason', sortDirection: 'ASC'}}
                     - { entity: 'Notfoodstamp', params: { sortField: 'notfoodstamp', sortDirection: 'ASC'}}
             - label: 'Members'
@@ -29,31 +27,7 @@ easy_admin:
                     - { entity: 'State', params: { sortField: 'state', sortDirection: 'ASC' } }
                     - { entity: 'Work', params: { sortField: 'work', sortDirection: 'ASC' } }
             - { label: 'Admin home', route: 'admin_index' }
-
     entities:
-
-#        prototype:
-#            class: Mana\ClientBundle\Entity\
-#            label:
-#            list:
-#                title: '%%entity_label%%'
-#                fields:
-#            form:
-#                title: '%%entity_label%%'
-#                fields: 
-                    
-        Appliance:
-            class: Mana\ClientBundle\Entity\Appliance
-            label: Appliances
-            list:
-                title: '%%entity_label%%'
-                fields: [appliance, enabled]
-            form:
-                title: '%%entity_label%%'
-                fields:
-                    - {property: 'appliance', type_options: { by_reference: false }}
-                    - enabled
-
         Site:
             class: Mana\ClientBundle\Entity\Center
             label: Sites
@@ -69,14 +43,12 @@ easy_admin:
                     - {property: 'center', label: 'Site'}
                     - enabled
                     - {property: 'county', type: 'entity', type_options: { class: Mana\ClientBundle\Entity\County }}
-
         Ethnicity:
             class: Mana\ClientBundle\Entity\Ethnicity
             label: Ethnicities
             list:
                 title: '%%entity_label%%'
                 fields: [ethnicity, abbreviation, enabled]
-
         ContactType:
             class: Mana\ClientBundle\Entity\ContactDesc
             label: Contact types
@@ -85,14 +57,12 @@ easy_admin:
                 fields: 
                     - {property: 'contactDesc', label: 'Type'}
                     - enabled
-
         County:
             class: Mana\ClientBundle\Entity\County
             label: Counties
             list:
                 title: '%%entity_label%%'
                 fields: [county, enabled]
-
         FoodStampBracket:
             class: Mana\ClientBundle\Entity\FsAmount
             label: Foodstamp brackets
@@ -103,7 +73,6 @@ easy_admin:
                 fields:
                     - {property: amount, label: Bracket}
                     - enabled
-
         FoodstampStatus:
             class: Mana\ClientBundle\Entity\FsStatus
             label: Foodstamp status
@@ -113,7 +82,6 @@ easy_admin:
             form:
                 title: '%%entity_label%%'
                 fields: [status]
-
         Housing:
             class: Mana\ClientBundle\Entity\Housing
             label: Housing
@@ -123,7 +91,6 @@ easy_admin:
             form:
                 title: '%%entity_label%%'
                 fields: [housing, enabled]
-
         Income:
             class: Mana\ClientBundle\Entity\Income
             label: Income brackets
@@ -133,7 +100,6 @@ easy_admin:
             form:
                 title: '%%entity_label%%'
                 fields: [income, enabled]
-
         IncomeSource:
             class: Mana\ClientBundle\Entity\IncomeSource
             label: Income sources
@@ -143,7 +109,6 @@ easy_admin:
             form:
                 title: '%%entity_label%%'
                 fields: [incomeSource, enabled]
-
         Notfoodstamp:
             class: Mana\ClientBundle\Entity\Notfoodstamp
             label: Why not foodstamps
@@ -153,7 +118,6 @@ easy_admin:
             form:
                 title: '%%entity_label%%'
                 fields: [notfoodstamp, enabled]
-
         Offense:
             class: Mana\ClientBundle\Entity\Offence
             label: Offense
@@ -167,7 +131,6 @@ easy_admin:
                 fields: 
                     - {property: 'offence', label: 'Offense', type_options: {by_reference: false}}
                     - enabled
-
         InsufficientFood:
             class: Mana\ClientBundle\Entity\Reason
             label: 'Insufficient food'
@@ -177,7 +140,6 @@ easy_admin:
             form:
                 title: '%%entity_label%%'
                 fields: [reason, enabled]
-
         Relationship:
             class: Mana\ClientBundle\Entity\Relationship
             label: Relationship
@@ -191,7 +153,6 @@ easy_admin:
                 fields: 
                     - {property: relation, label: 'Relation to head'}
                     - enabled
-
         State:
             class: Mana\ClientBundle\Entity\State
             label: State
@@ -203,15 +164,12 @@ easy_admin:
                 fields: 
                     - {property: 'state', type_options: {by_reference: false}}
                     - enabled
-
         Work:
             class: Mana\ClientBundle\Entity\Work
-            label: Work
+            label: 'Work'
             list:
                 title: '%%entity_label%%'
                 fields: [work, enabled]
             form:
                 title: '%%entity_label%%'
-                fields: 
-                    - {property: 'work', type_options: {by_reference: false}}
-                    - enabled
+                fields: [work, enabled]

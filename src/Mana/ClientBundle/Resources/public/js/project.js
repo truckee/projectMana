@@ -10,7 +10,7 @@ $(document).ready(function() {
     // for contacts
     var contactForm = $('#contact_form');
     var env = $('#env').text();
-    var foodStampSelect = $("select#household_foodstamp");
+    var foodStampSelect = $("select#household_foodStamps");
     showHideIncludeHead();
 
     $('#menuToggle').click(function() {
@@ -206,11 +206,14 @@ $(document).ready(function() {
         });
     }
 
-    foodStampShowHide(foodStampSelect.val());
+    var foodStampSelect = $("#household_foodstamp");
+    var option = $("#household_foodstamp option:selected").val();
+    foodStampShowHide(option);
 
     foodStampSelect.click(function() {
-        foodStampShowHide(foodStampSelect.val());
-    });    
+        var option = $("#household_foodstamp option:selected").val();
+        foodStampShowHide(option);
+    });        
     
 }
 );
@@ -281,30 +284,35 @@ $(document).keypress(function(e) {
 }
 
 function foodStampShowHide(option) {
-        if (option === "1") {
+        //Blank option === ""
+        if (option === "" || option > "2") {
+            $("label[for=household_fsamount]").hide();
+            $("select#household_fsamount").hide();
+            $("select#household_fsamount").val("");
             $("label[for=household_notfoodstamp]").hide();
             $("select#household_notfoodstamp").hide();
             $("select#household_notfoodstamp").val("");
-            $("label[for=household_fsamount]").show();
-            $("select#household_fsamount").show();
-        }
-        if (option === "0") {
             $("label[for=household_fsamount]").hide();
             $("select#household_fsamount").hide();
             $("select#household_fsamount").val("");
+        }
+        //No foodstamps: option === "1" 
+        if (option === "1") {
             $("label[for=household_notfoodstamp]").show();
             $("select#household_notfoodstamp").show();
-        }
-        if (option === "2" || option === "") {
             $("label[for=household_fsamount]").hide();
             $("select#household_fsamount").hide();
             $("select#household_fsamount").val("");
+        }
+        //Yes option === "2"
+        if (option === "2") {
+            $("label[for=household_fsamount]").show();
+            $("select#household_fsamount").show();
             $("label[for=household_notfoodstamp]").hide();
             $("select#household_notfoodstamp").hide();
             $("select#household_notfoodstamp").val("");
         }
 }
-
 /**
 * sets visibility of isHead radio & include 
 if isHead=1, then include is hidden, other rows are shown

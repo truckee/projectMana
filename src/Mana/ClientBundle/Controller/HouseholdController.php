@@ -36,7 +36,7 @@ class HouseholdController extends Controller
             throw $this->createNotFoundException('Unable to find Household entity.');
         }
         $templates[] = "ManaClientBundle:Member:memberShowBlock.html.twig";
-        $templates[] = "ManaClientBundle:Household:householdShowBlock.html.twig";
+        $templates[] = "ManaClientBundle:Household:household_show_content.html.twig";
         $templates[] = "ManaClientBundle:Address:addressShowBlock.html.twig";
         $templates[] = "ManaClientBundle:Household:contactShowBlock.html.twig";
 
