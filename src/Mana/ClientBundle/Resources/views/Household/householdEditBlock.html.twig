@@ -18,7 +18,7 @@
     </li>
 <!--    <li><b>{{ form_label(form.incomeSource) }}: </b>{{ form_widget(form.incomeSource, {'attr': {'class':'smallform-checkbox'}}) }}</li>-->
     <li><b>Income: </b>{{ form_widget(form.income) }}</li>
-    <li><b>Housing: </b>{{ form_widget(form.housing) }}</li>
+    <li>{{ form_row(form.housing) }}{{ form_row(form.disabledHousing) }}</li>
 <!--    <li><b>{{ form_label(form.appliances) }}: </b>{{ form_widget(form.appliances, {'attr': {'class':'smallform-checkbox'}}) }}</li>-->
     <li><b>{{ form_label(form.reasons) }}: </b>{{ form_widget(form.reasons, {'attr': {'class':'smallform-checkbox'}}) }}</li>
     <li></li>

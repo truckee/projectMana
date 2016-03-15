@@ -7,10 +7,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Mana\ClientBundle\Form\MemberType;
 use Mana\ClientBundle\Form\AddressType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Mana\ClientBundle\Form\PhoneType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Doctrine\ORM\EntityRepository;
+use Mana\ClientBundle\Utilities\DisabledOptions;
 
 class HouseholdType extends AbstractType
 {
@@ -76,7 +78,7 @@ class HouseholdType extends AbstractType
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('f')
                                 ->orderBy('f.id', 'ASC')
-                                ;
+                        ;
                     },
                 ))
                 ->add('fsamount', 'entity', array(
@@ -93,16 +95,16 @@ class HouseholdType extends AbstractType
                 ->add('headId', 'hidden', array(
                     'mapped' => false,
                 ))
-                ->add('housing', 'entity', array(
-                    'class' => 'ManaClientBundle:Housing',
-                    'property' => 'housing',
-                    'empty_value' => '',
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('h')
-                                ->orderBy('h.housing', 'ASC')
-                                ->where("h.enabled=1");
-                    },
-                ))
+//                ->add('housing', EntityType::class, array(
+//                    'class' => 'ManaClientBundle:Housing',
+//                    'property' => 'housing',
+//                    'empty_value' => '',
+//                    'query_builder' => function(EntityRepository $er) {
+//                        return $er->createQueryBuilder('h')
+//                                ->orderBy('h.housing', 'ASC')
+//                                ->where("h.enabled=1");
+//                    },
+//                ))
                 ->add('income', 'entity', array(
                     'class' => 'ManaClientBundle:Income',
                     'property' => 'income',
@@ -192,9 +194,32 @@ class HouseholdType extends AbstractType
             $center = $household->getCenter();
             if (empty($center)) {
                 $form->add('center', new Field\CenterEnabledChoiceType());
-            } else {
+            }
+            else {
                 $form->add('center', new Field\CenterAllChoiceType());
             }
+
+            $fieldEntity = $household->getHousing();
+            $enabled = (null !== $fieldEntity) ? $fieldEntity->getEnabled() : true;
+            if (null !== $fieldEntity && !$fieldEntity->getEnabled()) {
+                $form->add('disabledHousing', 'text', array(
+                    'data' => $fieldEntity->getHousing(),
+                    'attr' => ['disabled' => true],
+                    'label' => 'Housing: ',
+                    'label_attr' => ['style' => 'font-weight:bold;'],
+                    'mapped' => false,
+                ));
+            }
+            if (null === $fieldEntity || $fieldEntity->getEnabled()) {
+                $form->add('disabledHousing', 'text', array(
+                    'data' => 'Something',
+                    'attr' => ['style' => 'display:none;'],
+                    'mapped' => false,
+                ));
+            }
+
+            $housing = new DisabledOptions('Housing', 'housing', 'Housing: ', $enabled);
+            $form->add('housing', EntityType::class, $housing->fieldArray());
         });
     }
 
@@ -212,6 +237,7 @@ class HouseholdType extends AbstractType
             'csrf_protection' => false,
             'required' => false,
             'attr' => array("class" => "smallform"),
+            'label_attr' => ['style' => ['font-style' => 'bold']],
         ));
     }
 
