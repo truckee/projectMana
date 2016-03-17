@@ -8,11 +8,9 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Mana\ClientBundle\Form\MemberType;
 use Mana\ClientBundle\Form\AddressType;
 use Mana\ClientBundle\Form\PhoneType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Doctrine\ORM\EntityRepository;
-use Mana\ClientBundle\Utilities\DisabledOptions;
 
 class HouseholdType extends AbstractType
 {
@@ -95,16 +93,16 @@ class HouseholdType extends AbstractType
                 ->add('headId', 'hidden', array(
                     'mapped' => false,
                 ))
-//                ->add('housing', 'entity', array(
-//                    'class' => 'ManaClientBundle:Housing',
-//                    'property' => 'housing',
-//                    'empty_value' => '',
-//                    'query_builder' => function(EntityRepository $er) {
-//                        return $er->createQueryBuilder('h')
-//                                ->orderBy('h.housing', 'ASC')
-//                                ->where("h.enabled=1");
-//                    },
-//                ))
+                ->add('housing', 'entity', array(
+                    'class' => 'ManaClientBundle:Housing',
+                    'property' => 'housing',
+                    'empty_value' => '',
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('h')
+                                ->orderBy('h.housing', 'ASC')
+                                ->where("h.enabled=1");
+                    },
+                ))
                 ->add('income', 'entity', array(
                     'class' => 'ManaClientBundle:Income',
                     'property' => 'income',
@@ -183,20 +181,6 @@ class HouseholdType extends AbstractType
         // required data from member to head of household
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $data = $event->getData();
-
-//            foreach ($arr as $key => $value) {
-//                if (0 === strpos($key, 'old')) {
-//                    $er = new EntityRepository('ManaClientBundle:' . $key);
-//                    $entity = $er->find($value);
-//                    $method = 'set' . $key;
-//                    $household->$method($entity);
-//                    $key = str_replace('old', '', $key);
-//                    $data[$key] = $value;
-//                }
-//            }
-//            $event->setData($data);
-//            dump($arr, $data);
-//            die;
             if ($data['headId'] <> 0) {
                 $newData = $this->service->replaceHeadData($data);
                 $event->setData($newData);
@@ -211,16 +195,6 @@ class HouseholdType extends AbstractType
             }
             else {
                 $form->add('center', new Field\CenterAllChoiceType());
-            }
-
-            $housing = new DisabledOptions($household, 'getHousing', 'Housing', 'housing', 'getHousing');
-            $form->add('housing', EntityType::class, $housing->fieldArray());
-            $enabled = (!empty($household->getHousing())) ? $household->getHousing()->getEnabled() : true;
-            if (!$enabled) {
-                $form->add('oldHousing', HiddenType::class, array(
-                    'data' => $household->getHousing()->getId(),
-                    'mapped' => false,
-                ));
             }
         });
     }
