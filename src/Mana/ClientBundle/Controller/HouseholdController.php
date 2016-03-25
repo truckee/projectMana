@@ -30,6 +30,8 @@ class HouseholdController extends Controller
      */
     public function showAction($id)
     {
+        $session = $this->getRequest()->getSession();
+        $session->set('household', null);
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('ManaClientBundle:Household')->find($id);
         if (!$household) {
@@ -83,6 +85,8 @@ class HouseholdController extends Controller
             $searchFor = $member->getFname() . ' ' . $member->getSname();
             $searches = $this->get('searches');
             $found = $searches->getMembers($searchFor);
+            $session->set('household', $household);
+            $em->detach($household);
 
             if (count($found) === 0) {
                 //when there are no matches, create member as head with incoming data
@@ -91,8 +95,6 @@ class HouseholdController extends Controller
             }
             else {
                 //send new data plus matches to match_results
-                $session->set('household', $household);
-                $em->detach($household);
                 $session->set('member', $member);
                 $em->detach($member);
 
@@ -134,7 +136,12 @@ class HouseholdController extends Controller
         elseif ($flag > 1) {
             return $this->forward('ManaClientBundle:HouseholdV1Many:edit', ['id' => $id]);
         }
-
+        $session = $request->getSession();
+        $new = false;
+        if (null !== $session->get('household')) {
+            $new = true;
+            $session->set('household', null);
+        }
         $members = $household->getMembers();
         //$idArray required for isHead radio choices
         foreach ($members as $member) {
@@ -146,9 +153,8 @@ class HouseholdController extends Controller
             $household->addPhone($phone);
         }
         $newHead = $this->container->get('mana.head.replacement');
-        $form = $this->createForm(new HouseholdType($newHead, $idArray), $household);
+        $form = $this->createForm(new HouseholdType($newHead, $idArray, $new), $household);
         $form->handleRequest($request);
-
         if ($form->isValid()) {
             $houseData = $request->request->get('household');
             $newHeadId = $houseData['isHead'];  //new head id
