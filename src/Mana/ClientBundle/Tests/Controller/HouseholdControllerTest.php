@@ -2,9 +2,9 @@
 
 /*
  * This file is part of the Truckee\Match package.
- * 
+ *
  * (c) George W. Brooks
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -12,14 +12,14 @@
 
 namespace Mana\ClientBundle\Tests\Controller;
 
-use Liip\FunctionalTestBundle\Test\WebTestCase;
+use Mana\ClientBundle\Tests\Controller\ManaWebTestCase;
 
 /**
  * Description of HouseholdControllerTest
  *
  * @author George
  */
-class HouseholdControllerTest extends WebTestCase
+class HouseholdControllerTest extends ManaWebTestCase
 {
 
     public function setup()
@@ -30,8 +30,8 @@ class HouseholdControllerTest extends WebTestCase
         $this->client = static::makeClient();
         $this->client->followRedirects();
         $this->fixtures = $this->loadFixtures([
-            'Mana\ClientBundle\DataFixtures\Test\AdminUser'
-        ])->getReferenceRepository();
+                    'Mana\ClientBundle\DataFixtures\Test\AdminUser'
+                ])->getReferenceRepository();
 //        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
     }
 
@@ -60,36 +60,55 @@ class HouseholdControllerTest extends WebTestCase
         $form['household[members][0][sex]'] = 'Male';
         $eth = $this->fixtures->getReference('cau')->getId();
         $form['household[members][0][ethnicity]'] = $eth;
-        $form['household[arrivalmonth]'] = 1;
-        $form['household[arrivalyear]'] = '2016';
         $tahoe = $this->fixtures->getReference('tahoe')->getId();
         $form['household[center]'] = $tahoe;
         $form['household[complianceDate]'] = '2/1/2016';
         $form['household[sharedDate]'] = '2/1/2016';
-        
+
         return $this->client->submit($form);
     }
-    
+
     public function testNewHousehold()
     {
         $crawler = $this->submitNewHousehold();
-        
+
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Household Edit")')->count());
     }
-    
+
     public function testFoodStamps()
     {
         $crawler = $this->submitNewHousehold();
         $unk = $this->fixtures->getReference('unk')->getId();
         $test = $crawler->filter('div.title')->text();
-        $start = strpos($test,':');
+        $start = strpos($test, ':');
         $id = substr($test, $start + 2, 5);
         $crawler = $this->client->request('GET', '/home');
         $form = $crawler->selectButton('Search')->form();
         $form['qtext'] = $id;
         $crawler = $this->client->submit($form);
-        
+
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Food stamps? Unknown")')->count());
+    }
+
+    public function testDuplicateName()
+    {
+        $crawler = $this->submitNewHousehold();
+        $crawler = $this->client->request('GET', '/household/new');
+
+        $form = $crawler->selectButton('Submit')->form();
+        $form['household[members][0][fname]'] = 'Benny';
+        $form['household[members][0][sname]'] = 'Broko';
+        $form['household[members][0][dob]'] = '44';
+        $form['household[members][0][sex]'] = 'Male';
+        $eth = $this->fixtures->getReference('cau')->getId();
+        $form['household[members][0][ethnicity]'] = $eth;
+        $tahoe = $this->fixtures->getReference('tahoe')->getId();
+        $form['household[center]'] = $tahoe;
+        $form['household[complianceDate]'] = '2/1/2016';
+        $form['household[sharedDate]'] = '2/1/2016';
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Borko")')->count());
     }
 
 }
