@@ -24,9 +24,6 @@ class HouseholdControllerTest extends ManaWebTestCase
 
     public function setup()
     {
-        $this->loadFixtures(array(
-            'Mana\ClientBundle\DataFixtures\Test\AdminUser',
-        ));
         $this->client = static::makeClient();
         $this->client->followRedirects();
         $this->fixtures = $this->loadFixtures([
@@ -78,13 +75,9 @@ class HouseholdControllerTest extends ManaWebTestCase
     public function testFoodStamps()
     {
         $crawler = $this->submitNewHousehold();
-        $unk = $this->fixtures->getReference('unk')->getId();
-        $test = $crawler->filter('div.title')->text();
-        $start = strpos($test, ':');
-        $id = substr($test, $start + 2, 5);
         $crawler = $this->client->request('GET', '/home');
         $form = $crawler->selectButton('Search')->form();
-        $form['qtext'] = $id;
+        $form['qtext'] = 'Benny Borko';
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Food stamps? Unknown")')->count());
