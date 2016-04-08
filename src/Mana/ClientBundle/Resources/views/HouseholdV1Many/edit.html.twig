@@ -1,5 +1,5 @@
 {% extends "ManaClientBundle:Default:layout.html.twig" %}
-{% form_theme form 'ManaClientBundle:Form:fields.html.twig' %}
+
 {% block body %}
     {#{{ errorString }}#}
     <div class="title">Household Edit<br>
@@ -15,13 +15,9 @@
             <div class="border" onclick="showHideIncludeHead()" >
                 <ul id="member-form" class="formblock">
                     <li id="radioHead"><b>Head?</b> <input class="smallform" type="radio" id="isHead" name="household[isHead]" 
-                                                           value="{{ member.vars.value.id }}" {% if member.vars.value.id == household.hohId %}checked="checked"{% endif %}></li>
-                        {% if member.vars.value.id != household.hohId %}
-                            {% include "ManaClientBundle:Member:memberRequired.html.twig" %}
-                        {% else %}
-                        <li><b>First name: </b>{{ form_widget(member.fname, {'attr':{'readonly':'true'}}) }}</li>
-                        <li><b>Last name: </b>{{ form_widget(member.sname, {'attr':{'readonly':'true'}}) }}</li>
-                        {% endif %}
+                                                           value="{{ member.vars.value.id }}" 
+                                                           {% if member.vars.value.id == household.hohId %}checked="checked"{% endif %}></li>
+                        {% include "ManaClientBundle:Member:memberRequired.html.twig" %}
                 </ul>
             </div>
         {% endfor %}

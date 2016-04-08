@@ -4,7 +4,7 @@ namespace Mana\ClientBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Mana\ClientBundle\Form\MemberType;
 
 class HouseholdHeadType extends AbstractType {
@@ -27,7 +27,7 @@ class HouseholdHeadType extends AbstractType {
         return 'household_head';
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+    public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'Mana\ClientBundle\Entity\Household',
             'error_bubbling' => false,

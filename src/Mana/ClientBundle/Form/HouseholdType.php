@@ -4,7 +4,7 @@ namespace Mana\ClientBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Mana\ClientBundle\Form\MemberType;
 use Mana\ClientBundle\Form\AddressType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -217,7 +217,7 @@ class HouseholdType extends AbstractType
         return 'household';
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'Mana\ClientBundle\Entity\Household',
@@ -226,7 +226,6 @@ class HouseholdType extends AbstractType
             'csrf_protection' => false,
             'required' => false,
             'attr' => array("class" => "smallform"),
-            'label_attr' => ['style' => ['font-style' => 'bold']],
         ));
     }
 

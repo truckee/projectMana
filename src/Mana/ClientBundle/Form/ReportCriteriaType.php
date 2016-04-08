@@ -4,7 +4,7 @@ namespace Mana\ClientBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Mana\ClientBundle\Form\Field\MonthType;
 use Mana\ClientBundle\Form\Field\YearType;
 use Doctrine\ORM\EntityRepository;
@@ -87,7 +87,7 @@ class ReportCriteriaType extends AbstractType {
         ;
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+    public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'csrf_protection' => false,
             'required' => false,

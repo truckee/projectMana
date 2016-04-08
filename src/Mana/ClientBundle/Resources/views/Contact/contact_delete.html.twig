@@ -1,5 +1,5 @@
 {% extends "ManaClientBundle:Default:layout.html.twig" %}
-{% form_theme form 'ManaClientBundle:Form:fields.html.twig' %}
+
 {% block body %}
 <div class="title">{{ title }} for {{ contact.household.head.fname }} {{ contact.household.head.sname }}</div>
 <form action="{{ path("contact_delete", {'id': contact.id }) }}" method="post">

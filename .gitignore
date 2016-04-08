@@ -10,8 +10,7 @@
 /nbproject/
 /vendor/*
 /web/bundles/
-/web/assetic/css/compiled/*
-/web/assetic/js/compiled/*
-/web/js/
-/web/css/
 /htdocs/
+tests/_output/*
+
+tests/_output/*

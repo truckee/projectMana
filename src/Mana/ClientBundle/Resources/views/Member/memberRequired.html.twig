@@ -1,5 +1,5 @@
-<li><b>First name: </b>{{ form_widget(member.fname) }}</li>
-<li><b>Last name: </b>{{ form_widget(member.sname) }}</li>
-<li><b>Date of birth<br>(mm/dd/yyyy): </b>{{ form_widget(member.dob) }}</li>
-<li><br><b>Gender: </b>{{ form_widget(member.sex) }}</li>
-<li><br><b>Ethnicity: </b>{{ form_widget(member.ethnicity) }}</li>
+<li>{{ form_row(member.fname) }}</li>
+<li>{{ form_row(member.sname) }}</li>
+<li>{{ form_row(member.dob) }}</li>
+<li>{{ form_row(member.sex) }}</li>
+<li>{{ form_row(member.ethnicity) }}</li>

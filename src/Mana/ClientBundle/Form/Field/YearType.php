@@ -5,11 +5,11 @@
 namespace Mana\ClientBundle\Form\Field;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class YearType extends AbstractType {
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+    public function configureOptions(OptionsResolver $resolver) {
         $range = range(Date('Y'), 1930, -1);
         $years = array();
         foreach ($range as $year) {

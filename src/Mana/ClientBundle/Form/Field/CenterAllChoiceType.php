@@ -3,7 +3,7 @@
 namespace Mana\ClientBundle\Form\Field;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -13,7 +13,7 @@ class CenterAllChoiceType extends AbstractType
         return 'entity';
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
                     'class' => 'ManaClientBundle:Center',
