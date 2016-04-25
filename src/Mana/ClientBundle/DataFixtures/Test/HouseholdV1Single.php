@@ -30,8 +30,8 @@ class HouseholdV1Single extends AbstractFixture implements OrderedFixtureInterfa
     public function load(ObjectManager $manager)
     {
         $member = new Member();
-        $member->setFname('Bogus');
-        $member->setSname('Beelzebub');
+        $member->setFname('Single');
+        $member->setSname('Head');
         $eth = $this->getReference('cau');
         $member->setEthnicity($eth);
         $manager->persist($member);
@@ -48,7 +48,7 @@ class HouseholdV1Single extends AbstractFixture implements OrderedFixtureInterfa
 
     public function getOrder()
     {
-        return 2; // the order in which fixtures will be loaded
+        return 3; // the order in which fixtures will be loaded
     }
 
 }

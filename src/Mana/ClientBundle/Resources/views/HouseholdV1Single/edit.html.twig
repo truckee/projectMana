@@ -1,16 +1,13 @@
 {% extends "ManaClientBundle:Default:layout.html.twig" %}
 {% block body %}
-    <div class="title">Household Edit<br>
-        ID: {{household.id}}; Head: {{household.head.fname}} {{household.head.sname}}</div>
-    <div class="title">NOTICE: Head of household missing data MUST be corrected before other editing
-    </div>
+    {% include 'ManaClientBundle:Household:v1HouseholdEditHeader.html.twig' %}
     <div class="border head">
         <form action="{{ path('household_edit', { 'id': household.id }) }}" method="post">
             {# for loop only generates single member for v1, single member household #}
             {% for member in form.members %}
                 <input type="hidden" name="household_head[members][0][include]" value="{{ member.vars.value.include }}">
                 <ul class="formblock">
-                    <li id="radioHead"><b>Head?</b> <input class="smallform" type="radio" id="isHead" name="household[isHead]" value="{{ member.vars.value.id }}" checked="checked"</li>
+                    <li id="radioHead"><b>Head?</b> <input class="smallform" type="radio" id="isHead" name="household[isHead]" value="{{ member.vars.value.id }}" checked="checked"></li>
                         {% include 'ManaClientBundle:Member:memberRequired.html.twig' %}
                 </ul>
             {% endfor %}

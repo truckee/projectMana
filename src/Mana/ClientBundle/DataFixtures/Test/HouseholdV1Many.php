@@ -30,14 +30,14 @@ class HouseholdV1Many extends AbstractFixture implements OrderedFixtureInterface
     public function load(ObjectManager $manager)
     {
         $member = new Member();
-        $member->setFname('Bogus');
-        $member->setSname('Beelzebub');
+        $member->setFname('MoreThanOne');
+        $member->setSname('Member');
         $eth = $this->getReference('cau');
         $member->setEthnicity($eth);
         $manager->persist($member);
         $member2 = new Member();
-        $member2->setFname('Bartle');
-        $member2->setSname('Beelzebub');
+        $member2->setFname('Added');
+        $member2->setSname('Member');
         $eth = $this->getReference('cau');
         $member2->setEthnicity($eth);
         $manager->persist($member2);
@@ -57,7 +57,7 @@ class HouseholdV1Many extends AbstractFixture implements OrderedFixtureInterface
 
     public function getOrder()
     {
-        return 2; // the order in which fixtures will be loaded
+        return 4; // the order in which fixtures will be loaded
     }
 
 }

@@ -29,6 +29,7 @@ class HouseholdV1ManyTest extends ManaWebTestCase
         $this->client->followRedirects();
         $this->fixtures = $this->loadFixtures([
                     'Mana\ClientBundle\DataFixtures\Test\AdminUser',
+                    'Mana\ClientBundle\DataFixtures\Test\Constants',
                     'Mana\ClientBundle\DataFixtures\Test\HouseholdV1Many'
                 ])->getReferenceRepository();
     }

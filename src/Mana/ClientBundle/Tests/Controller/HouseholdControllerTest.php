@@ -27,7 +27,10 @@ class HouseholdControllerTest extends ManaWebTestCase
         $this->client = static::makeClient();
         $this->client->followRedirects();
         $this->fixtures = $this->loadFixtures([
-                    'Mana\ClientBundle\DataFixtures\Test\AdminUser'
+                    'Mana\ClientBundle\DataFixtures\Test\AdminUser',
+                    'Mana\ClientBundle\DataFixtures\Test\Constants',
+                    'Mana\ClientBundle\DataFixtures\Test\HouseholdV1Single',
+                    'Mana\ClientBundle\DataFixtures\Test\HouseholdV1Many',
                 ])->getReferenceRepository();
 //        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
     }
@@ -77,7 +80,7 @@ class HouseholdControllerTest extends ManaWebTestCase
         $crawler = $this->submitNewHousehold();
         $crawler = $this->client->request('GET', '/home');
         $form = $crawler->selectButton('Search')->form();
-        $form['qtext'] = 'Benny Borko';
+        $form['qtext'] = 'MoreThanOne Member';
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Food stamps? Unknown")')->count());
@@ -89,8 +92,8 @@ class HouseholdControllerTest extends ManaWebTestCase
         $crawler = $this->client->request('GET', '/household/new');
 
         $form = $crawler->selectButton('Submit')->form();
-        $form['household[members][0][fname]'] = 'Benny';
-        $form['household[members][0][sname]'] = 'Broko';
+        $form['household[members][0][fname]'] = 'MoreThanOne';
+        $form['household[members][0][sname]'] = 'Membrane';
         $form['household[members][0][dob]'] = '44';
         $form['household[members][0][sex]'] = 'Male';
         $eth = $this->fixtures->getReference('cau')->getId();
@@ -101,7 +104,7 @@ class HouseholdControllerTest extends ManaWebTestCase
         $form['household[sharedDate]'] = '2/1/2016';
         $crawler = $this->client->submit($form);
 
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Borko")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Add new head of house")')->count());
     }
 
 }
