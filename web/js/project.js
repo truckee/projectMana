@@ -42,8 +42,8 @@ $(document).ready(function() {
         return false;
     });
 
-  $('input#isHead').click(function() {
-      var hohId = $("input[id=headId]").val();
+  $("input[name='household[isHead]']").click(function() {
+      var hohId = $("input[name='household[isHead]']").val();
       var checkedId = $("input:radio:checked").val();
       var dateAdded = $("#dateAdded").text();
       var v1 = $.trim(dateAdded);
@@ -327,12 +327,11 @@ function showHideIncludeHead() {
             $(this).parent().addClass("head");
         }
         
-//        var excluded=$(this).find('input[type=hidden]').val();
         var exclude=$(this).find("select[name$='[include]']").val();
         if (exclude === "0") {
-            $(this).find("li#radioHead").hide();
+            $(this).find("li[name=radioHead]").hide();
         } else {
-            $(this).find("li#radioHead").show();
+            $(this).find("li[name=radioHead]").show();
         }
     });
     return true;

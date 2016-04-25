@@ -9,7 +9,7 @@ modules:
     enabled:
         - WebDriver:
            url: 'http://projectmana/app_test.php'
-           browser: phantomjs
+           browser: firefox
            window_size: 1024x768
         - \Helper\Acceptance
         - Db:

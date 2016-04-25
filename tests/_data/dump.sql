@@ -986,8 +986,8 @@ DELIMITER ;
 
 ## single head
 set foreign_key_checks = 0;
-insert into member (fname, sname, ethnicity_id)
-values ('Single', 'Head', '8');
+insert into member (fname, sname, ethnicity_id, include)
+values ('Single', 'Head', '8', 1);
 set @hohId = last_insert_id();
 insert into household (hoh_id, foodstamp_id)
 values (@hohId, 4);
@@ -995,11 +995,11 @@ set @householdId = last_insert_id();
 update member set household_id = @householdId where id = @hohId;
 
 ## several members
-insert into member (fname, sname, ethnicity_id)
-values ('MoreThanOne', 'Member', '8');
+insert into member (fname, sname, ethnicity_id, include)
+values ('MoreThanOne', 'Member', '8', 1);
 set @hohId = last_insert_id();
-insert into member (fname, sname, ethnicity_id)
-values ('Added', 'Member', '8');
+insert into member (fname, sname, ethnicity_id, include)
+values ('Added', 'Member', '8', 1);
 set @memberId = last_insert_id();
 insert into household (hoh_id, foodstamp_id)
 values (@hohId, 4);

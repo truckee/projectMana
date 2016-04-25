@@ -32,6 +32,7 @@ class HouseholdV1Single extends AbstractFixture implements OrderedFixtureInterfa
         $member = new Member();
         $member->setFname('Single');
         $member->setSname('Head');
+        $member->setInclude(true);
         $eth = $this->getReference('cau');
         $member->setEthnicity($eth);
         $manager->persist($member);

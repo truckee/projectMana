@@ -32,12 +32,14 @@ class HouseholdV1Many extends AbstractFixture implements OrderedFixtureInterface
         $member = new Member();
         $member->setFname('MoreThanOne');
         $member->setSname('Member');
+        $member->setInclude(true);
         $eth = $this->getReference('cau');
         $member->setEthnicity($eth);
         $manager->persist($member);
         $member2 = new Member();
         $member2->setFname('Added');
         $member2->setSname('Member');
+        $member2->setInclude(true);
         $eth = $this->getReference('cau');
         $member2->setEthnicity($eth);
         $manager->persist($member2);

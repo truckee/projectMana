@@ -19,5 +19,6 @@ $I->click('Search');
 $I->see('Household View');
 $I->click('Edit household');
 $I->see('select new head of household from included members');
-$I->click('Submit');
-$I->see('select new head of household from included members');
+$I->checkOption("#isHead2");
+$I->waitForJS("return $.active == 0;", 25);
+$I->seeInPopup('Reminder');
