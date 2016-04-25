@@ -45,7 +45,8 @@
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "nelmio/alice": "^2.1",
         "javiereguiluz/easyadmin-bundle": "~1.1",
-        "codeception/codeception": "*"
+        "codeception/codeception": "*",
+        "friendsofsymfony/user-bundle": "~2.0@dev"
     },
     "scripts": {
         "post-install-cmd": [

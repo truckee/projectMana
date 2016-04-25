@@ -11,6 +11,4 @@
 /vendor/*
 /web/bundles/
 /htdocs/
-tests/_output/*
-
-tests/_output/*
+/tests/_output/*

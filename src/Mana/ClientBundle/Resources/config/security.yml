@@ -1,6 +1,6 @@
 security:
     encoders:
-      Mana\ClientBundle\Entity\User: 
+      FOS\UserBundle\Model\UserInterface:
         algorithm: md5
         ignore_case: true
         encode_as_base64: false
@@ -11,10 +11,12 @@ security:
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
-        entity:
-          entity:
-            class: Mana\ClientBundle\Entity\User
-            property: username
+        fos_userbundle:
+            id: fos_user.user_provider.username
+#        entity:
+#          entity:
+#            class: Mana\ClientBundle\Entity\User
+#            property: username
 
     firewalls:
         dev:
@@ -32,8 +34,9 @@ security:
         secured_area:
             pattern:    ^/
             form_login:
-              default_target_path: /home
-              use_referer: true
+                provider: fos_userbundle
+                default_target_path: /home
+                use_referer: true
 
             logout:
               target: /login
