@@ -7,25 +7,31 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Mana\ClientBundle\Form\MemberType;
 use Mana\ClientBundle\Form\AddressType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Mana\ClientBundle\Form\PhoneType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Doctrine\ORM\EntityRepository;
 
+//use Mana\ClientBundle\Utilities\DisabledOptions;
+
 class HouseholdType extends AbstractType
 {
 
     private $idArray;
-    private $service;
+    private $newHeadService;
+    private $new;
 
-    public function __construct($service, $idArray = null)
+    public function __construct($newHeadService, $idArray = null, $new = null)
     {
         $this->idArray = $idArray;
-        $this->service = $service;
+        $this->newHeadService = $newHeadService;
+        $this->new = $new;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $new = $this->new;
         $builder
                 ->add('active', 'choice', array(
                     'choices' => array('1' => 'Yes', '0' => 'No'),
@@ -93,14 +99,20 @@ class HouseholdType extends AbstractType
                 ->add('headId', 'hidden', array(
                     'mapped' => false,
                 ))
-                ->add('housing', 'entity', array(
+                ->add('housing', EntityType::class, array(
                     'class' => 'ManaClientBundle:Housing',
                     'property' => 'housing',
                     'empty_value' => '',
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('h')
-                                ->orderBy('h.housing', 'ASC')
-                                ->where("h.enabled=1");
+                    'query_builder' => function(EntityRepository $er) use($new) {
+                        if (true === $new) {
+                            return $er->createQueryBuilder('h')
+                                    ->orderBy('h.housing', 'ASC')
+                                    ->where("h.enabled=1");
+                        }
+                        else {
+                            return $er->createQueryBuilder('h')
+                                    ->orderBy('h.housing', 'ASC');
+                        }
                     },
                 ))
                 ->add('income', 'entity', array(
@@ -182,13 +194,14 @@ class HouseholdType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $data = $event->getData();
             if ($data['headId'] <> 0) {
-                $newData = $this->service->replaceHeadData($data);
+                $newData = $this->newHeadService->replaceHeadData($data);
                 $event->setData($newData);
             }
         });
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $household = $event->getData();
             $form = $event->getForm();
+            $new = $this->new;
             $center = $household->getCenter();
             if (empty($center)) {
                 $form->add('center', new Field\CenterEnabledChoiceType());
@@ -213,6 +226,7 @@ class HouseholdType extends AbstractType
             'csrf_protection' => false,
             'required' => false,
             'attr' => array("class" => "smallform"),
+            'label_attr' => ['style' => ['font-style' => 'bold']],
         ));
     }
 
