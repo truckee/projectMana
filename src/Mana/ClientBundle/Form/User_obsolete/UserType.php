@@ -5,11 +5,9 @@ namespace Mana\ClientBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-//use Mana\ClientBundle\EventListener\UserPasswordSubscriber;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class UserType extends AbstractType {
-//        $subscriber = new UserPasswordSubscriber($builder->getFormFactory());
-//        $builder->addEventSubscriber($subscriber);
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
@@ -21,7 +19,7 @@ class UserType extends AbstractType {
                 ))
                 ->add('fname')
                 ->add('sname')
-                ->add('email')
+                ->add('email', EmailType::class)
                 ->add('username')
                 ->add('password', 'repeated', array(
                     'type' => 'password',

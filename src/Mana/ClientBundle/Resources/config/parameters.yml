@@ -1,17 +1,17 @@
-parameters:
-    database_driver: pdo_mysql
-    database_host: localhost
-    database_port: null
-    database_name: projectmana
-    database_user: projectmana
-    database_password: OrangeWhite
-    mailer_transport: smtp
-    mailer_host: localhost
-    mailer_user: developer@bogus.info
-    mailer_password: aardvark
-    locale: en
-    secret: 34d3b18854545256088f00913e0e45a02f39708c
-    database_path: null
-    statistics.class: Mana\ClientBundle\Statistics\Statistics
-    entity.manager: Doctrine\ORM\EntityManager
-    core.exceptlistener.class: Mana\ClientBundle\EventListener\ExceptionListener
+#parameters:
+#    database_driver: pdo_mysql
+#    database_host: localhost
+#    database_port: null
+#    database_name: projectmana
+#    database_user: projectmana
+#    database_password: OrangeWhite
+#    mailer_transport: smtp
+#    mailer_host: localhost
+#    mailer_user: developer@bogus.info
+#    mailer_password: aardvark
+#    locale: en
+#    secret: 34d3b18854545256088f00913e0e45a02f39708c
+#    database_path: null
+#    statistics.class: Mana\ClientBundle\Statistics\Statistics
+#    entity.manager: Doctrine\ORM\EntityManager
+#    core.exceptlistener.class: Mana\ClientBundle\EventListener\ExceptionListener

@@ -30,8 +30,12 @@ security:
         login_firewall:
             pattern:    ^/login$
             anonymous:  ~
+#        
+        reset_firewall:
+            pattern:    ^/resetting
+            anonymous:  ~
         
-        secured_area:
+        main:
             pattern:    ^/
             form_login:
                 provider: fos_userbundle
@@ -42,6 +46,7 @@ security:
               target: /login
 
     access_control:
+        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/reports/foodbank/*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: ROLE_USER }

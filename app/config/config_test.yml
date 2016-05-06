@@ -13,11 +13,6 @@ web_profiler:
 swiftmailer:
     disable_delivery: true
 
-security:
-    firewalls:
-        secured_area:
-            http_basic:
-
 liip_functional_test: ~
 #    cache_sqlite_db: true
         
@@ -34,5 +29,4 @@ doctrine:
                 user:     "%database_user%"
                 password: "%database_password%"
                 charset:  UTF8
-                mapping_types: 
-                    enum:       string 
+                server_version: 5.7

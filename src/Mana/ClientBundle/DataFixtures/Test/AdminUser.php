@@ -19,10 +19,6 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Mana\ClientBundle\Entity\User;
-use Mana\ClientBundle\Entity\Ethnicity;
-use Mana\ClientBundle\Entity\Center;
-use Mana\ClientBundle\Entity\County;
-use Mana\ClientBundle\Entity\FsStatus;
 
 /**
  * Description of AdminUser
@@ -51,13 +47,13 @@ class AdminUser extends AbstractFixture implements OrderedFixtureInterface, Cont
         $userAdmin->setUsername('admin');
         $factory = $this->container->get('security.encoder_factory');
         $encoder = $factory->getEncoder($userAdmin);
-        $password = $encoder->encodePassword('pmana314', $userAdmin->getSalt());
+        $password = $encoder->encodePassword('manapw', $userAdmin->getSalt());
         $userAdmin->setPassword($password);
-        $userAdmin->setRole('ROLE_ADMIN');
+        $userAdmin->setRoles(array('ROLE_ADMIN'));
         $userAdmin->setFname('Benny');
         $userAdmin->setSname('Borko');
         $userAdmin->setEmail('bborko@bogus.info');
-        $userAdmin->setIsActive(TRUE);
+        $userAdmin->setEnabled(TRUE);
         $manager->persist($userAdmin);
 
         $manager->flush();

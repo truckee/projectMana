@@ -1,5 +1,5 @@
 var memberCount = $('#member-form').length;
-$(document).ready(function() {
+$(document).ready(function () {
     // for household members
     var memberList = $('#member-list');
     var newMemberWidget = memberList.attr('data-prototype');
@@ -12,26 +12,28 @@ $(document).ready(function() {
     var env = $('#env').text();
     var foodStampSelect = $("select#household_foodStamps");
     showHideIncludeHead();
-
+    $("#dialog").dialog({
+        autoOpen: false,
+    });
     $("#household_submit").click(function () {
         $("select").each(function () {
             $(this).removeAttr('disabled');
         });
     });
-    
-    $('#menuToggle').click(function() {
-        if ( $("#menuToggle").text() === 'Printable view')  {  
+
+    $('#menuToggle').click(function () {
+        if ($("#menuToggle").text() === 'Printable view') {
             $("#menuToggle").text('Menu');
             $(".menu").hide();
-            $("html>body #content").css('margin-left', 10+'px');
+            $("html>body #content").css('margin-left', 10 + 'px');
         } else {
             $("#menuToggle").text('Printable view');
             $(".menu").show();
-            $("html>body #content").css('margin-left', 180+'px');
+            $("html>body #content").css('margin-left', 180 + 'px');
         }
     });
 
-    $('#add-member').click(function() {
+    $('#add-member').click(function () {
         //allow for adding members in client edit
         var includeCount = $('#member-list li#included').length;
         var excludeCount = $('#member-list li#excluded').length;
@@ -42,18 +44,20 @@ $(document).ready(function() {
         return false;
     });
 
-  $("input[name='household[isHead]']").click(function() {
-      var hohId = $("input[name='household[isHead]']").val();
-      var checkedId = $("input:radio:checked").val();
-      var dateAdded = $("#dateAdded").text();
-      var v1 = $.trim(dateAdded);
+
+
+    $("input[name='household[isHead]']").click(function () {
+        var hohId = $("input[name='household[isHead]']").val();
+        var checkedId = $("input:radio:checked").val();
+        var dateAdded = $("#dateAdded").text();
+        var v1 = $.trim(dateAdded);
         if (hohId !== checkedId && v1 === "") {
-            alert("REMINDER:\nSelecting new head of household copies\ndob, etc. to head and removes member")
+            $("#dialog").dialog("open");
         }
-    showHideIncludeHead();
+        showHideIncludeHead();
     });
-    
-    $('#add-address').click(function() {
+
+    $('#add-address').click(function () {
         //allow for adding addresss in household edit
         addressCount = addressCount + 1;
         addressWidget = newAddressWidget.replace(/__address__/g, addressCount);
@@ -62,7 +66,7 @@ $(document).ready(function() {
     });
 
     //statistics criteria
-    $('#report_criteria_county').change(function() {
+    $('#report_criteria_county').change(function () {
         var me = $(this).val();
         if (me !== "") {
             $('#center_select').hide();
@@ -70,7 +74,7 @@ $(document).ready(function() {
             $('#center_select').show();
         }
     });
-    $('#report_criteria_center').change(function() {
+    $('#report_criteria_center').change(function () {
         var me = $(this).val();
         if (me !== "") {
             $('#county_select').hide();
@@ -79,13 +83,13 @@ $(document).ready(function() {
         }
     });
 
-    $("#contact_household_button").click(function() {
+    $("#contact_household_button").click(function () {
         var houseId = $("#contact_householdId").val();
         if (houseId !== "") {
             // make sure household not already listed
             var present = false;
             var houseCol = $("td#idCol");
-            $.each(houseCol, function() {
+            $.each(houseCol, function () {
                 if (this.textContent === houseId) {
                     present = true;
                 }
@@ -93,12 +97,11 @@ $(document).ready(function() {
             if (!present) {
                 if (env !== 'dev') {
                     url = "/household/contact/" + houseId;
-                }
-                else {
+                } else {
                     url = "/app_dev.php/household/contact/" + houseId;
                 }
 
-                $.get(url, function(data) {
+                $.get(url, function (data) {
                     //make sure household exists
                     if (data !== 0) {
                         $("#contacts p").text("Center's contacts")
@@ -127,7 +130,7 @@ $(document).ready(function() {
         }
     });
 
-    $(document).on("click", "#selectAll", function() {
+    $(document).on("click", "#selectAll", function () {
         if ($("#selectAll").prop("checked")) {
             $("input[type='checkbox']").prop("checked", true);
         } else {
@@ -135,7 +138,7 @@ $(document).ready(function() {
         }
     });
 
-    $("#contact_center").change(function() {
+    $("#contact_center").change(function () {
         $("tr#latest").remove();
         $("tr#latestHead").remove();
         $("tr#latestFooter").remove();
@@ -154,18 +157,17 @@ $(document).ready(function() {
                     .hide();
             if (env !== 'dev') {
                 url = "/contact/latest";
-            }
-            else {
+            } else {
                 url = "/app_dev.php/contact/latest";
             }
 
-            var jqxhr = $.get(url, function(data) {
+            var jqxhr = $.get(url, function (data) {
                 $("#contact_store").data(data);
             })
-                    .done(function() {
+                    .done(function () {
                         html = "";
                         found = false;
-                        $.each($("#contact_store").data(), function(key, val) {
+                        $.each($("#contact_store").data(), function (key, val) {
                             if (val.centerId === parseInt(center)) {
                                 html += '<tr id="latest"><td><input type="checkbox" id="idSelect" name="contact_household[' + val.id + ']" value="' + val.id + '">';
                                 html += '<td id="idCol">' + val.id + "<td>" + val.head;
@@ -216,11 +218,11 @@ $(document).ready(function() {
     var option = $("#household_foodstamp option:selected").val();
     foodStampShowHide(option);
 
-    foodStampSelect.click(function() {
+    foodStampSelect.click(function () {
         var option = $("#household_foodstamp option:selected").val();
         foodStampShowHide(option);
-    });        
-    
+    });
+
 }
 );
 
@@ -235,7 +237,7 @@ function removeAddress(r) {
 function tableSort() {
     //preserves first row
     var $tbody = $('table#contact_form tbody');
-    $tbody.find('tr').sort(function(a, b) {
+    $tbody.find('tr').sort(function (a, b) {
         var tda = $(a).find('td:eq(2)').text(); // can replace 1 with the column you want to sort on
         var tdb = $(b).find('td:eq(2)').text(); // this will sort on the second column
         // if a < b return 1
@@ -262,54 +264,54 @@ function col2Reset() {
 
 function submitTest() {
 
-$(document).keypress(function(e) {
-  if(e.which === 13) {
-    alert('Enter pressed');
-  }
-});
+    $(document).keypress(function (e) {
+        if (e.which === 13) {
+            alert('Enter pressed');
+        }
+    });
 
-    
+
 }
 
 function foodStampShowHide(option) {
-        //Blank option === ""
-        if (option === "" || option > "2") {
-            $("label[for=household_fsamount]").hide();
-            $("select#household_fsamount").hide();
-            $("select#household_fsamount").val("");
-            $("label[for=household_notfoodstamp]").hide();
-            $("select#household_notfoodstamp").hide();
-            $("select#household_notfoodstamp").val("");
-            $("label[for=household_fsamount]").hide();
-            $("select#household_fsamount").hide();
-            $("select#household_fsamount").val("");
-        }
-        //No foodstamps: option === "1" 
-        if (option === "1") {
-            $("label[for=household_notfoodstamp]").show();
-            $("select#household_notfoodstamp").show();
-            $("label[for=household_fsamount]").hide();
-            $("select#household_fsamount").hide();
-            $("select#household_fsamount").val("");
-        }
-        //Yes option === "2"
-        if (option === "2") {
-            $("label[for=household_fsamount]").show();
-            $("select#household_fsamount").show();
-            $("label[for=household_notfoodstamp]").hide();
-            $("select#household_notfoodstamp").hide();
-            $("select#household_notfoodstamp").val("");
-        }
+    //Blank option === ""
+    if (option === "" || option > "2") {
+        $("label[for=household_fsamount]").hide();
+        $("select#household_fsamount").hide();
+        $("select#household_fsamount").val("");
+        $("label[for=household_notfoodstamp]").hide();
+        $("select#household_notfoodstamp").hide();
+        $("select#household_notfoodstamp").val("");
+        $("label[for=household_fsamount]").hide();
+        $("select#household_fsamount").hide();
+        $("select#household_fsamount").val("");
+    }
+    //No foodstamps: option === "1" 
+    if (option === "1") {
+        $("label[for=household_notfoodstamp]").show();
+        $("select#household_notfoodstamp").show();
+        $("label[for=household_fsamount]").hide();
+        $("select#household_fsamount").hide();
+        $("select#household_fsamount").val("");
+    }
+    //Yes option === "2"
+    if (option === "2") {
+        $("label[for=household_fsamount]").show();
+        $("select#household_fsamount").show();
+        $("label[for=household_notfoodstamp]").hide();
+        $("select#household_notfoodstamp").hide();
+        $("select#household_notfoodstamp").val("");
+    }
 }
 
 /**
-* sets visibility of isHead radio & include 
-if isHead=1, then include is hidden, other rows are shown
-if include=0 or No, then isHead is hidden, else shown
-head of household last name input is disabled
+ * sets visibility of isHead radio & include 
+ if isHead=1, then include is hidden, other rows are shown
+ if include=0 or No, then isHead is hidden, else shown
+ head of household last name input is disabled
  * @returns {Boolean} */
 function showHideIncludeHead() {
-    $('.border ul').each(function() {
+    $('.border ul').each(function () {
         headInput = $(this).find("input[name='household[isHead]']").prop("checked");
         showBlock = $(this).find("li#headShow")
         headShow = showBlock.length
@@ -326,8 +328,8 @@ function showHideIncludeHead() {
         if (headShow) {
             $(this).parent().addClass("head");
         }
-        
-        var exclude=$(this).find("select[name$='[include]']").val();
+
+        var exclude = $(this).find("select[name$='[include]']").val();
         if (exclude === "0") {
             $(this).find("li[name=radioHead]").hide();
         } else {

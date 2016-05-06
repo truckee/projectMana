@@ -40,7 +40,7 @@ class HouseholdControllerTest extends ManaWebTestCase
         $crawler = $this->client->request('GET', '/');
         $form = $crawler->selectButton('Login')->form();
         $form['_username'] = 'admin';
-        $form['_password'] = 'pmana314';
+        $form['_password'] = 'manapw';
         $crawler = $this->client->submit($form);
 
         return $crawler;
@@ -68,6 +68,12 @@ class HouseholdControllerTest extends ManaWebTestCase
         return $this->client->submit($form);
     }
 
+    public function testLogin() {
+        $crawler = $this->login();
+        
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Admin menu")')->count());
+    }
+    
     public function testNewHousehold()
     {
         $crawler = $this->submitNewHousehold();

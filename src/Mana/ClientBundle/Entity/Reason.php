@@ -4,6 +4,7 @@ namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Mana\ClientBundle\Entity\Household;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Reason
@@ -27,6 +28,7 @@ class Reason
      * @var string
      *
      * @ORM\Column(name="reason", type="string", nullable=false)
+     * @Assert\NotBlank(message="Reason may not be blank")
      */
     protected $reason;
 

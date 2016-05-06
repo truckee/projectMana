@@ -22,7 +22,7 @@ class Builder extends ContainerAware
             $menu->addChild('Home', array(
                 'route' => 'home',
             ));
-            $menu['Home']->setLinkAttribute('class', 'smallbutton');
+//            $menu['Home'];
         }
 
 
@@ -32,40 +32,43 @@ class Builder extends ContainerAware
                 'route' => 'contact_new',
                 'routeParameters' => array('id' => $id)
             ));
-            $menu['Add contact']->setLinkAttribute('class', 'smallbutton');
+//            $menu['Add contact'];
         }
 
         $menu->addChild('Latest contacts', array(
             'route' => 'center_select',
         ));
-        $menu['Latest contacts']->setLinkAttribute('class', 'smallbutton');
+//        $menu['Latest contacts'];
 
         $menu->addChild("New contacts", array(
             'route' => 'contacts_add',
         ));
-        $menu["New contacts"]->setLinkAttribute('class', 'smallbutton');
+//        $menu["New contacts"];
 
         $menu->addChild('New household', array(
             'route' => 'household_new',
         ));
-        $menu['New household']->setLinkAttribute('class', 'smallbutton');
+//        $menu['New household'];
 
         $menu->addChild('New household', array(
             'route' => 'household_new',
         ));
-        $menu['New household']->setLinkAttribute('class', 'smallbutton');
+//        $menu['New household'];
+        
+        $menu->addChild('Reports', array(
+            'route' => 'report_menu',
+        ));
+//        $menu['Reports'];
+        
         if ($securityContext->isGranted('ROLE_ADMIN')) {
-            $menu->addChild("Admin menu", array(
-                'route' => 'admin_index',
+            $menu->addChild('Options & users', array(
+                'route' => 'easyadmin',
             ));
-            $menu['Admin menu']->setLinkAttribute('class', 'smallbutton');
+//            $menu['Options & users'];
         }
 
 
-        $menu->addChild("Log out", array(
-            'route' => 'logout',
-        ));
-        $menu['Log out']->setLinkAttribute('class', 'smallbutton');
+//        $menu['Log out'];
 
         return $menu;
     }
@@ -77,17 +80,17 @@ class Builder extends ContainerAware
         $menu->addChild('Home', array(
             'route' => 'home',
         ));
-        $menu['Home']->setLinkAttribute('class', 'smallbutton');
+//        $menu['Home'];
 
-        $menu->addChild("Options maintenance", array(
-            'route' => 'easyadmin',
-        ));
-        $menu['Options maintenance']->setLinkAttribute('class', 'smallbutton');
+//        $menu->addChild("Options maintenance", array(
+//            'route' => 'easyadmin',
+//        ));
+//        $menu['Options maintenance'];
 
-        $menu->addChild("User maintenance", array(
-            'route' => 'user_main',
-        ));
-        $menu['User maintenance']->setLinkAttribute('class', 'smallbutton');
+//        $menu->addChild("User maintenance", array(
+//            'route' => 'user_main',
+//        ));
+//        $menu['User maintenance'];
 
         return $menu;
     }
@@ -97,16 +100,16 @@ class Builder extends ContainerAware
         $menu = $factory->createItem('root');
         $menu->addChild('Employment', array(
             'route' => 'employment_profile',
-        ))->setLinkAttribute('class', 'smallbutton');
+        ));
         $menu->addChild('Income', array(
             'route' => 'income_profile',
-        ))->setLinkAttribute('class', 'smallbutton');
+        ));
         $menu->addChild('Insusfficient food', array(
             'route' => 'reason_profile',
-        ))->setLinkAttribute('class', 'smallbutton');
+        ));
         $menu->addChild('SNAP', array(
             'route' => 'snap_profile',
-        ))->setLinkAttribute('class', 'smallbutton');
+        ));
 
         return $menu;
     }
@@ -119,21 +122,30 @@ class Builder extends ContainerAware
             'route' => 'stats_general',
 //            'routeParameters' => array('dest' => 'general')
         ));
-        $menu["General Statistics"]->setLinkAttribute('class', 'smallbutton');
+        $menu["General Statistics"];
 
         $menu->addChild("Distribution details", array(
             'route' => 'stats_details',
 //            'routeParameters' => array('dest' => 'distribution')
         ));
-        $menu["Distribution details"]->setLinkAttribute('class', 'smallbutton');
+        $menu["Distribution details"];
 
         $menu->addChild("Multiple contacts", array(
             'route' => 'multi_contacts',
 //            'routeParameters' => array('dest' => 'multi')
         ));
-        $menu["Multiple contacts"]->setLinkAttribute('class', 'smallbutton');
+        $menu["Multiple contacts"];
 
         return $menu;
     }
 
+    public function logoutMenu(FactoryInterface $factory, array $options)
+    {
+        $menu = $factory->createItem('root');
+        $menu->addChild("Log out", array(
+            'route' => 'logout',
+        ));
+
+        return $menu;
+    }
 }

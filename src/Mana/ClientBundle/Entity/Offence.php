@@ -3,6 +3,7 @@
 namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Offence
@@ -25,6 +26,7 @@ class Offence
      * @var string
      *
      * @ORM\Column(name="offence", type="string", length=45)
+     * @Assert\NotBlank(message="Offense may not be blank")
      */
     private $offence;
 

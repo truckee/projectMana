@@ -4,6 +4,7 @@ namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * State
@@ -27,6 +28,7 @@ class State
      * @var string
      *
      * @ORM\Column(name="state", type="string", length=45, nullable=true)
+     * @Assert\NotBlank(message="State may not be blank")
      */
     protected $state;
 

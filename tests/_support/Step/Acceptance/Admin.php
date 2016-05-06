@@ -10,7 +10,7 @@ class Admin extends \AcceptanceTester
         $I = $this;
         $I->amOnPage('/login');
         $I->fillField('_username', 'admin');
-        $I->fillField('_password', 'pmana314');
+        $I->fillField('_password', 'manapw');
         $I->click('Login');
     }
 

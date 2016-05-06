@@ -3,6 +3,7 @@
 namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Member
@@ -49,6 +50,7 @@ class Relationship
      * @var string
      *
      * @ORM\Column(name="relation", type="string", nullable=true)
+     * @Assert\NotBlank(message="Relationship may not be blank")
      */
     protected $relation;
 

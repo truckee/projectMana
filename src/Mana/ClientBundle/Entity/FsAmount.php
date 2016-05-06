@@ -4,6 +4,7 @@ namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Mana\ClientBundle\Entity\Household;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * FsAmount
@@ -27,6 +28,7 @@ class FsAmount
      * @var boolean
      *
      * @ORM\Column(name="amount", type="string", nullable=false)
+     * @Assert\NotBlank(message="Bracket may not be blank")
      */
     protected $amount;
 

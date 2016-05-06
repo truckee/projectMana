@@ -10,11 +10,19 @@ class DefaultController extends Controller
 {
 
     /**
-     * @Route("/")
-     * @Template("ManaClientBundle:Default:index.html.twig")
+     * @Route("/home", name="home")
+     * @Template()
      */
     public function indexAction()
     {
+        return array();
+    }
+    
+    /**
+     * @Route("/reportMenu", name="report_menu")
+     * @Template()
+     */
+    public function reportMenuAction() {
         return array();
     }
 

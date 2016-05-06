@@ -39,7 +39,7 @@ class HouseholdV1SingleTest extends ManaWebTestCase
         $crawler = $this->client->request('GET', '/');
         $form = $crawler->selectButton('Login')->form();
         $form['_username'] = 'admin';
-        $form['_password'] = 'pmana314';
+        $form['_password'] = 'manapw';
         $crawler = $this->client->submit($form);
 
         return $crawler;

@@ -1,13 +1,13 @@
-mana_household:
+mana_project:
     resource: "@ManaClientBundle/Controller/"
     type:     annotation
-    prefix:   /
+#    prefix:   /
 
-login_check:
-    path:   /login_check
-
-login_path:
-  path: /login
+#login_check:
+#    path:   /login_check
+#
+#login_path:
+#  path: /login
 
 logout:
     path:   /logout
@@ -16,12 +16,12 @@ root:
     path: /
     defaults:  { _controller: ManaClientBundle:Default:index }
        
-home:
-    path: /home
-    defaults:  { _controller: ManaClientBundle:Default:index }
+#home:
+#    path: /home
+#    defaults:  { _controller: ManaClientBundle:Default:index }
 
 easy_admin_bundle:
-    resource: "@EasyAdminBundle/Controller/"
+    resource: "@ManaClientBundle/Controller/ManaUserController.php"
     type:     annotation
     prefix:   /optionsAdmin
 

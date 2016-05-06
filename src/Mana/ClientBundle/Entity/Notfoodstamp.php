@@ -4,6 +4,7 @@ namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Mana\ClientBundle\Entity\Household;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Notfoodstamp
@@ -26,6 +27,7 @@ class Notfoodstamp {
      * @var boolean
      *
      * @ORM\Column(name="notfoodstamp", type="string", nullable=false)
+     * @Assert\NotBlank(message="Reason may not be blank")
      */
     protected $notfoodstamp;
 

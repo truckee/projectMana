@@ -4,6 +4,7 @@ namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * ContactDesc
@@ -27,6 +28,7 @@ class ContactDesc
      * @var string
      *
      * @ORM\Column(name="contact_desc", type="string", length=45, nullable=true)
+     * @Assert\NotBlank(message="Type may not be blank")
      */
     protected $contactDesc;
 

@@ -756,7 +756,7 @@ class Household
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="center_id", referencedColumnName="id")
      * })
-     * Assert\NotBlank(message="First site may not be empty")
+     * @Assert\NotBlank(message="First site may not be empty")
      */
     protected $center;
 

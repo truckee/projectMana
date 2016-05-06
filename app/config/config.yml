@@ -1,8 +1,8 @@
 imports:
     - { resource: parameters.yml }
     - { resource: easyAdmin.yml }
-    - { resource: @ManaClientBundle/Resources/config/security.yml }
-    - { resource: @ManaClientBundle/Resources/config/services.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
 
 framework:
     #esi:             ~
@@ -74,5 +74,22 @@ monolog:
 
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
-    firewall_name: secured_area
+    firewall_name: main
     user_class: Mana\ClientBundle\Entity\User
+    from_email:
+        address:        projectmana.app@gmail.com
+        sender_name:    Application Support
+    service:
+        mailer: fos_user.mailer.twig_swift
+    resetting:
+        email:
+            template: email/password_resetting.email.twig
+
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        lessphp:
+             file: %kernel.root_dir%/../vendor/oyejorge/less.php/lessc.inc.php
+             apply_to: "\.less$"
+        cssrewrite: ~

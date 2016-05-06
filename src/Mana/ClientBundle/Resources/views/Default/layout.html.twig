@@ -1,5 +1,4 @@
 <!DOCTYPE HTML>
-
 <html>
     <head>
         {% block head %}
@@ -11,58 +10,58 @@
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
             {% block stylesheets %}
-                <link href="{{ asset('/css/cssframes.css') }}" rel="stylesheet" />
-                <link href="{{ asset('/css/mana.css') }}" rel="stylesheet" />
-                <link href="{{ asset('/css/tables.css') }}" rel="stylesheet" />
+                <link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet" />
                 <link href="{{ asset('/css/jquery-ui-1.10.3.custom.css') }}" rel="stylesheet" />
             {% endblock %}
         {%endblock head %}
     </head>
     <body>
-        <div id="wrap">
-            <div id="header"> <img class="imgLogo" src="{{ asset('/images/mana-banner.gif') }}" alt="Project MANA">
+        <div class="container">
+            <div id="env" style="visibility: hidden;">{{ app.environment }}</div>
+            {% if app.user %}
+                {% set route = app.request.attributes.get('_route') %}
+                <div class="menu hidden-print">
+                    {% block nav %}
+                        <nav class="navbar navbar-default" role="navigation">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </button>
+                                <a class="navbar-brand" href="#"></a>
+                            </div>
+                            <div class="collapse navbar-collapse navbar-ex1-collapse">
 
-                <p class="headerText"><h3 class="title">Project M.A.N.A. Client Database</h3>
-                <h5 class="title">Serving more than 90,000 meals per year to North Lake Tahoe
-                    and Truckee communities.</h5>
-            </div>
-
-            <!--<div id="content-wrap">-->
-            <div id="content">
-                <div id="env" style="visibility: hidden;">{{ app.environment }}</div>
-                {% if app.user %}
-                    {% set route = app.request.attributes.get('_route') %}
-                    <div class="menu hidden-print">
-                        {% block menu %}<div style="margin-left: 5px;">
-                                <form action="{{ path('_search') }}" method="get">
-                                    <input name="qtext" type="text" class="tinyform"><br>
-                                    <span style="font-size: 8pt; margin-left: 5px;">Full name or ID</span>
-                                    <input class="smallbutton" name="submit" type="submit" value="Search">
-                                </form></div>
-                                {{ knp_menu_render('ManaClientBundle:Builder:mainMenu') }}
-                            {% endblock menu %}
-                    </div>
-                {%endif%}
-            {% block body %}{% endblock %}</div>
-        <!--</div>-->
-    </div>
-    <div id="footer" class="hidden-print">
-        <hr>
-        <div class="leftfoot">
-            <b> Project MANA -- A Hunger Relief Agency</b><br>
-            (775) 298-0008 Fax: (775) 298-0009<br>
-            Kings Beach: (530) 546-2416<br>
-            Truckee office: (530) 582-4079
-        </div>
-        <div class="rightfoot">
-            <img  src="{{ asset('/images/hosted_by.gif') }}" alt="Sierra Web logo">
-        </div>
-    </div>
-
-    {% block javascripts %}
-        <script src="{{ asset('jquery/jquery-1.10.2.min.js') }}"></script>
-        <script src="{{ asset('jquery/jquery-ui-1.10.3.custom.min.js') }}"></script>
-        <script src="{{ asset('js/project.js') }}"></script>
-    {% endblock %}
+                                {{ knp_menu_render('ManaClientBundle:Builder:mainMenu',{'style': 'navbar'})  }}
+                                <form action="{{ path('_search') }}" class="navbar-form navbar-left" role="search">
+                                    <div class="form-group">
+                                        <input type="text" name="qtext" method="get" class="form-control" placeholder="Full name or ID">
+                                    </div>
+                                    <button type="submit" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                </form>
+                                {{ knp_menu_render('ManaClientBundle:Builder:logoutMenu', { 'style': 'navbar-right' }) }}
+                            </div>
+                        </nav>
+                    {% endblock nav %}
+                    {#                    <form action="{{ path('_search') }}" method="get">#}
+                    {#                        <input name="qtext" type="text" class="tinyform"><br>
+                                            <span style="font-size: 8pt; margin-left: 5px;">Full name or ID</span>
+                                            <input class="smallbutton" name="submit" type="submit" value="Search">
+                                        </form>#}
+                </div>
+            {%endif%}
+            <img src="/images/banner.jpg" style="float: left">
+        {% block body %}{% endblock %}
+    {% block fos_user_content %}{% endblock %}
+</div>
+{% block javascripts %}
+    <script src="{{ asset('js/jquery.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui-1.10.3.custom.min.js') }}"></script>
+    <script src="{{ asset('js/project.js') }}"></script>
+{% endblock %}
 </body>
 </html>
