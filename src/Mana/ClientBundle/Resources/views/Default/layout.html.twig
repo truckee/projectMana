@@ -17,44 +17,41 @@
     </head>
     <body>
         <div class="container">
+{#            <img src="/images/banner.jpg">#}
             <div id="env" style="visibility: hidden;">{{ app.environment }}</div>
             {% if app.user %}
                 {% set route = app.request.attributes.get('_route') %}
                 <div class="menu hidden-print">
                     {% block nav %}
-                        <nav class="navbar navbar-default" role="navigation">
-                            <div class="navbar-header">
-                                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                                    <span class="sr-only">Toggle navigation</span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                </button>
-                                <a class="navbar-brand" href="#"></a>
-                            </div>
-                            <div class="collapse navbar-collapse navbar-ex1-collapse">
-
-                                {{ knp_menu_render('ManaClientBundle:Builder:mainMenu',{'style': 'navbar'})  }}
-                                <form action="{{ path('_search') }}" class="navbar-form navbar-left" role="search">
-                                    <div class="form-group">
-                                        <input type="text" name="qtext" method="get" class="form-control" placeholder="Full name or ID">
-                                    </div>
-                                    <button type="submit" class="btn btn-default">
-                                        <span class="glyphicon glyphicon-search"></span>
+                        {% spaceless %}
+                            <nav class="navbar navbar-default" role="navigation">
+                                <div class="navbar-header">
+                                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                        <span class="sr-only">Toggle navigation</span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
                                     </button>
-                                </form>
-                                {{ knp_menu_render('ManaClientBundle:Builder:logoutMenu', { 'style': 'navbar-right' }) }}
-                            </div>
-                        </nav>
+                                    <a class="navbar-brand" href="#"></a>
+                                </div>
+                                <div class="collapse navbar-collapse navbar-ex1-collapse">
+
+                                    {{ knp_menu_render('ManaClientBundle:Builder:mainMenu',{'style': 'navbar'})  }}
+                                    <form action="{{ path('_search') }}" class="navbar-form navbar-left" role="search">
+                                        <div class="form-group">
+                                            <input type="text" name="qtext" method="get" class="form-control" placeholder="Full name or ID">
+                                        </div>
+                                        <button type="submit" class="btn btn-default">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </form>
+                                    {{ knp_menu_render('ManaClientBundle:Builder:logoutMenu', { 'style': 'navbar-right' }) }}
+                                </div>
+                            </nav>
+                        {% endspaceless %}
                     {% endblock nav %}
-                    {#                    <form action="{{ path('_search') }}" method="get">#}
-                    {#                        <input name="qtext" type="text" class="tinyform"><br>
-                                            <span style="font-size: 8pt; margin-left: 5px;">Full name or ID</span>
-                                            <input class="smallbutton" name="submit" type="submit" value="Search">
-                                        </form>#}
                 </div>
             {%endif%}
-            <img src="/images/banner.jpg" style="float: left">
         {% block body %}{% endblock %}
     {% block fos_user_content %}{% endblock %}
 </div>
