@@ -1,6 +1,15 @@
 {% extends 'ManaClientBundle:Default:layout.html.twig' %}
 {% block body %}
-<p align="center">
-    Welcome to the Project M.A.N.A. distribution database application.
-</p>
+    <p align="center">
+        Welcome to the Project M.A.N.A. distribution database application.
+    </p>
+    <div id="linechart" style="margin: 0 10em;"></div>
 {% endblock body%}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="/js/highcharts.js"></script>
+    <script src="/js/exporting.js"></script>
+    <script type="text/javascript">
+        {{ render(controller('ManaClientBundle:Default:script')) }}
+    </script>
+{% endblock %}

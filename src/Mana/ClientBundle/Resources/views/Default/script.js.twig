@@ -1,0 +1,21 @@
+$(document).ready(function () {
+    var options = {
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: 'Diistributions, FY{{ chart.fy }} to date'
+        },
+        xAxis: {
+            categories: [{% for category in chart.categories %}{{category|raw}}{%endfor%}]
+        },
+        yAxis: {
+            title: {
+                text: 'Distributions'
+            }
+        },
+        series: {{ chart.series|raw }}
+    };
+
+    $('#linechart').highcharts(options);
+})

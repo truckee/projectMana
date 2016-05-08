@@ -17,7 +17,7 @@
     </head>
     <body>
         <div class="container">
-{#            <img src="/images/banner.jpg">#}
+            {#            <img src="/images/banner.jpg">#}
             <div id="env" style="visibility: hidden;">{{ app.environment }}</div>
             {% if app.user %}
                 {% set route = app.request.attributes.get('_route') %}
@@ -52,13 +52,14 @@
                     {% endblock nav %}
                 </div>
             {%endif%}
-        {% block body %}{% endblock %}
-    {% block fos_user_content %}{% endblock %}
-</div>
-{% block javascripts %}
-    <script src="{{ asset('js/jquery.js') }}"></script>
-    <script src="{{ asset('js/jquery-ui-1.10.3.custom.min.js') }}"></script>
-    <script src="{{ asset('js/project.js') }}"></script>
-{% endblock %}
+            {% block body %}
+            {% endblock %}
+        {% block fos_user_content %}{% endblock %}
+    </div>
+    {% block javascripts %}
+        <script src="{{ asset('js/jquery.js') }}"></script>
+        <script src="{{ asset('js/jquery-ui-1.10.3.custom.min.js') }}"></script>
+        <script src="{{ asset('js/project.js') }}"></script>
+    {% endblock %}
 </body>
 </html>

@@ -87,5 +87,14 @@ class DefaultController extends Controller
     {
         throw new \Exception('A purposely thrown PHP exception');
     }
+    
+    public function scriptAction() {
+        $reports = $this->get('reports');
+        $chart = $reports->getFiscalYearToDate();
+
+        return $this->render('ManaClientBundle:Default:script.js.twig', array(
+            'chart' => $chart,
+        ));
+    }
 
 }
