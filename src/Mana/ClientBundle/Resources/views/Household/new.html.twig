@@ -1,0 +1,26 @@
+{% extends "ManaClientBundle:Default:layout.html.twig" %}
+
+{% block body %}
+    <div class="title">All items required</div>
+    <div class="section">New Head of Household</div>
+    <form action=""  method="post" class="form-horizontal">
+        {{ bootstrap_set_style('horizontal') }}
+        {{ bootstrap_set_col_size('md') }}
+        {{ bootstrap_set_widget_col(4) }}
+        {{ bootstrap_set_label_col(2) }}
+        <input type="hidden" name="household[headId]" value="0">
+        {{ form_row(formHead.fname) }}
+        {{ form_row(formHead.sname) }}
+        {{ form_row(formHead.dob) }}
+        {{ form_row(formHead.sex) }}
+        {{ form_row(formHead.ethnicity) }}
+        {{form_row(form.center) }}
+        {{form_row(form.compliance) }}
+        {{form_row(form.complianceDate) }}
+        {{form_row(form.shared) }}
+        {{form_row(form.sharedDate) }}
+        <div> <input name="submit" type="submit"  value="Submit"> 
+            <input type="reset" value=" Reset "></div>
+    </form>
+{% endblock %}
+

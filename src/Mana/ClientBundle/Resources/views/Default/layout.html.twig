@@ -3,7 +3,7 @@
     <head>
         {% block head %}
             <meta Name="description"
-                  Content="Project M.A.N.A. aims to dramatically reduce the incidence of hunger and its effects on the communities on the north and west shores of Lake Tahoe and Truckee. We believe that adequate food for the maintenance of physical, emotional and mental health is a basic human right and in the overall best interest of our community.">
+                  Content="Project MANA aims to dramatically reduce the incidence of hunger and its effects on the communities on the north and west shores of Lake Tahoe and Truckee. We believe that adequate food for the maintenance of physical, emotional and mental health is a basic human right and in the overall best interest of our community.">
             <meta Name="keywords"
                   Content="hunger, poverty, homelessness, community gardens, nutrition, Hispanic services, outreach, sustainable agriculture, non-profit, kids cooking, food, volunteering, Lake Tahoe, low-income, food pantry, Truckee, soup kitchen, emergency food relief, meals on wheels, gardening">
             <title>Project MANA{% if title is defined %}: {{ title|raw }}{% endif %}</title>
@@ -11,6 +11,7 @@
 
             {% block stylesheets %}
                 <link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet" />
+                <link href="{{ asset('/css/mana.css') }}" rel="stylesheet" />
                 <link href="{{ asset('/css/jquery-ui-1.10.3.custom.css') }}" rel="stylesheet" />
             {% endblock %}
         {%endblock head %}
@@ -18,7 +19,6 @@
     <body>
         <div class="container">
             {#            <img src="/images/banner.jpg">#}
-            <div id="env" style="visibility: hidden;">{{ app.environment }}</div>
             {% if app.user %}
                 {% set route = app.request.attributes.get('_route') %}
                 <div class="menu hidden-print">
@@ -35,9 +35,8 @@
                                     <a class="navbar-brand" href="#"></a>
                                 </div>
                                 <div class="collapse navbar-collapse navbar-ex1-collapse">
-
                                     {{ knp_menu_render('ManaClientBundle:Builder:mainMenu',{'style': 'navbar'})  }}
-                                    <form action="{{ path('_search') }}" class="navbar-form navbar-left" role="search">
+                                    <form action="{{ path('_search') }}" id="household_search" class="navbar-form navbar-left" role="search">
                                         <div class="form-group">
                                             <input type="text" name="qtext" method="get" class="form-control" placeholder="Full name or ID">
                                         </div>

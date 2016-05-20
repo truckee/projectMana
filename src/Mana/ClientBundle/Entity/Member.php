@@ -31,7 +31,7 @@ class Member
      * @var string
      *
      * @ORM\Column(name="fname", type="string", length=45, nullable=true)
-     * @Assert\NotBlank(message = "Member first name may not be blank")
+     * @Assert\NotBlank(message = "First name may not be blank")
      */
     protected $fname;
 
@@ -39,7 +39,7 @@ class Member
      * @var string
      *
      * @ORM\Column(name="sname", type="string", length=45, nullable=true)
-     * @Assert\NotBlank(message = "Member last name may not be blank", groups={"sname"})
+     * @Assert\NotBlank(message = "Last name may not be blank")
      */
     protected $sname;
 
@@ -47,8 +47,8 @@ class Member
      * @var \DateTime
      *
      * @ORM\Column(name="dob", type="date", nullable=true)
-     * @Assert\NotBlank(message = "Member DOB must be valid date or age")
-     * @ManaAssert\NotFutureDate
+     * @Assert\NotBlank(message = "DOB must be valid date or age")
+     * @ManaAssert\NotFutureDate(message="Future date not allowed")
      */
     protected $dob;
 
@@ -70,7 +70,7 @@ class Member
      * @var string
      *
      * @ORM\Column(name="sex", type="string", length=45, nullable=true)
-     * @Assert\NotBlank(message = "Member gender may not be blank")
+     * @Assert\NotBlank(message = "Gender may not be blank")
      */
     protected $sex;
 
@@ -81,7 +81,7 @@ class Member
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ethnicity_id", referencedColumnName="id")
      * })
-     * @Assert\NotBlank(message = "Member ethnicity may not be blank")
+     * @Assert\NotBlank(message = "Ethnicity may not be blank")
      */
     protected $ethnicity;
 

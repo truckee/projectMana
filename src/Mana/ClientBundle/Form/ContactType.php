@@ -6,6 +6,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class ContactType extends AbstractType
 {
@@ -14,10 +18,10 @@ class ContactType extends AbstractType
     {
         $builder
                 ->add('center', new Field\CenterEnabledChoiceType())
-                ->add('contactDesc', 'entity', array(
+                ->add('contactDesc', EntityType::class, array(
                     'class' => 'ManaClientBundle:ContactDesc',
-                    'property' => 'contactDesc',
-                    'empty_value' => 'Select contact type',
+                    'choice_label' => 'contactDesc',
+                    'placeholder' => 'Select contact type',
                     'attr' => array("class" => "smallform"),
                     'query_builder' => function(EntityRepository $er) {
                 return $er->createQueryBuilder('c')
@@ -26,16 +30,16 @@ class ContactType extends AbstractType
                 ;
             },
                 ))
-                ->add('contactDate', 'date', array(
+                ->add('contactDate', DateType::class, array(
                     'format' => 'M/d/y',
                     'years' => range(date('Y'), date('Y') - 5),
                 ))
-                ->add('household', 'choice', array(
+                ->add('household', ChoiceType::class, array(
                     'mapped' => false,
                     'expanded' => true,
                     'multiple' => true,
                 ))
-                ->add('householdId', 'text', array(
+                ->add('householdId', TextType::class, array(
                     'mapped' => false,
                 ))
         ;
@@ -48,11 +52,6 @@ class ContactType extends AbstractType
             'csrf_protection' => false,
             'required' => false,
         ));
-    }
-
-    public function getName()
-    {
-        return 'contact';
     }
 
 }

@@ -29,10 +29,6 @@ class MonthType extends AbstractType {
         ));
     }
 
-    public function getName() {
-        return 'month_names';
-    }
-
     public function getParent() {
         return 'choice';
     }

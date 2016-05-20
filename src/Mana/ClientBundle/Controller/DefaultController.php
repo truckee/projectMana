@@ -5,6 +5,8 @@ namespace Mana\ClientBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Mana\ClientBundle\Form\MemberType;
+use Mana\ClientBundle\Entity\Member;
 
 class DefaultController extends Controller
 {
@@ -97,4 +99,15 @@ class DefaultController extends Controller
         ));
     }
 
+    /**
+     * @Route("test", name="test")
+     * @Template()
+     */
+    public function testMember() {
+        $member = new Member();
+        $form = $this->createForm(new MemberType(), $member);
+        return array(
+            'form' => $form->createView(),
+        );
+    }
 }

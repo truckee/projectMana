@@ -5,6 +5,7 @@ namespace Mana\ClientBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class PhoneType extends AbstractType
 {
@@ -15,10 +16,10 @@ class PhoneType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('areacode', 'text', array(
+            ->add('areacode', TextType::class, array(
                 'attr' => array('size' => 2)
             ))
-            ->add('phoneNumber', 'text', array(
+            ->add('phoneNumber', TextType::class, array(
                 'attr' => array('size' => 8)
             ))
         ;
@@ -33,13 +34,5 @@ class PhoneType extends AbstractType
             'data_class' => 'Mana\ClientBundle\Entity\Phone',
             'required' => false,
         ));
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'center';
     }
 }

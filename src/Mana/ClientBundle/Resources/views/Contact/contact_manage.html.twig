@@ -23,13 +23,13 @@
                 <td>{{ form_widget(form.center)}}
             <tr></tr>
             <tr>
-                <td><input class="smallbutton" type="submit" name="submit" value="Submit contact"> 
+                <td><input type="submit" name="submit" value="Submit contact"> 
                 <td>
-{% if title == 'New Contact' %}<input class="smallbutton" type="reset">
-{% else %}<input class="smallbutton" type="reset" name="reset" value="Cancel" onclick="history.go(-1);
+{% if title == 'New Contact' %}<input type="reset">
+{% else %}<input type="reset" name="reset" value="Cancel" onclick="history.go(-1);
         return false;">
 {% endif %}
-                <td><a class="smallbutton" href="{{ path('household_show', {'id':household.id}) }}">Household view</a>
+                <td><a href="{{ path('household_show', {'id':household.id}) }}">Household view</a>
         </table>
     </form>
 {% if household.contacts|length > 0 and title != 'Edit Contact'%}

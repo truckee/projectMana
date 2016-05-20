@@ -59,7 +59,7 @@ class StatisticsController extends Controller
                 'ctyPcts' => $ctyPcts,
                 'title' => "General statistics"
             );
-            $session = $this->getRequest()->getSession();
+            $session = $request->getSession();
             $session->set('report', $report);
 
             return $this->render("ManaClientBundle:Statistics:statistics.html.twig", $report);
@@ -87,7 +87,7 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $stats = $this->get('reports');
-            $session = $this->getRequest()->getSession();
+            $session = $request->getSession();
             $stats->setDetails($criteria);
             $data = $stats->getDetails();
             $report = array(
@@ -144,10 +144,9 @@ class StatisticsController extends Controller
      * @Route("/excel", name="stats_excel")
      *
      */
-    public function excelAction()
+    public function excelAction(Request $request)
     {
-
-        $session = $this->getRequest()->getSession();
+        $session = $request->getSession();
         $report = $session->get('report');
         $specs = $report['specs'];
         $block = $report['block'];

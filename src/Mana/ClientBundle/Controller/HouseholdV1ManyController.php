@@ -54,13 +54,12 @@ class HouseholdV1ManyController extends Controller
 
             return $this->redirect($this->generateUrl('household_edit', ['id' => $id]));
         }
-        $errorString = $form->getErrorsAsString();
 
         return [
             'household' => $household,
+            'hohId' => $household->getHead()->getId(),
             'form' => $form->createView(),
             'title' => 'Edit Household',
-            'errorString' => $errorString,
         ];
     }
 

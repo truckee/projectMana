@@ -44,8 +44,6 @@ $(document).ready(function () {
         return false;
     });
 
-
-
     $("input[name='household[isHead]']").click(function () {
         var hohId = $("input[name='household[isHead]']").val();
         var checkedId = $("input:radio:checked").val();
@@ -95,12 +93,8 @@ $(document).ready(function () {
                 }
             })
             if (!present) {
-                if (env !== 'dev') {
-                    url = "/household/contact/" + houseId;
-                } else {
-                    url = "/app_dev.php/household/contact/" + houseId;
-                }
-
+                var where = $(location).attr('pathname');
+                var url = where.replace('contact/addContacts', 'household/contact/ + houseId');
                 $.get(url, function (data) {
                     //make sure household exists
                     if (data !== 0) {
@@ -155,12 +149,8 @@ $(document).ready(function () {
             $('#dialog').dialog("widget")            // get the dialog widget element
                     .find(".ui-dialog-titlebar-close") // find the close button for this dialog
                     .hide();
-            if (env !== 'dev') {
-                url = "/contact/latest";
-            } else {
-                url = "/app_dev.php/contact/latest";
-            }
-
+            var where = $(location).attr('pathname');
+            var url = where.replace('contact/addContacts', 'contact/latest');
             var jqxhr = $.get(url, function (data) {
                 $("#contact_store").data(data);
             })
@@ -189,10 +179,7 @@ $(document).ready(function () {
                             alert('No data found');
                         }
                     });
-
-
         }
-
     })
 
     //get latest contact data if required

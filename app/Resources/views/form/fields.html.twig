@@ -29,6 +29,7 @@
         {%- endif -%}
         {% if required -%}
             {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+            <span style="color: red;" title="This field is required">*</span>
         {%- endif -%}
         {% if label is empty -%}
             {%- if label_format is not empty -%}

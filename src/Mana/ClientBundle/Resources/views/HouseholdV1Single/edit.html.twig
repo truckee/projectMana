@@ -1,18 +1,13 @@
 {% extends "ManaClientBundle:Default:layout.html.twig" %}
 {% block body %}
     {% include 'ManaClientBundle:Household:v1HouseholdEditHeader.html.twig' %}
-    <div class="border head">
-        <form action="{{ path('household_edit', { 'id': household.id }) }}" method="post">
-            {# for loop only generates single member for v1, single member household #}
-            {% for member in form.members %}
-                <input type="hidden" name="household_head[members][0][include]" value="{{ member.vars.value.include }}">
-                <ul class="formblock">
-                    <li id="radioHead"><b>Head?</b> <input class="smallform" type="radio" id="isHead" name="household[isHead]" value="{{ member.vars.value.id }}" checked="checked"></li>
-                        {% include 'ManaClientBundle:Member:memberRequired.html.twig' %}
-                </ul>
-            {% endfor %}
-            <div align="center"><input class="smallbutton" type="submit" value="Submit">
-                <input class="smallbutton" type="reset"></div>
-        </form>
-    </div>
+    <form action="{{ path('household_edit', { 'id': household.id }) }}" method="post" class="form-horizontal">
+        {{ bootstrap_set_style('horizontal') }}
+        {{ bootstrap_set_col_size('md') }}
+        {{ bootstrap_set_widget_col(4) }}
+        {{ bootstrap_set_label_col(2) }}                    
+        {% include 'ManaClientBundle:Member:memberRequired.html.twig' %}
+        <input type="submit" value="Submit">
+        <input type="reset">
+    </form>
 {% endblock %}

@@ -10,9 +10,9 @@
             <input type="hidden" name="household[members][{{loop.index0}}][id]" value="{{member.vars.value.id}}">
             <div class="border">
                 <ul id="member-form" class="formblock">
-                    <li name="radioHead"><b>Head?</b> <input id="isHead{{ loop.index }}" class="smallform" type="radio" name="household[isHead]" value="{{ member.vars.value.id }}" {% if member.vars.value.id == household.hohId %}checked="checked"{% endif %}></li>
-                        {% if member.vars.value.id != household.hohId %}
-                            {% include "ManaClientBundle:Member:memberRequired.html.twig" %}
+                    <li name="radioHead"><b>Head?</b> <input id="isHead{{ loop.index }}" type="radio" name="household[isHead]" value="{{ member.vars.value.id }}" {% if member.vars.value.id == hohId %}checked="checked"{% endif %}></li>
+                        {% if member.vars.value.id != hohId %}
+                            {% include "ManaClientBundle:Member:householdMemberRequired.html.twig" %}
                         {% else %}
                         <li><b>First name: </b>{{ form_widget(member.fname, {'attr':{'readonly':'true'}}) }}</li>
                         <li><b>Last name: </b>{{ form_widget(member.sname, {'attr':{'readonly':'true'}}) }}</li>
@@ -20,7 +20,7 @@
                 </ul>
             </div>
         {% endfor %}
-        <div align="center"><input class="smallbutton" type="submit" value="Submit">
-            <input class="smallbutton" type="reset"></div>
+        <div align="center"><input type="submit" value="Submit">
+            <input type="reset"></div>
     </form>
 {% endblock %}

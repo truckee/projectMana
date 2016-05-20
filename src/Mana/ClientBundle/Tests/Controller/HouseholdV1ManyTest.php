@@ -55,6 +55,7 @@ class HouseholdV1ManyTest extends ManaWebTestCase
 
         $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
+        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("new head of household from included")')->count());
     }

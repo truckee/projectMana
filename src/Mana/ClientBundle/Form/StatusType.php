@@ -5,6 +5,7 @@ namespace Mana\ClientBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class StatusType extends AbstractType {
     
@@ -16,20 +17,16 @@ class StatusType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-            ->add('status', 'choice', array(
+            ->add('status', ChoiceType::class, array(
                 'choices' => array('Yes' => 'Yes', 'No' => 'No'),
                 'label' => 'Change status to: ',
                 'attr' => array("class" => "smallform"),
                 ))
-            ->add('years', 'choice', array(
+            ->add('years', ChoiceType::class, array(
                 'choices' => $this->years,
                 'attr' => array("class" => "smallform"),
                 ))
         ;
-    }
-    
-    public function getName() {
-        return 'status';
     }
 
     public function configureOptions(OptionsResolver $resolver) {

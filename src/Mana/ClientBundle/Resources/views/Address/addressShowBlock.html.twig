@@ -1,12 +1,20 @@
+<div class="panel panel-info">
+    <div class="panel-heading">Addresses</div>
 {% if household.addresses|length > 0 %}
-{%for address in household.addresses%}
-<ul class="formblock">
-    <li><b>Address Type: </b>{{ address.addresstype.addresstype }}</li>
-    <li><b>Address:</b> {{ address.line1 }}{%if address.line2 is not null %}, {{ address.line2 }}{% endif%} 
-    {% if address.city is not null %}, {{ address.city }} {%endif %}
-    {% if address.county.county is defined %}, {{ address.county.county }} County{% endif %} 
-    {% if address.state.state is defined %}, {{ address.state.state }}{% endif %} {{ address.zip }}</li>
-</ul>
-{%endfor%}
-</table>
+    {%for address in household.addresses%}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-md-2">
+                    <b>Address Type: </b>{{ address.addresstype.addresstype }}
+                </div>
+                <div class="col-md-8">
+                    <b>Address:</b> {{ address.line1 }}{%if address.line2 is not null %}<br>{{ address.line2 }}, {% endif%}
+                    {% if address.city is not null %}, {{ address.city }},  {%endif %}
+                {% if address.county.county is defined %}, {{ address.county.county }} County, {% endif %} 
+                {% if address.state.state is defined %}, {{ address.state.state }}{% endif %} {{ address.zip }}
+            </div>
+        </div>
+        </div>
+    {%endfor%}
+</div>
 {% endif %}

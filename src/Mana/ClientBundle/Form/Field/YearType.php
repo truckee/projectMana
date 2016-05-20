@@ -20,10 +20,6 @@ class YearType extends AbstractType {
         ));
     }
 
-    public function getName() {
-        return 'year_names';
-    }
-
     public function getParent() {
         return 'choice';
     }

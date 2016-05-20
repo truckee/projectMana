@@ -28,7 +28,7 @@ class County
      * @var string
      *
      * @ORM\Column(name="county", type="string", length=15, nullable=false)
-     * @Assert\NotBlank(message="County may not be blank")
+     * @Assert\NotBlank(message="County may not be blank", groups={"Options"})
      */
     protected $county;
 

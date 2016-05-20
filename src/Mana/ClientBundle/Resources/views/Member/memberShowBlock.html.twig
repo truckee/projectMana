@@ -1,21 +1,46 @@
-<div class="section">Members</div>
+<div class="panel panel-info">
+<div class="panel-heading">Members</div>
 {% for member in household.members %}
-{% if member.id == household.hohId %}{% set isHead = true %}{% else %}{% set isHead = false %}{% endif %}
-<div class="border">
-    <ul class="formblock">
-        <li {% if isHead %}id="headShow"{% endif %}>{% if isHead %}<b>Head </b>{%else%}<b>Include: </b>{% if member.include == 1 %}Yes{%else%}No{%endif%}{% endif%}</li>
-        <li><b>First name:</b> {{ member.fname }}</li>
-        <li><b>Last name:</b> {{ member.sname }}</li>
-        <li><b>Date of birth<br>(mm/dd/yyyy):</b> {% if member.dob %}{{ member.dob|date('m/d/Y') }}{% endif %}</li>
-        <li><b>Gender:</b> {{ member.sex }}</li>
-        <li><b>Ethnicity:</b> {{ member.ethnicity.abbreviation }}</li>
-        <li><br><b>Relation:</b> {% if member.relation is not null %}{{ member.relation.relation }}{% endif %}</li>
-        <li><br><b>Work:</b> {% if member.work is not null %}{{ member.work.work }}{% endif %}</li>
-        {% set n = member.offences|length %}{% for offence in member.offences if n > 0 and isHead %}<li><b>Offences:</b> 
-{{offence.offence}}{% if loop.index < n %}, {% endif %}</li>{% endfor %}
-        {#<li><br><b>Insurance:</b> {% if member.insurance is not null %}{{ member.insurance.insurance }}{% endif %}</li>
-        <li><br><b>Shots:</b> {% if member.shots is not null %}{{ member.shots.shots }}{% endif %}</li>#}
-        {% if member.excludeDate is not null %}<li><br><b>Excluded: </b>{{ member.excludeDate|date('m/d/Y') }}</li>{% endif %}
-    </ul>
-</div>
+{% if member.id == hohId %}{% set isHead = true %}{% else %}{% set isHead = false %}{% endif %}
+{#<div>#}
+    <div class="panel-body"{% if isHead %} style="background-color: lightyellow;"{% endif %}>
+        <div class="col-md-2">
+            <span {% if isHead %}id="headShow"{% endif %}>{% if isHead %}<b>Head </b>{%else%}<b>Include: </b>{% if member.include == 1 %}Yes{%else%}No{%endif%}{% endif%}</span>
+        </div>
+        <div class="col-md-3">
+            <b>First name:</b> {{ member.fname }}
+        </div>
+        <div class="col-md-3">
+            <b>Last name:</b> {{ member.sname }}
+        </div>
+        <div class="col-md-3">
+            <b>Date of birth:</b> {% if member.dob %}{{ member.dob|date('m/d/Y') }}{% endif %}<br>
+        </div>
+    </div>
+{#    <div class="row">
+        <div class="col-md-2">
+            {% if member.excludeDate is not null %}<b>Excluded: </b>{{ member.excludeDate|date('m/d/Y') }}{% endif %}
+        </div>
+        <div class="col-md-2">
+            <b>Gender:</b> {{ member.sex }}
+        </div>
+        <div class="col-md-2">
+            <b>Ethnicity:</b> {{ member.ethnicity.abbreviation }}
+        </div>
+        <div class="col-md-2">
+            <b>Relation:</b> {% if member.relation is not null %}{{ member.relation.relation }}{% endif %}
+        </div>
+        <div class="col-md-2">
+            <b>Work:</b> {% if member.work is not null %}{{ member.work.work }}{% endif %}<br>
+        </div>
+    </div>
+    <div class="row">
+        {% set n = member.offences|length %}{% if n > 0 and isHead %}
+            <div class="col-md-4">
+                <b>Offences:</b> {% for offence in member.offences %}{{offence.offence}}{% if loop.index < n %}, {% endif %}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+#}
 {% endfor %}
+</div>

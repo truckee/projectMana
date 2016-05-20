@@ -81,7 +81,6 @@ class Household
      *
      * @ORM\OneToMany(targetEntity="Member", mappedBy="household", cascade={"persist", "remove"}, orphanRemoval=true,  fetch="EAGER"  )
      * @ORM\OrderBy({"dob" = "ASC"})
-     * @Assert\Valid
      */
     protected $members;
 
@@ -130,29 +129,6 @@ class Household
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set hohId
-     *
-     * @param integer $hohId
-     * @return Household
-     */
-    public function setHohId($hohId)
-    {
-        $this->hohId = $hohId;
-
-        return $this;
-    }
-
-    /**
-     * Get hohId
-     *
-     * @return integer 
-     */
-    public function getHohId()
-    {
-        return $this->hohId;
     }
 
     /**

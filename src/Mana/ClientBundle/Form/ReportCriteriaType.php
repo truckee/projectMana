@@ -8,6 +8,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Mana\ClientBundle\Form\Field\MonthType;
 use Mana\ClientBundle\Form\Field\YearType;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Mana\ClientBundle\Validator\Constraints\CenterOrCounty;
 use Mana\ClientBundle\Validator\Constraints\StartEndDate;
 
@@ -26,7 +28,7 @@ class ReportCriteriaType extends AbstractType {
         $builder
                 ->add('startMonth', new MonthType(), array(
                     'data' => $this->month,
-                    'empty_value' => false,
+                    'placeholder' => false,
                     'attr' => array("class" => "smallform"),
                     'constraints' => array(
                         new StartEndDate(),
@@ -34,26 +36,26 @@ class ReportCriteriaType extends AbstractType {
                 ))
                 ->add('endMonth', new MonthType(), array(
                     'data' => $this->month,
-                    'empty_value' => false,
+                    'placeholder' => false,
                     'attr' => array("class" => "smallform"),
                         )
                 )
                 ->add('startYear', new YearType(), array(
                     'data' => $this->year,
-                    'empty_value' => false,
+                    'placeholder' => false,
                     'attr' => array("class" => "smallform"),
                         )
                 )
                 ->add('endYear', new YearType(), array(
                     'data' => $this->year,
-                    'empty_value' => false,
+                    'placeholder' => false,
                     'attr' => array("class" => "smallform"),
                         )
                 )
-                ->add('contact_type', 'entity', array(
+                ->add('contact_type', EntityType::class, array(
                     'class' => 'ManaClientBundle:ContactDesc',
-                    'property' => 'contactDesc',
-                    'empty_value' => 'Select contact type',
+                    'choice_label' => 'contactDesc',
+                    'placeholder' => 'Select contact type',
                     'error_bubbling' => true,
                     'attr' => array("class" => "smallform"),
                     'query_builder' => function(EntityRepository $er) {
@@ -65,10 +67,10 @@ class ReportCriteriaType extends AbstractType {
                         new CenterOrCounty(),
                     ),
                 ))
-                ->add('county', 'entity', array(
+                ->add('county', EntityType::class, array(
                     'class' => 'ManaClientBundle:County',
-                    'property' => 'county',
-                    'empty_value' => 'Select county',
+                    'choice_label' => 'county',
+                    'placeholder' => 'Select county',
                     'error_bubbling' => true,
                     'attr' => array("class" => "smallform"),
                     'query_builder' => function(EntityRepository $er) {
@@ -78,7 +80,7 @@ class ReportCriteriaType extends AbstractType {
                 ))
                 ->add('center', new Field\CenterEnabledChoiceType())
                 ->add('dest', 'hidden')
-                ->add('columnType', 'choice', [
+                ->add('columnType', ChoiceType::class, [
                     'mapped' => FALSE,
                     'choices' => ['center' => 'By site', 'county' => 'By county'],
                     'expanded' => TRUE,
@@ -96,10 +98,4 @@ class ReportCriteriaType extends AbstractType {
         ));
     }
 
-    public function getName() {
-        return 'report_criteria';
-    }
-
 }
-
-?>

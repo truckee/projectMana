@@ -27,8 +27,4 @@ class DobAgeType extends AbstractType {
         return 'text';
     }
 
-    public function getName() {
-        return 'dob_age';
-    }
-
 }

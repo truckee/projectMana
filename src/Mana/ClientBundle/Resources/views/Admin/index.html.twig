@@ -5,7 +5,7 @@
 {% block body %}
 <p align="center">
     Reports for 
-    Project M.A.N.A. distribution database application.
+    Project MANA distribution database application.
 </p>
 <table>
     <tr>
@@ -16,7 +16,7 @@
     <tr>
         <td>{{ knp_menu_render('ManaClientBundle:Builder:reportsMenu') }}</td>
         <td>{{ knp_menu_render('ManaClientBundle:Builder:profileMenu') }}</td>
-        <td><a class="smallbutton" href="{{ path("status") }}">Status changes</a></td>
+        <td><a href="{{ path("status") }}">Status changes</a></td>
     </tr>
 </table>
 {% endblock body %}

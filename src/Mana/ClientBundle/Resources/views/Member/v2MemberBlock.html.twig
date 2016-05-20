@@ -8,7 +8,7 @@
             {{ form_errors(member.sex) }}
             {{ form_errors(member.ethnicity) }}</div>
             {% set isHead = false  %}
-            {% if member.vars.value.id == household.hohId %}
+            {% if member.vars.value.id == hohId %}
                 {% set isHead = true %}
             {% endif %}
         <div class="border" onclick="showHideIncludeHead()" >
@@ -16,7 +16,7 @@
             <ul class="formblock" id="member-form">
                 {% if member.vars.value.include == '1' %}
                     {% include 'ManaClientBundle:Member:included.html.twig' %}
-                    {% include 'ManaClientBundle:Member:memberRequired.html.twig' %}
+                    {% include 'ManaClientBundle:Member:householdMemberRequired.html.twig' %}
                     {% include 'ManaClientBundle:Member:memberNotRequired.html.twig' %}
                 {% else %}
                     {% include 'ManaClientBundle:Member:excluded.html.twig' %}
@@ -25,4 +25,4 @@
         </div>
     {% endfor %}
 </div>
-<p><a class="smallbutton" href="#" id="add-member">Add member</a></p>
+<p><a href="#" id="add-member">Add member</a></p>

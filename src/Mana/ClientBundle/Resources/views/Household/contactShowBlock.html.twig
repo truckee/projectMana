@@ -1,21 +1,25 @@
 {% if household.contacts|length > 0 %}
-<div class="section">5 Most Recent Contacts</div>
-<table>
-    <tr>
-        <td><b>Date:</b></td>
-        <td><b>Type:</b></td>
-        <td><b>Site:</b></td>
-        <td><b>County:</b></td>
-    </tr>
-{% for i in 0..4 %}
-{% if household.contacts[i] is defined %}
-    <tr>
-        <td>{{ household.contacts[i].contactDate|date('m/d/Y') }}</td>
-        <td>{{ household.contacts[i].contactDesc.contactDesc }}</td>
-        <td>{% if household.contacts[i].center is not null %}{{ household.contacts[i].center.center }}{% endif %}</td>
-        <td>{% if household.contacts[i].center is not null %}{{ household.contacts[i].center.county.county }}{% elseif household.contacts[i].county is not null and household.contacts[i].county.id > 0%}{{ household.contacts[i].county.county }}{% endif %}</td>
-    </tr>    
-{% endif %}
-{% endfor %}
-</table>
+    <div class="panel panel-info">
+        <div class="panel-heading">5 Most Recent Contacts</div>
+        <div class="panel-body">
+            <table class="table">
+                <tr>
+                    <td><b>Date:</b></td>
+                    <td><b>Type:</b></td>
+                    <td><b>Site:</b></td>
+                    <td><b>County:</b></td>
+                </tr>
+                {% for i in 0..4 %}
+                    {% if household.contacts[i] is defined %}
+                        <tr>
+                            <td>{{ household.contacts[i].contactDate|date('m/d/Y') }}</td>
+                            <td>{{ household.contacts[i].contactDesc.contactDesc }}</td>
+                            <td>{% if household.contacts[i].center is not null %}{{ household.contacts[i].center.center }}{% endif %}</td>
+                            <td>{% if household.contacts[i].center is not null %}{{ household.contacts[i].center.county.county }}{% elseif household.contacts[i].county is not null and household.contacts[i].county.id > 0%}{{ household.contacts[i].county.county }}{% endif %}</td>
+                        </tr>    
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 {% endif %}

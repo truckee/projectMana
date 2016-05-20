@@ -15,7 +15,7 @@ namespace Mana\ClientBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
-use Mana\ClientBundle\Form\HouseholdHeadType;
+use Mana\ClientBundle\Form\MemberType;
 
 /**
  * HouseholdV1Single: collect required data for head of household
@@ -32,19 +32,20 @@ class HouseholdV1SingleController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('ManaClientBundle:Household')->find($id);
-        $form = $this->createForm(new HouseholdHeadType(), $household);
+        $member = $household->getHead();
+        $form = $this->createForm(new MemberType(), $member);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em->persist($household);
+            $em->persist($member);
             $em->flush();
             return $this->redirect($this->generateUrl('household_edit', ['id' => $id]));
         }
-        $errorString = $form->getErrorsAsString();
+
         return [
             'household' => $household,
-            'form'      => $form->createView(),
-            'errorString' => $errorString,
+            'member' => $member,
+            'form' => $form->createView(),
         ];
     }
 

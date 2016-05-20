@@ -33,8 +33,4 @@ class SelectCenterType extends AbstractType
             ));
 }
 
-    public function getName()
-    {
-        return 'center';
-    }
 }

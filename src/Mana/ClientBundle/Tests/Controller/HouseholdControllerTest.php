@@ -54,16 +54,16 @@ class HouseholdControllerTest extends ManaWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("All items required")')->count());
 
         $form = $crawler->selectButton('Submit')->form();
-        $form['household[members][0][fname]'] = 'Benny';
-        $form['household[members][0][sname]'] = 'Borko';
-        $form['household[members][0][dob]'] = '44';
-        $form['household[members][0][sex]'] = 'Male';
+        $form['member[fname]'] = 'Benny';
+        $form['member[sname]'] = 'Borko';
+        $form['member[dob]'] = '44';
+        $form['member[sex]'] = 'Male';
         $eth = $this->fixtures->getReference('cau')->getId();
-        $form['household[members][0][ethnicity]'] = $eth;
+        $form['member[ethnicity]'] = $eth;
         $tahoe = $this->fixtures->getReference('tahoe')->getId();
-        $form['household[center]'] = $tahoe;
-        $form['household[complianceDate]'] = '2/1/2016';
-        $form['household[sharedDate]'] = '2/1/2016';
+        $form['household_required[center]'] = $tahoe;
+        $form['household_required[complianceDate]'] = '2/1/2016';
+        $form['household_required[sharedDate]'] = '2/1/2016';
 
         return $this->client->submit($form);
     }
@@ -71,7 +71,7 @@ class HouseholdControllerTest extends ManaWebTestCase
     public function testLogin() {
         $crawler = $this->login();
         
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Admin menu")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Project MANA")')->count());
     }
     
     public function testNewHousehold()
@@ -85,8 +85,8 @@ class HouseholdControllerTest extends ManaWebTestCase
     {
         $crawler = $this->submitNewHousehold();
         $crawler = $this->client->request('GET', '/home');
-        $form = $crawler->selectButton('Search')->form();
-        $form['qtext'] = 'MoreThanOne Member';
+        $form = $crawler->filter('#household_search')->form();
+        $form['qtext'] = 'Benny Borko';
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Food stamps? Unknown")')->count());
@@ -98,16 +98,16 @@ class HouseholdControllerTest extends ManaWebTestCase
         $crawler = $this->client->request('GET', '/household/new');
 
         $form = $crawler->selectButton('Submit')->form();
-        $form['household[members][0][fname]'] = 'MoreThanOne';
-        $form['household[members][0][sname]'] = 'Membrane';
-        $form['household[members][0][dob]'] = '44';
-        $form['household[members][0][sex]'] = 'Male';
+        $form['member[fname]'] = 'MoreThanOne';
+        $form['member[sname]'] = 'Membrane';
+        $form['member[dob]'] = '44';
+        $form['member[sex]'] = 'Male';
         $eth = $this->fixtures->getReference('cau')->getId();
-        $form['household[members][0][ethnicity]'] = $eth;
+        $form['member[ethnicity]'] = $eth;
         $tahoe = $this->fixtures->getReference('tahoe')->getId();
-        $form['household[center]'] = $tahoe;
-        $form['household[complianceDate]'] = '2/1/2016';
-        $form['household[sharedDate]'] = '2/1/2016';
+        $form['household_required[center]'] = $tahoe;
+        $form['household_required[complianceDate]'] = '2/1/2016';
+        $form['household_required[sharedDate]'] = '2/1/2016';
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Add new head of house")')->count());

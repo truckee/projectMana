@@ -119,7 +119,7 @@ class ContactController extends Controller {
         $message = "";
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $households = $this->getRequest()->request->get('contact_household');
+            $households = $request->request->get('contact_household');
             $data = $form->getData();
             $contactData['date'] = $data->getContactDate();
             $center = $data->getCenter();
@@ -174,7 +174,7 @@ class ContactController extends Controller {
             $location = $center->getCenter()->getCenter();
             $found = $searches->getRoster($id);
             if (count($found['contactSet']) == 0 || empty($found)) {
-                $session = $this->getRequest()->getSession();
+                $session = $request->getSession();
                 $session->set('message', "No contacts found for $location");
                 return $this->forward("ManaClientBundle:Default:message");
             }

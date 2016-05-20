@@ -46,6 +46,7 @@ easy_admin:
                     - {property: 'center', label: 'Site'}
                     - enabled
                     - {property: 'county', type: 'entity', type_options: { class: Mana\ClientBundle\Entity\County }}
+                form_options: { validation_groups: ['Options'] }
         Ethnicity:
             class: Mana\ClientBundle\Entity\Ethnicity
             label: Ethnicities
@@ -75,6 +76,7 @@ easy_admin:
                 fields: [county, enabled]
             form:
                 fields: [county, enabled]
+                form_options: { validation_groups: ['Options'] }
         FoodStampBracket:
             class: Mana\ClientBundle\Entity\FsAmount
             label: Foodstamp brackets

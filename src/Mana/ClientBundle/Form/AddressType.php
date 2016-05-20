@@ -5,6 +5,8 @@ namespace Mana\ClientBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -15,9 +17,9 @@ use Doctrine\ORM\EntityRepository;
 class AddressType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-                ->add('addresstype', 'entity', array(
+                ->add('addresstype', EntityType::class, array(
                     'class' => 'ManaClientBundle:AddressType',
-                    'property' => 'addresstype',
+                    'choice_label' => 'addresstype',
                     'attr' => array("class" => "smallform"),
                     'expanded' => false,
                     'query_builder' => function(EntityRepository $er) {
@@ -26,24 +28,24 @@ class AddressType extends AbstractType {
                             ->where("a.enabled=1");
                     },
                 ))
-                ->add('line1', 'text', array(
+                ->add('line1', TextType::class, array(
                     'attr' => array(
                         'size' => 20,
                         "class" => "smallform"
                     )
                 ))
-                ->add('line2', 'text', array(
+                ->add('line2', TextType::class, array(
                     'attr' => array(
                         'size' => 20,
                         "class" => "smallform"
                     )
                 ))
                 ->add('city')
-                ->add('county', 'entity', array(
+                ->add('county', EntityType::class, array(
                     'class' => 'ManaClientBundle:County',
-                    'property' => 'county',
+                    'choice_label' => 'county',
                     'expanded' => false,
-                    'empty_value' => '',
+                    'placeholder' => '',
                     'attr' => array("class" => "smallform"),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
@@ -51,11 +53,11 @@ class AddressType extends AbstractType {
                             ->where("c.enabled=1");
                     },
                 ))
-                ->add('state', 'entity', array(
+                ->add('state', EntityType::class, array(
                     'class' => 'ManaClientBundle:State',
-                    'property' => 'state',
+                    'choice_label' => 'state',
                     'expanded' => false,
-                    'empty_value' => '',
+                    'placeholder' => '',
                     'attr' => array("class" => "smallform"),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('s')
@@ -63,17 +65,13 @@ class AddressType extends AbstractType {
                             ->where("s.enabled=1");
                     },
                 ))
-                ->add('zip', 'text', array(
+                ->add('zip', TextType::class, array(
                     'attr' => array(
                         'size' => 5,
                         "class" => "smallform"
                     )
                 ))
                 ;
-    }
-
-    public function getName() {
-        return 'address';
     }
 
     public function configureOptions(OptionsResolver $resolver) {
@@ -85,5 +83,3 @@ class AddressType extends AbstractType {
         ));
     }
 }
-
-?>
