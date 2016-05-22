@@ -23,13 +23,13 @@ class HouseholdType extends AbstractType
 {
 
     private $idArray;
-    private $newHeadService;
+//    private $newHeadService;
     private $new;
 
-    public function __construct($newHeadService, $idArray = null, $new = null)
+    public function __construct( $idArray = null, $new = null)
     {
         $this->idArray = $idArray;
-        $this->newHeadService = $newHeadService;
+//        $this->newHeadService = $newHeadService;
         $this->new = $new;
     }
 
@@ -146,12 +146,6 @@ class HouseholdType extends AbstractType
                     'mapped' => false,
                     'choices' => $this->idArray,
                 ))
-                ->add('members', CollectionType::class, array(
-                    'entry_type' => MemberType::class,
-                    'allow_add' => true,
-                    'allow_delete' => true,
-                    'by_reference' => false,
-                ))
                 ->add('notfoodstamp', EntityType::class, array(
                     'class' => 'ManaClientBundle:Notfoodstamp',
                     'label' => 'If no, why not? ',
@@ -192,13 +186,13 @@ class HouseholdType extends AbstractType
         ;
         // if a head of household is necessarily being replaced, copy
         // required data from member to head of household
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-            $data = $event->getData();
-            if ($data['headId'] <> 0) {
-                $newData = $this->newHeadService->replaceHeadData($data);
-                $event->setData($newData);
-            }
-        });
+//        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+//            $data = $event->getData();
+//            if ($data['headId'] <> 0) {
+//                $newData = $this->newHeadService->replaceHeadData($data);
+//                $event->setData($newData);
+//            }
+//        });
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $household = $event->getData();
             $form = $event->getForm();

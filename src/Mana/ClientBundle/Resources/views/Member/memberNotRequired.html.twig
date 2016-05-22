@@ -1,3 +1,5 @@
-<li><br><b>Relation: </b>{{ form_widget(member.relation) }}</li>
-<li><br><b>Work: </b>{{ form_widget(member.work) }}</li>
-<li><b>Criminal history: </b>{{ form_widget(member.offences, {'attr': {'class':'smallform-checkbox'}}) }}</li>
+{{ form_row(form.relation) }}
+{{ form_row(form.work) }}
+{% if form.vars.value.id == headId %}
+{{ form_row(form.offences) }}
+{% endif %}

@@ -151,17 +151,18 @@ class HouseholdController extends Controller
             $phone = new Phone();
             $household->addPhone($phone);
         }
-        $newHead = $this->container->get('mana.head.replacement');
-        $form = $this->createForm(new HouseholdType($newHead, $idArray, $new), $household);
+//        $newHead = $this->container->get('mana.head.replacement');
+        $form = $this->createForm(new HouseholdType($idArray, $new), $household);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $houseData = $request->request->get('household');
-            $newHeadId = $houseData['isHead'];  //new head id
-            $formerHeadId = $houseData['headId'];  //former head id
-            if ($newHead <> $formerHeadId) {
-                $hoh = $em->getRepository('ManaClientBundle:Member')->find($newHeadId);
-                $household->setHead($hoh);
-            }
+            dump($household->getMembers());
+//            $houseData = $request->request->get('household');
+//            $newHeadId = $houseData['isHead'];  //new head id
+//            $formerHeadId = $houseData['headId'];  //former head id
+//            if ($newHead <> $formerHeadId) {
+//                $hoh = $em->getRepository('ManaClientBundle:Member')->find($newHeadId);
+//                $household->setHead($hoh);
+//            }
             $em->getRepository('ManaClientBundle:Member')->initialize($household);
             $em->persist($household);
             $em->flush();

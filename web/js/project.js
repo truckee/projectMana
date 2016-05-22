@@ -11,9 +11,16 @@ $(document).ready(function () {
     var contactForm = $('#contact_form');
     var env = $('#env').text();
     var foodStampSelect = $("select#household_foodStamps");
-    showHideIncludeHead();
+//    showHideIncludeHead();
     $("#dialog").dialog({
         autoOpen: false,
+    });
+    $("#memberEditDialog").dialog({
+        autoOpen: false,
+        resizable: true,
+        modal: true,
+        width: '80%',
+        title: 'Edit household member',
     });
     $("#household_submit").click(function () {
         $("select").each(function () {
@@ -44,15 +51,23 @@ $(document).ready(function () {
         return false;
     });
 
-    $("input[name='household[isHead]']").click(function () {
-        var hohId = $("input[name='household[isHead]']").val();
-        var checkedId = $("input:radio:checked").val();
-        var dateAdded = $("#dateAdded").text();
-        var v1 = $.trim(dateAdded);
-        if (hohId !== checkedId && v1 === "") {
-            $("#dialog").dialog("open");
+    $(document).on("click", "#member_isHead", function () {
+        if ($("input[name='member[isHead]']").prop('checked') == true) {
+            $("select[name='member[include]']").hide();
+            $("label[for='member_include']").hide();
+        } else {
+            $("select[name='member[include]']").show();
+            $("label[for='member_include']").show();
         }
-        showHideIncludeHead();
+    });
+
+    $(document).on("change", "select[name='member[include]']", function () {
+        if ($("select[name='member[include]']").val() === '1') {
+            $("input[name='member[isHead]']").show();
+            $("label[for='member_isHead']").show();
+        } else {
+            $("label[for='member_isHead']").hide();
+        }
     });
 
     $('#add-address').click(function () {
@@ -210,6 +225,52 @@ $(document).ready(function () {
         foodStampShowHide(option);
     });
 
+//    //launch member edit form
+    $(".btn-sm").click(function () {
+        id = this.id
+        if (id.startsWith('memberId')) {
+            memberId = id.replace('memberId', '');
+//            alert(memberId);
+            nowAt = $(location).attr('pathname');
+            houseAt = nowAt.indexOf('/household');
+            url = nowAt.slice(0, houseAt) + '/member/edit/' + memberId;
+            $.get(url, function (data) {
+                $('#memberEditDialog').dialog({
+                    buttons: [
+                        {
+                            text: "Submit",
+                            id: "submit",
+                            class: "btn-xs btn-primary",
+                            click: function () {
+                                var formData = $("form").serialize();
+                                $.post(url, formData, function (response) {
+                                    if (response.indexOf("updated") >= 0) {
+                                        $("#submit").hide();
+                                    }
+                                    $('#memberEditDialog').html(response);
+                                })
+                            }
+                        },
+                        {
+                            text: 'Close',
+                            id: "close",
+                            class: "btn-xs btn-primary",
+                            click: function () {
+                                $(this).dialog("close");
+                                window.location = nowAt;
+                            }
+                        }
+                    ],
+                });
+                $('#memberEditDialog').html(data);
+
+                $('#memberEditDialog').dialog('open');
+            });
+        } else {
+            alert('Not yet!');
+        }
+    });
+
 }
 );
 
@@ -297,31 +358,31 @@ function foodStampShowHide(option) {
  if include=0 or No, then isHead is hidden, else shown
  head of household last name input is disabled
  * @returns {Boolean} */
-function showHideIncludeHead() {
-    $('.border ul').each(function () {
-        headInput = $(this).find("input[name='household[isHead]']").prop("checked");
-        showBlock = $(this).find("li#headShow")
-        headShow = showBlock.length
-        if (headInput) {
-            $(this).find("li#included").hide();
-            $(this).find("li:contains('Criminal history')").show();
-            $(this).find("input[name$='[sname]']").prop('readonly', 'readonly');
-            $(this).parent().addClass("head");
-        } else {
-            $(this).find("li#included").show();
-            $(this).find("li:contains('Criminal history')").hide();
-            $(this).parent().removeClass("head")
-        }
-        if (headShow) {
-            $(this).parent().addClass("head");
-        }
-
-        var exclude = $(this).find("select[name$='[include]']").val();
-        if (exclude === "0") {
-            $(this).find("li[name=radioHead]").hide();
-        } else {
-            $(this).find("li[name=radioHead]").show();
-        }
-    });
-    return true;
-}
+//function showHideIncludeHead() {
+//    $('.border ul').each(function () {
+//        headInput = $(this).find("input[name='household[isHead]']").prop("checked");
+//        showBlock = $(this).find("li#headShow")
+//        headShow = showBlock.length
+//        if (headInput) {
+//            $(this).find("li#included").hide();
+//            $(this).find("li:contains('Criminal history')").show();
+//            $(this).find("input[name$='[sname]']").prop('readonly', 'readonly');
+//            $(this).parent().addClass("head");
+//        } else {
+//            $(this).find("li#included").show();
+//            $(this).find("li:contains('Criminal history')").hide();
+//            $(this).parent().removeClass("head")
+//        }
+//        if (headShow) {
+//            $(this).parent().addClass("head");
+//        }
+//
+//        var exclude = $(this).find("select[name$='[include]']").val();
+//        if (exclude === "0") {
+//            $(this).find("li[name=radioHead]").hide();
+//        } else {
+//            $(this).find("li[name=radioHead]").show();
+//        }
+//    });
+//    return true;
+//}
