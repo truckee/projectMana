@@ -11,6 +11,7 @@
 
 namespace Mana\ClientBundle\Controller;
 
+use Mana\ClientBundle\Entity\Member;
 use Mana\ClientBundle\Form\MemberType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -23,12 +24,12 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class MemberController extends Controller
 {
-
     /**
      * @Route("/edit/{id}", name="member_edit")
      * @Template()
      */
-    public function editAction(Request $request, $id) {
+    public function editAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
         $member = $em->getRepository('ManaClientBundle:Member')->find($id);
         if (!$member) {
@@ -37,26 +38,42 @@ class MemberController extends Controller
         $household = $member->getHousehold();
         $headId = $household->getHead()->getId();
         $templates[] = 'ManaClientBundle:Member:memberFormRows.html.twig';
-        
+
         if ($id == $headId) {
-            array_unshift($templates,'ManaClientBundle:Member:head.html.twig');
-            array_push($templates,'ManaClientBundle:Member:headOffenses.html.twig');
+            array_unshift($templates, 'ManaClientBundle:Member:headForm.html.twig');
+            array_push($templates, 'ManaClientBundle:Member:headOffensesForm.html.twig');
         } else {
-            array_unshift($templates, 'ManaClientBundle:Member:include.html.twig');
+            array_unshift($templates, 'ManaClientBundle:Member:includeForm.html.twig');
         }
-        
+
         $form = $this->createForm(MemberType::class, $member);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $data = $form->getData();
             $isHead = $form['isHead']->getData();
-            $household->setHead($member);
-            $em->persist($household);
+            if (true === $isHead) {
+                $household->setHead($member);
+                $em->persist($household);
+            }
+            if (false == $member->getInclude()) {
+                $member->setExcludeDate(new \DateTime());
+            }
             $em->persist($member);
             $em->flush();
-            $name = $member->getFname() . ' ' . $member->getSname();
-            $response = new Response("Member " . $name . " updated");
-            
+
+            $reply = array(
+                'id' => $member->getId(),
+                'headId' => $headId,
+                'isHead' => $isHead,
+                'include' => $member->getInclude(),
+                'excludeDate' => date_format($member->getExcludeDate(), 'm/d/Y'),
+                'fname' => $member->getFname(),
+                'sname' => $member->getSname(),
+                'dob' => date_format($member->getDob(), 'm/d/Y'),
+            );
+            $content = \GuzzleHttp\json_encode($reply);
+            $response = new Response($content);
+
             return $response;
         }
 
@@ -68,4 +85,45 @@ class MemberController extends Controller
         ];
     }
 
+    /**
+     * @Route("/add/{houseId}", name="member_add")
+     * @Template()
+     */
+    public function addAction(Request $request, $houseId)
+    {
+        $member = new Member();
+        $form = $this->createForm(MemberType::class, $member);
+        $templates[] = 'ManaClientBundle:Member:memberFormRows.html.twig';
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $household = $em->getRepository('ManaClientBundle:Household')->find($houseId);
+            if (!$household) {
+                throw $this->createNotFoundException('Unable to find Household.');
+            }
+            $member->setInclude(true);
+            $household->addMember($member);
+            $em->persist($member);
+            $em->persist($household);
+            $em->flush();
+            $name = $member->getFname().' '.$member->getSname();
+            $view = $this->renderView('ManaClientBundle:Member:memberShowBlock_content.html.twig', [
+                'member' => $member,
+                'hohId' => $household->getHead()->getId(),
+            ]);
+            $content = [
+                'view' => $view,
+                'name' => $name,
+            ];
+            $response = new Response(\GuzzleHttp\json_encode($content, JSON_HEX_QUOT | JSON_HEX_TAG));
+
+            return $response;
+        }
+
+        return [
+            'form' => $form->createView(),
+            'templates' => $templates,
+            'houseId' => $houseId,
+        ];
+    }
 }

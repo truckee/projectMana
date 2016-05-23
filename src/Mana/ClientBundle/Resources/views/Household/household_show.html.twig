@@ -2,13 +2,10 @@
 {% block body %}
     <div class="panel panel-primary">
         <div class="panel-heading">
-             Household View<br>
+            Household View<br>
             ID: {{household.id}}; Head: {{household.head.fname}} {{household.head.sname}}
         </div>
-    {% for template in templates %}
-        {% include template %}
-        
-    {% endfor %}
+        {% include 'ManaClientBundle:Default:templates.html.twig' %}
     </div>
     <div style="text-align: center;"><a href="{{ path("household_edit", {'id':household.id}) }}">Edit household</a> 
         <a href="{{ path("house_card", {'id':household.id}) }}">Create card</a></div>

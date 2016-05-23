@@ -9,6 +9,7 @@ flag=0: v2
         ID: {{household.id}}; Head: {{household.head.fname}} {{household.head.sname}}</div>
         <form action="{{ path('household_edit', { 'id': household.id }) }}" method="post">
             {% include "ManaClientBundle:Member:memberShowBlock.html.twig" %}
+            <a id="addMember" href="#" class="btn-sm btn-info">Add member</a>
 {#            {% include "ManaClientBundle:Member:v2MemberBlock.html.twig" %}#}
             {% include "ManaClientBundle:Address:addressBlock.html.twig" %}
             {% include "ManaClientBundle:Household:householdEditBlock.html.twig" %}

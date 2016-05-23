@@ -1,55 +1,7 @@
-<div class="panel panel-info">
+<div class="panel panel-info" id="members">
     <div class="panel-heading">Members</div>
     <div id="memberEditDialog"></div>
-    {% for member in household.members %}
-        {% set isHead = false %}
-{% if member.id == hohId %}{% set isHead = true %}{%endif%}
-{#<div>#}
-<div class="panel-body"{% if isHead %} style="background-color: lightyellow;"{% endif %}>
-    <div class="col-md-1">
-        <a href="#" class="btn-sm btn-info" id="memberId{{member.id}}">Edit</a>
-    </div>
-    <div class="col-md-2">
-        <span{% if member.include == 1 %}
-        {% if isHead %}<b>Head </b>{%else%}<b>Include: </b>{% if member.include == 1 %}Yes{%else%}No{%endif%}{% endif%}</span>
-        {%else%}
-            <b>Excluded: </b> {{member.excludeDate|date('m/d/Y') }}
-            {% endif%}
-    </div>
-    <div class="col-md-3">
-        <b>First name:</b> {{ member.fname }}
-    </div>
-    <div class="col-md-3">
-        <b>Last name:</b> {{ member.sname }}
-    </div>
-    <div class="col-md-3">
-        <b>Date of birth:</b> {% if member.dob %}{{ member.dob|date('m/d/Y') }}{% endif %}<br>
-    </div>
-</div>
-{#    <div class="row">
-        <div class="col-md-2">
-            {% if member.excludeDate is not null %}<b>Excluded: </b>{{ member.excludeDate|date('m/d/Y') }}{% endif %}
-        </div>
-        <div class="col-md-2">
-            <b>Gender:</b> {{ member.sex }}
-        </div>
-        <div class="col-md-2">
-            <b>Ethnicity:</b> {{ member.ethnicity.abbreviation }}
-        </div>
-        <div class="col-md-2">
-            <b>Relation:</b> {% if member.relation is not null %}{{ member.relation.relation }}{% endif %}
-        </div>
-        <div class="col-md-2">
-            <b>Work:</b> {% if member.work is not null %}{{ member.work.work }}{% endif %}<br>
-        </div>
-    </div>
-    <div class="row">
-        {% set n = member.offences|length %}{% if n > 0 and isHead %}
-            <div class="col-md-4">
-                <b>Offences:</b> {% for offence in member.offences %}{{offence.offence}}{% if loop.index < n %}, {% endif %}{% endfor %}
-            </div>
-        {% endif %}
-    </div>
-#}
+{% for member in household.members %}
+    {% include 'ManaClientBundle:Member:memberShowBlock_content.html.twig' %}
 {% endfor %}
 </div>

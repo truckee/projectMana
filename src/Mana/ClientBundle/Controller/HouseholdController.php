@@ -155,7 +155,6 @@ class HouseholdController extends Controller
         $form = $this->createForm(new HouseholdType($idArray, $new), $household);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            dump($household->getMembers());
 //            $houseData = $request->request->get('household');
 //            $newHeadId = $houseData['isHead'];  //new head id
 //            $formerHeadId = $houseData['headId'];  //former head id
