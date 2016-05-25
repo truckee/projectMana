@@ -1,17 +1,8 @@
 var memberCount = $('#member-form').length;
 $(document).ready(function () {
-    // for household members
-    var memberList = $('#member-list');
-    var newMemberWidget = memberList.attr('data-prototype');
-    // for household addresses
-    var addressCount = $('#address-form').length;
-    var addressList = $('#address-list');
-    var newAddressWidget = addressList.attr('data-prototype');
     // for contacts
     var contactForm = $('#contact_form');
-    var env = $('#env').text();
     var foodStampSelect = $("select#household_foodStamps");
-//    showHideIncludeHead();
     $("#dialog").dialog({
         autoOpen: false,
     });
@@ -20,14 +11,9 @@ $(document).ready(function () {
         resizable: true,
         modal: true,
         width: '80%',
-        title: 'Edit household member',
-    });
-    $("#household_submit").click(function () {
-        $("select").each(function () {
-            $(this).removeAttr('disabled');
-        });
     });
 
+//for printable reports
     $('#menuToggle').click(function () {
         if ($("#menuToggle").text() === 'Printable view') {
             $("#menuToggle").text('Menu');
@@ -40,19 +26,9 @@ $(document).ready(function () {
         }
     });
 
-    $('#add-member').click(function () {
-        //allow for adding members in client edit
-        var includeCount = $('#member-list li#included').length;
-        var excludeCount = $('#member-list li#excluded').length;
-        newMember = memberCount + includeCount + excludeCount;
-        //remove existing members correction
-        memberWidget = newMemberWidget.replace(/__name__/g, newMember);
-        memberList.append($(memberWidget));
-        return false;
-    });
-
+    //member edit form
     $(document).on("click", "#member_isHead", function () {
-        if ($("input[name='member[isHead]']").prop('checked') == true) {
+        if ($("input[name='member[isHead]']").prop('checked') === true) {
             $("select[name='member[include]']").hide();
             $("label[for='member_include']").hide();
         } else {
@@ -60,7 +36,6 @@ $(document).ready(function () {
             $("label[for='member_include']").show();
         }
     });
-
     $(document).on("change", "select[name='member[include]']", function () {
         if ($("select[name='member[include]']").val() === '1') {
             $("input[name='member[isHead]']").show();
@@ -70,11 +45,11 @@ $(document).ready(function () {
         }
     });
 
+    // for household addresses
+    var addressForm = $('#addressForm');
+    var addressWidget = $('#addressWidget').attr('data-prototype');
     $('#add-address').click(function () {
-        //allow for adding addresss in household edit
-        addressCount = addressCount + 1;
-        addressWidget = newAddressWidget.replace(/__address__/g, addressCount);
-        addressList.append($(addressWidget));
+        addressForm.append($(addressWidget));
         return false;
     });
 
@@ -225,17 +200,17 @@ $(document).ready(function () {
         foodStampShowHide(option);
     });
 
-//    //launch member edit form
+    //launch member edit form
     $(".btn-sm").click(function () {
-        id = this.id
+        id = this.id;
+        nowAt = $(location).attr('pathname');
+        houseAt = nowAt.indexOf('/household');
         if (id.startsWith('memberId')) {
             memberId = id.replace('memberId', '');
-//            alert(memberId);
-            nowAt = $(location).attr('pathname');
-            houseAt = nowAt.indexOf('/household');
             url = nowAt.slice(0, houseAt) + '/member/edit/' + memberId;
             $.get(url, function (data) {
                 $('#memberEditDialog').dialog({
+                    title: 'Edit household member',
                     buttons: [
                         {
                             text: "Submit",
@@ -244,10 +219,32 @@ $(document).ready(function () {
                             click: function () {
                                 var formData = $("form").serialize();
                                 $.post(url, formData, function (response) {
-                                    if (response.indexOf("updated") >= 0) {
-                                        $("#submit").hide();
+                                    //display form if validation errors
+                                    if (response.startsWith('<form')) {
+                                        $('#memberEditDialog').html(response);
+                                        return;
                                     }
-                                    $('#memberEditDialog').html(response);
+                                    member = $.parseJSON(response);
+                                    update = member.fname + ' ' + member.sname + ' has been updated';
+                                    //use jquery to make display match members entities
+                                    if (member.excludeDate !== null) {
+                                        $("a#memberId" + memberId).hide();
+                                        $("#include" + memberId).html('<b>Excluded:</b> ' + member.excludeDate);
+                                    } else {
+                                        if (member.isHead) {
+                                            $("#include" + memberId).html('<b>Head</b>');
+                                            if (member.id !== member.headId) {
+                                                $("#include" + member.headId).html('<b>Include: </b> Yes');
+                                            }
+                                        } else {
+                                            $("#include" + memberId).html('<b>Include: </b> Yes');
+                                        }
+                                    }
+                                    $("#fname" + memberId).text(member.fname);
+                                    $("#sname" + memberId).text(member.sname);
+                                    $("#dob" + memberId).text(member.dob);
+                                    $('#memberEditDialog').html(update);
+                                    $("#submit").hide();
                                 })
                             }
                         },
@@ -257,7 +254,6 @@ $(document).ready(function () {
                             class: "btn-xs btn-primary",
                             click: function () {
                                 $(this).dialog("close");
-                                window.location = nowAt;
                             }
                         }
                     ],
@@ -266,20 +262,61 @@ $(document).ready(function () {
 
                 $('#memberEditDialog').dialog('open');
             });
-        } else {
-            alert('Not yet!');
+        }
+
+        if (id === 'addMember') {
+            nowAt = $(location).attr('pathname');
+            n = (nowAt.match(/\//g) || []).length;
+            urlArray = nowAt.split("/");
+            houseId = parseInt(urlArray[n - 1], 10);
+            url = nowAt.slice(0, houseAt) + '/member/add/' + houseId;
+            $.get(url, function (data) {
+                $('#memberEditDialog').dialog({
+                    title: 'Add household member',
+                    buttons: [
+                        {
+                            text: "Submit",
+                            id: "submit",
+                            class: "btn-xs btn-primary",
+                            click: function () {
+                                var formData = $("form").serialize();
+                                $.post(url, formData, function (response) {
+                                    //display form if validation errors
+                                    if (response.startsWith('<form')) {
+                                        $('#memberEditDialog').html(response);
+                                        return;
+                                    }
+                                    reply = $.parseJSON(response);
+                                    name = reply.name;
+                                    update = name + ' has been added';
+                                    //use jquery to make display match members entities
+                                    $("#members").append(reply.view);
+                                    $('#memberEditDialog').html(update);
+                                    $("#submit").hide();
+                                })
+                            }
+                        },
+                        {
+                            text: 'Close',
+                            id: "close",
+                            class: "btn-xs btn-primary",
+                            click: function () {
+                                $(this).dialog("close");
+                            }
+                        }
+                    ],
+                });
+                $('#memberEditDialog').html(data);
+
+                $('#memberEditDialog').dialog('open');
+            });
         }
     });
-
 }
 );
 
-function removeMember(r) {
-    $("div.border").last().remove();
-}
-
-function removeAddress(r) {
-    $("ul#address-form").last().remove();
+function removeAddress(me) {
+    $(me).parents().eq(2).remove();
 }
 
 function tableSort() {
@@ -295,7 +332,6 @@ function tableSort() {
                 // else they are equal - return 0    
                 : 0;
     }).appendTo($tbody);
-//    $("<tr>" + tds).insertBefore("#contact_form tr:eq(0)")
 }
 
 function showContactSubmitButton() {
@@ -308,17 +344,6 @@ function showContactSubmitButton() {
 
 function col2Reset() {
     $("#column2").height(400);
-}
-
-function submitTest() {
-
-    $(document).keypress(function (e) {
-        if (e.which === 13) {
-            alert('Enter pressed');
-        }
-    });
-
-
 }
 
 function foodStampShowHide(option) {
@@ -351,38 +376,3 @@ function foodStampShowHide(option) {
         $("select#household_notfoodstamp").val("");
     }
 }
-
-/**
- * sets visibility of isHead radio & include 
- if isHead=1, then include is hidden, other rows are shown
- if include=0 or No, then isHead is hidden, else shown
- head of household last name input is disabled
- * @returns {Boolean} */
-//function showHideIncludeHead() {
-//    $('.border ul').each(function () {
-//        headInput = $(this).find("input[name='household[isHead]']").prop("checked");
-//        showBlock = $(this).find("li#headShow")
-//        headShow = showBlock.length
-//        if (headInput) {
-//            $(this).find("li#included").hide();
-//            $(this).find("li:contains('Criminal history')").show();
-//            $(this).find("input[name$='[sname]']").prop('readonly', 'readonly');
-//            $(this).parent().addClass("head");
-//        } else {
-//            $(this).find("li#included").show();
-//            $(this).find("li:contains('Criminal history')").hide();
-//            $(this).parent().removeClass("head")
-//        }
-//        if (headShow) {
-//            $(this).parent().addClass("head");
-//        }
-//
-//        var exclude = $(this).find("select[name$='[include]']").val();
-//        if (exclude === "0") {
-//            $(this).find("li[name=radioHead]").hide();
-//        } else {
-//            $(this).find("li[name=radioHead]").show();
-//        }
-//    });
-//    return true;
-//}

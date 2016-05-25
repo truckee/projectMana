@@ -1,7 +1,10 @@
 <div class="panel panel-info" id="members">
     <div class="panel-heading">Members</div>
     <div id="memberEditDialog"></div>
-{% for member in household.members %}
-    {% include 'ManaClientBundle:Member:memberShowBlock_content.html.twig' %}
-{% endfor %}
+    {% for member in household.members %}
+        {% include 'ManaClientBundle:Member:memberShowBlock_content.html.twig' %}
+    {% endfor %}
+    <div class="panel-body">
+        <a id="addMember" href="#" class="btn-sm btn-info">Add member</a>
+    </div>
 </div>

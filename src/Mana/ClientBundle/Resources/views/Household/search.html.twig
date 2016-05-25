@@ -1,18 +1,19 @@
 {# src\Mana\ClientBundle\Resources\views\Default\search.html.twig #}
 {% extends "ManaClientBundle:Default:layout.html.twig" %}
 {% block body %}
-<div align="center">
-    <div class="title">Search Results for {{ searchedFor }}</div>
-    <p>* = Household is inactive</p>
+<div class="panel panel-info" style="width:80%; margin-left: 10%;">
+    <div class="panel-heading">Search Results for {{ searchedFor }}<br>
+    * = Household is inactive
 </div>
-<table class="width80">
+<table class="table">
     <tr>
-        <td class="searchbody" width="25%">Options
-        <td class="searchbody" width="15%">ID
-        <td class="searchbody" width="15%">Name/Head
-        <td class="searchbody" width="10%">DOB
-        <td class="searchbody" width="45%">Address
+        <th>Options
+        <th>ID
+        <th>Name/Head
+        <th>DOB
+        <th>Address
     </tr>
-{% include "ManaClientBundle:Household:matchBlock.html.twig" %}
+{% include "ManaClientBundle:Member:matchBlock.html.twig" %}
 </table>
+</div>
 {% endblock %}

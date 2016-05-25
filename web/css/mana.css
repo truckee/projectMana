@@ -11,16 +11,6 @@
    Created on : May 9, 2016, 10:04:39 AM
    Author     : George
 */
-ul {
-    list-style:none;
-/*    background-color:#eee;     TEST background-color 
-    font-size:0;
-    text-align:justify;
-    padding:0;
-    margin:0;*/
-}
-li.show {
-    display:inline-block;
-/*    background-color:#cff;     TEST background-color 
-    font-size:1rem;*/
+.margin10x {
+    margin: 0 10px;
 }

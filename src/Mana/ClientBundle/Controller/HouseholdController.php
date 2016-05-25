@@ -7,8 +7,8 @@ namespace Mana\ClientBundle\Controller;
 use Mana\ClientBundle\Entity\Household;
 use Mana\ClientBundle\Entity\Member;
 use Mana\ClientBundle\Entity\Phone;
-use Mana\ClientBundle\Form\HouseholdRequiredType;
 use Mana\ClientBundle\Form\HouseholdType;
+use Mana\ClientBundle\Form\HouseholdRequiredType;
 use Mana\ClientBundle\Form\MemberType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -28,7 +28,7 @@ class HouseholdController extends Controller
     /**
      * Finds and displays a Household entity.
      * @Route("/{id}/show", name="household_show")
-     * @Template("ManaClientBundle:Household:household_show.html.twig")
+     * @Template()
      */
     public function showAction(Request $request, $id) {
         $session = $request->getSession();
@@ -39,7 +39,7 @@ class HouseholdController extends Controller
             throw $this->createNotFoundException('Unable to find Household entity.');
         }
         $templates[] = "ManaClientBundle:Member:memberShowBlock.html.twig";
-        $templates[] = "ManaClientBundle:Household:household_show_content.html.twig";
+        $templates[] = "ManaClientBundle:Household:show_content.html.twig";
         $templates[] = "ManaClientBundle:Address:addressShowBlock.html.twig";
         $templates[] = "ManaClientBundle:Household:contactShowBlock.html.twig";
 
@@ -70,8 +70,8 @@ class HouseholdController extends Controller
         }
         $household = new Household();
         $head = new Member();
-        $newHead = $this->container->get('mana.head.replacement');
-        $form = $this->createForm(new HouseholdRequiredType($newHead), $household);
+        $new = true;
+        $form = $this->createForm(new HouseholdRequiredType($new, $household));
         $formHead = $this->createForm(new MemberType(), $head);
         $form->handleRequest($request);
         $formHead->handleRequest($request);
@@ -93,7 +93,7 @@ class HouseholdController extends Controller
 
             if (count($found) === 0) {
                 //when there are no matches, create member as head with incoming data
-                $id = $em->getRepository("ManaClientBundle:Household")->initialize($household, $head);
+                $id = $em->getRepository("ManaClientBundle:Household")->initialize($household, $head, $session);
                 return $this->redirect($this->generateUrl('household_edit', array('id' => $id)));
             } else {
                 //send new data plus matches to match_results
@@ -106,7 +106,7 @@ class HouseholdController extends Controller
                     'title' => 'Match Results',
                 );
                 return $this->render(
-                                "ManaClientBundle:Household:match_results.html.twig", $match_results);
+                                "ManaClientBundle:Member:match_results.html.twig", $match_results);
             }
         }
         return array(
@@ -128,40 +128,19 @@ class HouseholdController extends Controller
         if (!$household) {
             throw $this->createNotFoundException('Unable to find Household.');
         }
-        //flag - 0: v2; 1: v1, single member; >1: v1, >1 member
-        $flag = $em->getRepository('ManaClientBundle:Household')->getHouseholdVersionFlag($id);
-        if ('1' === $flag) {
-            return $this->forward('ManaClientBundle:HouseholdV1Single:edit', ['id' => $id]);
-        } elseif ($flag > 1) {
-            return $this->forward('ManaClientBundle:HouseholdV1Many:edit', ['id' => $id]);
-        }
         $session = $request->getSession();
         $new = false;
         if (null !== $session->get('household')) {
             $new = true;
             $session->set('household', null);
         }
-        $members = $household->getMembers();
-        //$idArray required for isHead radio choices
-        foreach ($members as $member) {
-            $memberId = $member->getId();
-            $idArray["$memberId"] = "$memberId";
-        }
         if (count($household->getPhones()) == 0) {
             $phone = new Phone();
             $household->addPhone($phone);
         }
-//        $newHead = $this->container->get('mana.head.replacement');
-        $form = $this->createForm(new HouseholdType($idArray, $new), $household);
+        $form = $this->createForm(new HouseholdType($new), $household);
         $form->handleRequest($request);
         if ($form->isValid()) {
-//            $houseData = $request->request->get('household');
-//            $newHeadId = $houseData['isHead'];  //new head id
-//            $formerHeadId = $houseData['headId'];  //former head id
-//            if ($newHead <> $formerHeadId) {
-//                $hoh = $em->getRepository('ManaClientBundle:Member')->find($newHeadId);
-//                $household->setHead($hoh);
-//            }
             $em->getRepository('ManaClientBundle:Member')->initialize($household);
             $em->persist($household);
             $em->flush();

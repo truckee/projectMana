@@ -10,76 +10,77 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Description of AddressType
+ * Description of AddressType.
  *
  * @author George
  */
-class AddressType extends AbstractType {
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+class AddressType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder
                 ->add('addresstype', EntityType::class, array(
                     'class' => 'ManaClientBundle:AddressType',
+                    'label' => 'Address type: ',
                     'choice_label' => 'addresstype',
-                    'attr' => array("class" => "smallform"),
+                    'attr' => array('class' => 'smallform'),
                     'expanded' => false,
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('a')
-                                ->orderBy('a.id', 'ASC')
-                            ->where("a.enabled=1");
-                    },
+                    'required' => false,
+                    'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('a')
+                        ->orderBy('a.id', 'ASC')
+                        ->where('a.enabled=1');
+            },
                 ))
                 ->add('line1', TextType::class, array(
-                    'attr' => array(
-                        'size' => 20,
-                        "class" => "smallform"
-                    )
+                    'label' => 'Address, line 1: ',
+                    'required' => false,
                 ))
                 ->add('line2', TextType::class, array(
-                    'attr' => array(
-                        'size' => 20,
-                        "class" => "smallform"
-                    )
+                    'label' => 'Address, line 2: ',
+                    'required' => false,
                 ))
-                ->add('city')
+                ->add('city', TextType::class, array(
+                    'label' => 'City: ',
+                    'required' => false,
+                ))
                 ->add('county', EntityType::class, array(
                     'class' => 'ManaClientBundle:County',
+                    'label' => 'County: ',
                     'choice_label' => 'county',
                     'expanded' => false,
                     'placeholder' => '',
-                    'attr' => array("class" => "smallform"),
-                    'query_builder' => function(EntityRepository $er) {
+                    'required' => false,
+                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('c')
                                 ->orderBy('c.county', 'ASC')
-                            ->where("c.enabled=1");
+                                ->where('c.enabled=1');
                     },
                 ))
                 ->add('state', EntityType::class, array(
                     'class' => 'ManaClientBundle:State',
+                    'label' => 'State: ',
                     'choice_label' => 'state',
                     'expanded' => false,
                     'placeholder' => '',
-                    'attr' => array("class" => "smallform"),
-                    'query_builder' => function(EntityRepository $er) {
+                    'required' => false,
+                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('s')
                                 ->orderBy('s.state', 'ASC')
-                            ->where("s.enabled=1");
+                                ->where('s.enabled=1');
                     },
                 ))
                 ->add('zip', TextType::class, array(
-                    'attr' => array(
-                        'size' => 5,
-                        "class" => "smallform"
-                    )
+                    'label' => 'Zip: ',
+                    'required' => false,
                 ))
-                ;
+        ;
     }
 
-    public function configureOptions(OptionsResolver $resolver) {
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'data_class' => 'Mana\ClientBundle\Entity\Address',
-            'csrf_protection' => false,
-            'required' => false,
-            
         ));
     }
 }

@@ -1,0 +1,5 @@
+{{ form_row(form.relation) }}
+{{ form_row(form.work) }}
+{% if form.vars.value.id == headId %}
+{{ form_row(form.offences) }}
+{% endif %}

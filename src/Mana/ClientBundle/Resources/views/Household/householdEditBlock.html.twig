@@ -1,23 +1,75 @@
-<div class="section">Household</div>
-<div class="errors">
-{% for phone in form.phones %} 
-{{ form_errors(phone.phoneNumber) }} 
-{{ form_errors(phone.areacode) }} 
-{% endfor %}
+<div class="panel panel-info">
+    <div class="panel-heading">Household<br>
+        <b>ID:</b> {{ household.id }} <b>Date added:</b> {% if household.dateAdded is not null %}{{ household.dateAdded|date('m/d/Y') }}<input type="hidden" name="household[dateAdded]" value="{{ household.dateAdded|date('m/d/Y') }}">{% endif %}
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-2">
+                {{ form_row(form.active) }}
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    {% for phone in form.phones %}
+                        <div class="col-md-2">
+                            {{ form_row(phone.areacode) }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form_row(phone.phoneNumber) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                {{ form_row(form.income) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.foodstamp) }}
+            </div>
+            {% if form.vars.value.fsamount %}
+                <div class="col-md-3">
+                    {{ form_row(form.fsamount) }}
+                </div>
+            {%else%}
+                <div class="col-md-3">
+                    {{ form_row(form.notfoodstamp) }}
+                </div>
+            {% endif %}
+            <div class="col-md-2">
+                {{ form_row(form.housing) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{ form_row(form.reasons) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                {{ form_row(form.arrivalmonth) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.arrivalyear) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.center) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                {{ form_row(form.compliance) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.complianceDate) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.shared) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.sharedDate) }}
+            </div>
+        </div>
+    </div>
 </div>
-<ul class="formblock">
-    <li><b>ID:</b> {{ household.id }}</li>
-    <li id="dateAdded"><b>Date added:</b> {% if household.dateAdded is not null %}{{ household.dateAdded|date('m/d/Y') }}<input type="hidden" name="household[dateAdded]" value="{{ household.dateAdded|date('m/d/Y') }}">{% endif %}</li>
-    <li><b>Active?:</b> {{ form_widget(form.active) }}</li>
-    <li><b>Phone: </b>{% for phone in form.phones %}
-        ({{ form_widget(phone.areacode) }}) {{ form_widget(phone.phoneNumber) }}
-{% endfor %}</li>
-    <li><b>Food stamps?</b>{{ form_widget(form.foodstamp) }} 
-    {{ form_label(form.fsamount) }}{{ form_widget(form.fsamount) }}
-    {{ form_label(form.notfoodstamp) }}{{ form_widget(form.notfoodstamp) }} 
-    </li>
-    <li><b>Income: </b>{{ form_widget(form.income) }}</li>
-    <li><b>Housing: </b>{{ form_widget(form.housing) }}</li>
-    <li><b>{{ form_label(form.reasons) }}: </b>{{ form_widget(form.reasons, {'attr': {'class':'smallform-checkbox'}}) }}</li>
-    <li></li>
-</ul>

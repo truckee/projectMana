@@ -51,27 +51,6 @@ class HouseholdRequiredType extends AbstractType
                     'format' => 'MM/dd/yyyy',
                 ))
         ;
-        // if a head of household is necessarily being replaced, copy
-        // required data from member to head of household
-//        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-//            $data = $event->getData();
-//            if ($data['headId'] <> 0) {
-//                $newData = $this->newHeadService->replaceHeadData($data);
-//                $event->setData($newData);
-//            }
-//        });
-//        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-//            $household = $event->getData();
-//            $form = $event->getForm();
-//            $new = $this->new;
-//            $center = $household->getCenter();
-//            if (empty($center)) {
-//                $form->add('center', new Field\CenterEnabledChoiceType());
-//            }
-//            else {
-//                $form->add('center', new Field\CenterAllChoiceType());
-//            }
-//        });
     }
 
     public function configureOptions(OptionsResolver $resolver)

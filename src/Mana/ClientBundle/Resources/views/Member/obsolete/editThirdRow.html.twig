@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-md-6">
+        {{ form_row(form.ethnicity) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_row(form.relation) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        {{ form_row(form.work) }}
+    </div>
+    <div class="col-md-6">
+        {% if form.vars.value.id == headId %}
+            {{ form_row(form.offences) }}
+        {% endif %}
+    </div>
+</div>

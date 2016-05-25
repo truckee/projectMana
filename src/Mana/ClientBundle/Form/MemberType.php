@@ -71,7 +71,7 @@ class MemberType extends AbstractType
                     'class' => 'ManaClientBundle:Relationship',
                     'choice_label' => 'relation',
                     'expanded' => false,
-                    'empty_value' => 'Select relation to head',
+                    'placeholder' => 'Select relation to head',
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('r')
                                 ->orderBy('r.relation', 'ASC')
@@ -85,7 +85,7 @@ class MemberType extends AbstractType
                 ->add('work', EntityType::class, array(
                     'class' => 'ManaClientBundle:Work',
                     'choice_label' => 'work',
-                    'empty_value' => 'Select work',
+                    'placeholder' => 'Select work',
                     'label' => 'Work:',
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('w')
