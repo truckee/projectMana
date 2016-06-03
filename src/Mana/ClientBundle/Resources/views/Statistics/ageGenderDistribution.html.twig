@@ -1,0 +1,59 @@
+<div class="panel-heading text-center">Age, Age/Gender Distributions</div>
+<div class="panel-body">
+    <div class="row">
+        <div class="col-sm-3 text-right">
+            <b>Under 6</b>
+        </div>
+        <div class="col-sm-3 text-right">
+            <b>6 to 18</b>
+        </div>
+        <div class="col-sm-3 text-right">
+            <b>19 to 59</b>
+        </div>
+        <div class="col-sm-3 text-right">
+            <b>60+</b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 text-right">
+            {{ statistics['Under 6']|number_format }}
+        </div>
+        <div class="col-sm-3 text-right">
+            {{ statistics['6 - 18']|number_format }}
+        </div>
+        <div class="col-sm-3 text-right">
+            {{ statistics['19 - 59']|number_format }}
+        </div>
+        <div class="col-sm-3 text-right">
+            {{ statistics['60+']|number_format }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 text-right">
+            <b>Female Children</b>
+        </div>
+        <div class="col-sm-3 text-right">
+            <b>Male Children</b>
+        </div>
+        <div class="col-sm-3 text-right">
+            <b>Female Adults</b>
+        </div>
+        <div class="col-sm-3 text-right">
+            <b>Male Adults</b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 text-right">
+            {{ statistics['FC']|number_format }}
+        </div>
+        <div class="col-sm-3 text-right">
+            {{ statistics['MC']|number_format }}
+        </div>
+        <div class="col-sm-3 text-right">
+            {{ statistics['FA']|number_format }}
+        </div>
+        <div class="col-sm-3 text-right">
+            {{ statistics['MA']|number_format }}
+        </div>
+    </div>
+</div>

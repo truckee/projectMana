@@ -1,0 +1,50 @@
+<div class="panel-heading text-center">County Distribution</div>
+<div class="panel-body">
+    <div class="row">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>Unique Individuals Served</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>Total Individuals Served</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>Unique Households Served</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>Total Households Served</b>
+        </div>
+    </div>
+{% for key, value in ctyStats %}
+    <div class="row">
+        <div class="col-sm-1">
+            {{ key }}
+        </div>
+        <div class="col-sm-1 text-right">
+            {{ value.UIS|number_format }}
+        </div>
+        <div class="col-sm-1 text-right">
+            {{ value.UISPct|number_format(1) ~ '%' }}
+        </div>
+        <div class="col-sm-1 text-right">
+            {{ value.IS|number_format }}
+        </div>
+        <div class="col-sm-1 text-right">
+            {{ value.ISPct|number_format(1) ~ '%' }}
+        </div>
+        <div class="col-sm-1 text-right">
+            {{ value.UHS|number_format }}
+        </div>
+        <div class="col-sm-1 text-right">
+            {{ value.UHSPct|number_format(1) ~ '%' }}
+        </div>
+        <div class="col-sm-1 text-right">
+            {{ value.THS|number_format }}
+        </div>
+        <div class="col-sm-1 text-right">
+            {{ value.THSPct|number_format(1) ~ '%' }}
+        </div>
+    </div>
+{% endfor %}
+</div>

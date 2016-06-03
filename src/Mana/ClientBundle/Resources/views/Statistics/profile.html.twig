@@ -1,13 +1,4 @@
 {% extends "ManaClientBundle:Default:layout.html.twig"%}
-{% block head %}
-    {{ parent() }}
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    {% block stylesheets %}
-        {{ parent() }}
-        <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="all">
-    {% endblock %}
-{% endblock head %}
 {% block body %}
     {% block button %}
     <button id="menuToggle" class="btn btn-default hidden-print" type="submit" style="margin-top: 10px;">Printable view</button>

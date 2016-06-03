@@ -6,6 +6,7 @@ namespace Mana\ClientBundle\Form\Field;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class MonthType extends AbstractType {
 
@@ -30,7 +31,7 @@ class MonthType extends AbstractType {
     }
 
     public function getParent() {
-        return 'choice';
+        return ChoiceType::class;
     }
 
 }

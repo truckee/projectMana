@@ -1,0 +1,43 @@
+<div class="panel-heading text-center">Family size</div>
+<div class="panel-body">
+    <div class="row">
+        <div class="col-sm-2">
+            <b>One</b>
+        </div>
+        <div class="col-sm-2">
+            <b>Two</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>Three</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>Four</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>Five</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>Six or more</b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
+            <b>{{ statistics['Single']|number_format }}</b>
+        </div>
+        <div class="col-sm-2">
+            <b>{{ statistics['Two']|number_format }}</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>{{ statistics['Three']|number_format }}</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>{{ statistics['Four']|number_format }}</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>{{ statistics['Five']|number_format }}</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>{{ statistics['Six or more']|number_format }}</b>
+        </div>
+    </div>
+</div>

@@ -35,16 +35,29 @@ class MemberController extends Controller
         if (!$member) {
             throw $this->createNotFoundException('Unable to find Member.');
         }
-        $household = $member->getHousehold();
-        $headId = $household->getHead()->getId();
         $templates[] = 'ManaClientBundle:Member:memberFormRows.html.twig';
-
-        if ($id == $headId) {
-            array_unshift($templates, 'ManaClientBundle:Member:headForm.html.twig');
-            array_push($templates, 'ManaClientBundle:Member:headOffensesForm.html.twig');
+        $include = $member->getInclude();
+        if (true == $include) {
+            $household = $member->getHousehold();
+            $headId = $household->getHead()->getId();
+            if ($member->getId() === $headId) {
+                array_unshift($templates, 'ManaClientBundle:Member:headShowForm.html.twig');
+            } else {
+                array_unshift($templates, 'ManaClientBundle:Member:includeForm.html.twig');
+            }
         } else {
-            array_unshift($templates, 'ManaClientBundle:Member:includeForm.html.twig');
+            $template = 'ManaClientBundle:Member:excludedShow.html.twig';
         }
+
+//        $household = $member->getHousehold();
+//        $headId = $household->getHead()->getId();
+//
+//        if ($id == $headId) {
+//            
+//            array_push($templates, 'ManaClientBundle:Member:headOffensesForm.html.twig');
+//        } else {
+//            
+//        }
 
         $form = $this->createForm(MemberType::class, $member);
         $form->handleRequest($request);
@@ -125,5 +138,29 @@ class MemberController extends Controller
             'templates' => $templates,
             'houseId' => $houseId,
         ];
+    }
+
+    /**
+     * @Route("/householdMember/{id}", name="house_member")
+     * @Template()
+     */
+    public function memberHeadShowAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $member = $em->getRepository('ManaClientBundle:Member')->find($id);
+        $include = $member->getInclude();
+        if (true == $include) {
+            $household = $member->getHousehold();
+            $headId = $household->getHead()->getId();
+            if ($member->getId() === $headId) {
+                $template = 'ManaClientBundle:Member:headShow.html.twig';
+            } else {
+                $template = 'ManaClientBundle:Member:includeShow.html.twig';
+            }
+        } else {
+            $template = 'ManaClientBundle:Member:excludedShow.html.twig';
+        }
+
+        return $this->render($template, ['member' => $member]);
     }
 }

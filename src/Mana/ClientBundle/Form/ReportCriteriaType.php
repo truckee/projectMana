@@ -29,7 +29,6 @@ class ReportCriteriaType extends AbstractType {
                 ->add('startMonth', new MonthType(), array(
                     'data' => $this->month,
                     'placeholder' => false,
-                    'attr' => array("class" => "smallform"),
                     'constraints' => array(
                         new StartEndDate(),
                     ),
@@ -37,27 +36,22 @@ class ReportCriteriaType extends AbstractType {
                 ->add('endMonth', new MonthType(), array(
                     'data' => $this->month,
                     'placeholder' => false,
-                    'attr' => array("class" => "smallform"),
                         )
                 )
                 ->add('startYear', new YearType(), array(
                     'data' => $this->year,
                     'placeholder' => false,
-                    'attr' => array("class" => "smallform"),
                         )
                 )
                 ->add('endYear', new YearType(), array(
                     'data' => $this->year,
                     'placeholder' => false,
-                    'attr' => array("class" => "smallform"),
                         )
                 )
                 ->add('contact_type', EntityType::class, array(
                     'class' => 'ManaClientBundle:ContactDesc',
                     'choice_label' => 'contactDesc',
                     'placeholder' => 'Select contact type',
-                    'error_bubbling' => true,
-                    'attr' => array("class" => "smallform"),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
                                 ->where('c.enabled = 1')
@@ -71,8 +65,6 @@ class ReportCriteriaType extends AbstractType {
                     'class' => 'ManaClientBundle:County',
                     'choice_label' => 'county',
                     'placeholder' => 'Select county',
-                    'error_bubbling' => true,
-                    'attr' => array("class" => "smallform"),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
                                 ->orderBy('c.county', 'ASC');
