@@ -1,5 +1,4 @@
 <?php
-
 // src\Mana\ClientBundle\Controller\HouseholdController.php
 
 namespace Mana\ClientBundle\Controller;
@@ -30,7 +29,8 @@ class HouseholdController extends Controller
      * @Route("/{id}/show", name="household_show")
      * @Template()
      */
-    public function showAction(Request $request, $id) {
+    public function showAction(Request $request, $id)
+    {
         $session = $request->getSession();
         $session->set('household', null);
         $em = $this->getDoctrine()->getManager();
@@ -57,7 +57,8 @@ class HouseholdController extends Controller
      * @Route("/new", name="household_new")
      * @Template()
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request)
+    {
         $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $houseTest = $session->get('household');
@@ -106,7 +107,7 @@ class HouseholdController extends Controller
                     'title' => 'Match Results',
                 );
                 return $this->render(
-                                "ManaClientBundle:Member:match_results.html.twig", $match_results);
+                        "ManaClientBundle:Member:match_results.html.twig", $match_results);
             }
         }
         return array(
@@ -122,7 +123,8 @@ class HouseholdController extends Controller
      * @Route("/{id}/edit", name="household_edit")
      * @Template()
      */
-    public function editAction(Request $request, $id) {
+    public function editAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('ManaClientBundle:Household')->find($id);
         if (!$household) {
@@ -162,7 +164,8 @@ class HouseholdController extends Controller
      * @return type
      * @Route("/_search", name = "_search")
      */
-    public function searchAction(Request $request) {
+    public function searchAction(Request $request)
+    {
         $qtext = $request->query->get('qtext');
         if ($qtext == '') {
             $session = $request->getSession();
@@ -194,10 +197,11 @@ class HouseholdController extends Controller
                 $id = $found[0]->getHousehold()->getId();
                 return $this->redirect($this->generateUrl('household_show', array('id' => $id)));
             } else {
-                return $this->render('ManaClientBundle:Household:search.html.twig', array(
-                            'searchedFor' => $qtext,
-                            'matched' => $found,
-                            'title' => 'Search results',
+                return $this->render('ManaClientBundle:Household:search.html.twig',
+                        array(
+                        'searchedFor' => $qtext,
+                        'matched' => $found,
+                        'title' => 'Search results',
                 ));
             }
         }
@@ -207,17 +211,21 @@ class HouseholdController extends Controller
      * get household data by id for json response
      * @Route("/contact/{id}", name="household_contact")
      */
-    public function contactAction($id) {
+    public function contactAction($id)
+    {
         $em = $this->getDoctrine()->getManager();
-        $response = new JsonResponse();
+        $response = new Response();
         $household = $em->getRepository('ManaClientBundle:Household')->find($id);
         if (!$household) {
-            $response->setData(0);
+            $response = new Response('');
         } else {
-            $contactData['id'] = $household->getId();
-            $contactData['head'] = $household->getHead()->getsname() . ', ' . $household->getHead()->getFname();
-            $response->setData($contactData);
+            $content = $this->renderView('ManaClientBundle:Contact:addHouseholdContact.html.twig',
+                [
+                'household' => $household,
+            ]);
+            $response = new Response($content);
         }
+        
         return $response;
     }
 
@@ -225,7 +233,8 @@ class HouseholdController extends Controller
      * Create and download registration card for household
      * @Route("/{id}/card", name="house_card")
      */
-    public function cardAction($id) {
+    public function cardAction($id)
+    {
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('ManaClientBundle:Household')->find($id);
         $head = $household->getHead();
@@ -246,17 +255,18 @@ class HouseholdController extends Controller
         $facade = $this->get('ps_pdf.facade');
         $response = new Response();
 
-        $this->render('ManaClientBundle:Household:card.pdf.twig', array(
+        $this->render('ManaClientBundle:Household:card.pdf.twig',
+            array(
             'household' => $household,
             'date' => date_create(),
             'code' => $code,
-                ), $response);
+            ), $response);
         $xml = $response->getContent();
         $content = $facade->render($xml, $stylesheetXml);
-        return new Response($content, 200, array(
+        return new Response($content, 200,
+            array(
             'content-type' => 'application/pdf',
             'Content-Disposition' => 'attachment; filename=' . $filename,
         ));
     }
-
 }

@@ -13,16 +13,12 @@ security:
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username
-#        entity:
-#          entity:
-#            class: Mana\ClientBundle\Entity\User
-#            property: username
 
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
-            
+
         foodbank:
           pattern: ^/reports/foodbank/*
           anonymous: ~
@@ -30,11 +26,11 @@ security:
         login_firewall:
             pattern:    ^/login$
             anonymous:  ~
-#        
+#
         reset_firewall:
             pattern:    ^/resetting
             anonymous:  ~
-        
+
         main:
             pattern:    ^/
             form_login:

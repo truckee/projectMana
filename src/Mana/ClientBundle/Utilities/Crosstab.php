@@ -76,13 +76,13 @@ class Crosstab
      */
     public function setDateCriteria($criteria)
     {
-        $startMonth = $criteria['startMonth'];
-        $startYear = $criteria['startYear'];
-        $startText = $startYear . '-' . $startMonth . '-' . '01';
-        $endMonth = $criteria['endMonth'];
-        $endYear = $criteria['endYear'];
-        $endDate = new \DateTime($endMonth . '/01/' . $endYear);
-        $endText = $endDate->format('Y-m-t');
+//        $startMonth = $criteria['startMonth'];
+//        $startYear = $criteria['startYear'];
+        $startText = $criteria['startDate'];
+//        $endMonth = $criteria['endMonth'];
+//        $endYear = $criteria['endYear'];
+//        $endDate = new \DateTime($endMonth . '/01/' . $endYear);
+        $endText = $criteria['endDate'];
         
         return "'$startText' AND '$endText' ";
                

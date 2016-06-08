@@ -1,0 +1,20 @@
+{% extends "ManaClientBundle:Default:layout.html.twig" %}
+{% block body %}
+    <form action="{{ path("contacts_add") }}" method="post">
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>{{ label_info('Add contacts') }}</h3>
+                <p>{{ form_row(form.contactDate) }}</p>
+                <p>{{ form_row(form.contactDesc) }}</p>
+                <p>{{ form_row(form.center)}}</p>
+                <div id="dialog" title="Collecting data" style="font-size: 10pt;">Please wait while data being gathered</div>
+                <div id="householdById">
+                    <p>{{ form_row(form.householdId)}}</p>
+                    <button type="button" id="contact_household_button">Add household</button>
+                </div>
+            </div>
+            <div class="col-sm-8" id="contact_form">
+            </div>
+        </div>
+    </form>
+{% endblock %}

@@ -23,7 +23,7 @@ class ContactController extends Controller {
     /**
      * Displays a form to create a new Contact entity.
      * @Route("/{id}/new", name="contact_new")
-     * @Template("ManaClientBundle:Contact:contact_manage.html.twig")
+     * @Template("ManaClientBundle:Contact:edit.html.twig")
      */
     public function newAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
@@ -58,7 +58,7 @@ class ContactController extends Controller {
     /**
      * Displays a form to edit an existing Contact entity.
      * @Route("/{id}/edit", name="contact_edit")
-     * @Template("ManaClientBundle:Contact:contact_manage.html.twig")
+     * @Template()
      */
     public function editAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
@@ -87,7 +87,7 @@ class ContactController extends Controller {
     /**
      * Deletes a Contact entity.
      * @Route("/{id}/delete", name="contact_delete")
-     * @Template("ManaClientBundle:Contact:contact_delete.html.twig")
+     * @Template()
      */
     public function deleteAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
@@ -110,13 +110,12 @@ class ContactController extends Controller {
 
     /**
      * @Route("/addContacts", name="contacts_add")
-     * @Template("ManaClientBundle:Contact:latestContacts.html.twig")
+     * @Template()
      */
     public function addContactsAction(Request $request) {
         $contact = new Contact();
         $form = $this->createForm(new ContactType(), $contact);
         $form->handleRequest($request);
-        $message = "";
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $households = $request->request->get('contact_household');
@@ -128,30 +127,47 @@ class ContactController extends Controller {
             $desc = $contactData['desc']->getContactDesc();
             $centerName = $center->getCenter();
             $n = count($households);
+            $flash = $this->get('braincrafted_bootstrap.flash');
             if ($n !== 0) {
                 $em->getRepository("ManaClientBundle:Household")->addContacts($households, $contactData);
-                $message = "$n $desc contacts added for $centerName";
+                $flash->alert("$n $desc contacts added for $centerName");
             } else {
-                $message = 'No contacts were added';
+                $flash->alert('No contacts were added');
+                return $this->redirectToRoute('contacts_add');
             }
+            
         }
         return array(
             'form' => $form->createView(),
             'title' => 'Add contacts',
-            'message' => $message,
         );
     }
 
     /**
      * returning latest contacts w/ households & distribution
      * at given center
-     * @Route("/latest")
+     * @Route("/latest/{site}")
      */
-    public function latestContactsAction() {
-        $searches = $this->get('searches');
-        $found = $searches->getLatest();
-        $response = new JsonResponse();
-        $response->setData($found);
+    public function latestContactsAction($site) {
+        $em = $this->getDoctrine()->getManager();
+        $site = $em->getRepository('ManaClientBundle:Center')->find($site);
+        $maxDate = $em->createQuery('SELECT MAX(c.contactDate) FROM '
+                . 'ManaClientBundle:Contact c WHERE c.center = :site')
+                ->setParameter('site', $site)
+                ->getSingleScalarResult();
+        $contacts = $em->createQuery('SELECT c FROM ManaClientBundle:Contact c '
+                . 'JOIN ManaClientBundle:Household h WITH c.household = h '
+                . 'JOIN ManaClientBundle:Member m WITH h.head = m '
+                . 'WHERE c.center = :site AND c.contactDate = :date '
+                . 'ORDER BY m.sname, m.fname')
+                ->setParameters(['site' => $site, 'date' => $maxDate])
+                ->getResult();
+        $content = $this->renderView('ManaClientBundle:Contact:latestContacts.html.twig', [
+            'contacts' => $contacts,
+            'site' => $site,
+            ]);
+        $response = new Response($content);
+
         return $response;
     }
 

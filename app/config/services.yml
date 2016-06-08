@@ -6,25 +6,25 @@ services:
 
     searches:
       class: Mana\ClientBundle\Utilities\Searches
-      arguments: 
-        em: @doctrine.orm.entity_manager
+      arguments:
+        em: '@doctrine.orm.entity_manager'
 
     reports:
       class: Mana\ClientBundle\Utilities\Reports
       arguments:
-        conn: @doctrine.dbal.default_connection
+        conn: '@doctrine.dbal.default_connection'
 
     status:
       class: Mana\ClientBundle\Utilities\Status
       arguments:
-        conn: @doctrine.dbal.default_connection
+        conn: '@doctrine.dbal.default_connection'
 
     mana.crosstab:
       class: Mana\ClientBundle\Utilities\Crosstab
-      arguments: 
-        em: @doctrine.orm.entity_manager
+      arguments:
+        em: '@doctrine.orm.entity_manager'
 
     mana.user_manipulator:
         class:      Mana\ClientBundle\Utilities\UserManipulator
-        arguments:  [@fos_user.user_manager]
+        arguments:  ['@fos_user.user_manager']
 

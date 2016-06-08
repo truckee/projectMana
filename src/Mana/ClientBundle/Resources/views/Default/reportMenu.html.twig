@@ -1,22 +1,26 @@
 {% extends "ManaClientBundle:Default:layout.html.twig" %}
 {% block menu %}
-{{ knp_menu_render('ManaClientBundle:Builder:adminMenu') }}
+    {{ knp_menu_render('ManaClientBundle:Builder:adminMenu') }}
 {% endblock menu %}
 {% block body %}
-<p align="center">
-    Reports for 
-    Project MANA distribution database application.
-</p>
-<table>
-    <tr>
-        <td class="section">Reports</td>
-        <td class="section">Profiles</td>
-        <td class="section">Status Changes</td>
-    </tr>
-    <tr>
-        <td>{{ knp_menu_render('ManaClientBundle:Builder:reportsMenu') }}</td>
-        <td>{{ knp_menu_render('ManaClientBundle:Builder:profileMenu') }}</td>
-        <td><a href="{{ path("status") }}">Status changes</a></td>
-    </tr>
-</table>
+    <div class="panel panel-info">
+        <div class="panel-heading text-center">
+            Reports for
+            Project MANA distribution database application.
+        </div>
+        <div class="panel-body">
+            <table class="table">
+                <tr>
+                    <td>Reports</td>
+                    <td>Profiles</td>
+                    <td>Status Changes</td>
+                </tr>
+                <tr>
+                    <td>{{ knp_menu_render('ManaClientBundle:Builder:reportsMenu') }}</td>
+                    <td>{{ knp_menu_render('ManaClientBundle:Builder:profileMenu') }}</td>
+                    <td><a href="{{ path("status") }}">Status changes</a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
 {% endblock body %}

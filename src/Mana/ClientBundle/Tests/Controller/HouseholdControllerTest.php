@@ -32,7 +32,6 @@ class HouseholdControllerTest extends ManaWebTestCase
                     'Mana\ClientBundle\DataFixtures\Test\HouseholdV1Single',
                     'Mana\ClientBundle\DataFixtures\Test\HouseholdV1Many',
                 ])->getReferenceRepository();
-//        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
     }
 
     public function login()
@@ -50,9 +49,6 @@ class HouseholdControllerTest extends ManaWebTestCase
     {
         $crawler = $this->login();
         $crawler = $this->client->request('GET', '/household/new');
-
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("All items required")')->count());
-
         $form = $crawler->selectButton('Submit')->form();
         $form['member[fname]'] = 'Benny';
         $form['member[sname]'] = 'Borko';

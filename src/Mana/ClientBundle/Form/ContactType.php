@@ -20,9 +20,9 @@ class ContactType extends AbstractType
                 ->add('center', new Field\CenterEnabledChoiceType())
                 ->add('contactDesc', EntityType::class, array(
                     'class' => 'ManaClientBundle:ContactDesc',
+                    'label' => 'Contact type',
                     'choice_label' => 'contactDesc',
                     'placeholder' => 'Select contact type',
-                    'attr' => array("class" => "smallform"),
                     'query_builder' => function(EntityRepository $er) {
                 return $er->createQueryBuilder('c')
                         ->where('c.enabled=1')
@@ -31,6 +31,9 @@ class ContactType extends AbstractType
             },
                 ))
                 ->add('contactDate', DateType::class, array(
+                    'widget' => 'single_text',
+                    'html5' => false,
+                    'attr' => ['class' => 'js-datepicker'],
                     'format' => 'M/d/y',
                     'years' => range(date('Y'), date('Y') - 5),
                 ))

@@ -17,6 +17,7 @@ class CenterEnabledChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'class' => 'ManaClientBundle:Center',
+            'label' => 'Site',
             'choice_label' => 'center',
             'placeholder' => 'Select site',
             'query_builder' => function(EntityRepository $er) {

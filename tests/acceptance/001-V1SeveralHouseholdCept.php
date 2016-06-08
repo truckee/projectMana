@@ -12,14 +12,15 @@
 use Step\Acceptance\Admin as AdminTester;
 
 $I = new AdminTester($scenario);
-$I->wantTo('Test reminder on update several members V1 household');
+$I->wantTo('Test Add member');
 $I->loginAsAdmin();
 $I->fillField('qtext', 'MoreThanOne Member');
-$I->click('Search');
+$I->click('#search');
 $I->see('Select');
 $I->click('Select');
 $I->see('Household View');
-$I->click('Edit household');
-$I->see('select new head of household from included members');
-$I->checkOption("#isHead2");
-$I->see('Reminder');
+$I->see('Add member');
+$I->click('#addMember');
+$I->waitForJS("return $.active == 0;", 20);
+//$I->checkOption("#isHead2");
+$I->see('Add household member');

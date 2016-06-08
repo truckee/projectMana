@@ -14,14 +14,12 @@ swiftmailer:
     disable_delivery: true
 
 liip_functional_test: ~
-#    cache_sqlite_db: true
-        
+
 doctrine:
     dbal:
         default_connection: test
         connections:
             test:
-#        default_connection:   default
                 driver:   pdo_mysql
                 host:     localhost
                 port:     3306

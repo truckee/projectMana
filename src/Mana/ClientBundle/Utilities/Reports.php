@@ -42,9 +42,9 @@ class Reports
         $this->start = $criteria['startDate'];
         $this->end = $criteria['endDate'];
         $incoming = array(
-            'contact_type_id' => $criteria['contact_type'],
-            'county_id' => $criteria['county'],
-            'center_id' => $criteria['county']
+            'contact_type_id' => (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '',
+            'county_id' => (!empty($criteria['county'])) ? $criteria['county'] : '',
+            'center_id' => (!empty($criteria['center'])) ? $criteria['center'] : ''
             );
         $where = " where contact_date >= '$this->start' and contact_date <= '$this->end' ";
 
@@ -67,7 +67,6 @@ class Reports
         } else {
             array_push($this->criteria, $where);
         }
-        dump($this->criteria);
     }
 
     public function dataExist()

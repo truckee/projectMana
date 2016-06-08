@@ -36,8 +36,8 @@ class StatisticsController extends Controller
             $reports->setStats($specs['reportCriteria']);
             $data = $reports->getStats();
             $statistics = $data['statistics'];
-            $reportSpecs = $specs['templateCriteria'];
-            $reportSpecs['reportType'] = 'General Statistics';
+            $templateSpecs = $specs['templateCriteria'];
+            $templateSpecs['reportType'] = 'General Statistics';
             $counties = $em->getRepository("ManaClientBundle:County")->findByEnabled(1);
             $ctyStats = ('' === $specs['reportCriteria']['county']) ? $reports->getCountyStats() : 0;
             $ctyPcts = ($specs['reportCriteria']['county'] || $specs['reportCriteria']['center']) ? 0 : $reports->getCountyPcts($statistics, $counties, $ctyStats);
@@ -58,7 +58,7 @@ class StatisticsController extends Controller
             $templates[] = 'ManaClientBundle:Statistics:ethnicityDistribution.html.twig';
             $templates[] = 'ManaClientBundle:Statistics:ageGenderDistribution.html.twig';
             $templates[] = 'ManaClientBundle:Statistics:residencyDistribution.html.twig';
-            if ('' === $reportSpecs['county'] . $reportSpecs['center']) {
+            if ('' === $templateSpecs['county'] . $templateSpecs['center']) {
                 $templates[] = 'ManaClientBundle:Statistics:countyDistribution.html.twig';
             }
             $templates[] = 'ManaClientBundle:Statistics:familySizeDistribution.html.twig';
@@ -68,12 +68,12 @@ class StatisticsController extends Controller
 
             $report = array(
                 'block' => 'statsblock',
-                'specs' => $reportSpecs,
+                'specs' => $templateSpecs,
                 'statistics' => $statistics,
                 'ctyStats' => $ctyStats,
                 'ctyPcts' => $ctyPcts,
                 'title' => "General statistics",
-                'reportHeader' => $this->getReportHeader($reportSpecs),
+                'reportHeader' => $this->getReportHeader($templateSpecs),
                 'templates' => $templates,
             );
             $session = $request->getSession();
@@ -104,13 +104,19 @@ class StatisticsController extends Controller
         if ($form->isValid()) {
             $reports = $this->get('reports');
             $session = $request->getSession();
-            $reports->setDetails($criteria);
+            $specs = $this->specs($criteria);
+            $reports->setDetails($specs['reportCriteria']);
             $data = $reports->getDetails();
+            $templateSpecs = $specs['templateCriteria'];
+            $templateSpecs['reportType'] = 'Distribution Details';
+            $templates[] = 'ManaClientBundle:Statistics:details.html.twig';
+
             $report = array(
                 'block' => 'details',
                 'details' => $data['details'],
-                'specs' => $data['specs'],
-                'title' => 'Distribution statistics'
+                'title' => 'Distribution statistics',
+                'reportHeader' => $this->getReportHeader($templateSpecs),
+                'templates' => $templates,
             );
             $session->set('report', $report);
             return $this->render("ManaClientBundle:Statistics:statistics.html.twig", $report);
@@ -135,13 +141,18 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $reports = $this->get('reports');
-            $multi = $reports->getMultiContacts($criteria);
+            $specs = $this->specs($criteria);
+            $reportSpecs = $specs['reportCriteria'];
+            $templateSpecs = $specs['templateCriteria'];
+            $templateSpecs['reportType'] = 'Multiple Same Date Contacts';
+            $multi = $reports->getMultiContacts($reportSpecs);
             if (count($multi) == 0) {
                 $session->set('message', 'No instances of multiple same-date contacts found');
                 return $this->forward("ManaClientBundle:Default:message");
             }
             return array('multi' => $multi,
                 'title' => 'Multiple contacts',
+                'reportHeader' => $this->getReportHeader($templateSpecs),
             );
         }
         return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
@@ -228,20 +239,25 @@ class StatisticsController extends Controller
         $templateCriteria['startDate'] = new \DateTime($criteria['startMonth'] . '/01/' . $criteria['startYear']);
         $templateCriteria['endDate'] = new \DateTime($criteria['endMonth'] . '/'. $endDay . '/' . $criteria['endYear']);
         $em = $this->getDoctrine()->getManager();
+
+        $reportCriteria['contact_type'] = (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '';
+        $reportCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
+        $reportCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
+        $reportCriteria['columnType'] = (!empty($criteria['columnType'])) ? $criteria['columnType'] : '';
+        $templateCriteria['contact_type'] = (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '';
+        $templateCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
+        $templateCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
         
-        $templateCriteria['contact_type'] = $criteria['contact_type'];
         if (!empty($templateCriteria['contact_type'])) {
             $typeObj = $em->getRepository('ManaClientBundle:ContactDesc')->find($templateCriteria['contact_type']);
             $templateCriteria['contact_type'] = $typeObj->getContactDesc();
         }
         
-         $templateCriteria['center'] = $criteria['center'];
         if (!empty($templateCriteria['center'])) {
             $centerObj = $em->getRepository('ManaClientBundle:Center')->find($templateCriteria['center']);
             $templateCriteria['center'] = $centerObj->getCenter();
         } 
         
-         $templateCriteria['county'] = $criteria['county'];
         if (!empty($templateCriteria['county'])) {
             $countyObj = $em->getRepository('ManaClientBundle:County')->find( $templateCriteria['county']);
             $templateCriteria['county'] = $countyObj->getCounty();
@@ -249,9 +265,9 @@ class StatisticsController extends Controller
         
         $reportCriteria['startDate'] = date_format($templateCriteria['startDate'], 'Y-m-d');
         $reportCriteria['endDate'] = date_format($templateCriteria['endDate'], 'Y-m-d');
-        $reportCriteria['contact_type'] = $criteria['contact_type'];
-        $reportCriteria['center'] = $criteria['center'];
-        $reportCriteria['county'] = $criteria['county'];
+        $reportCriteria['contact_type'] = (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '';
+        $reportCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
+        $reportCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
 
         return [
             'templateCriteria' => $templateCriteria,
@@ -268,8 +284,11 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
-            $reportData = $this->employment($criteria);
-            $content = $this->profiler($reportData);
+            $specs = $this->specs($criteria);
+            $reportSpecs = $specs['reportCriteria'];
+            $templateSpecs = $specs['templateCriteria'];
+            $reportData = $this->employment($reportSpecs);
+            $content = $this->profiler($reportData, $templateSpecs);
             $response->setContent($content);
             return $response;
         }
@@ -292,8 +311,11 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
-            $reportData = $this->income($criteria);
-            $content = $this->profiler($reportData);
+            $specs = $this->specs($criteria);
+            $reportSpecs = $specs['reportCriteria'];
+            $templateSpecs = $specs['templateCriteria'];
+            $reportData = $this->income($reportSpecs);
+            $content = $this->profiler($reportData, $templateSpecs);
             $response->setContent($content);
 
             return $response;
@@ -317,8 +339,11 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
-            $reportData = $this->yesNo($criteria);
-            $content = $this->profiler($reportData);
+            $specs = $this->specs($criteria);
+            $reportSpecs = $specs['reportCriteria'];
+            $templateSpecs = $specs['templateCriteria'];
+            $reportData = $this->yesNo($reportSpecs);
+            $content = $this->profiler($reportData, $templateSpecs);
             $response->setContent($content);
 
             return $response;
@@ -343,8 +368,11 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
-            $reportData = $this->howMuch($criteria);
-            $content = $this->profiler($reportData);
+            $specs = $this->specs($criteria);
+            $reportSpecs = $specs['reportCriteria'];
+            $templateSpecs = $specs['templateCriteria'];
+            $reportData = $this->howMuch($reportSpecs);
+            $content = $this->profiler($reportData, $templateSpecs);
             $response->setContent($content);
 
             return $response;
@@ -368,8 +396,11 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
-            $reportData = $this->reason($criteria);
-            $content = $this->profiler($reportData);
+            $specs = $this->specs($criteria);
+            $reportSpecs = $specs['reportCriteria'];
+            $templateSpecs = $specs['templateCriteria'];
+            $reportData = $this->reason($reportSpecs);
+            $content = $this->profiler($reportData, $templateSpecs);
             $response->setContent($content);
 
             return $response;
@@ -393,8 +424,11 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
-            $reportData = $this->not($criteria);
-            $content = $this->profiler($reportData);
+            $specs = $this->specs($criteria);
+            $reportSpecs = $specs['reportCriteria'];
+            $templateSpecs = $specs['templateCriteria'];
+            $reportData = $this->not($reportSpecs);
+            $content = $this->profiler($reportData, $templateSpecs);
             $response->setContent($content);
             return $response;
         }
@@ -417,12 +451,15 @@ class StatisticsController extends Controller
         $criteria = $request->request->get('report_criteria');
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $reportData = $this->yesNo($criteria);
-            $content = $this->profilerPlain($reportData);
-            $reportData = $this->howMuch($criteria);
-            $content .= $this->profilerPlain($reportData);
-            $reportData = $this->not($criteria);
-            $content .= $this->profilerPlain($reportData);
+            $specs = $this->specs($criteria);
+            $reportSpecs = $specs['reportCriteria'];
+            $templateSpecs = $specs['templateCriteria'];
+            $reportData = $this->yesNo($reportSpecs);
+            $content = $this->profilerPlain($reportData, $templateSpecs);
+            $reportData = $this->howMuch($reportSpecs);
+            $content .= $this->profilerPlain($reportData, $templateSpecs);
+            $reportData = $this->not($reportSpecs);
+            $content .= $this->profilerPlain($reportData, $templateSpecs);
             return ['content' => $content];
         }
 
@@ -435,12 +472,9 @@ class StatisticsController extends Controller
         ));
     }
 
-    private function profiler($reportData) {
+    private function profiler($reportData, $templateSpecs) {
         $xp = $this->container->get('mana.crosstab');
         $profile = $xp->crosstabQuery($reportData['data'], $reportData['rowLabels'], $reportData['colLabels']);
-        $reports = $this->get('reports');
-        $specs = $reports->getSpecs($reportData['criteria']);
-
 
         return $this->renderView("ManaClientBundle:Statistics:profile.html.twig", ['profile' => $profile,
                     'rowHeader' => $reportData['rowHeader'],
@@ -449,16 +483,13 @@ class StatisticsController extends Controller
                     'reportTitle' => $reportData['reportTitle'],
                     'reportSubTitle' => $reportData['reportSubTitle'],
                     'date' => new \DateTime(),
-                    'specs' => $specs,
+                    'specs' => $templateSpecs,
         ]);
     }
 
-    private function profilerPlain($reportData) {
+    private function profilerPlain($reportData, $templateSpecs) {
         $xp = $this->container->get('mana.crosstab');
         $profile = $xp->crosstabQuery($reportData['data'], $reportData['rowLabels'], $reportData['colLabels']);
-        $reports = $this->get('reports');
-        $specs = $reports->getSpecs($reportData['criteria']);
-
 
         return $this->renderView("ManaClientBundle:Statistics:profile_content.html.twig", ['profile' => $profile,
                     'rowHeader' => $reportData['rowHeader'],
@@ -467,7 +498,7 @@ class StatisticsController extends Controller
                     'reportTitle' => $reportData['reportTitle'],
                     'reportSubTitle' => $reportData['reportSubTitle'],
                     'date' => new \DateTime(),
-                    'specs' => $specs,
+                    'specs' => $templateSpecs,
         ]);
     }
 
@@ -475,6 +506,7 @@ class StatisticsController extends Controller
         $em = $this->getDoctrine()->getManager();
         $xp = $this->container->get('mana.crosstab');
         $dateCriteria = $xp->setDateCriteria($criteria);
+
         $columnType = $criteria['columnType'];
         $rowLabels = $em->getRepository('ManaClientBundle:Work')->rowLabels($dateCriteria);
         $colLabels = $em->getRepository('ManaClientBundle:' . $columnType)->colLabels($dateCriteria);

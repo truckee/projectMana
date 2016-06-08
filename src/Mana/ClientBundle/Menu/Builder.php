@@ -14,7 +14,7 @@ class Builder extends ContainerAware
     {
         $menu = $factory->createItem('root');
 
-        $securityContext = $this->container->get('security.context');
+        $securityContext = $this->container->get('security.authorization_checker');
         $request = $this->container->get('request');
         $routeName = $request->get('_route');
 
