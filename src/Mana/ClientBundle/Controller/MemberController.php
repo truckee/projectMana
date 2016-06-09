@@ -49,16 +49,6 @@ class MemberController extends Controller
             $template = 'ManaClientBundle:Member:excludedShow.html.twig';
         }
 
-//        $household = $member->getHousehold();
-//        $headId = $household->getHead()->getId();
-//
-//        if ($id == $headId) {
-//            
-//            array_push($templates, 'ManaClientBundle:Member:headOffensesForm.html.twig');
-//        } else {
-//            
-//        }
-
         $form = $this->createForm(MemberType::class, $member);
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -79,12 +69,12 @@ class MemberController extends Controller
                 'headId' => $headId,
                 'isHead' => $isHead,
                 'include' => $member->getInclude(),
-                'excludeDate' => date_format($member->getExcludeDate(), 'm/d/Y'),
+                'excludeDate' => ($member->getInclude()) ? null : date_format($member->getExcludeDate(), 'm/d/Y'),
                 'fname' => $member->getFname(),
                 'sname' => $member->getSname(),
                 'dob' => date_format($member->getDob(), 'm/d/Y'),
             );
-            $content = \GuzzleHttp\json_encode($reply);
+            $content = json_encode($reply);
             $response = new Response($content);
 
             return $response;

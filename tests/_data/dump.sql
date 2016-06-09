@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.9, for Win32 (AMD64)
+-- MySQL dump 10.13  Distrib 5.6.24, for Win64 (x86_64)
 --
--- Host: localhost    Database: projectmana_test
+-- Host: 127.0.0.1    Database: projectmana_test
 -- ------------------------------------------------------
--- Server version	5.7.12-log
+-- Server version	5.6.21
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -15,10 +15,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-create schema if not exists `projectmana_test`;
-use `projectmana_test`;
-
---
 -- Table structure for table `address`
 --
 
@@ -42,7 +38,7 @@ CREATE TABLE `address` (
   CONSTRAINT `idx_address_county` FOREIGN KEY (`county_id`) REFERENCES `county` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `idx_address_household` FOREIGN KEY (`household_id`) REFERENCES `household` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `idx_address_state` FOREIGN KEY (`state_id`) REFERENCES `state` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9869 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -57,7 +53,7 @@ CREATE TABLE `address_type` (
   `address_type` varchar(45) DEFAULT NULL,
   `enabled` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -106,7 +102,7 @@ CREATE TABLE `appliance` (
   `appliance` varchar(45) DEFAULT NULL,
   `enabled` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,7 +120,7 @@ CREATE TABLE `center` (
   PRIMARY KEY (`id`),
   KEY `idx_center_county_idx` (`county_id`),
   CONSTRAINT `idx_center_county` FOREIGN KEY (`county_id`) REFERENCES `county` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -150,7 +146,7 @@ CREATE TABLE `contact` (
   CONSTRAINT `idx_contact_center` FOREIGN KEY (`center_id`) REFERENCES `center` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `idx_contact_household` FOREIGN KEY (`household_id`) REFERENCES `household` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `idx_contact_type` FOREIGN KEY (`contact_type_id`) REFERENCES `contact_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=125092 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -165,7 +161,7 @@ CREATE TABLE `contact_type` (
   `contact_desc` varchar(45) DEFAULT NULL,
   `enabled` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,7 +176,7 @@ CREATE TABLE `county` (
   `county` varchar(45) DEFAULT NULL,
   `enabled` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -196,7 +192,7 @@ CREATE TABLE `ethnicity` (
   `abbr` varchar(45) DEFAULT NULL,
   `enabled` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -231,7 +227,7 @@ CREATE TABLE `fs_amount` (
   `amount` varchar(45) DEFAULT NULL,
   `enabled` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -246,7 +242,7 @@ CREATE TABLE `fs_status` (
   `status` varchar(45) DEFAULT NULL,
   `enabled` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -277,7 +273,7 @@ CREATE TABLE `household` (
   `center_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_fs_status` (`foodstamp_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10564 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -296,7 +292,7 @@ CREATE TABLE `household_appliance` (
   KEY `fk_appliance_household_idx` (`appliance_id`),
   CONSTRAINT `fk_appliance_household` FOREIGN KEY (`appliance_id`) REFERENCES `appliance` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_household_appliance` FOREIGN KEY (`household_id`) REFERENCES `household` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5647 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -315,7 +311,7 @@ CREATE TABLE `household_incomesource` (
   KEY `fk_income_household_idx` (`incomesource_id`),
   CONSTRAINT `fk_household_income` FOREIGN KEY (`household_id`) REFERENCES `household` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_income_household` FOREIGN KEY (`incomesource_id`) REFERENCES `income_source` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1318 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -334,7 +330,7 @@ CREATE TABLE `household_reason` (
   KEY `fk_reason_household_idx` (`reason_id`),
   CONSTRAINT `fk_household_reason` FOREIGN KEY (`household_id`) REFERENCES `household` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_reason_household` FOREIGN KEY (`reason_id`) REFERENCES `reason` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3173 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -349,7 +345,7 @@ CREATE TABLE `housing` (
   `housing` varchar(45) DEFAULT NULL,
   `enabled` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -364,7 +360,7 @@ CREATE TABLE `income` (
   `income` varchar(45) DEFAULT NULL,
   `enabled` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -380,7 +376,7 @@ CREATE TABLE `income_source` (
   `income_abbr` varchar(45) DEFAULT NULL,
   `enabled` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -409,7 +405,7 @@ CREATE TABLE `member` (
   KEY `idx_client_household` (`household_id`),
   KEY `idx_member_relationship_idx` (`relationship_id`),
   FULLTEXT KEY `idx_name` (`fname`,`sname`)
-) ENGINE=MyISAM AUTO_INCREMENT=34583 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -424,7 +420,7 @@ CREATE TABLE `member_offence` (
   `member_id` int(11) DEFAULT NULL,
   `offence_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -438,7 +434,7 @@ CREATE TABLE `new_appliance` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `enabled` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -453,7 +449,7 @@ CREATE TABLE `notfoodstamp` (
   `notfoodstamp` varchar(45) DEFAULT NULL,
   `enabled` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -468,7 +464,7 @@ CREATE TABLE `offence` (
   `offence` varchar(45) DEFAULT NULL,
   `enabled` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -503,7 +499,7 @@ CREATE TABLE `person` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_34DCD17692FC23A8` (`username_canonical`),
   UNIQUE KEY `UNIQ_34DCD176A0D96FBF` (`email_canonical`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -521,7 +517,7 @@ CREATE TABLE `phone` (
   PRIMARY KEY (`id`),
   KEY `idx_phone_household_idx` (`household_id`),
   CONSTRAINT `idx_phone_household` FOREIGN KEY (`household_id`) REFERENCES `household` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=7018 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -536,7 +532,7 @@ CREATE TABLE `reason` (
   `reason` varchar(45) DEFAULT NULL,
   `enabled` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -551,7 +547,7 @@ CREATE TABLE `relationship` (
   `relation` varchar(45) DEFAULT NULL,
   `enabled` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -566,7 +562,7 @@ CREATE TABLE `state` (
   `state` varchar(45) DEFAULT NULL,
   `enabled` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -588,7 +584,7 @@ CREATE TABLE `temp_contact` (
   KEY `idx_vid` (`contact_type_id`),
   KEY `idx_cid` (`household_id`),
   KEY `idx_date` (`contact_date`)
-) ENGINE=MyISAM AUTO_INCREMENT=7442505 DEFAULT CHARSET=utf8 COMMENT='household contacts';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='household contacts';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -606,7 +602,7 @@ CREATE TABLE `temp_household` (
   `size` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `cid` (`hoh_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10549 DEFAULT CHARSET=utf8 COMMENT='members of client''s household';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='members of client''s household';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -635,16 +631,28 @@ DROP TABLE IF EXISTS `usertable`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `usertable` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(12) DEFAULT NULL,
-  `role` varchar(25) DEFAULT 'ROLE_USER',
-  `fname` varchar(25) NOT NULL DEFAULT '',
-  `sname` varchar(45) NOT NULL DEFAULT '',
-  `email` varchar(45) DEFAULT '',
-  `salt` varchar(32) DEFAULT NULL,
-  `is_active` tinyint(4) DEFAULT '1',
-  `password` varchar(45) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+  `username` varchar(255) NOT NULL,
+  `fname` varchar(25) NOT NULL,
+  `sname` varchar(45) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `salt` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `username_canonical` varchar(255) NOT NULL,
+  `email_canonical` varchar(255) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  `last_login` datetime DEFAULT NULL,
+  `locked` tinyint(1) NOT NULL,
+  `expired` tinyint(1) NOT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  `confirmation_token` varchar(255) DEFAULT NULL,
+  `password_requested_at` datetime DEFAULT NULL,
+  `roles` longtext NOT NULL COMMENT '(DC2Type:array)',
+  `credentials_expired` tinyint(1) NOT NULL,
+  `credentials_expire_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_D18DB39492FC23A8` (`username_canonical`),
+  UNIQUE KEY `UNIQ_D18DB394A0D96FBF` (`email_canonical`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -659,12 +667,11 @@ CREATE TABLE `work` (
   `work` varchar(45) DEFAULT NULL,
   `enabled` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 --
--- Dumping routines for database 'projectmana'
+-- Dumping routines for database 'projectmana_test'
 --
 /*!50003 DROP FUNCTION IF EXISTS `age` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -677,8 +684,27 @@ CREATE TABLE `work` (
 /*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
 DELIMITER ;;
 CREATE DEFINER=`projectmana`@`localhost` FUNCTION `age`(dob DATE) RETURNS int(11)
-return 
+return
 (SELECT (year(now()) - year(dob) - (concat(month(now()),'-01') < right(dob,5)))) ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `fy` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`projectmana`@`localhost` FUNCTION `fy`( dt DATE) RETURNS int(11)
+begin
+        return (select if(month(dt) <7, year(dt),year(dt) + 1));
+	end ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -736,23 +762,44 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-28 11:01:45
--- MySQL dump 10.13  Distrib 5.7.9, for Win32 (AMD64)
---
--- Host: 127.0.0.1    Database: projectmana
--- ------------------------------------------------------
--- Server version	5.7.9-log
+-- Dump completed on 2016-06-09 11:28:51
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Dumping data for table `address`
+--
+
+LOCK TABLES `address` WRITE;
+/*!40000 ALTER TABLE `address` DISABLE KEYS */;
+/*!40000 ALTER TABLE `address` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `address_type`
+--
+
+LOCK TABLES `address_type` WRITE;
+/*!40000 ALTER TABLE `address_type` DISABLE KEYS */;
+/*!40000 ALTER TABLE `address_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `admin`
+--
+
+LOCK TABLES `admin` WRITE;
+/*!40000 ALTER TABLE `admin` DISABLE KEYS */;
+/*!40000 ALTER TABLE `admin` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `admin_outbox`
+--
+
+LOCK TABLES `admin_outbox` WRITE;
+/*!40000 ALTER TABLE `admin_outbox` DISABLE KEYS */;
+/*!40000 ALTER TABLE `admin_outbox` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Dumping data for table `appliance`
@@ -772,6 +819,15 @@ LOCK TABLES `center` WRITE;
 /*!40000 ALTER TABLE `center` DISABLE KEYS */;
 INSERT INTO `center` VALUES (1,'Tahoe City',1,1),(2,'Squaw Valley',1,0),(3,'Kings Beach',1,1),(4,'Soda Springs',1,0),(5,'Truckee',2,1),(6,'Incline Village',3,1),(7,'N/A',8,0);
 /*!40000 ALTER TABLE `center` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `contact`
+--
+
+LOCK TABLES `contact` WRITE;
+/*!40000 ALTER TABLE `contact` DISABLE KEYS */;
+/*!40000 ALTER TABLE `contact` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -805,6 +861,15 @@ INSERT INTO `ethnicity` VALUES (1,'Caucasian','Cau',1),(2,'African-American','Af
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `event`
+--
+
+LOCK TABLES `event` WRITE;
+/*!40000 ALTER TABLE `event` DISABLE KEYS */;
+/*!40000 ALTER TABLE `event` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `fs_amount`
 --
 
@@ -822,6 +887,43 @@ LOCK TABLES `fs_status` WRITE;
 /*!40000 ALTER TABLE `fs_status` DISABLE KEYS */;
 INSERT INTO `fs_status` VALUES (1,'No',1),(2,'Yes',1),(3,'Appl',1),(4,'Unknown',1);
 /*!40000 ALTER TABLE `fs_status` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `household`
+--
+
+LOCK TABLES `household` WRITE;
+/*!40000 ALTER TABLE `household` DISABLE KEYS */;
+INSERT INTO `household` VALUES (1,1,NULL,NULL,4,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,2,NULL,NULL,4,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(3,4,NULL,NULL,4,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,'2016-03-16',0,'2016-03-16',4);
+/*!40000 ALTER TABLE `household` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `household_appliance`
+--
+
+LOCK TABLES `household_appliance` WRITE;
+/*!40000 ALTER TABLE `household_appliance` DISABLE KEYS */;
+/*!40000 ALTER TABLE `household_appliance` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `household_incomesource`
+--
+
+LOCK TABLES `household_incomesource` WRITE;
+/*!40000 ALTER TABLE `household_incomesource` DISABLE KEYS */;
+/*!40000 ALTER TABLE `household_incomesource` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `household_reason`
+--
+
+LOCK TABLES `household_reason` WRITE;
+/*!40000 ALTER TABLE `household_reason` DISABLE KEYS */;
+/*!40000 ALTER TABLE `household_reason` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -855,6 +957,34 @@ INSERT INTO `income_source` VALUES (1,'Cash Assistance',NULL,0),(2,'Social Secur
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `member`
+--
+
+LOCK TABLES `member` WRITE;
+/*!40000 ALTER TABLE `member` DISABLE KEYS */;
+INSERT INTO `member` VALUES (1,1,'Single','Head',NULL,8,1,NULL,NULL,NULL,NULL,NULL,NULL),(2,2,'MoreThanOne','Member',NULL,8,1,NULL,NULL,NULL,NULL,NULL,NULL),(3,2,'Added','Member',NULL,8,1,NULL,NULL,NULL,NULL,NULL,NULL),(4,3,'Benny','Borko','1968-06-14',8,NULL,NULL,NULL,'Male',NULL,NULL,NULL),(5,2,'Hieronymous','Bosch','1972-06-09',1,1,NULL,NULL,'Male',NULL,NULL,NULL);
+/*!40000 ALTER TABLE `member` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `member_offence`
+--
+
+LOCK TABLES `member_offence` WRITE;
+/*!40000 ALTER TABLE `member_offence` DISABLE KEYS */;
+/*!40000 ALTER TABLE `member_offence` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `new_appliance`
+--
+
+LOCK TABLES `new_appliance` WRITE;
+/*!40000 ALTER TABLE `new_appliance` DISABLE KEYS */;
+/*!40000 ALTER TABLE `new_appliance` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `notfoodstamp`
 --
 
@@ -872,6 +1002,24 @@ LOCK TABLES `offence` WRITE;
 /*!40000 ALTER TABLE `offence` DISABLE KEYS */;
 INSERT INTO `offence` VALUES (1,'Felony',1),(2,'Assault',1),(3,'Sex offender',1);
 /*!40000 ALTER TABLE `offence` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `person`
+--
+
+LOCK TABLES `person` WRITE;
+/*!40000 ALTER TABLE `person` DISABLE KEYS */;
+/*!40000 ALTER TABLE `person` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `phone`
+--
+
+LOCK TABLES `phone` WRITE;
+/*!40000 ALTER TABLE `phone` DISABLE KEYS */;
+/*!40000 ALTER TABLE `phone` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -905,12 +1053,39 @@ INSERT INTO `state` VALUES (1,'AK',NULL),(2,'AL',NULL),(3,'AR',NULL),(4,'AZ',NUL
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `temp_contact`
+--
+
+LOCK TABLES `temp_contact` WRITE;
+/*!40000 ALTER TABLE `temp_contact` DISABLE KEYS */;
+/*!40000 ALTER TABLE `temp_contact` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `temp_household`
+--
+
+LOCK TABLES `temp_household` WRITE;
+/*!40000 ALTER TABLE `temp_household` DISABLE KEYS */;
+/*!40000 ALTER TABLE `temp_household` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `temp_member`
+--
+
+LOCK TABLES `temp_member` WRITE;
+/*!40000 ALTER TABLE `temp_member` DISABLE KEYS */;
+/*!40000 ALTER TABLE `temp_member` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `usertable`
 --
 
 LOCK TABLES `usertable` WRITE;
 /*!40000 ALTER TABLE `usertable` DISABLE KEYS */;
-INSERT INTO `usertable` VALUES (1,'projectmana','ROLE_ADMIN','Original','User','',NULL,1,'b42910335688fb5ff0fe971de6f5262c'),(2,'admin','ROLE_ADMIN','Application','Administrator','admin@projectmana.org','56225c363a3c4b53e92ee2ddb3593940',1,'16e711fbad2f007492a3e78b7520e1b1'),(3,'superadmin','ROLE_SUPER_ADMIN','George','Brooks',NULL,'d69629bd6e90ef6f2c15aa7cfccc6b89',1,'b02959189eb06fb84a86265302fc9c17');
+INSERT INTO `usertable` VALUES (1,'admin','Application','Administrator','admin@bogus.info','bln1i2t131cgwg8so8coo4cw4g0g0wc','6ea9da874c182461a5cc3a4049117c2f','admin','admin@bogus.info',1,'2016-06-09 11:59:03',0,0,NULL,'lyT0rSBlMMfa8Y9vcmSqu7uLxPhoP-4dJNZQPQmxQps','2016-06-09 11:13:52','a:1:{i:0;s:10:\"ROLE_ADMIN\";}',0,NULL);
 /*!40000 ALTER TABLE `usertable` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -925,7 +1100,7 @@ INSERT INTO `work` VALUES (1,'Full Time',1),(2,'Part Time',1),(3,'Seasonal',1),(
 UNLOCK TABLES;
 
 --
--- Dumping routines for database 'projectmana'
+-- Dumping routines for database 'projectmana_test'
 --
 /*!50003 DROP FUNCTION IF EXISTS `age` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -938,8 +1113,27 @@ UNLOCK TABLES;
 /*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
 DELIMITER ;;
 CREATE DEFINER=`projectmana`@`localhost` FUNCTION `age`(dob DATE) RETURNS int(11)
-return 
+return
 (SELECT (year(now()) - year(dob) - (concat(month(now()),'-01') < right(dob,5)))) ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `fy` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`projectmana`@`localhost` FUNCTION `fy`( dt DATE) RETURNS int(11)
+begin
+        return (select if(month(dt) <7, year(dt),year(dt) + 1));
+	end ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -983,39 +1177,6 @@ begin
         return (select 12*(year(now()) - arrYear) + (month(now()) - arrMonth));
 	end ;;
 DELIMITER ;
-
-## single head
-set foreign_key_checks = 0;
-insert into member (fname, sname, ethnicity_id, include)
-values ('Single', 'Head', '8', 1);
-set @hohId = last_insert_id();
-insert into household (hoh_id, foodstamp_id)
-values (@hohId, 4);
-set @householdId = last_insert_id();
-update member set household_id = @householdId where id = @hohId;
-
-## several members
-insert into member (fname, sname, ethnicity_id, include)
-values ('MoreThanOne', 'Member', '8', 1);
-set @hohId = last_insert_id();
-insert into member (fname, sname, ethnicity_id, include)
-values ('Added', 'Member', '8', 1);
-set @memberId = last_insert_id();
-insert into household (hoh_id, foodstamp_id)
-values (@hohId, 4);
-set @householdId = last_insert_id();
-update member set household_id = @householdId where id = @hohId;
-update member set household_id = @householdId where id = @memberId;
-
-## v2 household
-insert into member (fname, sname, ethnicity_id, sex, dob)
-values ('Benny', 'Borko', '8', 'Male', '1968-06-14');
-set @hohId = last_insert_id();
-insert into household (hoh_id, foodstamp_id, center_id, compliance, compliance_date, shared, shared_date)
-values (@hohId, 4, 4, 0, '2016-03-16', 0, '2016-03-16');
-set @householdId = last_insert_id();
-update member set household_id = @householdId where id = @hohId;
-
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1030,16 +1191,4 @@ update member set household_id = @householdId where id = @hohId;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-28 10:12:46
-
-
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2016-04-24  9:24:34
+-- Dump completed on 2016-06-09 12:47:58

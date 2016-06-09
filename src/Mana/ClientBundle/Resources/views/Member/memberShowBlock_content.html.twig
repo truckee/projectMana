@@ -1,6 +1,6 @@
 {% set isHead = false %}
 {% if member.id == hohId %}{% set isHead = true %}{%endif%}
-<div class="panel-body"{% if isHead %} style="background-color: lightyellow;"{% endif %}>
+<div id="row{{member.id}}" class="panel-body"{% if isHead %} style="background-color: lightyellow;"{% endif %}>
     <div class="row">
         {{ render(controller('ManaClientBundle:Member:memberHeadShow', {'id':member.id})) }}
         <div class="col-md-3">

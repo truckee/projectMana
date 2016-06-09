@@ -14,6 +14,6 @@ modules:
         - \Helper\Acceptance
         - Db:
             populate: false
-            cleanup: false
-        - Doctrine2:
-            depends: Symfony2
+            cleanup: true
+#        - Doctrine2:
+#            depends: Symfony2

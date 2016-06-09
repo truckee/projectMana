@@ -84,7 +84,7 @@ $(document).ready(function () {
     $("#contact_household_button").click(function () {
         var houseId = $("#contact_householdId").val();
         $(".alert").html("");
-        $(".alert").removeClass( 'alert-warning');
+        $(".alert").removeClass('alert-warning');
         if (houseId !== "") {
             // make sure household not already listed
             var present = false;
@@ -116,7 +116,7 @@ $(document).ready(function () {
     $("#contact_center").change(function () {
         center = $("#contact_center").val();
         $(".alert").html("");
-        $(".alert").removeClass( 'alert-warning');
+        $(".alert").removeClass('alert-warning');
         if (center === "") {
             $("#householdById").hide();
             contactForm.html("");
@@ -132,13 +132,12 @@ $(document).ready(function () {
                 if (data.length > 0) {
                     contactForm.html(data);
                     $("#dialog").dialog('close');
-                }
-                else {
+                } else {
                     $("#dialog").dialog('close');
                     alert('No data found');
                 }
-                })
-            }
+            })
+        }
     });
 
     if ($("#householdById").length > 0) {
@@ -163,7 +162,7 @@ $(document).ready(function () {
         id = this.id;
         nowAt = $(location).attr('pathname');
         houseAt = nowAt.indexOf('/household');
-        if (id.startsWith('memberId')) {
+        if (id.indexOf('memberId') === 0) {
             memberId = id.replace('memberId', '');
             url = nowAt.slice(0, houseAt) + '/member/edit/' + memberId;
             $.get(url, function (data) {
@@ -174,6 +173,7 @@ $(document).ready(function () {
                             text: "Submit",
                             id: "submit",
                             class: "btn-xs btn-primary",
+                            type: "submit",
                             click: function () {
                                 var formData = $("form").serialize();
                                 $.post(url, formData, function (response) {
@@ -190,14 +190,18 @@ $(document).ready(function () {
                                         $("#include" + memberId).html('<b>Excluded:</b> ' + member.excludeDate);
                                     } else {
                                         if (member.isHead) {
-                                            $("#include" + memberId).html('<b>Head</b>');
+                                            memberHTML = '<span id="include' + memberId + '"><b>Head</b></span>';
+                                            $("#row" + memberId).css({"background-color":"lightyellow"});
                                             if (member.id !== member.headId) {
-                                                $("#include" + member.headId).html('<b>Include: </b> Yes');
+                                                headHTML = '<span id="include' + member.headId + '"><b>Include: </b> Yes</span>'
+                                                $("#include" + member.headId).html(headHTML);
+                                                $("#row" + member.headId).css({"background-color":""});
                                             }
                                         } else {
-                                            $("#include" + memberId).html('<b>Include: </b> Yes');
+                                            memberHTML = '<span id="include' + memberId + '"><b>Include: </b> Yes</span>';
                                         }
                                     }
+                                    $("#include" + memberId).html(memberHTML);
                                     $("#fname" + memberId).text(member.fname);
                                     $("#sname" + memberId).text(member.sname);
                                     $("#dob" + memberId).text(member.dob);
@@ -240,7 +244,7 @@ $(document).ready(function () {
                                 var formData = $("form").serialize();
                                 $.post(url, formData, function (response) {
                                     //display form if validation errors
-                                    if (response.startsWith('<form')) {
+                                    if (response.indexOf('<form') === 0) {
                                         $('#memberEditDialog').html(response);
                                         return;
                                     }
@@ -277,31 +281,12 @@ function removeAddress(me) {
     $(me).parents().eq(2).remove();
 }
 
-function tableSort() {
-    //preserves first row
-    var $tbody = $('table#contact_form tbody');
-    $tbody.find('tr').sort(function (a, b) {
-        var tda = $(a).find('td:eq(2)').text(); // can replace 1 with the column you want to sort on
-        var tdb = $(b).find('td:eq(2)').text(); // this will sort on the second column
-        // if a < b return 1
-        return tda > tdb ? 1
-                // else if a > b return -1
-                : tda < tdb ? -1
-                // else they are equal - return 0
-                : 0;
-    }).appendTo($tbody);
-}
-
 function showContactSubmitButton() {
     if ($("input:checked").length === 0) {
         $("#submitButton").hide();
     } else {
         $("#submitButton").show();
     }
-}
-
-function col2Reset() {
-    $("#column2").height(400);
 }
 
 function foodStampShowHide(option) {

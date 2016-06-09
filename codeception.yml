@@ -15,7 +15,7 @@ extensions:
 modules:
     config:
         Db:
-            dsn: 'mysql:host=localhost;dbname=projectmana'
+            dsn: 'mysql:host=localhost;dbname=projectmana_test'
             user: 'projectmana'
             password: 'OrangeWhite'
             dump: tests/_data/dump.sql
