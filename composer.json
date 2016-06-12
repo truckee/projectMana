@@ -36,6 +36,7 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "jms/security-extra-bundle": "~1.5",
         "knplabs/knp-menu-bundle": "~2.0",
+        "psliwa/pdf-bundle": "dev-master",
         "symfony/intl": "2.3.*@dev",
         "braincrafted/bootstrap-bundle": "~2.0",
         "twbs/bootstrap": "3.0.*",

@@ -21,28 +21,28 @@
         <div class="col-sm-1">
             {{ key }}
         </div>
-        <div class="col-sm-1 text-right">
+        <div id="{{ key }}UIS" class="col-sm-1 text-right">
             {{ value.UIS|number_format }}
         </div>
-        <div class="col-sm-1 text-right">
+        <div id="{{ key }}UISPct" class="col-sm-1 text-right">
             {{ value.UISPct|number_format(1) ~ '%' }}
         </div>
-        <div class="col-sm-1 text-right">
+        <div id="{{ key }}IS" class="col-sm-1 text-right">
             {{ value.IS|number_format }}
         </div>
-        <div class="col-sm-1 text-right">
+        <div id="{{ key }}ISPct" class="col-sm-1 text-right">
             {{ value.ISPct|number_format(1) ~ '%' }}
         </div>
-        <div class="col-sm-1 text-right">
+        <div id="{{ key }}UHS" class="col-sm-1 text-right">
             {{ value.UHS|number_format }}
         </div>
-        <div class="col-sm-1 text-right">
+        <div id="{{ key }}UHSPct" class="col-sm-1 text-right">
             {{ value.UHSPct|number_format(1) ~ '%' }}
         </div>
-        <div class="col-sm-1 text-right">
+        <div id="{{ key }}THS" class="col-sm-1 text-right">
             {{ value.THS|number_format }}
         </div>
-        <div class="col-sm-1 text-right">
+        <div id="{{ key }}THSPct" class="col-sm-1 text-right">
             {{ value.THSPct|number_format(1) ~ '%' }}
         </div>
     </div>

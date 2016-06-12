@@ -1,7 +1,6 @@
-var memberCount = $('#member-form').length;
 $(document).ready(function () {
     // for contacts
-    var contactForm = $('#contact_form');
+//    var contactForm = $('#contact_form');
     // for household addresses
     var addressForm = $('#addressForm');
     var addressWidget = $('#addressWidget').attr('data-prototype');
@@ -81,68 +80,68 @@ $(document).ready(function () {
         }
     });
 
-    $("#contact_household_button").click(function () {
-        var houseId = $("#contact_householdId").val();
-        $(".alert").html("");
-        $(".alert").removeClass('alert-warning');
-        if (houseId !== "") {
-            // make sure household not already listed
-            var present = false;
-            var houseCol = $(".text-right");
-            $.each(houseCol, function () {
-                if (this.textContent === houseId) {
-                    present = true;
-                    return;
-                }
-            })
-            if (!present) {
-                var where = $(location).attr('pathname');
-                var url = where.replace('contact/addContacts', 'household/contact/' + houseId);
-                $.get(url, function (data) {
-                    //make sure household exists
-                    if (data !== '') {
-                        $("#latestContacts").prepend(data);
-                    } else {
-                        alert('Household does not exist');
-                    }
-                })
-            } else {
-                alert("Household already listed")
-            }
-            $("#contact_householdId").val("");
-        }
-    });
-
-    $("#contact_center").change(function () {
-        center = $("#contact_center").val();
-        $(".alert").html("");
-        $(".alert").removeClass('alert-warning');
-        if (center === "") {
-            $("#householdById").hide();
-            contactForm.html("");
-        } else {
-            $("#householdById").show();
-            $("#dialog").dialog('open');
-            $("#dialog").dialog("widget")            // get the dialog widget element
-                    .find(".ui-dialog-titlebar-close") // find the close button for this dialog
-                    .hide();
-            var where = $(location).attr('pathname');
-            var url = where.replace('contact/addContacts', 'contact/latest/' + center);
-            var jqxhr = $.get(url, function (data) {
-                if (data.length > 0) {
-                    contactForm.html(data);
-                    $("#dialog").dialog('close');
-                } else {
-                    $("#dialog").dialog('close');
-                    alert('No data found');
-                }
-            })
-        }
-    });
-
-    if ($("#householdById").length > 0) {
-        $("#householdById").hide();
-    }
+//    $("#contact_household_button").click(function () {
+//        var houseId = $("#contact_householdId").val();
+//        $(".alert").html("");
+//        $(".alert").removeClass('alert-warning');
+//        if (houseId !== "") {
+//            // make sure household not already listed
+//            var present = false;
+//            var houseCol = $(".text-right");
+//            $.each(houseCol, function () {
+//                if (this.textContent === houseId) {
+//                    present = true;
+//                    return;
+//                }
+//            })
+//            if (!present) {
+//                var where = $(location).attr('pathname');
+//                var url = where.replace('contact/addContacts', 'household/contact/' + houseId);
+//                $.get(url, function (data) {
+//                    //make sure household exists
+//                    if (data !== '') {
+//                        $("#latestContacts").prepend(data);
+//                    } else {
+//                        alert('Household does not exist');
+//                    }
+//                })
+//            } else {
+//                alert("Household already listed")
+//            }
+//            $("#contact_householdId").val("");
+//        }
+//    });
+//
+//    $("#contact_center").change(function () {
+//        center = $("#contact_center").val();
+//        $(".alert").html("");
+//        $(".alert").removeClass('alert-warning');
+//        if (center === "") {
+//            $("#householdById").hide();
+//            contactForm.html("");
+//        } else {
+//            $("#householdById").show();
+//            $("#dialog").dialog('open');
+//            $("#dialog").dialog("widget")            // get the dialog widget element
+//                    .find(".ui-dialog-titlebar-close") // find the close button for this dialog
+//                    .hide();
+//            var where = $(location).attr('pathname');
+//            var url = where.replace('contact/addContacts', 'contact/latest/' + center);
+//            var jqxhr = $.get(url, function (data) {
+//                if (data.length > 0) {
+//                    contactForm.html(data);
+//                    $("#dialog").dialog('close');
+//                } else {
+//                    $("#dialog").dialog('close');
+//                    alert('No data found');
+//                }
+//            })
+//        }
+//    });
+//
+//    if ($("#householdById").length > 0) {
+//        $("#householdById").hide();
+//    }
 
     $(document).on("click", "#selectAll", function () {
         if ($("#selectAll").prop("checked")) {
@@ -178,7 +177,7 @@ $(document).ready(function () {
                                 var formData = $("form").serialize();
                                 $.post(url, formData, function (response) {
                                     //display form if validation errors
-                                    if (response.startsWith('<form')) {
+                                    if (response.indexOf('<form') === 0) {
                                         $('#memberEditDialog').html(response);
                                         return;
                                     }
@@ -200,8 +199,8 @@ $(document).ready(function () {
                                         } else {
                                             memberHTML = '<span id="include' + memberId + '"><b>Include: </b> Yes</span>';
                                         }
+                                        $("#include" + memberId).html(memberHTML);
                                     }
-                                    $("#include" + memberId).html(memberHTML);
                                     $("#fname" + memberId).text(member.fname);
                                     $("#sname" + memberId).text(member.sname);
                                     $("#dob" + memberId).text(member.dob);
@@ -279,14 +278,6 @@ $(document).ready(function () {
 
 function removeAddress(me) {
     $(me).parents().eq(2).remove();
-}
-
-function showContactSubmitButton() {
-    if ($("input:checked").length === 0) {
-        $("#submitButton").hide();
-    } else {
-        $("#submitButton").show();
-    }
 }
 
 function foodStampShowHide(option) {

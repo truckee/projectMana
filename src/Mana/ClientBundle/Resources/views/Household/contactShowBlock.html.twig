@@ -1,6 +1,6 @@
 {% if household.contacts|length > 0 %}
     <div class="panel panel-info">
-        <div class="panel-heading">5 Most Recent Contacts</div>
+        <div class="panel-heading panel-info">5 Most Recent Contacts</div>
         <div class="panel-body">
             <table class="table">
                 <tr>
@@ -16,10 +16,10 @@
                             <td>{{ household.contacts[i].contactDesc.contactDesc }}</td>
                             <td>{% if household.contacts[i].center is not null %}{{ household.contacts[i].center.center }}{% endif %}</td>
                             <td>{% if household.contacts[i].center is not null %}{{ household.contacts[i].center.county.county }}{% elseif household.contacts[i].county is not null and household.contacts[i].county.id > 0%}{{ household.contacts[i].county.county }}{% endif %}</td>
-                        </tr>    
+                        </tr>
                     {% endif %}
                 {% endfor %}
             </table>
         </div>
-    </div>
-{% endif %}
+    {% endif %}
+</div>

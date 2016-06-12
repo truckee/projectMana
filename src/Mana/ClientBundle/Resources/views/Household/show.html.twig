@@ -6,7 +6,9 @@
             ID: {{household.id}}; Head: {{household.head.fname}} {{household.head.sname}}
         </div>
         {% include 'ManaClientBundle:Default:templates.html.twig' %}
+        <div class="panel-body">
+            <div class="text-center"><a class="btn-sm btn-info" href="{{ path("household_edit", {'id':household.id}) }}">Edit household</a>
+                {#<a class="btn-sm btn-info" href="{{ path("house_card", {'id':household.id}) }}">Create card</a>#}</div>
+        </div>
     </div>
-    <div style="text-align: center;"><a class="btn-sm btn-info" href="{{ path("household_edit", {'id':household.id}) }}">Edit household</a> 
-        {#<a class="btn-sm btn-info" href="{{ path("house_card", {'id':household.id}) }}">Create card</a>#}</div>
-    {% endblock %}
+{% endblock %}

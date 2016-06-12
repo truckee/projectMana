@@ -26,6 +26,8 @@ class StatisticsController extends Controller
      */
     public function generalAction(Request $request) {
         $form = $this->createForm(new ReportCriteriaType());
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:typeLocationCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $criteria = $request->request->get('report_criteria');
@@ -84,10 +86,10 @@ class StatisticsController extends Controller
 
         return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
                     'form' => $form->createView(),
-                    'extra' => 'general',
+                    'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => "stats_general",
                     'title' => 'Report criteria',
-                    'criteriaHeader' => 'Select statistics reporting criteria',
+                    'criteriaHeader' => 'Select general statistics reporting criteria',
         ));
     }
 
@@ -100,6 +102,7 @@ class StatisticsController extends Controller
     public function detailsAction(Request $request) {
         $form = $this->createForm(new ReportCriteriaType());
         $criteria = $request->request->get('report_criteria');
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $reports = $this->get('reports');
@@ -113,6 +116,7 @@ class StatisticsController extends Controller
 
             $report = array(
                 'block' => 'details',
+                'specs' => $templateSpecs,
                 'details' => $data['details'],
                 'title' => 'Distribution statistics',
                 'reportHeader' => $this->getReportHeader($templateSpecs),
@@ -124,7 +128,7 @@ class StatisticsController extends Controller
 
         return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
                     'form' => $form->createView(),
-                    'extra' => false,
+                    'criteriaTemplates' => $criteriaTemplates,
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Select distribution details reporting criteria',
                     'formPath' => 'stats_details',
@@ -138,6 +142,7 @@ class StatisticsController extends Controller
     public function multiAction(Request $request) {
         $form = $this->createForm(new ReportCriteriaType());
         $criteria = $request->request->get('report_criteria');
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $reports = $this->get('reports');
@@ -157,7 +162,7 @@ class StatisticsController extends Controller
         }
         return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
                     'form' => $form->createView(),
-                    'extra' => false,
+                    'criteriaTemplates' => $criteriaTemplates,
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Select multiple contacts report criteria',
                     'formPath' => 'multi_contacts',
@@ -173,6 +178,7 @@ class StatisticsController extends Controller
     public function excelAction(Request $request) {
         $session = $request->getSession();
         $report = $session->get('report');
+        dump($report);
         $specs = $report['specs'];
         $block = $report['block'];
         $filename = ($block == 'statsblock') ? 'General_' : 'Details_';
@@ -213,7 +219,8 @@ class StatisticsController extends Controller
             'county_id' => 0,
         );
         $reports = $this->get('reports');
-        $reports->setStats($criteria);
+        $specs = $this->specs($criteria);
+        $reports->setStats($specs['reportCriteria']);
         $data = $reports->getStats();
         $statistics = $data['statistics'];
         $ctyStats = $reports->getCountyStats();
@@ -281,6 +288,8 @@ class StatisticsController extends Controller
     public function employmentProfileAction(Request $request) {
         $form = $this->createForm(new ReportCriteriaType());
         $criteria = $request->request->get('report_criteria');
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
@@ -295,7 +304,7 @@ class StatisticsController extends Controller
 
         return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
                     'form' => $form->createView(),
-                    'extra' => 'profile',
+                    'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'employment_profile',
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Employment profile reporting criteria',
@@ -308,6 +317,8 @@ class StatisticsController extends Controller
     public function incomeProfileAction(Request $request) {
         $form = $this->createForm(new ReportCriteriaType());
         $criteria = $request->request->get('report_criteria');
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
@@ -323,7 +334,7 @@ class StatisticsController extends Controller
 
         return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
                     'form' => $form->createView(),
-                    'extra' => 'profile',
+                    'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => "income_profile",
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Select income profile reporting criteria',
@@ -336,6 +347,8 @@ class StatisticsController extends Controller
     public function foodstampYesNoProfileAction(Request $request) {
         $form = $this->createForm(new ReportCriteriaType());
         $criteria = $request->request->get('report_criteria');
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
@@ -351,7 +364,7 @@ class StatisticsController extends Controller
 
         return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
                     'form' => $form->createView(),
-                    'extra' => 'profile',
+                    'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => "foodstampYesNo_profile",
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Select SNAP/CalFresh benefits reporting criteria',
@@ -365,6 +378,8 @@ class StatisticsController extends Controller
 
         $form = $this->createForm(new ReportCriteriaType());
         $criteria = $request->request->get('report_criteria');
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
@@ -380,7 +395,7 @@ class StatisticsController extends Controller
 
         return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
                     'form' => $form->createView(),
-                    'extra' => 'profile',
+                    'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'foodstampHowMuch_profile',
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Select SNAP/CalFresh benefits reporting criteria',
@@ -393,6 +408,8 @@ class StatisticsController extends Controller
     public function reasonProfileAction(Request $request) {
         $form = $this->createForm(new ReportCriteriaType());
         $criteria = $request->request->get('report_criteria');
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
@@ -408,7 +425,7 @@ class StatisticsController extends Controller
 
         return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
                     'form' => $form->createView(),
-                    'extra' => 'profile',
+                    'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => "reason_profile",
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Insufficient Food Reporting Criteria',
@@ -421,6 +438,8 @@ class StatisticsController extends Controller
     public function notfoodstampProfileAction(Request $request) {
         $form = $this->createForm(new ReportCriteriaType());
         $criteria = $request->request->get('report_criteria');
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
@@ -435,7 +454,7 @@ class StatisticsController extends Controller
 
         return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
                     'form' => $form->createView(),
-                    'extra' => 'profile',
+                    'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'notfoodstamp_profile',
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Select SNAP/CalFresh benefits reporting criteria',
@@ -449,6 +468,8 @@ class StatisticsController extends Controller
     public function snapProfileAction(Request $request) {
         $form = $this->createForm(new ReportCriteriaType());
         $criteria = $request->request->get('report_criteria');
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
+        $criteriaTemplates[] = 'ManaClientBundle:Statistics:profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $specs = $this->specs($criteria);
@@ -465,7 +486,7 @@ class StatisticsController extends Controller
 
         return $this->render('ManaClientBundle:Statistics:report_criteria.html.twig', array(
                     'form' => $form->createView(),
-                    'extra' => 'profile',
+                    'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'snap_profile',
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Select SNAP/CalFresh benefits reporting criteria',

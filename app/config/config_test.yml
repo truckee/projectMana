@@ -17,14 +17,11 @@ liip_functional_test: ~
 
 doctrine:
     dbal:
-        default_connection: test
-        connections:
-            test:
-                driver:   pdo_mysql
-                host:     localhost
-                port:     3306
-                dbname:   projectmana_test
-                user:     "%database_user%"
-                password: "%database_password%"
-                charset:  UTF8
-                server_version: 5.7
+        driver:   pdo_mysql
+        host:     localhost
+        port:     3306
+        dbname:   projectmana_test
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  UTF8
+        server_version: 5.7

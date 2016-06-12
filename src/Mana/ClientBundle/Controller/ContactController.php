@@ -176,7 +176,7 @@ class ContactController extends Controller {
      * distribution
      * 
      * @Route("/centerSelect", name="center_select")
-     * @Template("ManaClientBundle:Contact:centerSelect.html.twig")
+     * @Template()
      */
     public function centerSelectAction(Request $request) {
         $center = new Center();

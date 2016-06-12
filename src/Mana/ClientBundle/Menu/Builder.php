@@ -22,7 +22,6 @@ class Builder extends ContainerAware
             $menu->addChild('Home', array(
                 'route' => 'home',
             ));
-//            $menu['Home'];
         }
 
 
@@ -32,43 +31,29 @@ class Builder extends ContainerAware
                 'route' => 'contact_new',
                 'routeParameters' => array('id' => $id)
             ));
-//            $menu['Add contact'];
         }
-
-        $menu->addChild('Latest contacts', array(
-            'route' => 'center_select',
-        ));
-//        $menu['Latest contacts'];
 
         $menu->addChild("New contacts", array(
             'route' => 'contacts_add',
         ));
-//        $menu["New contacts"];
 
         $menu->addChild('New household', array(
             'route' => 'household_new',
         ));
-//        $menu['New household'];
 
         $menu->addChild('New household', array(
             'route' => 'household_new',
         ));
-//        $menu['New household'];
         
         $menu->addChild('Reports', array(
             'route' => 'report_menu',
         ));
-//        $menu['Reports'];
         
         if ($securityContext->isGranted('ROLE_ADMIN')) {
             $menu->addChild('Options & users', array(
                 'route' => 'easyadmin',
             ));
-//            $menu['Options & users'];
         }
-
-
-//        $menu['Log out'];
 
         return $menu;
     }
@@ -80,17 +65,6 @@ class Builder extends ContainerAware
         $menu->addChild('Home', array(
             'route' => 'home',
         ));
-//        $menu['Home'];
-
-//        $menu->addChild("Options maintenance", array(
-//            'route' => 'easyadmin',
-//        ));
-//        $menu['Options maintenance'];
-
-//        $menu->addChild("User maintenance", array(
-//            'route' => 'user_main',
-//        ));
-//        $menu['User maintenance'];
 
         return $menu;
     }
@@ -120,21 +94,19 @@ class Builder extends ContainerAware
 
         $menu->addChild("General Statistics", array(
             'route' => 'stats_general',
-//            'routeParameters' => array('dest' => 'general')
         ));
-        $menu["General Statistics"];
 
         $menu->addChild("Distribution details", array(
             'route' => 'stats_details',
-//            'routeParameters' => array('dest' => 'distribution')
         ));
-        $menu["Distribution details"];
+
+        $menu->addChild('Most recent contacts', array(
+            'route' => 'center_select',
+        ));
 
         $menu->addChild("Multiple contacts", array(
             'route' => 'multi_contacts',
-//            'routeParameters' => array('dest' => 'multi')
         ));
-        $menu["Multiple contacts"];
 
         return $menu;
     }

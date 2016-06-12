@@ -11,14 +11,13 @@
 
 namespace Mana\ClientBundle\DataFixtures\Test;
 
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Mana\ClientBundle\Entity\Ethnicity;
 use Mana\ClientBundle\Entity\Center;
+use Mana\ClientBundle\Entity\ContactDesc;
 use Mana\ClientBundle\Entity\County;
+use Mana\ClientBundle\Entity\Ethnicity;
 use Mana\ClientBundle\Entity\FsStatus;
 
 /**
@@ -26,21 +25,8 @@ use Mana\ClientBundle\Entity\FsStatus;
  *
  * @author George
  */
-class Constants extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class Constants extends AbstractFixture implements OrderedFixtureInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
     public function load(ObjectManager $manager)
     {
         $eth = new Ethnicity();
@@ -129,6 +115,7 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface, Cont
         $nevada = $this->getReference('nevada');
         $center2->setCounty($nevada);
         $center2->setEnabled(1);
+        $this->setReference('truckee', $center2);
         $manager->persist($center2);
 
         $center3 = new Center();
@@ -154,6 +141,18 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface, Cont
         $foodstamp->setStatus('Unknown');
         $this->setReference('unk', $foodstamp);
         $manager->persist($foodstamp);
+
+        $desc = new ContactDesc();
+        $desc->setContactDesc('FACE');
+        $desc->setEnabled(true);
+        $this->setReference('face', $desc);
+        $manager->persist($desc);
+
+        $desc1 = new ContactDesc();
+        $desc1->setContactDesc('General Dist.');
+        $desc1->setEnabled(true);
+        $this->setReference('general', $desc1);
+        $manager->persist($desc1);
 
         $manager->flush();
     }

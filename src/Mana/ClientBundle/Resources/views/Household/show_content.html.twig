@@ -1,6 +1,5 @@
 <div class="panel panel-info">
-    <div class="panel-heading">Household</div>
-    <div class="panel panel-default">
+    <div class="panel-heading panel-info">Household</div>
         <div class="panel-body">
             <div class="col-md-10">
                 <b>ID:</b> {{ household.id }}
@@ -27,6 +26,5 @@
             <b>Date: </b>{% if household.sharedDate is not null %}{{ household.sharedDate|date('m/d/Y') }}{% endif %}
         </div>
     </div>
-</div>
 </div>
 

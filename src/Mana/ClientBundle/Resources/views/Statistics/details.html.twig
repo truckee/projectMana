@@ -23,16 +23,16 @@
                 <div class="col-sm-3 text-right">
                     {{ desc }}
                 </div>
-                <div class="col-sm-2 text-right">
+                <div id="{{ key|url_encode }}{{ desc|url_encode }}uniqInd" class="col-sm-2 text-right">
                     {{ type.uniqInd }}
                 </div>
-                <div class="col-sm-2 text-right">
+                <div id="{{ key|url_encode }}{{ desc|url_encode }}totalInd" class="col-sm-2 text-right">
                     {{ type.totalInd }}
                 </div>
-                <div class="col-sm-2 text-right">
+                <div id="{{ key|url_encode }}{{ desc|url_encode }}uniqHouse" class="col-sm-2 text-right">
                     {{ type.uniqHouse }}
                 </div>
-                <div class="col-sm-2 text-right">
+                <div id="{{ key|url_encode }}{{ desc|url_encode }}totalHouse" class="col-sm-2 text-right">
                     {{ type.totalHouse }}
                 </div>
             </div>

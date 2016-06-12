@@ -1,13 +1,18 @@
-<table  class="width80">
-    <tr>
-        <td>Report type: 
-        <td>{{ form_widget(form.contact_type) }}
-    <tr>
-        <td>Either center or county or neither:
-    <tr>
-        <td>Site: 
-        <td id="center_select">{{ form_widget(form.center) }}
-    <tr>
-        <td>County:
-        <td id="county_select">{{ form_widget(form.county) }}
-</table>
+<div class="row">
+    <div class="col-sm-3">
+        {{ form_row(form.contact_type, {'label': 'Report type'}) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <b>Either center or county or neither</b>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-2">
+        <span id="center_select">{{ form_row(form.center, {'label': 'Site'}) }}</span>
+    </div>
+    <div class="col-sm-2">
+        <span id="county_select">{{ form_row(form.county, {'label': 'County'}) }}</span>
+    </div>
+</div>

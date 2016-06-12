@@ -9,9 +9,10 @@ modules:
     enabled:
         - WebDriver:
            url: 'http://mana/app_test.php'
-           browser: firefox
+           browser: chrome
            window_size: 1024x768
         - \Helper\Acceptance
+        - Asserts
         - Db:
             populate: false
             cleanup: true
