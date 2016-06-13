@@ -1,18 +1,38 @@
-<div class="section">Addresses</div>
-<div id="address-list" data-prototype="{% filter escape %}{% include 'ManaClientBundle:Address:address_prototype.html.twig' with {'form': form.addresses.vars.prototype} %}{% endfilter %}">
-{%for address in form.addresses%}
-    <div class="errors">
-        {{ form_errors(address.line1) }}
-        {{ form_errors(address.city) }}
+<div class="panel panel-info" id="address-list">
+    <div class="panel-heading">Addresses</div>
+        <div id="addressWidget" data-prototype="{% filter escape %}{% include 'ManaClientBundle:Address:address_prototype.html.twig' with {'form': form.addresses.vars.prototype} %}{% endfilter %}"></div>
+    <div id="addressForm">
+    {%for address in form.addresses%}
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-2">
+                    {{ form_row(address.addresstype) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(address.line1) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(address.line2) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    {{ form_row(address.city) }}
+                </div>
+                <div class="col-md-2">
+                    {{ form_row(address.county) }}
+                </div>
+                <div class="col-md-2">
+                    {{ form_row(address.state) }}
+                </div>
+                <div class="col-md-2">
+                    {{ form_row(address.zip) }}
+                </div>
+            </div>
+        </div>
+    {%endfor%}
     </div>
-    <ul class="formblock" id="address-form">
-    <li><b>Address type: </b>{{ form_widget(address.addresstype) }} </li>
-    <li><b>Address: </b>{{ form_widget(address.line1) }} {{ form_widget(address.line2) }}</li>
-    <li><b>City: </b>{{ form_widget(address.city) }}</li>
-    <li><b>County: </b>{{ form_widget(address.county) }}</li>
-    <li><b>State: </b>{{ form_widget(address.state) }}</li>
-    <li><b>Zip: </b>{{ form_widget(address.zip) }}</li>
-    </ul>
-{%endfor%}
+    <div class="panel-body">
+        <a class="btn-sm btn-info" href="#" id="add-address">Add address</a>
+    </div>
 </div>
-<p><a class="smallbutton" href="#" id="add-address">Add address</a></p>

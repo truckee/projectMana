@@ -5,12 +5,13 @@
 namespace Mana\ClientBundle\Form\Field;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class YearType extends AbstractType {
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
-        $range = range(Date('Y'), 1930, -1);
+    public function configureOptions(OptionsResolver $resolver) {
+        $range = range(Date('Y'), Date('Y') - 50, -1);
         $years = array();
         foreach ($range as $year) {
             $years[$year] = $year;
@@ -20,12 +21,8 @@ class YearType extends AbstractType {
         ));
     }
 
-    public function getName() {
-        return 'year_names';
-    }
-
     public function getParent() {
-        return 'choice';
+        return ChoiceType::class;
     }
 
 }

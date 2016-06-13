@@ -1,0 +1,14 @@
+{% for member in matched %}
+    <tr {% if loop.index is divisible by(2) %}style="background-color: lightblue;"{% endif %}>
+        <td><a class="btn-sm btn-info" href="{{ path('household_show', {'id':member.household.id}) }}">Select</a>
+        {% if member.household.active == 1 and newadd is not defined %}
+            <a class="btn-sm btn-info" href="{{ path('contact_new', {'id':member.household.id    }) }}">Contact</a>
+        {% endif %}
+        <td>{{ member.household.id }}
+        <td>{% if member.household.active == 0 %}*{% endif %} {{ member.household.head.sname }}, {{ member.household.head.fname }}</td>
+        <td>{% if member.dob %}{{ member.dob|date('m/d/Y') }}{% endif %}</td>
+        <td>
+        {% for address in member.household.addresses %}
+        {{ address.line1 }}{% if address.city %}, {% endif %}{{ address.city }}<br>
+        {% endfor %}
+{% endfor %}

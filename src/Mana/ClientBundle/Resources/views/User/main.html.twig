@@ -1,5 +1,5 @@
 {% extends "ManaClientBundle:Default:layout.html.twig" %}
-{% form_theme form 'ManaClientBundle:Form:fields.html.twig' %}
+
 {% block body %}
 <div class="title">Manage users</div>
     {{ form_errors(form) }}
@@ -33,7 +33,7 @@
             <td>{{ form_widget(form.role) }}</td>
         </tr>
         <tr>
-            <td><input class="smallbutton" type="submit" value="Submit"> <input class="smallbutton" type="reset"></td>
+            <td><input type="submit" value="Submit"> <input type="reset"></td>
         </tr>
     </table>
  </form>

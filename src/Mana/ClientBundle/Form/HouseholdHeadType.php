@@ -4,37 +4,52 @@ namespace Mana\ClientBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Mana\ClientBundle\Form\MemberType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Doctrine\ORM\EntityRepository;
+use Mana\ClientBundle\Form\Field\DobAgeType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class HouseholdHeadType extends AbstractType {
+class HouseholdHeadType extends AbstractType
+{
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-                ->add('members', 'collection', array(
-                    'type' => new MemberType(),
-                    'allow_add' => true,
-                    'allow_delete' => true,
-                    'by_reference' => false,
-                    'error_bubbling' => false,
-                    'cascade_validation' => true,
-                    'prototype' => true,
+                ->add('fname', TextType::class, array(
+                    'label' => 'First name ',
+                ))
+                ->add('sname', TextType::class, array(
+                    'label' => 'Last name ',
+                ))
+                ->add('dob', DobAgeType::class, array(
+                    'label' => 'DOB or age ',
+                ))
+                ->add('sex', ChoiceType::class, array(
+                    'label' => 'Gender ',
+                    'placeholder' => 'Select gender',
+                    'choices' => array('Male' => 'Male', 'Female' => 'Female'),
+                    'choices_as_values' => true,
+                ))
+                ->add('ethnicity', EntityType::class, array(
+                    'label' => 'Ethnicity',
+                    'class' => 'ManaClientBundle:Ethnicity',
+                    'choice_label' => 'ethnicity',
+                    'expanded' => false,
+                    'placeholder' => 'Select ethnicity',
+                    'query_builder' => function(EntityRepository $er) {
+                return $er->createQueryBuilder('e')
+                        ->orderBy('e.ethnicity', 'ASC')
+                ;
+            },
                 ))
         ;
     }
 
-    public function getName() {
-        return 'household_head';
-    }
-
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+    public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'Mana\ClientBundle\Entity\Household',
-            'error_bubbling' => false,
-            'cascade_validation' => true,
-            'csrf_protection' => false,
+            'data_class' => 'Mana\ClientBundle\Entity\Member',
             'required' => false,
-            'attr' => array("class" => "smallform"),
         ));
     }
 

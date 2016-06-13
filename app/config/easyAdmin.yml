@@ -26,7 +26,10 @@ easy_admin:
                     - { entity: 'Relationship', params: { sortField: 'relation', sortDirection: 'ASC' } }
                     - { entity: 'State', params: { sortField: 'state', sortDirection: 'ASC' } }
                     - { entity: 'Work', params: { sortField: 'work', sortDirection: 'ASC' } }
-            - { label: 'Admin home', route: 'admin_index' }
+#            - label: 'Users'
+#              children:
+            - { entity: 'User', params: { sortField: 'username', sortDirection: 'ASC' } }
+            - { label: 'Home', route: 'home' }
     entities:
         Site:
             class: Mana\ClientBundle\Entity\Center
@@ -43,10 +46,14 @@ easy_admin:
                     - {property: 'center', label: 'Site'}
                     - enabled
                     - {property: 'county', type: 'entity', type_options: { class: Mana\ClientBundle\Entity\County }}
+                form_options: { validation_groups: ['Options'] }
         Ethnicity:
             class: Mana\ClientBundle\Entity\Ethnicity
             label: Ethnicities
             list:
+                title: '%%entity_label%%'
+                fields: [ethnicity, abbreviation, enabled]
+            form:
                 title: '%%entity_label%%'
                 fields: [ethnicity, abbreviation, enabled]
         ContactType:
@@ -57,12 +64,19 @@ easy_admin:
                 fields: 
                     - {property: 'contactDesc', label: 'Type'}
                     - enabled
+            form:
+                title: '%%entity_label%%'
+                fields: 
+                    - {property: 'contactDesc', label: 'Type'}
+                    - enabled
         County:
             class: Mana\ClientBundle\Entity\County
             label: Counties
             list:
-                title: '%%entity_label%%'
                 fields: [county, enabled]
+            form:
+                fields: [county, enabled]
+                form_options: { validation_groups: ['Options'] }
         FoodStampBracket:
             class: Mana\ClientBundle\Entity\FsAmount
             label: Foodstamp brackets
@@ -96,10 +110,14 @@ easy_admin:
             label: Income brackets
             list:
                 title: '%%entity_label%%'
-                fields: [bracket, enabled]
+                fields: 
+                    - {property: 'income', label: 'Bracket'}
+                    - enabled
             form:
                 title: '%%entity_label%%'
-                fields: [income, enabled]
+                fields: 
+                    - {property: 'income', label: 'Bracket'}
+                    - enabled
         IncomeSource:
             class: Mana\ClientBundle\Entity\IncomeSource
             label: Income sources
@@ -134,6 +152,7 @@ easy_admin:
         InsufficientFood:
             class: Mana\ClientBundle\Entity\Reason
             label: 'Insufficient food'
+            disabled_actions: ['edit']
             list:
                 title: '%%entity_label%%'
                 fields: [reason, enabled]
@@ -173,3 +192,41 @@ easy_admin:
             form:
                 title: '%%entity_label%%'
                 fields: [work, enabled]
+                
+        User:
+            class: Mana\ClientBundle\Entity\User
+            list:
+                fields: 
+                    - 'enabled'
+                    - 'username'
+                    - {property: 'fname', label: 'First name'}
+                    - {property: 'sname', label: 'Last name'}
+                    - {property: 'email', type: 'email'}
+                    - 'roles'
+                    - 'lastLogin'
+            edit:
+                fields: 
+                    - 'enabled'
+                    - 'username'
+                    - {property: 'fname', label: 'First name'}
+                    - {property: 'sname', label: 'Last name'}
+                    - {property: 'email', type: 'email'}
+                    - 'roles'
+#                    - property: 'roles'
+#                      type: 'choice'
+#                      type_options:
+#                          expanded: true
+#                          choices: 
+#                            'ROLE_USER': 'Normal user'
+#                            'ROLE_ADMIN': 'Administrator'             
+                form_options: { validation_groups: ['Profile'] }
+            new:
+                fields: 
+                    - 'enabled'
+                    - 'username'
+                    - {property: 'fname', label: 'First name'}
+                    - {property: 'sname', label: 'Last name'}
+                    - {property: 'email', type: 'email'}
+                    - {property: 'plainPassword', label: 'Password'}
+                    - 'roles'
+                form_options: { validation_groups: ['Registration'] }

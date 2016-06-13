@@ -1,0 +1,25 @@
+<div class="panel-heading text-center">Residency Distribution</div>
+<div class="panel-body">
+    <div class="row">
+        <div class="col-sm-3 text-right">
+            <b>&lt; 1 month</b>
+        </div>
+        <div class="col-sm-3 text-right">
+            <b>1 mo - 2 yrs</b>
+        </div>
+        <div class="col-sm-3 text-right">
+            <b>&gt;=2 yrs</b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 text-right">
+            {{ statistics['< 1 month']|number_format }}
+        </div>
+        <div class="col-sm-3 text-right">
+            {{ statistics['1 mo - 2 yrs']|number_format }}
+        </div>
+        <div class="col-sm-3 text-right">
+            {{ statistics['>=2 yrs']|number_format }}
+        </div>
+    </div>
+</div>

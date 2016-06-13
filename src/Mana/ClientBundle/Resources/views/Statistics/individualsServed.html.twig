@@ -1,0 +1,18 @@
+<div class="panel-body">
+    <div class="row">
+        <div class="col-sm-3 text-right">
+            <b>Individuals Served</b>
+        </div>
+        <div class="col-sm-3 text-right">
+            <b>Unique Individuals Served</b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 text-right">
+            {{ statistics.IS|number_format }}
+        </div>
+        <div class="col-sm-3 text-right">
+            {{ statistics.UIS|number_format }}
+        </div>
+    </div>
+</div>

@@ -5,12 +5,12 @@ namespace Mana\ClientBundle\Form\Field;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Mana\ClientBundle\Form\DataTransformer\AgeToDOB;
 
 class DobAgeType extends AbstractType {
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+    public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'required' => false,
             'invalid_message' => "DOB or age not valid",
@@ -25,10 +25,6 @@ class DobAgeType extends AbstractType {
 
     public function getParent() {
         return 'text';
-    }
-
-    public function getName() {
-        return 'dob_age';
     }
 
 }

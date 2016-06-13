@@ -3,7 +3,7 @@
 namespace Mana\ClientBundle\Form\Field;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -13,12 +13,12 @@ class CenterAllChoiceType extends AbstractType
         return 'entity';
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
                     'class' => 'ManaClientBundle:Center',
-                    'property' => 'center',
-                    'empty_value' => 'Select site',
+                    'choice_label' => 'center',
+                    'placeholder' => 'Select site',
                     'attr' => array("class" => "smallform"),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('c')
@@ -27,10 +27,5 @@ class CenterAllChoiceType extends AbstractType
                     },
                     'constraints' => array(new NotBlank(array('message' => 'Site must be selected')),),
             ));
-    }
-
-    public function getName()
-    {
-        return 'center';
     }
 }

@@ -1,38 +1,26 @@
-{% extends "ManaClientBundle:Default:layout.html.twig" %}
-{% form_theme form 'ManaClientBundle:Form:fields.html.twig' %}
-{% block body %}
-<div id="contact_store"></div>
-<div class="section">Add contacts</div>
-<div class="title" align="center">{{ message }}</div>
-<div class="errors">{{ form_errors(form.contactDate) }}
-{{ form_errors(form.contactDesc) }}</div>
-<div>
-    <form id="latestContacts" action="{{ path("contacts_add") }}" method="post">
-        <div class="column1">
-            <table>
-                <tr>
-                    <td><b>Date:</b> 
-                    <td>{{ form_widget(form.contactDate) }}
-                <tr>
-                    <td><b>Type:</b> 
-                    <td>{{ form_widget(form.contactDesc) }}
-                <tr>
-                    <td><b>Site:</b> 
-                    <td>{{ form_widget(form.center)}}
-            </table>
-            <div id="household_store"></div>
-            <div id="dialog" title="Collecting data" style="font-size: 10pt;">Please wait while data being gathered</div>
-            <div id="householdById" style="font-size: 10pt;">
-                Household id: <input type="text" id="contact_householdId" rows="1" cols="4">
-                <button type="button" id="contact_household_button">Add household</button>
-            </div>
-        </div>
-        <div class="column2" id="contacts">
-            <p></p>
-            <table id="contact_form">
-            </table>
-{#            <br><input id="submitButton" class="smallbutton" type="submit" name="submit" value="Submit contacts"> #}
-        </div>
-    </form>
+<div class="row">
+    <div class="col-sm-12">
+        <h3>{{ label_info('Most recent contacts for '~site.center) }}</h3>
+    </div>
 </div>
-{% endblock %}
+<div class="row">
+    <div class="col-sm-1"><input type="checkbox" id="selectAll"></div>
+    <div class="col-sm-1 text-right">ID</div>
+    <div class="col-sm-3">Head</div>
+    <div class="col-sm-3">Distribution</div>
+    <div class="col-sm-2">Date</div>
+</div>
+<div id="latestContacts" action="{{ path("contacts_add") }}" method="post">
+    {% for contact in contacts %}
+        <div class="row">
+            <div class="col-sm-1"><input type="checkbox" id="idSelect" name="contact_household[{{ contact.household.id }}]" value="{{ contact.household.id }}"></div>
+            <div class="col-sm-1 text-right">{{ contact.household.id }}</div>
+            <div class="col-sm-3">{{ contact.household.head.sname }}, {{ contact.household.head.fname }}</div>
+            <div class="col-sm-3">{{ contact.contactDesc.contactDesc }}</div>
+            <div class="col-sm-2">{{ contact.contactDate|date('m/d/Y') }}</div>
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-sm-2"><input id="submitButton" type="submit" name="submit" value="Submit contacts"></div>
+    </div>
+</div>

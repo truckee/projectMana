@@ -22,7 +22,7 @@
                 </tr>
 {% for member in roster %}
                 <tr>
-                    <td width="20"><img src="{{ pdf_image('ManaClientBundle:unchecked.png') }}" /></td>
+                    <td width="20"><img src="{{ pdf_image('unchecked.png') }}" /></td>
                     <td>{{ member.head }}</td>
                     <td>{{ member.id }}</td>
                     <td>{% if member.dob is not empty %}{{ member.dob|date('m/d/Y') }}{% else %}___________{% endif %}</td>

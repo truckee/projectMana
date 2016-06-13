@@ -3,6 +3,7 @@
 namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Work
@@ -25,6 +26,7 @@ class Work {
      * @var boolean
      *
      * @ORM\Column(name="work", type="string", nullable=false)
+     * @Assert\NotBlank(message="Work may not be blank")
      */
     protected $work;
 

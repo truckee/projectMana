@@ -2,231 +2,203 @@
 
 namespace Mana\ClientBundle\Form;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Mana\ClientBundle\Form\MemberType;
-use Mana\ClientBundle\Form\AddressType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Mana\ClientBundle\Form\PhoneType;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormEvent;
 use Doctrine\ORM\EntityRepository;
+use Mana\ClientBundle\Form\AddressType;
+use Mana\ClientBundle\Form\PhoneType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 //use Mana\ClientBundle\Utilities\DisabledOptions;
 
 class HouseholdType extends AbstractType
 {
 
-    private $idArray;
-    private $newHeadService;
     private $new;
 
-    public function __construct($newHeadService, $idArray = null, $new = null)
-    {
-        $this->idArray = $idArray;
-        $this->newHeadService = $newHeadService;
+    public function __construct($new = null) {
         $this->new = $new;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    public function buildForm(FormBuilderInterface $builder, array $options) {
         $new = $this->new;
         $builder
-                ->add('active', 'choice', array(
+                ->add('active', ChoiceType::class, array(
                     'choices' => array('1' => 'Yes', '0' => 'No'),
-                    'data' => 1,
+                    'label' => 'Active: ',
+                    'attr' => $options['attr'],
                 ))
-                ->add('addresses', 'collection', array(
-                    'type' => new AddressType(),
+                ->add('addresses', CollectionType::class, array(
+                    'entry_type' => AddressType::class,
+                    'attr' => $options['attr'],
                     'allow_add' => true,
                     'allow_delete' => true,
                     'by_reference' => false,
                     'prototype' => true,
-                    'prototype_name' => '__address__',
-                ))
-                ->add('appliances', 'entity', array(
-                    'class' => 'ManaClientBundle:Appliance',
-                    'property' => 'appliance',
-                    'label' => 'Appliances: ',
-                    'expanded' => true,
-                    'multiple' => true,
-                    'empty_value' => false,
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('a')
-                                ->orderBy('a.appliance', 'ASC')
-                                ->where("a.enabled=1");
-                    },
                 ))
                 ->add('arrivalmonth', new Field\MonthType(), array(
-                    'empty_value' => false,
+                    'placeholder' => false,
+                    'label' => 'Arrival month: ',
+                    'attr' => $options['attr'],
                 ))
                 ->add('arrivalyear', new Field\YearType(), array(
-                    'empty_value' => false,
+                    'placeholder' => false,
+                    'label' => 'Arrival year: ',
+                    'attr' => $options['attr'],
                 ))
-                ->add('compliance', 'choice', array(
+                ->add('compliance', ChoiceType::class, array(
                     'choices' => array('0' => 'No', '1' => 'Yes'),
+                    'label' => 'Compliance: ',
+                    'attr' => $options['attr'],
                 ))
-                ->add('complianceDate', 'date', array(
+                ->add('complianceDate', DateType::class, array(
+                    'label' => 'Compliance date: ',
                     'widget' => 'single_text',
                     'format' => 'MM/dd/yyyy',
+                    'attr' => $options['attr'],
                 ))
-                ->add('dateAdded', 'date', array(
-                    'widget' => 'single_text',
-                    'format' => 'MM/dd/yyyy',
-                ))
-                ->add('foodstamp', 'entity', array(
+//                ->add('dateAdded', DateType::class, array(
+//                    'widget' => 'single_text',
+//                    'format' => 'MM/dd/yyyy',
+//                ))
+                ->add('foodstamp', EntityType::class, array(
                     'class' => 'ManaClientBundle:FsStatus',
-                    'property' => 'status',
-                    'empty_value' => '',
+                    'choice_label' => 'status',
+                    'placeholder' => '',
+                    'label' => 'Food stamp status: ',
+                    'attr' => $options['attr'],
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('f')
                                 ->orderBy('f.id', 'ASC')
                         ;
                     },
                 ))
-                ->add('fsamount', 'entity', array(
+                ->add('fsamount', EntityType::class, array(
                     'class' => 'ManaClientBundle:FsAmount',
-                    'property' => 'amount',
-                    'label' => 'If yes, how much?',
-                    'empty_value' => '',
+                    'choice_label' => 'amount',
+                    'label' => 'If foodstamps, how much?',
+                    'placeholder' => '',
+                    'attr' => $options['attr'],
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('f')
                                 ->orderBy('f.amount', 'ASC')
                                 ->where("f.enabled=1");
                     },
                 ))
-                ->add('headId', 'hidden', array(
-                    'mapped' => false,
-                ))
                 ->add('housing', EntityType::class, array(
                     'class' => 'ManaClientBundle:Housing',
-                    'property' => 'housing',
-                    'empty_value' => '',
+                    'choice_label' => 'housing',
+                    'placeholder' => '',
+                    'label' => 'Housing: ',
+                    'attr' => $options['attr'],
                     'query_builder' => function(EntityRepository $er) use($new) {
                         if (true === $new) {
                             return $er->createQueryBuilder('h')
                                     ->orderBy('h.housing', 'ASC')
                                     ->where("h.enabled=1");
-                        }
-                        else {
+                        } else {
                             return $er->createQueryBuilder('h')
                                     ->orderBy('h.housing', 'ASC');
                         }
                     },
                 ))
-                ->add('income', 'entity', array(
+                ->add('income', EntityType::class, array(
                     'class' => 'ManaClientBundle:Income',
-                    'property' => 'income',
-                    'empty_value' => '',
+                    'choice_label' => 'income',
+                    'placeholder' => '',
+                    'label' => 'Income bracket: ',
+                    'attr' => $options['attr'],
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('i')
                                 ->where("i.enabled=1");
                     },
                 ))
-                ->add('incomeSource', 'entity', array(
-                    'class' => 'ManaClientBundle:IncomeSource',
-                    'property' => 'incomeSource',
-                    'label' => 'Income sources: ',
-                    'expanded' => true,
-                    'multiple' => true,
-                    'empty_value' => '',
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('i')
-                                ->orderBy('i.incomeSource', 'ASC')
-                                ->where("i.enabled=1");
-                    },
-                ))
-                ->add('isHead', 'choice', array(
-                    'expanded' => true,
-                    'mapped' => false,
-                    'choices' => $this->idArray,
-                ))
-                ->add('members', 'collection', array(
-                    'type' => new MemberType(),
-                    'allow_add' => true,
-                    'allow_delete' => true,
-                    'by_reference' => false,
-                    'error_bubbling' => false,
-                    'cascade_validation' => true,
-                    'prototype' => true,
-                ))
-                ->add('notfoodstamp', 'entity', array(
+//                ->add('incomeSource', EntityType::class, array(
+//                    'class' => 'ManaClientBundle:IncomeSource',
+//                    'choice_label' => 'incomeSource',
+//                    'label' => 'Income sources: ',
+//                    'expanded' => true,
+//                    'multiple' => true,
+//                    'placeholder' => '',
+//                    'query_builder' => function(EntityRepository $er) {
+//                        return $er->createQueryBuilder('i')
+//                                ->orderBy('i.incomeSource', 'ASC')
+//                                ->where("i.enabled=1");
+//                    },
+//                ))
+                ->add('notfoodstamp', EntityType::class, array(
                     'class' => 'ManaClientBundle:Notfoodstamp',
-                    'label' => 'If no, why not? ',
-                    'property' => 'notfoodstamp',
-                    'empty_value' => '',
+                    'label' => 'If not food stamps, why not? ',
+                    'choice_label' => 'notfoodstamp',
+                    'placeholder' => '',
+                    'attr' => $options['attr'],
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('f')
                                 ->orderBy('f.notfoodstamp', 'ASC')
                                 ->where("f.enabled=1");
                     },
                 ))
-                ->add('phones', 'collection', array(
-                    'type' => new PhoneType(),
+                ->add('phones', CollectionType::class, array(
+                    'entry_type' => new PhoneType(),
+                    'label' => 'Phone: ',
+                    'attr' => $options['attr'],
                     'allow_add' => true,
                     'allow_delete' => false,
                     'by_reference' => false,
                 ))
-                ->add('reasons', 'entity', array(
+                ->add('reasons', EntityType::class, array(
                     'class' => 'ManaClientBundle:Reason',
-                    'property' => 'reason',
+                    'choice_label' => 'reason',
                     'label' => 'Insufficient food: ',
                     'expanded' => true,
                     'multiple' => true,
-                    'empty_value' => '',
+                    'attr' => [
+                        'class' => 'form-inline',
+                    ],
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('r')
                                 ->orderBy('r.reason', 'ASC')
                                 ->where("r.enabled=1");
                     },
                 ))
-                ->add('shared', 'choice', array(
+                ->add('shared', ChoiceType::class, array(
                     'choices' => array('0' => 'No', '1' => 'Yes'),
+                    'label' => 'Shared: ',
+                    'attr' => $options['attr'],
                 ))
-                ->add('sharedDate', 'date', array(
+                ->add('sharedDate', DateType::class, array(
+                    'label' => 'Shared date: ',
                     'widget' => 'single_text',
                     'format' => 'MM/dd/yyyy',
+                    'attr' => $options['attr'],
                 ))
         ;
-        // if a head of household is necessarily being replaced, copy
-        // required data from member to head of household
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-            $data = $event->getData();
-            if ($data['headId'] <> 0) {
-                $newData = $this->newHeadService->replaceHeadData($data);
-                $event->setData($newData);
-            }
-        });
+
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $household = $event->getData();
             $form = $event->getForm();
             $new = $this->new;
-            $center = $household->getCenter();
-            if (empty($center)) {
+            if (true === $new || empty($household->getCenter())) {
                 $form->add('center', new Field\CenterEnabledChoiceType());
-            }
-            else {
+            } else {
                 $form->add('center', new Field\CenterAllChoiceType());
             }
         });
     }
 
-    public function getName()
-    {
-        return 'household';
-    }
-
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
+    public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'Mana\ClientBundle\Entity\Household',
-            'error_bubbling' => false,
-            'cascade_validation' => true,
-            'csrf_protection' => false,
             'required' => false,
-            'attr' => array("class" => "smallform"),
-            'label_attr' => ['style' => ['font-style' => 'bold']],
+//            'attr' => [
+//                'style' => 'margin: 0 30px 0 10px;'
+//            ],
         ));
     }
 

@@ -9,11 +9,15 @@ use Mana\ClientBundle\Validator\Constraints as ManaAssert;
 /**
  * Client
  *
- * @ORM\Table(name="member", indexes={@ORM\Index(name="idx_client_household_idx", columns={"household_id"}), @ORM\Index(name="idx_client_ethnicity_idx", columns={"ethnicity_id"})})
+ * @ORM\Table(name="member", indexes={
+ *      @ORM\Index(name="idx_client_household_idx", columns={"household_id"}),
+ *      @ORM\Index(name="idx_client_ethnicity_idx", columns={"ethnicity_id"}),
+ *      @ORM\Index(columns={"fname", "sname"}, flags={"fulltext"})})
  * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\MemberRepository")
  */
 class Member
 {
+
     /**
      * @var integer
      *
@@ -27,7 +31,7 @@ class Member
      * @var string
      *
      * @ORM\Column(name="fname", type="string", length=45, nullable=true)
-     * @Assert\NotBlank(message = "Member first name may not be blank")
+     * @Assert\NotBlank(message = "First name may not be blank")
      */
     protected $fname;
 
@@ -35,7 +39,7 @@ class Member
      * @var string
      *
      * @ORM\Column(name="sname", type="string", length=45, nullable=true)
-     * @Assert\NotBlank(message = "Member last name may not be blank", groups={"sname"})
+     * @Assert\NotBlank(message = "Last name may not be blank")
      */
     protected $sname;
 
@@ -43,8 +47,8 @@ class Member
      * @var \DateTime
      *
      * @ORM\Column(name="dob", type="date", nullable=true)
-     * @Assert\NotBlank(message = "Member DOB must be valid date or age")
-     * @ManaAssert\NotFutureDate
+     * @Assert\NotBlank(message = "DOB must be valid date or age")
+     * @ManaAssert\NotFutureDate(message="Future date not allowed")
      */
     protected $dob;
 
@@ -66,7 +70,7 @@ class Member
      * @var string
      *
      * @ORM\Column(name="sex", type="string", length=45, nullable=true)
-     * @Assert\NotBlank(message = "Member gender may not be blank")
+     * @Assert\NotBlank(message = "Gender may not be blank")
      */
     protected $sex;
 
@@ -77,7 +81,7 @@ class Member
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ethnicity_id", referencedColumnName="id")
      * })
-     * @Assert\NotBlank(message = "Member ethnicity may not be blank")
+     * @Assert\NotBlank(message = "Ethnicity may not be blank")
      */
     protected $ethnicity;
 
@@ -107,7 +111,7 @@ class Member
     /**
      * Get fname
      *
-     * @return string 
+     * @return string
      */
     public function getFname()
     {
@@ -130,7 +134,7 @@ class Member
     /**
      * Get sname
      *
-     * @return string 
+     * @return string
      */
     public function getSname()
     {
@@ -153,7 +157,7 @@ class Member
     /**
      * Get dob
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDob()
     {
@@ -176,7 +180,7 @@ class Member
     /**
      * Get include
      *
-     * @return string 
+     * @return string
      */
     public function getInclude()
     {
@@ -199,7 +203,7 @@ class Member
     /**
      * Get excludeDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getExcludeDate()
     {
@@ -222,7 +226,7 @@ class Member
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -245,7 +249,7 @@ class Member
     /**
      * Get sex
      *
-     * @return string 
+     * @return string
      */
     public function getSex()
     {
@@ -268,7 +272,7 @@ class Member
     /**
      * Get ethnicity
      *
-     * @return \Mana\ClientBundle\Entity\Ethnicity 
+     * @return \Mana\ClientBundle\Entity\Ethnicity
      */
     public function getEthnicity()
     {
@@ -291,7 +295,7 @@ class Member
     /**
      * Get household
      *
-     * @return \Mana\ClientBundle\Entity\Household 
+     * @return \Mana\ClientBundle\Entity\Household
      */
     public function getHousehold()
     {
@@ -324,13 +328,13 @@ class Member
     /**
      * Get relation
      *
-     * @return \Mana\ClientBundle\Entity\Relationship 
+     * @return \Mana\ClientBundle\Entity\Relationship
      */
     public function getRelation()
     {
         return $this->relation;
-    }    
- 
+    }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
@@ -342,7 +346,8 @@ class Member
      */
     protected $offences;
 
-    public function addOffence(Offence $offence) {
+    public function addOffence(Offence $offence)
+    {
         $offence->addMember($this); // synchronously updating inverse side
         $this->offences[] = $offence;
     }
@@ -352,12 +357,14 @@ class Member
      *
      * @param \Mana\ClientBundle\Entity\Offence $offences
      */
-    public function removeOffence(Offence $offence) {
+    public function removeOffence(Offence $offence)
+    {
         $this->offences->removeElement($offence);
         $offence->setMember(null);
     }
 
-    public function getOffences() {
+    public function getOffences()
+    {
         return $this->offences;
     }
 
@@ -377,7 +384,8 @@ class Member
      * @param \Mana\ClientBundle\Entity\Work $work
      * @return Contact
      */
-    public function setWork(Work $work = null) {
+    public function setWork(Work $work = null)
+    {
         $this->work = $work;
 
         return $this;
@@ -386,9 +394,10 @@ class Member
     /**
      * Get work
      *
-     * @return \Mana\ClientBundle\Entity\Work 
+     * @return \Mana\ClientBundle\Entity\Work
      */
-    public function getWork() {
+    public function getWork()
+    {
         return $this->work;
     }
 

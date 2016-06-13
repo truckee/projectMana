@@ -1,0 +1,14 @@
+<div class="row">
+    {% if form.vars.value.include == 1 %}
+        <div class="col-md-2">
+            {{ form_row(form.isHead) }}
+        </div>
+        <div class="col-md-2">
+            {{ form_row(form.include) }}
+        </div>
+    {% else %}
+        <div class="col-md-2">
+            Excluded: {{form.vars.value.excludeDate|date('m/d/Y')}}
+        </div>
+    {% endif %}
+</div>

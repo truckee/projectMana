@@ -3,35 +3,31 @@
 namespace Mana\ClientBundle\Form\Field;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class CenterEnabledChoiceType extends AbstractType
 {
+
     public function getParent() {
         return 'entity';
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
+    public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
-                    'class' => 'ManaClientBundle:Center',
-                    'property' => 'center',
-                    'empty_value' => 'Select site',
-                    'attr' => array("class" => "smallform"),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('c')
+            'class' => 'ManaClientBundle:Center',
+            'label' => 'Site',
+            'choice_label' => 'center',
+            'placeholder' => 'Select site',
+            'query_builder' => function(EntityRepository $er) {
+                return $er->createQueryBuilder('c')
                                 ->where('c.enabled=1')
                                 ->orderBy('c.center', 'ASC')
-                                ;
-                    },
-                    'constraints' => array(new NotBlank(array('message' => 'No site elected', 'groups' => array('Default'))))
-            ));
+                ;
+            },
+            'constraints' => array(new NotBlank(array('message' => 'No site elected', 'groups' => array('Contact'))))
+        ));
     }
 
-    public function getName()
-    {
-        return 'center';
-    }
 }

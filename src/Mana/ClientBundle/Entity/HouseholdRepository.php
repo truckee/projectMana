@@ -24,7 +24,7 @@ class HouseholdRepository extends EntityRepository
         $household->setActive(1);
         $household->setDateAdded(new \DateTime());
         $member->setInclude(1);
-        $relation = $em->getRepository('ManaClientBundle:Relationship')->find(1);
+        $relation = $em->getRepository('ManaClientBundle:Relationship')->findOneBy(['relation' => 'Self']);
         $member->setRelation($relation);
         $foodstamp = $household->getFoodstamp();
         if (empty($foodstamp)){

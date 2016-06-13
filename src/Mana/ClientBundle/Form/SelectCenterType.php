@@ -15,7 +15,7 @@ namespace Mana\ClientBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SelectCenterType extends AbstractType
 {
@@ -25,7 +25,7 @@ class SelectCenterType extends AbstractType
             ->add('center', new Field\CenterEnabledChoiceType());
     }
     
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'csrf_protection' => false,
@@ -33,8 +33,4 @@ class SelectCenterType extends AbstractType
             ));
 }
 
-    public function getName()
-    {
-        return 'center';
-    }
 }

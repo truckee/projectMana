@@ -1,0 +1,166 @@
+{% set start = specs.startDate|date('F, Y') %}
+{% set end = specs.endDate|date('F, Y') %}
+<div class="title">Statistics for {{ start }}{% if (start != end) %} through {{ end }}{% endif %}
+    <br>
+{% if specs.contact_type != '' %}Type = {{ specs.contact_type }}{% if  specs.county != '' or specs.center != '' %}; {% endif %}{% endif %}
+{% if  specs.county != '' %}Location = {{ specs.county }} county{% endif %}{% if specs.center != '' %}Site = {{ specs.center }}{% endif %}
+
+    <br>Note: Some inconsistencies may exist due to households with missing data<br>
+</div>
+<div  class="section70">General statistics</div>
+
+<table class="stats">
+    <tr>
+        <td>&nbsp;</td>
+        <td><b>Individuals Served</b></td>
+        <td><b>Unique Individuals Served</b></td>
+        <td>&nbsp;</td>
+    <tr>
+        <td>&nbsp;</td>
+        <td>{{ statistics.IS|number_format }}</td>
+        <td>{{ statistics.UIS|number_format }}</td>
+        <td>&nbsp;</td>
+</table>
+<hr style="width:70%; margin-left: 15%;">
+<table class="stats">
+    <tr>
+        <td>&nbsp;</td>
+        <td><b>Total Households Served</b></td>
+        <td><b>Unique Households Served</b></td>
+        <td>&nbsp;</td>
+    <tr>
+        <td>&nbsp;</td>
+        <td>{{ statistics.THS|number_format }}</td>
+        <td>{{ statistics.UHS|number_format }}</td>
+        <td>&nbsp;</td>
+</table>
+<hr style="width:70%; margin-left: 15%;">
+<table class="stats">
+    <tr>
+        <td>&nbsp;</td>
+        <td>{% if specs.contact_type != ''%}<b>New {{ specs.contact_type }}</b>{% else %}&nbsp;{% endif %}</td>
+        <td><b>New Households<br>(all types)</b></td>
+        <td><b>Unique New Individuals<br>(all types)</b></td>
+
+    <tr>
+        <td>&nbsp;</td>
+        <td>{% if specs.contact_type != ''%}{{ statistics['NewByType']|number_format }}{% else %}&nbsp;{% endif %}</td>
+        <td>{{ statistics['NewHouseholds'] }}</td>
+        <td>{{ statistics['Unique New Individuals']|number_format }}</td>
+</table>
+
+<div class="section70">Member ethnicity distribution</div>
+<table class="stats">
+    <tr>
+    <td><b>Caucasian</b><br>
+                {% if statistics['Caucasian'] is defined %}{{ statistics['Caucasian']|number_format }}{% else %}0{% endif %}</td>
+    <td><b>African-American</b><br>
+                {% if statistics['African-American'] is defined %}{{ statistics['African-American']|number_format }}{% else %}0{% endif %}</td>
+    <td><b>Asian</b><br>
+                {% if statistics['Asian'] is defined %}{{ statistics['Asian']|number_format }}{% else %}0{% endif %}</td>
+    <td><b>Hispanic</b><br>
+                {% if statistics['Hispanic'] is defined %}{{ statistics['Hispanic'] }}{% else %}0{% endif %}</td>
+</table>
+<hr style="width:70%; margin-left: 15%;">
+<table class="stats">
+    <td><b>Native American</b><br>
+                {% if statistics['Native American'] is defined %}{{ statistics['Native American']|number_format }}{% else %}0{% endif %}</td>
+    <td><b>Hawaiian/Pacific Islander</b><br>
+                {% if statistics['Hawaiian/Pacific Islander'] is defined %}{{ statistics['Hawaiian/Pacific Islander']|number_format }}{% else %}0{% endif %}</td>
+    <td><b>Other</b><br>
+                {% if statistics['Other'] is defined %}{{ statistics['Other'] }}{% else %}0{% endif %}</td>
+    <td><b>Unknown</b><br>
+                {% if statistics['Unknown'] is defined %}{{ statistics['Unknown'] }}{% else %}0{% endif %}</td>
+</table>
+<div  class="section70">Age distribution</div>
+<table class="stats">
+    <tr>
+    <td><b>Under 6</b><br>{{ statistics['Under 6']|number_format }}</td>
+    <td><b>6 to 18</b><br>{{ statistics['6 - 18']|number_format }}</td>
+    <td><b>19 to 59</b><br>{{ statistics['19 - 59']|number_format }}</td>
+    <td><b>60+</b><br>{{ statistics['60+']|number_format }}</td>
+</table>
+<div class="section70">Age/Gender distribution</div>
+<table class="stats">
+    <tr>
+    <td><b>Female Children</b><br>{{ statistics['FC']|number_format }}</td>
+    <td><b>Male Children</b><br>{{ statistics['MC']|number_format }}</td>
+    <td><b>Female Adults</b><br>{{ statistics['FA']|number_format }}</td>
+    <td><b>Male Adults</b><br>{{ statistics['MA']|number_format }}</td>
+</table>
+<div class="section70">Residency distribution</div>
+<table class="stats">
+    <tr>
+    <td><b>&lt; 1 month</b><br>{{ statistics['< 1 month']|number_format }}</td>
+    <td><b>1 mo - 2 yrs</b><br>{{ statistics['1 mo - 2 yrs']|number_format }}</td>
+    <td><b>&gt;=2 yrs</b><br>{{ statistics['>=2 yrs']|number_format }}</td>
+    <td>&nbsp;</td>
+</table>
+
+{% if  specs.county is sameas(0) and specs.center is sameas(0) %}
+<div class="section70">County distribution</div>
+<table class="stats">
+    <tr>
+    <td>&nbsp;</td>
+    <td>Unique Individuals Served</td>
+    {% if ctyPcts != 0 %}<td>&nbsp;</td>{% endif %}
+    <td>Total Individuals Served</td>
+    {% if ctyPcts != 0 %}<td>&nbsp;</td>{% endif %}
+    <td>Unique Households Served</td>
+    {% if ctyPcts != 0 %}<td>&nbsp;</td>{% endif %}
+    <td>Total Households Served</td>
+    {% if ctyPcts != 0 %}<td>&nbsp;</td>{% endif %}
+</table>
+{% for key, value in ctyStats %}
+<table class="stats">
+    <td>{{ key }}</td>
+    {% set cty = key %}
+    <td>{{ value.UIS }}</td>
+    {% if ctyPcts != 0 %}<td>{{ value.UISPct|number_format(1) ~ '%' }}</td>{% endif %}
+    <td>{{ value.IS }}</td>
+    {% if ctyPcts != 0 %}<td>{{ value.ISPct|number_format(1) ~ '%' }}</td>{% endif %}
+    <td>{{ value.UHS }}</td>
+    {% if ctyPcts != 0 %}<td>{{ value.UHSPct|number_format(1) ~ '%' }}</td>{% endif %}
+    <td>{{ value.THS }}</td>
+    {% if ctyPcts != 0 %}<td>{{ value.THSPct|number_format(1) ~ '%' }}</td>{% endif %}
+</table>
+{% endfor %}
+{% endif %}
+<div class="section70">Family size</div>
+
+<table class="stats">
+    <tr>
+    <td><b>One</b></td>
+    <td><b>Two</b></td>
+    <td><b>Three</b></td>
+    <td><b>Four</b></td>
+    <td><b>Five</b></td>
+    <td><b>Six or more</b></td>
+</table>
+<table class="stats">
+    <tr>
+    <td>{{ statistics['Single']|number_format }}</td>
+    <td>{{ statistics['Two']|number_format }}</td>
+    <td>{{ statistics['Three']|number_format }}</td>
+    <td>{{ statistics['Four']|number_format }}</td>
+    <td>{{ statistics['Five']|number_format }}</td>
+    <td>{{ statistics['Six or more']|number_format }}</td>
+</table>
+{% if (start == end) %}
+<div class="section70">Frequency Distribution for Month</div>
+
+<table class="stats">
+    <tr>
+    <td><b>1x</b></td>
+    <td><b>2x</b></td>
+    <td><b>3x</b></td>
+    <td><b>&gt;=4x</b></td>
+</table>
+<table class="stats">
+    <tr>
+    <td>{{ statistics['1x']|number_format }}</td>
+    <td>{{ statistics['2x']|number_format }}</td>
+    <td>{{ statistics['3x']|number_format }}</td>
+    <td>{{ statistics['4x']|number_format }}</td>
+</table>
+{% endif %}

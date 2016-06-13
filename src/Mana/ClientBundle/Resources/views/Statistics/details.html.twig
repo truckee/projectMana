@@ -1,29 +1,41 @@
-{% block body %}
-{% set start = specs.startDate|date('F Y') %}
-{% set end = specs.endDate|date('F Y') %}
-<div class="title">Distribution Details for {{ start }}
-    {% if (start != end) %} through {{ end }}{% endif %}</div>
 {% for key,data in details.details %}
-<div class="section70">{{ key }}</div>
-{#<table class="width60">#}
-    <table class="stats">
-        <tr>
-        <td>&nbsp;</td>
-        <td>Unique<br>Individuals<br>Served</td>
-        <td>Total<br>Individuals<br>Served</td>
-        <td>Unique<br>Households<br>Served</td>
-        <td>Total<br>Households<br>Served</td>
-    </table>
-{% for desc, type in data %}
-    <table class="stats">
-        <tr>
-        <td>{{ desc }}</td>
-        <td>{{ type.uniqInd }}</td>
-        <td>{{ type.totalInd }}</td>
-        <td>{{ type.uniqHouse }}</td>
-        <td>{{ type.totalHouse }}</td>
-    </table>
+    <div class="panel-heading">{{ key }}</div>
+    {#<table class="width60">#}
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-3 text-right">
+            </div>
+            <div class="col-sm-2 text-right">
+                Unique Individuals Served
+            </div>
+            <div class="col-sm-2 text-right">
+                Total Individuals Served
+            </div>
+            <div class="col-sm-2 text-right">
+                Unique Households Served
+            </div>
+            <div class="col-sm-2 text-right">
+                Total Households Served
+            </div>
+        </div>
+        {% for desc, type in data %}
+            <div class="row">
+                <div class="col-sm-3 text-right">
+                    {{ desc }}
+                </div>
+                <div id="{{ key|url_encode }}{{ desc|url_encode }}uniqInd" class="col-sm-2 text-right">
+                    {{ type.uniqInd }}
+                </div>
+                <div id="{{ key|url_encode }}{{ desc|url_encode }}totalInd" class="col-sm-2 text-right">
+                    {{ type.totalInd }}
+                </div>
+                <div id="{{ key|url_encode }}{{ desc|url_encode }}uniqHouse" class="col-sm-2 text-right">
+                    {{ type.uniqHouse }}
+                </div>
+                <div id="{{ key|url_encode }}{{ desc|url_encode }}totalHouse" class="col-sm-2 text-right">
+                    {{ type.totalHouse }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endfor %}
-{#</table>#}
-{% endfor %}
-{% endblock %}

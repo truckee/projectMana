@@ -5,16 +5,26 @@ namespace Mana\ClientBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Mana\ClientBundle\Form\MemberType;
+use Mana\ClientBundle\Entity\Member;
 
 class DefaultController extends Controller
 {
 
     /**
-     * @Route("/")
-     * @Template("ManaClientBundle:Default:index.html.twig")
+     * @Route("/home", name="home")
+     * @Template()
      */
     public function indexAction()
     {
+        return array();
+    }
+    
+    /**
+     * @Route("/reportMenu", name="report_menu")
+     * @Template()
+     */
+    public function reportMenuAction() {
         return array();
     }
 
@@ -79,5 +89,25 @@ class DefaultController extends Controller
     {
         throw new \Exception('A purposely thrown PHP exception');
     }
+    
+    public function scriptAction() {
+        $reports = $this->get('reports');
+        $chart = $reports->getFiscalYearToDate();
 
+        return $this->render('ManaClientBundle:Default:script.js.twig', array(
+            'chart' => $chart,
+        ));
+    }
+
+    /**
+     * @Route("test", name="test")
+     * @Template()
+     */
+    public function testMember() {
+        $member = new Member();
+        $form = $this->createForm(new MemberType(), $member);
+        return array(
+            'form' => $form->createView(),
+        );
+    }
 }

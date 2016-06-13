@@ -1,0 +1,20 @@
+# Codeception Test Suite Configuration
+#
+# Suite for acceptance tests.
+# Perform tests in browser using the WebDriver or PhpBrowser.
+# If you need both WebDriver and PHPBrowser tests - create a separate suite.
+
+class_name: AcceptanceTester
+modules:
+    enabled:
+        - WebDriver:
+           url: 'http://mana/app_test.php'
+           browser: chrome
+           window_size: 1024x768
+        - \Helper\Acceptance
+        - Asserts
+        - Db:
+            populate: false
+            cleanup: true
+#        - Doctrine2:
+#            depends: Symfony2

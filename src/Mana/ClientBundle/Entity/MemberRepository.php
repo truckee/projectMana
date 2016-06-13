@@ -21,10 +21,10 @@ class MemberRepository extends EntityRepository {
             if (empty($memberSname)) {
                 $member->setSname($sname);
             }
-            $excluded = $member->getExcludeDate();
-            if ($member->getInclude() == 'No' && empty($excluded)) {
-                $member->setExcludeDate(new \DateTime);
-            }
+//            $excluded = $member->getExcludeDate();
+//            if ($member->getInclude() == 'No' && empty($excluded)) {
+//                $member->setExcludeDate(new \DateTime);
+//            }
             $em->persist($member);
         }
     }

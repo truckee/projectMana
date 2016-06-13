@@ -4,6 +4,7 @@ namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * County
@@ -27,6 +28,7 @@ class County
      * @var string
      *
      * @ORM\Column(name="county", type="string", length=15, nullable=false)
+     * @Assert\NotBlank(message="County may not be blank", groups={"Options"})
      */
     protected $county;
 

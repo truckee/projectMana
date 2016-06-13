@@ -3,6 +3,7 @@
 namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * IncomeSource
@@ -26,6 +27,7 @@ class IncomeSource
      * @var string
      *
      * @ORM\Column(name="income_source", type="string", length=45, nullable=true)
+     * @Assert\NotBlank(message="Source may not be blank")
      */
     protected $incomeSource;
 

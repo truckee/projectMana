@@ -4,8 +4,12 @@ namespace Mana\ClientBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class ContactType extends AbstractType
 {
@@ -14,11 +18,11 @@ class ContactType extends AbstractType
     {
         $builder
                 ->add('center', new Field\CenterEnabledChoiceType())
-                ->add('contactDesc', 'entity', array(
+                ->add('contactDesc', EntityType::class, array(
                     'class' => 'ManaClientBundle:ContactDesc',
-                    'property' => 'contactDesc',
-                    'empty_value' => 'Select contact type',
-                    'attr' => array("class" => "smallform"),
+                    'label' => 'Contact type',
+                    'choice_label' => 'contactDesc',
+                    'placeholder' => 'Select contact type',
                     'query_builder' => function(EntityRepository $er) {
                 return $er->createQueryBuilder('c')
                         ->where('c.enabled=1')
@@ -26,33 +30,31 @@ class ContactType extends AbstractType
                 ;
             },
                 ))
-                ->add('contactDate', 'date', array(
+                ->add('contactDate', DateType::class, array(
+                    'widget' => 'single_text',
+                    'html5' => false,
+                    'attr' => ['class' => 'js-datepicker'],
                     'format' => 'M/d/y',
                     'years' => range(date('Y'), date('Y') - 5),
                 ))
-                ->add('household', 'choice', array(
+                ->add('household', ChoiceType::class, array(
                     'mapped' => false,
                     'expanded' => true,
                     'multiple' => true,
                 ))
-                ->add('householdId', 'text', array(
+                ->add('householdId', TextType::class, array(
                     'mapped' => false,
                 ))
         ;
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'Mana\ClientBundle\Entity\Contact',
             'csrf_protection' => false,
             'required' => false,
         ));
-    }
-
-    public function getName()
-    {
-        return 'contact';
     }
 
 }

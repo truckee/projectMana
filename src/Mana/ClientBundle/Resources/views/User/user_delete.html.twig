@@ -1,12 +1,12 @@
 {% extends "ManaClientBundle:Default:layout.html.twig" %}
-{% form_theme form 'ManaClientBundle:Form:fields.html.twig' %}
+
 {% block body %}
 <div class="title">{{ title }}: {{ user.fname }} {{ user.sname }}</div>
 <form action="{{ path("user_delete", {'id': user.id }) }}" method="post">
     <table class="width40">
         <tr>
-            <td><input class="smallbutton" type="submit" name="submit" value="Delete user"> </td>
-            <td><input class="smallbutton" type="reset" name="reset" value="Cancel" onclick="history.go(-1);return false;"></div></td>
+            <td><input type="submit" name="submit" value="Delete user"> </td>
+            <td><input type="reset" name="reset" value="Cancel" onclick="history.go(-1);return false;"></div></td>
     </table>
         
 </form>

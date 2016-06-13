@@ -4,6 +4,7 @@ namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Center
@@ -26,6 +27,7 @@ class Center
      * @var string
      *
      * @ORM\Column(name="center", type="string", length=20, nullable=true)
+     * @Assert\NotBlank(message="Site may not be blank", groups={"Options"})
      */
     protected $center;
 
@@ -36,6 +38,7 @@ class Center
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="county_id", referencedColumnName="id")
      * })
+     * @Assert\NotBlank(message="County may not be blank", groups={"Options"})
      */
     protected $county;
 

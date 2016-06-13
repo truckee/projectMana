@@ -1,0 +1,13 @@
+{% extends "ManaClientBundle:Default:layout.html.twig" %}
+{% block body %}
+    {% include 'ManaClientBundle:Household:v1HouseholdEditHeader.html.twig' %}
+    <form action="{{ path('household_edit', { 'id': household.id }) }}" method="post" class="form-horizontal">
+        {{ bootstrap_set_style('horizontal') }}
+        {{ bootstrap_set_col_size('md') }}
+        {{ bootstrap_set_widget_col(4) }}
+        {{ bootstrap_set_label_col(2) }}                    
+        {% include 'ManaClientBundle:Member:memberRequired.html.twig' %}
+        <input type="submit" value="Submit">
+        <input type="reset">
+    </form>
+{% endblock %}

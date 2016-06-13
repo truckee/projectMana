@@ -4,10 +4,13 @@ namespace Mana\ClientBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Mana\ClientBundle\Form\MemberType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class HouseholdMembersType extends AbstractType
 {
@@ -23,21 +26,20 @@ class HouseholdMembersType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('isHead', 'choice', array(
+                ->add('isHead', ChoiceType::class, array(
                     'expanded' => true,
                     'mapped' => false,
                     'choices' => $this->idArray,
                 ))
-                ->add('headId', 'hidden', array(
+                ->add('headId', HiddenType::class,array(
                     'mapped' => false,
                 ))
-                ->add('members', 'collection', array(
-                    'type' => new MemberType(),
+                ->add('members', CollectionType::class, array(
+                    'entry_type' => new MemberType(),
                     'allow_add' => true,
                     'allow_delete' => true,
                     'by_reference' => false,
                     'error_bubbling' => false,
-                    'cascade_validation' => true,
                     'prototype' => true,
                 ))
         ;
@@ -50,20 +52,12 @@ class HouseholdMembersType extends AbstractType
         });
     }
 
-    public function getName()
-    {
-        return 'household';
-    }
-
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'Mana\ClientBundle\Entity\Household',
-//            'error_bubbling' => false,
-//            'cascade_validation' => true,
             'csrf_protection' => false,
             'required' => false,
-//            'attr' => array("class" => "smallform"),
         ));
     }
 
