@@ -3,7 +3,6 @@
 namespace Mana\ClientBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -11,8 +10,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Mana\ClientBundle\Entity\Contact;
 use Mana\ClientBundle\Entity\Center;
 use Mana\ClientBundle\Form\ContactType;
-use Mana\ClientBundle\Form\SelectCenterType;
-use \Mana\ClientBundle\Form\ReportCriteriaType;
 
 /**
  * Contact controller.
@@ -33,7 +30,7 @@ class ContactController extends Controller {
         }
         $contact = new Contact();
         $contact->setContactDate(date_create());
-        $form = $this->createForm(new ContactType(), $contact);
+        $form = $this->createForm(\Mana\ClientBundle\Form\ContactType::class, $contact);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -44,8 +41,10 @@ class ContactController extends Controller {
             $household->addContact($contact);
             $em->persist($household);
             $em->flush();
+            $flash = $this->get('braincrafted_bootstrap.flash');
+            $flash->alert("Contact added for household $id");
 
-            return $this->redirect($this->generateUrl('contact_new', array('id' => $id)));
+            return $this->redirectToRoute('contact_new', array('id' => $id));
         }
 
         return array(
@@ -66,7 +65,7 @@ class ContactController extends Controller {
         if (!$contact) {
             throw $this->createNotFoundException('Unable to find Contact.');
         }
-        $form = $this->createForm(new ContactType(), $contact);
+        $form = $this->createForm(\Mana\ClientBundle\Form\ContactType::class, $contact);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -74,7 +73,10 @@ class ContactController extends Controller {
             $em->persist($contact);
             $em->flush();
             $hid = $contact->getHousehold()->getId();
-            return $this->redirect($this->generateUrl('contact_new', array('id' => $hid)));
+            $flash = $this->get('braincrafted_bootstrap.flash');
+            $flash->alert("Contact has been updated");
+
+            return $this->redirectToRoute('contact_new', array('id' => $hid));
         }
         return array(
             'household' => $contact->getHousehold(),
@@ -92,14 +94,17 @@ class ContactController extends Controller {
     public function deleteAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
         $contact = $em->getRepository('ManaClientBundle:Contact')->find($id);
-        $form = $this->createForm(new ContactType(), $contact);
+        $form = $this->createForm(\Mana\ClientBundle\Form\ContactType::class, $contact);
         if ($request->isMethod('POST')) {
             $household = $contact->getHousehold();
             $hid = $household->getId();
             $household->removeContact($contact);
             $em->persist($household);
             $em->flush();
-            return $this->redirect($this->generateUrl('contact_new', array('id' => $hid)));
+            $flash = $this->get('braincrafted_bootstrap.flash');
+            $flash->alert("Contact has been deleted");
+
+            return $this->redirectToRoute('contact_new', array('id' => $hid));
         }
         return array(
             'contact' => $contact,
@@ -114,7 +119,7 @@ class ContactController extends Controller {
      */
     public function addContactsAction(Request $request) {
         $contact = new Contact();
-        $form = $this->createForm(new ContactType(), $contact);
+        $form = $this->createForm(\Mana\ClientBundle\Form\ContactType::class, $contact);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -148,23 +153,14 @@ class ContactController extends Controller {
      * at given center
      * @Route("/latest/{site}")
      */
-    public function latestContactsAction($site) {
+    public function mostRecentContactsAction($site) {
+        $searches = $this->get('searches');
+        $contacts = $searches->getLatest($site);
         $em = $this->getDoctrine()->getManager();
-        $site = $em->getRepository('ManaClientBundle:Center')->find($site);
-        $maxDate = $em->createQuery('SELECT MAX(c.contactDate) FROM '
-                . 'ManaClientBundle:Contact c WHERE c.center = :site')
-                ->setParameter('site', $site)
-                ->getSingleScalarResult();
-        $contacts = $em->createQuery('SELECT c FROM ManaClientBundle:Contact c '
-                . 'JOIN ManaClientBundle:Household h WITH c.household = h '
-                . 'JOIN ManaClientBundle:Member m WITH h.head = m '
-                . 'WHERE c.center = :site AND c.contactDate = :date '
-                . 'ORDER BY m.sname, m.fname')
-                ->setParameters(['site' => $site, 'date' => $maxDate])
-                ->getResult();
-        $content = $this->renderView('ManaClientBundle:Contact:latestContacts.html.twig', [
-            'contacts' => $contacts,
-            'site' => $site,
+        $center = $em->getRepository('ManaClientBundle:Center')->find($site);
+        $content = $this->renderView('ManaClientBundle:Contact:mostRecentContacts.html.twig', [
+            'contacts' => $contacts['contacts'],
+            'site' => $center,
             ]);
         $response = new Response($content);
 
@@ -175,12 +171,12 @@ class ContactController extends Controller {
      * For selected center, generates checklist of households at most recent
      * distribution
      * 
-     * @Route("/centerSelect", name="center_select")
+     * @Route("/latestReport", name="latest_contacts")
      * @Template()
      */
-    public function centerSelectAction(Request $request) {
+    public function latestReportAction(Request $request) {
         $center = new Center();
-        $form = $this->createForm(new SelectCenterType(), $center);
+        $form = $this->createForm(\Mana\ClientBundle\Form\SelectCenterType::class, $center);
         $form->handleRequest($request);
         if ($form->isValid()) {
             //time limit extension required for multi-page rendering
@@ -188,18 +184,18 @@ class ContactController extends Controller {
             $searches = $this->get('searches');
             $id = $center->getCenter()->getId();
             $location = $center->getCenter()->getCenter();
-            $found = $searches->getRoster($id);
-            if (count($found['contactSet']) == 0 || empty($found)) {
-                $session = $request->getSession();
-                $session->set('message', "No contacts found for $location");
-                return $this->forward("ManaClientBundle:Default:message");
+            $found = $searches->getLatest($id);
+            if (count($found['contacts']) == 0 || empty($found)) {
+                $flash = $this->get('braincrafted_bootstrap.flash');
+               $flash->alert("No contacts found for $location");
+                return $this->redirectToRoute('latest_contacts');
             }
             $facade = $this->get('ps_pdf.facade');
             $response = new Response();
             $this->render('ManaClientBundle:Contact:roster.html.twig', array(
                 'date' => $found['latestDate'],
                 'center' => $location,
-                'roster' => $found['contactSet'],
+                'contacts' => $found['contacts'],
                     ), $response);
             $date = new \DateTime($found['latestDate']);
             $filename = str_replace(' ', '', $location) . date_format($date, '_Ymd') . '.pdf';

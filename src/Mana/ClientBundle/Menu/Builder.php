@@ -101,7 +101,7 @@ class Builder extends ContainerAware
         ));
 
         $menu->addChild('Most recent contacts (PDF)', array(
-            'route' => 'center_select',
+            'route' => 'latest_contacts',
         ));
 
         $menu->addChild("Multiple contacts", array(

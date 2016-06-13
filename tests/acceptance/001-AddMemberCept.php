@@ -15,16 +15,9 @@ use Step\Acceptance\Admin as AdminTester;
 $I = new AdminTester($scenario);
 $I->wantTo('Test Add member');
 $I->loginAsAdmin();
-$I->see('Welcome');
-
 $I->fillField('qtext', 'MoreThanOne Member');
 $I->click('#search');
-$I->see('Select');
 $I->click('Select');
-$I->see('Household View');
-
-$I->see('Add member');
-
 $I->click('Add member');
 $I->waitForJS("return $.active == 0;", 2);
 $I->see('Add household member');

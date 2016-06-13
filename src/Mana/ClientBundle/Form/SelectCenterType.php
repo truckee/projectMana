@@ -1,6 +1,6 @@
 <?php
 
-//src\Mana\ClientBundle\Form\SelectCenter.php
+//src\Mana\ClientBundle\Form\SelectCenterType.php
 
 /*
  * This file is part of the Truckee\Projectmana package.

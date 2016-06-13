@@ -20,14 +20,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class HouseholdType extends AbstractType
 {
 
-    private $new;
-
-    public function __construct($new = null) {
-        $this->new = $new;
-    }
+//    private $new;
+//
+//    public function __construct($new = null) {
+//        $this->new = $new;
+//    }
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $new = $this->new;
+        $this->new = $options['new'];
         $builder
                 ->add('active', ChoiceType::class, array(
                     'choices' => array('1' => 'Yes', '0' => 'No'),
@@ -42,12 +42,12 @@ class HouseholdType extends AbstractType
                     'by_reference' => false,
                     'prototype' => true,
                 ))
-                ->add('arrivalmonth', new Field\MonthType(), array(
+                ->add('arrivalmonth', \Mana\ClientBundle\Form\Field\MonthType::class, array(
                     'placeholder' => false,
                     'label' => 'Arrival month: ',
                     'attr' => $options['attr'],
                 ))
-                ->add('arrivalyear', new Field\YearType(), array(
+                ->add('arrivalyear', \Mana\ClientBundle\Form\Field\YearType::class, array(
                     'placeholder' => false,
                     'label' => 'Arrival year: ',
                     'attr' => $options['attr'],
@@ -60,8 +60,9 @@ class HouseholdType extends AbstractType
                 ->add('complianceDate', DateType::class, array(
                     'label' => 'Compliance date: ',
                     'widget' => 'single_text',
-                    'format' => 'MM/dd/yyyy',
-                    'attr' => $options['attr'],
+                    'html5' => false,
+                    'attr' => ['class' => 'js-datepicker'],
+                    'format' => 'M/d/y',
                 ))
 //                ->add('dateAdded', DateType::class, array(
 //                    'widget' => 'single_text',
@@ -97,8 +98,8 @@ class HouseholdType extends AbstractType
                     'placeholder' => '',
                     'label' => 'Housing: ',
                     'attr' => $options['attr'],
-                    'query_builder' => function(EntityRepository $er) use($new) {
-                        if (true === $new) {
+                    'query_builder' => function(EntityRepository $er) use($options) {
+                        if (true === $options['new']) {
                             return $er->createQueryBuilder('h')
                                     ->orderBy('h.housing', 'ASC')
                                     ->where("h.enabled=1");
@@ -175,16 +176,16 @@ class HouseholdType extends AbstractType
                 ->add('sharedDate', DateType::class, array(
                     'label' => 'Shared date: ',
                     'widget' => 'single_text',
-                    'format' => 'MM/dd/yyyy',
-                    'attr' => $options['attr'],
+                    'html5' => false,
+                    'attr' => ['class' => 'js-datepicker'],
+                    'format' => 'M/d/y',
                 ))
         ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $household = $event->getData();
             $form = $event->getForm();
-            $new = $this->new;
-            if (true === $new || empty($household->getCenter())) {
+            if (true === $this->new || empty($household->getCenter())) {
                 $form->add('center', new Field\CenterEnabledChoiceType());
             } else {
                 $form->add('center', new Field\CenterAllChoiceType());
@@ -196,6 +197,7 @@ class HouseholdType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'Mana\ClientBundle\Entity\Household',
             'required' => false,
+            'new' => null,
 //            'attr' => [
 //                'style' => 'margin: 0 30px 0 10px;'
 //            ],

@@ -31,6 +31,7 @@ class HouseholdControllerTest extends ManaWebTestCase
                     'Mana\ClientBundle\DataFixtures\Test\Constants',
                     'Mana\ClientBundle\DataFixtures\Test\Households',
                 ])->getReferenceRepository();
+//        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
     }
 
     public function login()
@@ -108,4 +109,64 @@ class HouseholdControllerTest extends ManaWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Add new head of house")')->count());
     }
 
+    public function testShowHousehold()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('house1')->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/show');
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Household View")')->count());
+    }
+
+    public function testEditHousehold()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('house1')->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Household Edit")')->count());
+
+        $form = $crawler->selectButton('Submit')->form();
+        $form['household[compliance]'] = 1;
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Compliance date required")')->count());
+
+        $truckee = $this->fixtures->getReference('truckee')->getId();
+        $form['household[complianceDate]'] = '6/1/2015';
+        $form['household[center]'] = $truckee;
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Household updated")')->count());
+    }
+
+    public function testNoSearchCriteria()
+    {
+        $crawler = $this->login();
+        $form = $crawler->filter('#household_search')->form();
+        $form['qtext'] = '';
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("No search criteria were entered")')->count());
+    }
+
+    public function testHouseholdNotFound()
+    {
+        $crawler = $this->login();
+        $form = $crawler->filter('#household_search')->form();
+        $form['qtext'] = '999';
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Sorry, household not found")')->count());
+    }
+
+    public function testNoHouseholdsFound()
+    {
+        $crawler = $this->login();
+        $form = $crawler->filter('#household_search')->form();
+        $form['qtext'] = 'Alien Creatures';
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Sorry, no households were found")')->count());
+    }
 }

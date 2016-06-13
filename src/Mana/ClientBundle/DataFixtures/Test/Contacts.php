@@ -42,6 +42,7 @@ class Contacts extends AbstractFixture implements OrderedFixtureInterface
         $contact->setContactDate($date);
         $contact->setContactDesc($descGeneral);
         $contact->setHousehold($house1);
+        $this->setReference('contact', $contact);
         $manager->persist($contact);
 
         $manager->flush();

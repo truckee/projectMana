@@ -5,7 +5,7 @@
                         </form>
 {% endif %}
                         <a href="{{ path('household_new') }}" >New household</a>
-                        <a href="{{ path('center_select') }}" >Latest contacts</a>
+                        <a href="{{ path('latest_contacts') }}" >Latest contacts</a>
                         <a href="{{ path('contacts_add') }}" >Site contacts</a>
                         <a href="{{ path('stats_criteria', {'dest': 'general'}) }}" >Statistics</a>
 {% if is_granted('ROLE_ADMIN') %}

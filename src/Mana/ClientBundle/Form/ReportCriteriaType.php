@@ -26,24 +26,24 @@ class ReportCriteriaType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-                ->add('startMonth', new MonthType(), array(
+                ->add('startMonth', \Mana\ClientBundle\Form\Field\MonthType::class, array(
                     'data' => $this->month,
                     'placeholder' => false,
                     'constraints' => array(
                         new StartEndDate(),
                     ),
                 ))
-                ->add('endMonth', new MonthType(), array(
+                ->add('endMonth', \Mana\ClientBundle\Form\Field\MonthType::class, array(
                     'data' => $this->month,
                     'placeholder' => false,
                         )
                 )
-                ->add('startYear', new YearType(), array(
+                ->add('startYear', \Mana\ClientBundle\Form\Field\YearType::class, array(
                     'data' => $this->year,
                     'placeholder' => false,
                         )
                 )
-                ->add('endYear', new YearType(), array(
+                ->add('endYear', \Mana\ClientBundle\Form\Field\YearType::class, array(
                     'data' => $this->year,
                     'placeholder' => false,
                         )

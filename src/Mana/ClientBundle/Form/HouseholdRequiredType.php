@@ -12,20 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 class HouseholdRequiredType extends AbstractType
 {
 
-    private $idArray;
-    private $newHeadService;
-    private $new;
-
-    public function __construct($newHeadService, $idArray = null, $new = null)
-    {
-        $this->idArray = $idArray;
-        $this->newHeadService = $newHeadService;
-        $this->new = $new;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $new = $this->new;
         $builder
                 ->add('center', CenterEnabledChoiceType::class, array(
                     'label' => 'Site ',

@@ -6,13 +6,13 @@ namespace Mana\ClientBundle\Controller;
 use Mana\ClientBundle\Entity\Household;
 use Mana\ClientBundle\Entity\Member;
 use Mana\ClientBundle\Entity\Phone;
-use Mana\ClientBundle\Form\HouseholdType;
-use Mana\ClientBundle\Form\HouseholdRequiredType;
-use Mana\ClientBundle\Form\MemberType;
+//use Mana\ClientBundle\Form\HouseholdType;
+//use Mana\ClientBundle\Form\HouseholdRequiredType;
+//use Mana\ClientBundle\Form\MemberType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
+//use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -67,13 +67,13 @@ class HouseholdController extends Controller
             $household = $em->merge($session->get('household'));
             $head = $em->merge($session->get('head'));
             $id = $em->getRepository("ManaClientBundle:Household")->initialize($household, $head, $session);
-            return $this->redirect($this->generateUrl('household_edit', array('id' => $id)));
+            return $this->redirectToRoute('household_edit', array('id' => $id));
         }
         $household = new Household();
         $head = new Member();
         $new = true;
-        $form = $this->createForm(new HouseholdRequiredType($new, $household));
-        $formHead = $this->createForm(new MemberType(), $head);
+        $form = $this->createForm(\Mana\ClientBundle\Form\HouseholdRequiredType::class, $household);
+        $formHead = $this->createForm(\Mana\ClientBundle\Form\MemberType::class, $head);
         $form->handleRequest($request);
         $formHead->handleRequest($request);
         if ($form->isValid() && $formHead->isValid()) {
@@ -95,7 +95,7 @@ class HouseholdController extends Controller
             if (count($found) === 0) {
                 //when there are no matches, create member as head with incoming data
                 $id = $em->getRepository("ManaClientBundle:Household")->initialize($household, $head, $session);
-                return $this->redirect($this->generateUrl('household_edit', array('id' => $id)));
+                return $this->redirectToRoute('household_edit', array('id' => $id));
             } else {
                 //send new data plus matches to match_results
                 $session->set('head', $head);
@@ -140,14 +140,16 @@ class HouseholdController extends Controller
             $phone = new Phone();
             $household->addPhone($phone);
         }
-        $form = $this->createForm(new HouseholdType($new), $household);
+        $form = $this->createForm(\Mana\ClientBundle\Form\HouseholdType::class, $household, ['new' => $new]);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $em->getRepository('ManaClientBundle:Member')->initialize($household);
             $em->persist($household);
             $em->flush();
+            $flash = $this->get('braincrafted_bootstrap.flash');
+            $flash->alert("Household updated");
 
-            return $this->redirect($this->generateUrl('household_show', array('id' => $household->getId())));
+            return $this->redirectToRoute('household_show', array('id' => $household->getId()));
         }
 
         return array(
@@ -166,11 +168,11 @@ class HouseholdController extends Controller
      */
     public function searchAction(Request $request)
     {
+        $flash = $this->get('braincrafted_bootstrap.flash');
         $qtext = $request->query->get('qtext');
         if ($qtext == '') {
-            $session = $request->getSession();
-            $session->set('message', "No search criteria were entered");
-            return $this->forward("ManaClientBundle:Default:message");
+            $flash->alert("No search criteria were entered");
+            return $this->redirect($this->getRequest()->headers->get('referer'));
         }
 
         if (is_numeric($qtext)) {
@@ -178,24 +180,22 @@ class HouseholdController extends Controller
             $em = $this->getDoctrine()->getManager();
             $household = $em->getRepository('ManaClientBundle:Household')->find($qtext);
             if (!$household) {
-                $session = $request->getSession();
-                $session->set('message', 'Sorry, household not found');
-                return $this->forward("ManaClientBundle:Default:message");
+                $flash->alert('Sorry, household not found');
+                return $this->redirect($this->getRequest()->headers->get('referer'));
             }
-            return $this->redirect($this->generateUrl('household_show', array('id' => $qtext)));
+            return $this->redirectToRoute('household_show', array('id' => $qtext));
         } else {
             // search for head of household
             $searches = $this->get('searches');
             $found = $searches->getMembers($qtext);
             if (count($found) == 0 || !$found) {
-                $session = $request->getSession();
-                $session->set('message', 'Sorry, no households were found');
-                return $this->forward("ManaClientBundle:Default:message");
+                $flash->alert('Sorry, no households were found');
+                return $this->redirect($this->getRequest()->headers->get('referer'));
             }
 
             if (count($found) == 1) {
                 $id = $found[0]->getHousehold()->getId();
-                return $this->redirect($this->generateUrl('household_show', array('id' => $id)));
+                return $this->redirectToRoute('household_show', array('id' => $id));
             } else {
                 return $this->render('ManaClientBundle:Household:search.html.twig',
                         array(
