@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-//src\Mana\ClientBundle\DataFixtures\Test\AdminUser.php
+//src\Mana\ClientBundle\DataFixtures\Test\Users.php
 
 namespace Mana\ClientBundle\DataFixtures\Test;
 
@@ -25,7 +25,7 @@ use Mana\ClientBundle\Entity\User;
  *
  * @author George
  */
-class AdminUser extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class Users extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
 
     /**
@@ -55,6 +55,19 @@ class AdminUser extends AbstractFixture implements OrderedFixtureInterface, Cont
         $userAdmin->setEmail('bborko@bogus.info');
         $userAdmin->setEnabled(TRUE);
         $manager->persist($userAdmin);
+
+        $userPlain = new User();
+        $userPlain->setUsername('dberry');
+        $factory = $this->container->get('security.encoder_factory');
+        $encoder = $factory->getEncoder($userPlain);
+        $password = $encoder->encodePassword('mana', $userPlain->getSalt());
+        $userPlain->setPassword($password);
+        $userPlain->setRoles(array('ROLE_USER'));
+        $userPlain->setFname('Dingle');
+        $userPlain->setSname('Berry');
+        $userPlain->setEmail('dberry@bogus.info');
+        $userPlain->setEnabled(TRUE);
+        $manager->persist($userPlain);
 
         $manager->flush();
     }

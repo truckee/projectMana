@@ -26,7 +26,7 @@ class ContactTest extends ManaWebTestCase
         $this->client = static::makeClient();
         $this->client->followRedirects();
         $this->fixtures = $this->loadFixtures([
-                    'Mana\ClientBundle\DataFixtures\Test\AdminUser',
+                    'Mana\ClientBundle\DataFixtures\Test\Users',
                     'Mana\ClientBundle\DataFixtures\Test\Constants',
                     'Mana\ClientBundle\DataFixtures\Test\Households',
                     'Mana\ClientBundle\DataFixtures\Test\Contacts',
