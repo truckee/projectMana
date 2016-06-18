@@ -72,7 +72,7 @@ class ReportCriteriaType extends AbstractType {
                 ))
                 ->add('center', new Field\CenterEnabledChoiceType())
                 ->add('dest', 'hidden')
-                ->add('columnType', ChoiceType::class, [
+                ->add('columnType', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
                     'mapped' => FALSE,
                     'choices' => ['center' => 'By site', 'county' => 'By county'],
                     'expanded' => TRUE,

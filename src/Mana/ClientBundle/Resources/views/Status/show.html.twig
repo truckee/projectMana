@@ -36,13 +36,13 @@
                         <div class="col-sm-1">
                             {{ key }}
                         </div>
-                        <div class="col-sm-1">
+                        <div id="active{{key}}" class="col-sm-1">
                             {{ year.Active }}
                         </div>
                         <div class="col-sm-1">
                             <input type="radio" name="status[{{ key }}]" value="inactive">
                         </div>
-                        <div class="col-sm-1">
+                        <div id="inactive{{key}}" class="col-sm-1">
                             {{ year.Inactive }}
                         </div>
                         <div class="col-sm-1">

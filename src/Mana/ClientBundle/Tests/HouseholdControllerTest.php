@@ -10,9 +10,9 @@
  */
 //src\Mana\ClientBundle\Tests\Controller\HouseholdControllerTest.php
 
-namespace Mana\ClientBundle\Tests\Controller;
+namespace Mana\ClientBundle\Tests;
 
-use Mana\ClientBundle\Tests\Controller\ManaWebTestCase;
+use Mana\ClientBundle\Tests\ManaWebTestCase;
 
 /**
  * Description of HouseholdControllerTest

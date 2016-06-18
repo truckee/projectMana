@@ -6,13 +6,9 @@ namespace Mana\ClientBundle\Controller;
 use Mana\ClientBundle\Entity\Household;
 use Mana\ClientBundle\Entity\Member;
 use Mana\ClientBundle\Entity\Phone;
-//use Mana\ClientBundle\Form\HouseholdType;
-//use Mana\ClientBundle\Form\HouseholdRequiredType;
-//use Mana\ClientBundle\Form\MemberType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-//use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

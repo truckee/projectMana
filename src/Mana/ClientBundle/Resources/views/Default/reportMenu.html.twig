@@ -1,7 +1,4 @@
 {% extends "ManaClientBundle:Default:layout.html.twig" %}
-{% block menu %}
-    {{ knp_menu_render('ManaClientBundle:Builder:adminMenu') }}
-{% endblock menu %}
 {% block body %}
     <div class="panel panel-info">
         <div class="panel-heading text-center">
@@ -9,18 +6,22 @@
             Project MANA distribution database application.
         </div>
         <div class="panel-body">
-            <table class="table">
-                <tr>
-                    <td>Reports</td>
-                    <td>Profiles</td>
-                    <td>Status Changes</td>
-                </tr>
-                <tr>
-                    <td>{{ knp_menu_render('ManaClientBundle:Builder:reportsMenu') }}</td>
-                    <td>{{ knp_menu_render('ManaClientBundle:Builder:profileMenu') }}</td>
-                    <td><a href="{{ path("status") }}">Status changes</a></td>
-                </tr>
-            </table>
+            <div class="row">
+                <div class="col-sm-3">
+                    Reports
+                </div>
+                <div class="col-sm-3">
+                    Profiles
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    {{ knp_menu_render('ManaClientBundle:Builder:reportsMenu') }}
+                </div>
+                <div class="col-sm-3">
+                    {{ knp_menu_render('ManaClientBundle:Builder:profileMenu') }}
+                </div>
+            </div>
         </div>
     </div>
 {% endblock body %}

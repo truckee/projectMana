@@ -2,14 +2,15 @@
 
 namespace Mana\ClientBundle\Form;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Doctrine\ORM\EntityRepository;
 use Mana\ClientBundle\Form\Field\DobAgeType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class HouseholdHeadType extends AbstractType
 {
@@ -25,7 +26,7 @@ class HouseholdHeadType extends AbstractType
                 ->add('dob', DobAgeType::class, array(
                     'label' => 'DOB or age ',
                 ))
-                ->add('sex', ChoiceType::class, array(
+                ->add('sex', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
                     'label' => 'Gender ',
                     'placeholder' => 'Select gender',
                     'choices' => array('Male' => 'Male', 'Female' => 'Female'),

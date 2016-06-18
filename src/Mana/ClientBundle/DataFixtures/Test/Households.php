@@ -19,13 +19,12 @@ use Mana\ClientBundle\Entity\Household;
 use Mana\ClientBundle\Entity\Member;
 
 /**
- * Description of HouseholdV1Head
+ * Description of HouseholdV1Head.
  *
  * @author George
  */
 class Households extends AbstractFixture implements OrderedFixtureInterface
 {
-
     public function load(ObjectManager $manager)
     {
         $member = new Member();
@@ -44,6 +43,8 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($member2);
 
         $household = new Household();
+        $household->setActive(true);
+        $household->setDateAdded(new \DateTime('last year'));
         $household->setHead($member);
         $household->addMember($member);
         $household->addMember($member2);
@@ -60,13 +61,14 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $member3->setEthnicity($eth);
         $manager->persist($member3);
         $household2 = new Household();
+        $household2->setActive(true);
+        $household2->setDateAdded(new \DateTime('last month'));
         $household2->setHead($member3);
         $household2->addMember($member3);
         $this->setReference('house2', $household2);
         $unk = $this->getReference('unk');
         $household2->setFoodstamp($unk);
         $manager->persist($household2);
-
 
         $manager->flush();
     }

@@ -53,18 +53,10 @@ class Builder extends ContainerAware
             $menu->addChild('Options & users', array(
                 'route' => 'easyadmin',
             ));
+            $menu->addChild('Change status', array(
+                'route' => 'status',
+            ));
         }
-
-        return $menu;
-    }
-
-    public function adminMenu(FactoryInterface $factory, array $options)
-    {
-        $menu = $factory->createItem('root');
-
-        $menu->addChild('Home', array(
-            'route' => 'home',
-        ));
 
         return $menu;
     }

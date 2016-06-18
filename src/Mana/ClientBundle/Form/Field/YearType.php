@@ -22,7 +22,7 @@ class YearType extends AbstractType {
     }
 
     public function getParent() {
-        return ChoiceType::class;
+        return \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class;
     }
 
 }

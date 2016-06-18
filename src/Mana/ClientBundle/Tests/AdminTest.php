@@ -11,15 +11,15 @@
 
 //src\Mana\ClientBundle\DataFixtures\Test\AdminControllerTest.php
 
-namespace Mana\ClientBundle\DataFixtures\Test;
+namespace Mana\ClientBundle\Tests;
 
-use Mana\ClientBundle\Tests\Controller\ManaWebTestCase;
+use Mana\ClientBundle\Tests\ManaWebTestCase;
 
 /**
  * AdminControllerTest
  *
  */
-class AdminControllerTest extends ManaWebTestCase
+class AdminTest extends ManaWebTestCase
 {
     public function setup()
     {
@@ -39,6 +39,7 @@ class AdminControllerTest extends ManaWebTestCase
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Project MANA")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Options & users")')->count());
     }
 
     public function testUserLogin()
@@ -50,18 +51,6 @@ class AdminControllerTest extends ManaWebTestCase
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Project MANA")')->count());
-    }
-
- 
-    public function testAccessError()
-    {
-        $crawler = $this->client->request('GET', '/');
-        $form = $crawler->selectButton('Login')->form();
-        $form['_username'] = 'dberry';
-        $form['_password'] = 'mana';
-        $crawler = $this->client->submit($form);
-        $crawler = $this->client->request('GET', '/admin');
-        $code = $this->client->getResponse()->getStatusCode();
-        $this->assertEquals(403, $code);
+        $this->assertEquals(0, $crawler->filter('html:contains("Options & users")')->count());
     }
 }

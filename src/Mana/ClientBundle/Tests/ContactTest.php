@@ -11,9 +11,9 @@
 
 //src\Mana\ClientBundle\Tests\Controller\ContactTest.php
 
-namespace Mana\ClientBundle\Tests\Controller;
+namespace Mana\ClientBundle\Tests;
 
-use Mana\ClientBundle\Tests\Controller\ManaWebTestCase;
+use Mana\ClientBundle\Tests\ManaWebTestCase;
 
 /**
  * ContactTest

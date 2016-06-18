@@ -16,7 +16,7 @@
             <b>Total Households Served</b>
         </div>
     </div>
-{% for key, value in ctyStats %}
+{% for key, value in statistics.countyStats %}
     <div class="row">
         <div class="col-sm-1">
             {{ key }}
@@ -24,26 +24,26 @@
         <div id="{{ key }}UIS" class="col-sm-1 text-right">
             {{ value.UIS|number_format }}
         </div>
-        <div id="{{ key }}UISPct" class="col-sm-1 text-right">
-            {{ value.UISPct|number_format(1) ~ '%' }}
+        <div id="{{ key }}UISPCT" class="col-sm-1 text-right">
+            {{ value.UISPCT }}
         </div>
-        <div id="{{ key }}IS" class="col-sm-1 text-right">
-            {{ value.IS|number_format }}
+        <div id="{{ key }}TIS" class="col-sm-1 text-right">
+            {{ value.TIS|number_format }}
         </div>
-        <div id="{{ key }}ISPct" class="col-sm-1 text-right">
-            {{ value.ISPct|number_format(1) ~ '%' }}
+        <div id="{{ key }}TISPCT" class="col-sm-1 text-right">
+            {{ value.TISPCT }}
         </div>
         <div id="{{ key }}UHS" class="col-sm-1 text-right">
             {{ value.UHS|number_format }}
         </div>
-        <div id="{{ key }}UHSPct" class="col-sm-1 text-right">
-            {{ value.UHSPct|number_format(1) ~ '%' }}
+        <div id="{{ key }}UHSPCT" class="col-sm-1 text-right">
+            {{ value.UHSPCT }}
         </div>
         <div id="{{ key }}THS" class="col-sm-1 text-right">
             {{ value.THS|number_format }}
         </div>
-        <div id="{{ key }}THSPct" class="col-sm-1 text-right">
-            {{ value.THSPct|number_format(1) ~ '%' }}
+        <div id="{{ key }}THSPCT" class="col-sm-1 text-right">
+            {{ value.THSPCT }}
         </div>
     </div>
 {% endfor %}

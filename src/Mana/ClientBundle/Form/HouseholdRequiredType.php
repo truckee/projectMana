@@ -18,7 +18,7 @@ class HouseholdRequiredType extends AbstractType
                 ->add('center', CenterEnabledChoiceType::class, array(
                     'label' => 'Site ',
                 ))
-                ->add('compliance', ChoiceType::class, array(
+                ->add('compliance', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
                     'choices' => array('0' => 'No', '1' => 'Yes'),
                 ))
                 ->add('complianceDate', DateType::class, array(
@@ -28,7 +28,7 @@ class HouseholdRequiredType extends AbstractType
                     'widget' => 'single_text',
                     'format' => 'MM/dd/yyyy',
                 ))
-                ->add('shared', ChoiceType::class, array(
+                ->add('shared', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
                     'choices' => array('0' => 'No', '1' => 'Yes'),
                 ))
                 ->add('sharedDate', DateType::class, array(

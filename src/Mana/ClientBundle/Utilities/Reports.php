@@ -9,6 +9,7 @@ use Doctrine\DBAL\Connection;
  */
 class Reports
 {
+
     private $conn;
     private $_where;    //single value where clause
     private $ageDist;
@@ -23,7 +24,6 @@ class Reports
     private $newMembers;
     private $newHouseholds;
     private $residency;
-//    private $specs;
     private $start;
     private $statistics;
     private $totalHouseholds;
@@ -32,20 +32,18 @@ class Reports
     private $uniqIndividuals;
     private $uniqNewIndividuals;
 
-    public function __construct(Connection $conn)
-    {
+    public function __construct(Connection $conn) {
         $this->conn = $conn;
     }
 
-    private function setCriteria($criteria)
-    {
+    private function setCriteria($criteria) {
         $this->start = $criteria['startDate'];
         $this->end = $criteria['endDate'];
         $incoming = array(
             'contact_type_id' => (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '',
             'county_id' => (!empty($criteria['county'])) ? $criteria['county'] : '',
             'center_id' => (!empty($criteria['center'])) ? $criteria['center'] : ''
-            );
+        );
         $where = " where contact_date >= '$this->start' and contact_date <= '$this->end' ";
 
         $options = array('contact_type_id', 'county_id', 'center_id');
@@ -62,23 +60,21 @@ class Reports
             $sql = 'select id from county where enabled=1';
             $stmt = $this->conn->query($sql);
             while ($row = $stmt->fetch()) {
-                array_push($this->criteria, $where." and county_id = $row[id]");
+                array_push($this->criteria, $where . " and county_id = $row[id]");
             }
         } else {
             array_push($this->criteria, $where);
         }
     }
 
-    public function dataExist()
-    {
-        $sql = 'select count(*) N from contacts'.$this->_where;
+    public function dataExist() {
+        $sql = 'select count(*) N from contacts' . $this->_where;
         $data = $this->conn->fetchAssoc($sql);
 
         return $data['N'];
     }
 
-    public function setStats($criteria)
-    {
+    public function setStats($criteria) {
         $this->setCriteria($criteria);
         //fill tables for common statistics
         $this->makeTempTables($this->_where);
@@ -159,8 +155,7 @@ class Reports
         $this->statistics = $statistics;
     }
 
-    private function makeTempTables($criteria)
-    {
+    private function makeTempTables($criteria) {
         /*
          * establish tables for basis of calculations
          */
@@ -170,7 +165,7 @@ class Reports
             (contact_type_id, household_id, contact_date, first, center_id, county_id)
             select contact_type_id, household_id, contact_date, first, center_id, county_id
             from contact '
-                .$criteria;
+                . $criteria;
         $this->conn->exec($sql);
 
         $sql = 'delete from temp_member';
@@ -199,124 +194,102 @@ class Reports
         $n = $this->conn->exec($sql);
     }
 
-    protected function getAgeDist()
-    {
+    protected function getAgeDist() {
         return $this->ageDist;
     }
 
-    protected function getAgeGenderDist()
-    {
+    protected function getAgeGenderDist() {
         return $this->ageGenderDist;
     }
 
-    public function getDetails()
-    {
+    public function getDetails() {
         $data = array(
             'details' => $this->details,
-//            'specs' => $this->specs,
         );
 
         return $data;
     }
 
-    protected function getEthDist()
-    {
+    protected function getEthDist() {
         return $this->ethDist;
     }
 
-    protected function getFamilyDist()
-    {
+    protected function getFamilyDist() {
         return $this->familyDist;
     }
 
-    protected function getFreqDist()
-    {
+    protected function getFreqDist() {
         return $this->freqDist;
     }
 
-    protected function getNewByType()
-    {
+    protected function getNewByType() {
         return $this->newByType;
     }
 
-    protected function getNewMembers()
-    {
+    protected function getNewMembers() {
         return $this->newMembers;
     }
 
-    protected function getNewHouseholds()
-    {
+    protected function getNewHouseholds() {
         return $this->newHouseholds;
     }
 
-    protected function getResidency()
-    {
+    protected function getResidency() {
         return $this->residency;
     }
 
-    protected function getTotalHouseholds()
-    {
+    protected function getTotalHouseholds() {
         return $this->totalHouseholds;
     }
 
-    protected function getTotalIndividuals()
-    {
+    protected function getTotalIndividuals() {
         return $this->totalIndividuals;
     }
 
-    protected function getUniqHouseholds()
-    {
+    protected function getUniqHouseholds() {
         return $this->uniqHouseholds;
     }
 
-    protected function getUniqIndividuals()
-    {
+    protected function getUniqIndividuals() {
         return $this->uniqIndividuals;
     }
 
-    protected function getUniqNewIndividuals()
-    {
+    protected function getUniqNewIndividuals() {
         return $this->uniqNewIndividuals;
     }
 
-    protected function getUniqServed()
-    {
+    protected function getUniqServed() {
         return $this->uniqServed;
     }
 
-    private function setNewByType($criterion)
-    {
+    private function setNewByType($criterion) {
         //get new households for specific report type
-        $sql = 'select count(distinct household_id) NewByType from temp_contact'.
-                $criterion.' and `first` = 1';
+        $sql = 'select count(distinct household_id) NewByType from temp_contact' .
+                $criterion . ' and `first` = 1';
         $this->newByType = $this->conn->fetchAssoc($sql);
     }
 
-    private function setNewHouseholds()
-    {
+    private function setNewHouseholds() {
         //get new households for specific report type
         $sql = 'select count(distinct household_id) NewHouseholds from temp_contact where `first` = 1';
         $this->newHouseholds = $this->conn->fetchAssoc($sql);
     }
 
-    private function setNewMembers($criterion)
-    {
+    private function setNewMembers($criterion) {
         //all new households
         $sql = 'select count(*) NewMembers from temp_member m
-            join temp_contact c on m.household_id = c.household_id'.
-                $criterion.
+            join temp_contact c on m.household_id = c.household_id' .
+                $criterion .
                 ' and `first` = 1';
         $this->newMembers = $this->conn->fetchAssoc($sql);
     }
 
-    private function setTotalHouseholds()
-    {
+    private function setTotalHouseholds() {
         $sql = "select count(household_id) 'THS' from temp_contact";
         $this->totalHouseholds = $this->conn->fetchAssoc($sql);
     }
 
-    private function setUniqNewIndividuals()
-    {
+    private function setUniqNewIndividuals() {
         //unique new participants
         $sql = "select count(*) 'UNI' from temp_member m
             join temp_contact c on m.household_id = c.household_id
@@ -324,14 +297,12 @@ class Reports
         $this->uniqNewIndividuals = $this->conn->fetchAssoc($sql);
     }
 
-    private function setUniqHouseholds()
-    {
+    private function setUniqHouseholds() {
         $sql = "select count(*) 'UHS' from temp_household";
         $this->uniqHouseholds = $this->conn->fetchAssoc($sql);
     }
 
-    private function setResidency()
-    {
+    private function setResidency() {
         $sql = "select  sum(if(res<1,size,0)) as '< 1 month',
             sum(if(1<=res and res<=24,size,0)) as '1 mo - 2 yrs',
             sum(if(24<res,size,0)) as '>=2 yrs' from (
@@ -341,8 +312,7 @@ class Reports
         $this->residency = $res;
     }
 
-    private function setFamilyDist()
-    {
+    private function setFamilyDist() {
         $sql = "select sum(if(size=1,1,0)) as 'Single', sum(if(size=2,1,0)) as 'Two',
             sum(if(size=3,1,0)) as 'Three', sum(if(size=4,1,0)) as 'Four',
             sum(if(size=5,1,0)) as 'Five', sum(if(size>5,1,0)) as 'Six or more' from (
@@ -351,8 +321,7 @@ class Reports
         $this->familyDist = $this->conn->fetchAssoc($sql);
     }
 
-    private function setFreqDist()
-    {
+    private function setFreqDist() {
         $sql = "select sum(if(freq=1,size,0)) '1x', sum(if(freq=2,size,0)) '2x', sum(if(freq=3,size,0)) '3x', sum(if(4<=freq,size,0)) '4x' from (
             (select c.household_id, count(*) freq from temp_contact c
             group by c.household_id) Freqs
@@ -362,8 +331,7 @@ class Reports
         $this->freqDist = $this->conn->fetchAssoc($sql);
     }
 
-    private function setEthDist()
-    {
+    private function setEthDist() {
         $ethDist = array();
         $sql = 'select ethnicity, count(ethnicity_id) N from ethnicity e
             left outer join temp_member m on e.id = m.ethnicity_id
@@ -378,8 +346,7 @@ class Reports
         $this->ethDist = $ethDist;
     }
 
-    private function setAgeDist()
-    {
+    private function setAgeDist() {
         $sql = "select sum(if(age<6,1,0)) as 'Under 6', sum(if(6<=age and age<19,1,0)) as '6 - 18',
             sum(if(19<=age and age<60,1,0)) as '19 - 59', sum(if(age>=60,1,0)) as '60+' from
             temp_member m where m.age is not null";
@@ -388,8 +355,7 @@ class Reports
         $this->ageDist = $age;
     }
 
-    private function setAgeGenderDist()
-    {
+    private function setAgeGenderDist() {
         $sql = "select sum(if(age<18 and sex='Female',1,0)) as 'FC',
             sum(if(age<18 and sex='Male',1,0)) as 'MC',
             sum(if(age>=18 and sex='Female',1,0)) as 'FA',
@@ -401,15 +367,13 @@ class Reports
         $this->ageGenderDist = $ageGenderDist;
     }
 
-    private function setUniqIndividuals()
-    {
+    private function setUniqIndividuals() {
         //unique members
         $sql = 'select sum(size) UIS from temp_household';
         $this->uniqIndividuals = $this->conn->fetchAssoc($sql);
     }
 
-    private function setTotalIndividuals()
-    {
+    private function setTotalIndividuals() {
         $sql = "select sum(freq*size) 'IS' from (
             (select c.household_id, count(*) freq
             from temp_contact c
@@ -420,39 +384,86 @@ class Reports
         $this->totalIndividuals = $this->conn->fetchAssoc($sql);
     }
 
-    public function getCountyStats()
-    {
-        $subtotal = array();
-        foreach ($this->criteria as $criteria) {
-            //create tables for calculations
-            $this->makeTempTables($criteria);
+    public function getCountyStats() {
+        $db = $this->conn;
+        $sqlUIS = 'select cty.county, count(distinct tm.id) as UIS from temp_member tm
+join temp_contact tc on tm.household_id = tc.household_id
+join county cty on cty.id = tc.county_id
+group by cty.county';
 
-            //get or make value for county id
-//            $county_id = (strpos($criteria, 'county_id')) ? substr($criteria, strpos($criteria, 'county_id') + 12, 1) : 0;
-            $county_id = (strpos($criteria, 'county_id')) ? substr($criteria, -2) : 0;
+        $sqlUHS = 'select cty.county, count(distinct tc.household_id) as UHS from temp_contact tc
+join county cty on cty.id = tc.county_id
+group by cty.county';
 
-            $countyArr = $this->conn->fetchAssoc("select county from county where id=$county_id");
-            $county = $countyArr['county'];
+        $sqlTIS = 'select cty.county, count(tm.id) as TIS from temp_member tm
+join temp_contact tc on tm.household_id = tc.household_id
+join county cty on cty.id = tc.county_id
+group by cty.county';
 
-            $this->setUniqIndividuals();
-            $ui = $this->getUniqIndividuals();
-            $subtotal[$county]['UIS'] = (!empty($ui['UIS'])) ? $ui['UIS'] : 0;
-            $this->setTotalIndividuals();
-            $ti = $this->getTotalIndividuals();
-            $subtotal[$county]['IS'] = (!empty($ti['IS'])) ? $ti['IS'] : 0;
-            $this->setUniqHouseholds($criteria);
-            $uh = $this->getUniqHouseholds();
-            $subtotal[$county]['UHS'] = (!empty($uh['UHS'])) ? $uh['UHS'] : 0;
-            $this->setTotalHouseholds($criteria);
-            $th = $this->getTotalHouseholds();
-            $subtotal[$county]['THS'] = (!empty($th['THS'])) ? $th['THS'] : 0;
+        $sqlTHS = 'select cty.county, count(tc.household_id) as THS from temp_contact tc
+join county cty on cty.id = tc.county_id
+group by cty.county';
+
+        $UISData = $db->query($sqlUIS)->fetchAll();
+        $UHSData = $db->query($sqlUHS)->fetchAll();
+        $TISData = $db->query($sqlTIS)->fetchAll();
+        $THSData = $db->query($sqlTHS)->fetchAll();
+
+        $totals['UISTotal'] = 0;
+        $totals['UHSTotal'] = 0;
+        $totals['TISTotal'] = 0;
+        $totals['THSTotal'] = 0;
+
+        if (empty($UISData)) {
+            $sqlCounties = 'select county from county where enabled = 1 order by county asc';
+            $counties = $db->query($sqlCounties)->fetchAll();
+            $categories = ['UIS', 'TIS', 'UHS', 'THS'];
+            foreach ($categories as $category) {
+                $varname = $category . 'Data';
+                foreach ($counties as $county) {
+                    $$varname[] = array('county' => $county['county'], $category => 0);
+                }
+            }
+        }
+        foreach ($UISData as $array) {
+            $totals['UIS'][$array['county']] = $array['UIS'];
+            $totals['UISTotal'] += $array['UIS'];
+        }
+        foreach ($UHSData as $array) {
+            $totals['UHS'][$array['county']] = $array['UHS'];
+            $totals['UHSTotal'] += $array['UHS'];
+        }
+        foreach ($TISData as $array) {
+            $totals['TIS'][$array['county']] = $array['TIS'];
+            $totals['TISTotal'] += $array['TIS'];
+        }
+        foreach ($THSData as $array) {
+            $totals['THS'][$array['county']] = $array['THS'];
+            $totals['THSTotal'] += $array['THS'];
         }
 
-        return $subtotal;
+        $data = [];
+        foreach ($UISData as $array) {
+            $data[$array['county']]['UIS'] = $array['UIS'];
+            $data[$array['county']]['UISPCT'] = (0 < $totals['UISTotal']) ? sprintf('%01.1f', 100 * ($array['UIS'] / $totals['UISTotal'])) . '%' : 0;
+        }
+        foreach ($UHSData as $array) {
+            $data[$array['county']]['UHS'] = $array['UHS'];
+            $data[$array['county']]['UHSPCT'] = (0 < $totals['UHSTotal']) ? sprintf('%01.1f', 100 * ($array['UHS'] / $totals['UHSTotal'])) . '%' : 0;
+        }
+        foreach ($TISData as $array) {
+            $data[$array['county']]['TIS'] = $array['TIS'];
+            $data[$array['county']]['TISPCT'] = (0 < $totals['TISTotal']) ? sprintf('%01.1f', 100 * ($array['TIS'] / $totals['TISTotal'])) . '%' : 0;
+        }
+        foreach ($THSData as $array) {
+            $data[$array['county']]['THS'] = $array['THS'];
+            $data[$array['county']]['THSPCT'] = (0 < $totals['THSTotal']) ? sprintf('%01.1f', 100 * ($array['THS'] / $totals['THSTotal'])) . '%' : 0;
+        }
+
+        return $data;
     }
 
-    public function setDetails($criteria)
-    {
+    public function setDetails($criteria) {
         //details creates an array $countyStats[county][type][category]
         //where type = contact description, category is Unique or Total
         //Individuals or Households
@@ -519,8 +530,7 @@ class Reports
         $this->details = $details;
     }
 
-    public function getStats()
-    {
+    public function getStats() {
         $data = array();
         $data['statistics'] = $this->statistics;
 //        $data['specs'] = $this->specs;
@@ -528,39 +538,7 @@ class Reports
         return $data;
     }
 
-//    public function getSpecs($criteria)
-//    {
-//        $this->setCriteria($criteria);
-//
-//        return $this->specs;
-//    }
-
-    /**
-     * calculate county percentages.
-     *
-     * @param type $stats
-     * @param type $counties
-     */
-    public function getCountyPcts($statistics, $counties, $ctyStats)
-    {
-        foreach ($counties as $county) {
-            $county = $county->getCounty();
-            $pct_IS = ($statistics['IS']) ? round((100 * $ctyStats[$county]['IS'] / $statistics['IS']), 1) : '-';
-            $pct_UIS = ($statistics['UIS']) ? round((100 * $ctyStats[$county]['UIS'] / $statistics['UIS']), 1) : '-';
-            $pct_THS = ($statistics['THS']) ? round((100 * $ctyStats[$county]['THS'] / $statistics['THS']), 1) : '-';
-            $pct_UHS = ($statistics['UHS']) ? round((100 * $ctyStats[$county]['UHS'] / $statistics['UHS']), 1) : '-';
-            $countypct[$county] = array(
-                'IS' => $pct_IS,
-                'UIS' => $pct_UIS,
-                'THS' => $pct_THS,
-                'UHS' => $pct_UHS, );
-        }
-
-        return $countypct;
-    }
-
-    public function getMultiContacts($criteria)
-    {
+    public function getMultiContacts($criteria) {
         $this->setCriteria($criteria);
         $sql = "select distinct c1.household_id id, m.fname, m.sname, center,
             date_format(c1.contact_date,'%m/%d/%Y') 'contact_date', contact_desc from contact c1
@@ -578,8 +556,7 @@ class Reports
         return $multis;
     }
 
-    public function getFiscalYearToDate()
-    {
+    public function getFiscalYearToDate() {
         $year = date_format(new \DateTime(), 'Y');
         $month = date_format(new \DateTime(), 'n');
         $fy = ($month < 7) ? $year : $year + 1;
@@ -587,9 +564,9 @@ class Reports
         $fy_months = array_merge(range(7, 12), range(1, 6));
         $i = 0;
         for ($i = 0; $fy_months[$i] != $month; ++$i) {
-            $chart['categories'][] = "'".date_format(new \DateTime('2000-'.$fy_months[$i].'-01'), 'F')."', ";
+            $chart['categories'][] = "'" . date_format(new \DateTime('2000-' . $fy_months[$i] . '-01'), 'F') . "', ";
         }
-        $chart['categories'][] = "'".date_format(new \DateTime('2000-'.$fy_months[$i].'-01'), 'F')."'";
+        $chart['categories'][] = "'" . date_format(new \DateTime('2000-' . $fy_months[$i] . '-01'), 'F') . "'";
         $sqlSites = 'SELECT center FROM center WHERE enabled = TRUE ORDER BY center ASC';
         $siteQuery = $this->conn->fetchAll($sqlSites);
 
@@ -598,21 +575,22 @@ class Reports
             $site = $siteArray['center'];
             $seriesString = "{name:'$site', data:[";
             $sql = 'SELECT COUNT(DISTINCT c.household_id) N '
-                    .'FROM Contact c '
-                    .'JOIN Center r '
-                    .'ON r.id=c.center_id '
-                    .'WHERE r.center="'.$site.'" '
-                    .'AND fy(c.contact_date) = '.$fy.' '
-                    .'GROUP BY monthname(c.contact_date) '
-                    .'ORDER BY c.contact_date';
+                    . 'FROM Contact c '
+                    . 'JOIN Center r '
+                    . 'ON r.id=c.center_id '
+                    . 'WHERE r.center="' . $site . '" '
+                    . 'AND fy(c.contact_date) = ' . $fy . ' '
+                    . 'GROUP BY monthname(c.contact_date) '
+                    . 'ORDER BY c.contact_date';
             $query = $this->conn->fetchAll($sql);
             foreach ($query as $array) {
-                $seriesString .= $array['N'].',';
+                $seriesString .= $array['N'] . ',';
             }
-            $series .= $seriesString.']}, ';
+            $series .= $seriesString . ']}, ';
         }
-        $chart['series'] = $series.']';
+        $chart['series'] = $series . ']';
 
         return $chart;
     }
+
 }

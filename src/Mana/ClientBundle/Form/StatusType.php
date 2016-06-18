@@ -17,12 +17,12 @@ class StatusType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-            ->add('status', ChoiceType::class, array(
+            ->add('status', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
                 'choices' => array('Yes' => 'Yes', 'No' => 'No'),
                 'label' => 'Change status to: ',
                 'attr' => array("class" => "smallform"),
                 ))
-            ->add('years', ChoiceType::class, array(
+            ->add('years', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
                 'choices' => $this->years,
                 'attr' => array("class" => "smallform"),
                 ))

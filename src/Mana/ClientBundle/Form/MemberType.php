@@ -29,7 +29,7 @@ class MemberType extends AbstractType
                 ->add('dob', DobAgeType::class, array(
                     'label' => 'DOB or age:',
                 ))
-                ->add('sex', ChoiceType::class, array(
+                ->add('sex', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
                     'label' => 'Gender:',
                     'placeholder' => 'Select gender',
                     'choices' => array('Male' => 'Male', 'Female' => 'Female'),
@@ -46,7 +46,7 @@ class MemberType extends AbstractType
                         ;
                     },
                 ))
-                ->add('include', ChoiceType::class, array(
+                ->add('include', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
                     'choices' => array('Yes' => 1, 'No' => 0),
                     'choices_as_values' => true,
                     'label' => 'Include? ',

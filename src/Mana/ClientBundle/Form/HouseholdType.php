@@ -29,7 +29,7 @@ class HouseholdType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $this->new = $options['new'];
         $builder
-                ->add('active', ChoiceType::class, array(
+                ->add('active', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
                     'choices' => array('1' => 'Yes', '0' => 'No'),
                     'label' => 'Active: ',
                     'attr' => $options['attr'],
@@ -52,7 +52,7 @@ class HouseholdType extends AbstractType
                     'label' => 'Arrival year: ',
                     'attr' => $options['attr'],
                 ))
-                ->add('compliance', ChoiceType::class, array(
+                ->add('compliance', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
                     'choices' => array('0' => 'No', '1' => 'Yes'),
                     'label' => 'Compliance: ',
                     'attr' => $options['attr'],
@@ -168,7 +168,7 @@ class HouseholdType extends AbstractType
                                 ->where("r.enabled=1");
                     },
                 ))
-                ->add('shared', ChoiceType::class, array(
+                ->add('shared', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
                     'choices' => array('0' => 'No', '1' => 'Yes'),
                     'label' => 'Shared: ',
                     'attr' => $options['attr'],

@@ -11,7 +11,7 @@
 
 //src\Mana\ClientBundle\Tests\Controller\ManaWebTestCase.php
 
-namespace Mana\ClientBundle\Tests\Controller;
+namespace Mana\ClientBundle\Tests;
 
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 

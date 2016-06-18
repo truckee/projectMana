@@ -40,16 +40,6 @@ class StatisticsController extends Controller
             $statistics = $data['statistics'];
             $templateSpecs = $specs['templateCriteria'];
             $templateSpecs['reportType'] = 'General Statistics';
-            $counties = $em->getRepository("ManaClientBundle:County")->findByEnabled(1);
-            $ctyStats = ('' === $specs['reportCriteria']['county']) ? $reports->getCountyStats() : 0;
-            $ctyPcts = ($specs['reportCriteria']['county'] || $specs['reportCriteria']['center']) ? 0 : $reports->getCountyPcts($statistics, $counties, $ctyStats);
-            if ($ctyPcts <> 0 && $ctyStats <> 0) {
-                foreach ($ctyStats as $cty => $ctyData) {
-                    foreach ($ctyData as $key => $value) {
-                        $ctyStats[$cty][$key . 'Pct'] = $ctyPcts[$cty][$key];
-                    }
-                }
-            }
             $templates[] = 'ManaClientBundle:Statistics:individualsServed.html.twig';
             $templates[] = 'ManaClientBundle:Statistics:householdsServed.html.twig';
             if ('' === $specs['reportCriteria']['contact_type']) {
@@ -61,6 +51,7 @@ class StatisticsController extends Controller
             $templates[] = 'ManaClientBundle:Statistics:ageGenderDistribution.html.twig';
             $templates[] = 'ManaClientBundle:Statistics:residencyDistribution.html.twig';
             if ('' === $templateSpecs['county'] . $templateSpecs['center']) {
+                $statistics['countyStats'] = $reports->getCountyStats();
                 $templates[] = 'ManaClientBundle:Statistics:countyDistribution.html.twig';
             }
             $templates[] = 'ManaClientBundle:Statistics:familySizeDistribution.html.twig';
@@ -72,8 +63,6 @@ class StatisticsController extends Controller
                 'excel' => 'General',
                 'specs' => $templateSpecs,
                 'statistics' => $statistics,
-                'ctyStats' => $ctyStats,
-                'ctyPcts' => $ctyPcts,
                 'title' => "General statistics",
                 'reportHeader' => $this->getReportHeader($templateSpecs),
                 'templates' => $templates,
@@ -152,9 +141,12 @@ class StatisticsController extends Controller
             $templateSpecs['reportType'] = 'Multiple Same Date Contacts';
             $multi = $reports->getMultiContacts($reportSpecs);
             if (count($multi) == 0) {
-                $session->set('message', 'No instances of multiple same-date contacts found');
-                return $this->forward("ManaClientBundle:Default:message");
+                $flash = $this->get('braincrafted_bootstrap.flash');
+                $flash->alert('No instances of multiple same-date contacts found');
+                
+                return $this->redirect($this->getRequest()->headers->get('referer'));
             }
+            
             return array('multi' => $multi,
                 'title' => 'Multiple contacts',
                 'reportHeader' => $this->getReportHeader($templateSpecs),
