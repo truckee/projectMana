@@ -44,11 +44,11 @@ doctrine:
         entity_managers:
           default:
             auto_mapping: true
-            dql:
-              string_functions:
-                Soundex: Mana\ClientBundle\DQL\Soundex
-              datetime_functions: 
-                Year: DoctrineExtensions\Query\Mysql\Year
+#            dql:
+#              string_functions:
+#                Soundex: Mana\ClientBundle\DQL\Soundex
+#              datetime_functions: 
+#                Year: DoctrineExtensions\Query\Mysql\Year
 
 # Swiftmailer Configuration
 swiftmailer:

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Truckee\ProjectMana package.
  * 
@@ -20,20 +21,18 @@ use Mana\ClientBundle\Tests\ManaWebTestCase;
 class StatusTest extends ManaWebTestCase
 {
 
-    public function setup()
-    {
+    public function setup() {
         $this->client = static::makeClient();
         $this->client->followRedirects();
         $this->fixtures = $this->loadFixtures([
-                'Mana\ClientBundle\DataFixtures\Test\Users',
-                'Mana\ClientBundle\DataFixtures\Test\Constants',
-                'Mana\ClientBundle\DataFixtures\Test\Households',
-                'Mana\ClientBundle\DataFixtures\Test\Contacts',
-            ])->getReferenceRepository();
+                    'Mana\ClientBundle\DataFixtures\Test\Users',
+                    'Mana\ClientBundle\DataFixtures\Test\Constants',
+                    'Mana\ClientBundle\DataFixtures\Test\Households',
+                    'Mana\ClientBundle\DataFixtures\Test\Contacts',
+                ])->getReferenceRepository();
     }
 
-    public function login()
-    {
+    public function login() {
         $crawler = $this->client->request('GET', '/');
         $form = $crawler->selectButton('Login')->form();
         $form['_username'] = 'admin';
@@ -42,18 +41,26 @@ class StatusTest extends ManaWebTestCase
 
         return $crawler;
     }
-    
+
     public function testStatusChange() {
         $crawler = $this->login();
         $crawler = $this->client->request('GET', '/status');
         $form = $crawler->selectButton('Submit')->form();
         $year = date_format(new \DateTime(), 'Y');
-        $active = $crawler->filter('#active' . $year);
+        $activeBefore = trim($crawler->filter('#active' . $year)->text());
         $form['status[' . $year . ']']->select('inactive');
         $crawler = $this->client->submit($form);
-        $inactive = $crawler->filter('#inactive' . $year);
-        
+        $inactive = trim($crawler->filter('#inactive' . $year)->text());
+
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Household status updated")')->count());
-        $this->assertEquals($active, $inactive);
+        $this->assertEquals($activeBefore, $inactive);
+
+        $form = $crawler->selectButton('Submit')->form();
+        $form['status[' . $year . ']']->select('active');
+        $crawler = $this->client->submit($form);
+        $activeAfter = trim($crawler->filter('#active' . $year)->text());
+
+        $this->assertEquals($activeBefore, $activeAfter);
     }
+
 }

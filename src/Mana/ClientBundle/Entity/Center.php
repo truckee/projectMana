@@ -176,7 +176,7 @@ class Center
     }
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @codeCoverageIgnore
      *
      * @ORM\OneToMany(targetEntity="Household", mappedBy="center", cascade={"persist"})
      */
@@ -185,7 +185,7 @@ class Center
 
     /**
      * Add households
-     *
+     * @codeCoverageIgnore
      * @param \Mana\ClientBundle\Entity\Household $households
      * @return Household
      */
@@ -197,7 +197,7 @@ class Center
 
     /**
      * Remove households
-     *
+     * @codeCoverageIgnore
      * @param \Mana\ClientBundle\Entity\Household $households
      */
     public function removeHousehold(\Mana\ClientBundle\Entity\Household $household) {
@@ -206,7 +206,7 @@ class Center
 
     /**
      * Get households
-     *
+     * @codeCoverageIgnore
      * @return \Doctrine\Common\Collections\Collection 
      */
     public function getHouseholds() {

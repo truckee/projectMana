@@ -7,10 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Mana\ClientBundle\Entity\Member;
 use Mana\ClientBundle\Entity\Address;
 use Mana\ClientBundle\Entity\Phone;
-use Mana\ClientBundle\Entity\Appliance;
 use Mana\ClientBundle\Entity\Notfoodstamp;
 use Mana\ClientBundle\Entity\Housing;
-use Mana\ClientBundle\Entity\IncomeSource;
 use Mana\ClientBundle\Entity\FsAmount;
 use Mana\ClientBundle\Entity\FsStatus;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -387,57 +385,6 @@ class Household
     public function getHead()
     {
         return $this->head;
-    }
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Appliance", inversedBy="households", cascade={"persist"})
-     * @ORM\JoinTable(name="household_appliance",
-     *      joinColumns={@ORM\JoinColumn(name="household_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="appliance_id", referencedColumnName="id")}
-     *      ))
-     */
-    protected $appliances;
-
-    public function addAppliance(Appliance $appliance)
-    {
-        $appliance->addHousehold($this); // synchronously updating inverse side
-        $this->appliances[] = $appliance;
-    }
-
-    public function getAppliances()
-    {
-        return $this->appliances;
-    }
-
-    /**
-     * @var \Mana\ClientBundle\Entity\IncomeSource
-     *
-     * @ORM\ManyToMany(targetEntity="IncomeSource", inversedBy="household")
-     */
-    protected $incomeSource;
-
-    public function addIncomeSource(IncomeSource $incomeSource)
-    {
-        $incomeSource->addHousehold($this); // synchronously updating inverse side
-        $this->incomeSource[] = $incomeSource;
-    }
-
-    /**
-     * Remove incomesources
-     *
-     * @param \Mana\ClientBundle\Entity\IncomeSource $incomeSource
-     */
-    public function removeIncomeSource(IncomeSource $incomeSource)
-    {
-        $this->incomeSources->removeElement($incomeSource);
-        $incomeSource->setHousehold(null);
-    }
-
-    public function getIncomeSource()
-    {
-        return $this->incomeSource;
     }
 
     /**

@@ -5,7 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+//src\Mana\ClientBundle\DataFixtures\Test\StatisticsControllerTest.php
 namespace Mana\ClientBundle\Tests;
 
 /**
@@ -48,6 +48,21 @@ class StatisticsControllerTest extends ManaWebTestCase
         $reportDate = date_format($date, 'F, Y');
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("General Statistics for '.$reportDate.'")')->count());
+    }
+
+    public function testCenterGeneralStatistics()
+    {
+        $crawler = $this->login();
+        $crawler = $this->client->request('GET', '/reports/general');
+        $form = $crawler->selectButton('Submit')->form();
+        $truckee = $this->fixtures->getReference('truckee')->getId();
+        $form['report_criteria[center]']->select($truckee);
+        $crawler = $this->client->submit($form);
+        $date = new \DateTime('last month');
+        $reportDate = date_format($date, 'F, Y');
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("General Statistics for '.$reportDate.'")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Truckee")')->count());
     }
 
     public function testDetailsStatistics()

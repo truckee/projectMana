@@ -118,15 +118,15 @@ easy_admin:
                 fields: 
                     - {property: 'income', label: 'Bracket'}
                     - enabled
-        IncomeSource:
-            class: Mana\ClientBundle\Entity\IncomeSource
-            label: Income sources
-            list:
-                title: '%%entity_label%%'
-                fields: [incomeSource, enabled]
-            form:
-                title: '%%entity_label%%'
-                fields: [incomeSource, enabled]
+#        IncomeSource:
+#            class: Mana\ClientBundle\Entity\IncomeSource
+#            label: Income sources
+#            list:
+#                title: '%%entity_label%%'
+#                fields: [incomeSource, enabled]
+#            form:
+#                title: '%%entity_label%%'
+#                fields: [incomeSource, enabled]
         Notfoodstamp:
             class: Mana\ClientBundle\Entity\Notfoodstamp
             label: Why not foodstamps
