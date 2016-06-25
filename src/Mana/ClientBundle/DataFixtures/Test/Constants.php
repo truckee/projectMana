@@ -14,11 +14,18 @@ namespace Mana\ClientBundle\DataFixtures\Test;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Mana\ClientBundle\Entity\AddressType;
 use Mana\ClientBundle\Entity\Center;
 use Mana\ClientBundle\Entity\ContactDesc;
 use Mana\ClientBundle\Entity\County;
 use Mana\ClientBundle\Entity\Ethnicity;
+use Mana\ClientBundle\Entity\FsAmount;
 use Mana\ClientBundle\Entity\FsStatus;
+use Mana\ClientBundle\Entity\Housing;
+use Mana\ClientBundle\Entity\Income;;
+use Mana\ClientBundle\Entity\Notfoodstamp;
+use Mana\ClientBundle\Entity\Reason;
+use Mana\ClientBundle\Entity\State;
 
 /**
  * Description of Constants.
@@ -127,6 +134,7 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
 
         $foodstamp = new FsStatus();
         $foodstamp->setStatus('No');
+        $this->setReference('fsNo', $foodstamp);
         $manager->persist($foodstamp);
 
         $foodstamp1 = new FsStatus();
@@ -137,10 +145,10 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
         $foodstamp2->setStatus('Appl');
         $manager->persist($foodstamp2);
 
-        $foodstamp = new FsStatus();
-        $foodstamp->setStatus('Unknown');
-        $this->setReference('unk', $foodstamp);
-        $manager->persist($foodstamp);
+        $fsStatus = new FsStatus();
+        $fsStatus->setStatus('Unknown');
+        $this->setReference('unk', $fsStatus);
+        $manager->persist($fsStatus);
 
         $desc = new ContactDesc();
         $desc->setContactDesc('FACE');
@@ -154,6 +162,90 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
         $this->setReference('general', $desc1);
         $manager->persist($desc1);
 
+        $fsamount1 = new FsAmount();
+        $fsamount1->setAmount('0 - 200');
+        $fsamount1->setEnabled(true);
+        $this->setReference('fsamount1', $fsamount1);
+        $manager->persist($fsamount1);
+
+        $fsamount2 = new FsAmount();
+        $fsamount2->setAmount('201 - 400');
+        $fsamount2->setEnabled(true);
+        $this->setReference('fsamount2', $fsamount2);
+        $manager->persist($fsamount2);
+
+        $addType1 = new AddressType();
+        $addType1->setAddresstype('Mailing');
+        $addType1->setEnabled(true);
+        $this->setReference('mailing', $addType1);
+        $manager->persist($addType1);
+
+        $addType2 = new AddressType();
+        $addType2->setAddresstype('Physical');
+        $addType2->setEnabled(true);
+        $this->setReference('mailing', $addType2);
+        $manager->persist($addType2);
+        
+        $ca = new State();
+        $ca->setState('CA');
+        $ca->setEnabled(true);
+        $this->setReference('ca', $ca);
+        $manager->persist($ca);
+        
+        $nv = new State();
+        $nv->setState('NV');
+        $nv->setEnabled(true);
+        $this->setReference('nv', $nv);
+        $manager->persist($nv);
+        
+        $notQualified = new Notfoodstamp();
+        $notQualified->setNotfoodstamp('Not qualified');
+        $notQualified->setEnabled(true);
+        $this->setReference('notQ', $notQualified);
+        $manager->persist($notQualified);
+
+        $notApplied = new Notfoodstamp();
+        $notApplied->setNotfoodstamp('Not applied');
+        $notApplied->setEnabled(true);
+        $this->setReference('notA', $notApplied);
+        $manager->persist($notApplied);
+
+        $rent = new Housing();
+        $rent->setHousing('Renting');
+        $rent->setEnabled(true);
+        $this->setReference('rent', $rent);
+        $manager->persist($rent);
+
+        $own = new Housing();
+        $own->setHousing('Owner');
+        $own->setEnabled(true);
+        $this->setReference('own', $own);
+        $manager->persist($own);
+
+        $housing = new Reason();
+        $housing->setReason('Housing/Utility Cost');
+        $housing->setEnabled(true);
+        $this->setReference('housing', $housing);
+        $manager->persist($housing);
+
+        $unemployed = new Reason();
+        $unemployed->setReason('Unemployed');
+        $unemployed->setEnabled(true);
+        $this->setReference('unemployed', $unemployed);
+        $manager->persist($unemployed);
+        
+        $income1 = new Income();
+        $income1->setIncome('0 - 500');
+        $income1->setEnabled(true);
+        $this->setReference('lowIncome', $income1);
+        $manager->persist($income1);
+
+        $income2 = new Income();
+        $income2->setIncome('501 - 1,000');
+        $income2->setEnabled(true);
+        $this->setReference('medIncome', $income2);
+        $manager->persist($income2);
+        
         $manager->flush();
     }
 

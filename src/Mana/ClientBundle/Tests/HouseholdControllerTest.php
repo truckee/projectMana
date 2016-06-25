@@ -30,6 +30,7 @@ class HouseholdControllerTest extends ManaWebTestCase
                     'Mana\ClientBundle\DataFixtures\Test\Users',
                     'Mana\ClientBundle\DataFixtures\Test\Constants',
                     'Mana\ClientBundle\DataFixtures\Test\Households',
+                    'Mana\ClientBundle\DataFixtures\Test\HouseholdOptions',
                 ])->getReferenceRepository();
 //        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
     }
@@ -169,4 +170,30 @@ class HouseholdControllerTest extends ManaWebTestCase
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Sorry, no households were found")')->count());
     }
+
+//    public function testChangeHouseOptions()
+//    {
+//        $crawler = $this->login();
+//        $id = $this->fixtures->getReference('house1')->getId();
+//        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
+//        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
+//
+//        $foodstamp = $this->fixtures->getReference('fsNo')->getId();
+//        $fsamount = $this->fixtures->getReference('fsamount2')->getId();
+//        $housing = $this->fixtures->getReference('own')->getId();
+//        $income = $this->fixtures->getReference('medIncome')->getId();
+//        $unemployed = $this->fixtures->getReference('unemployed')->getId();
+//
+//        $form = $crawler->selectButton('Submit')->form();
+//        $truckee = $this->fixtures->getReference('truckee')->getId();
+//        $form['household[foodstamp]'] = $foodstamp;
+//        $form['household[income]'] = $income;
+//        $form['household[center]'] = $truckee;
+//        $form['household[reason]'] = $reason;
+//        $form['household[phone]'] = '123-4567';
+//        $form['household[areacode]'] = '123';
+//        $crawler = $this->client->submit($form);
+
+//        $this->assertGreaterThan(0, $crawler->filter('html:contains("Household updated")')->count());
+//    }
 }

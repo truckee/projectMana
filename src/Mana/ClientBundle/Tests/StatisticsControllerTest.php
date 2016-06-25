@@ -23,6 +23,7 @@ class StatisticsControllerTest extends ManaWebTestCase
                     'Mana\ClientBundle\DataFixtures\Test\Users',
                     'Mana\ClientBundle\DataFixtures\Test\Constants',
                     'Mana\ClientBundle\DataFixtures\Test\Households',
+                    'Mana\ClientBundle\DataFixtures\Test\Contacts',
                 ])->getReferenceRepository();
 //        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
     }

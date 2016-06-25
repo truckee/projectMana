@@ -1,12 +1,10 @@
 $(document).ready(function () {
-    // for contacts
-//    var contactForm = $('#contact_form');
     // for household addresses
     var addressForm = $('#addressForm');
     var addressWidget = $('#addressWidget').attr('data-prototype');
-    var foodStampSelect = $("select#household_foodStamps");
-//    var foodStampSelect = $("#household_foodstamp");
-    var option = $("#household_foodstamp option:selected").val();
+    var foodStampSelect = $("#household_foodstamp");
+
+    foodStampShowHide($("#household_foodstamp option:selected").val());
 
     $("#dialog").dialog({
         autoOpen: false,
@@ -80,69 +78,6 @@ $(document).ready(function () {
         }
     });
 
-//    $("#contact_household_button").click(function () {
-//        var houseId = $("#contact_householdId").val();
-//        $(".alert").html("");
-//        $(".alert").removeClass('alert-warning');
-//        if (houseId !== "") {
-//            // make sure household not already listed
-//            var present = false;
-//            var houseCol = $(".text-right");
-//            $.each(houseCol, function () {
-//                if (this.textContent === houseId) {
-//                    present = true;
-//                    return;
-//                }
-//            })
-//            if (!present) {
-//                var where = $(location).attr('pathname');
-//                var url = where.replace('contact/addContacts', 'household/contact/' + houseId);
-//                $.get(url, function (data) {
-//                    //make sure household exists
-//                    if (data !== '') {
-//                        $("#latestContacts").prepend(data);
-//                    } else {
-//                        alert('Household does not exist');
-//                    }
-//                })
-//            } else {
-//                alert("Household already listed")
-//            }
-//            $("#contact_householdId").val("");
-//        }
-//    });
-//
-//    $("#contact_center").change(function () {
-//        center = $("#contact_center").val();
-//        $(".alert").html("");
-//        $(".alert").removeClass('alert-warning');
-//        if (center === "") {
-//            $("#householdById").hide();
-//            contactForm.html("");
-//        } else {
-//            $("#householdById").show();
-//            $("#dialog").dialog('open');
-//            $("#dialog").dialog("widget")            // get the dialog widget element
-//                    .find(".ui-dialog-titlebar-close") // find the close button for this dialog
-//                    .hide();
-//            var where = $(location).attr('pathname');
-//            var url = where.replace('contact/addContacts', 'contact/latest/' + center);
-//            var jqxhr = $.get(url, function (data) {
-//                if (data.length > 0) {
-//                    contactForm.html(data);
-//                    $("#dialog").dialog('close');
-//                } else {
-//                    $("#dialog").dialog('close');
-//                    alert('No data found');
-//                }
-//            })
-//        }
-//    });
-//
-//    if ($("#householdById").length > 0) {
-//        $("#householdById").hide();
-//    }
-
     $(document).on("click", "#selectAll", function () {
         if ($("#selectAll").prop("checked")) {
             $("input[type='checkbox']").prop("checked", true);
@@ -151,7 +86,7 @@ $(document).ready(function () {
         }
     });
 
-    foodStampSelect.click(function () {
+    foodStampSelect.change(function () {
         var option = $("#household_foodstamp option:selected").val();
         foodStampShowHide(option);
     });
@@ -283,30 +218,27 @@ function removeAddress(me) {
 function foodStampShowHide(option) {
     //Blank option === ""
     if (option === "" || option > "2") {
-        $("label[for=household_fsamount]").hide();
-        $("select#household_fsamount").hide();
+        $("label[for=household_fsamount]").parent().hide();
+//        $("select#household_fsamount").hide();
         $("select#household_fsamount").val("");
-        $("label[for=household_notfoodstamp]").hide();
-        $("select#household_notfoodstamp").hide();
+        $("label[for=household_notfoodstamp]").parent().hide();
+//        $("select#household_notfoodstamp").hide();
         $("select#household_notfoodstamp").val("");
-        $("label[for=household_fsamount]").hide();
-        $("select#household_fsamount").hide();
-        $("select#household_fsamount").val("");
     }
     //No foodstamps: option === "1"
     if (option === "1") {
-        $("label[for=household_notfoodstamp]").show();
-        $("select#household_notfoodstamp").show();
-        $("label[for=household_fsamount]").hide();
-        $("select#household_fsamount").hide();
+        $("label[for=household_notfoodstamp]").parent().show();
+//        $("select#household_notfoodstamp").show();
+        $("label[for=household_fsamount]").parent().hide();
+//        $("select#household_fsamount").hide();
         $("select#household_fsamount").val("");
     }
     //Yes option === "2"
     if (option === "2") {
-        $("label[for=household_fsamount]").show();
-        $("select#household_fsamount").show();
-        $("label[for=household_notfoodstamp]").hide();
-        $("select#household_notfoodstamp").hide();
+        $("label[for=household_fsamount]").parent().show();
+//        $("select#household_fsamount").show();
+        $("label[for=household_notfoodstamp]").parent().hide();
+//        $("select#household_notfoodstamp").hide();
         $("select#household_notfoodstamp").val("");
     }
 }

@@ -27,15 +27,10 @@
             <div class="col-md-2">
                 {{ form_row(form.foodstamp) }}
             </div>
-            {% if form.vars.value.fsamount %}
                 <div class="col-md-3">
                     {{ form_row(form.fsamount) }}
-                </div>
-            {%else%}
-                <div class="col-md-3">
                     {{ form_row(form.notfoodstamp) }}
                 </div>
-            {% endif %}
             <div class="col-md-2">
                 {{ form_row(form.housing) }}
             </div>

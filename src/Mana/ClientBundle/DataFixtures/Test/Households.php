@@ -34,11 +34,11 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $eth = $this->getReference('cau');
         $member->setEthnicity($eth);
         $manager->persist($member);
+
         $member2 = new Member();
         $member2->setFname('Added');
         $member2->setSname('Member');
         $member2->setInclude(true);
-        $eth = $this->getReference('cau');
         $member2->setEthnicity($eth);
         $manager->persist($member2);
 
@@ -48,6 +48,7 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $household->setHead($member);
         $household->addMember($member);
         $household->addMember($member2);
+        $household->setFoodstamp(1);
         $this->setReference('house1', $household);
         $unk = $this->getReference('unk');
         $household->setFoodstamp($unk);

@@ -67,13 +67,6 @@ class Reports
         }
     }
 
-    public function dataExist() {
-        $sql = 'select count(*) N from contacts' . $this->_where;
-        $data = $this->conn->fetchAssoc($sql);
-
-        return $data['N'];
-    }
-
     public function setStats($criteria) {
         $this->setCriteria($criteria);
         //fill tables for common statistics
@@ -421,7 +414,7 @@ group by cty.county';
             foreach ($categories as $category) {
                 $varname = $category . 'Data';
                 foreach ($counties as $county) {
-                    $$varname[] = array('county' => $county['county'], $category => 0);
+                    ${$varname}[] = array('county' => $county['county'], $category => 0);
                 }
             }
         }
@@ -574,14 +567,11 @@ group by cty.county';
         foreach ($siteQuery as $siteArray) {
             $site = $siteArray['center'];
             $seriesString = "{name:'$site', data:[";
-            $sql = 'SELECT COUNT(DISTINCT c.household_id) N '
-                    . 'FROM Contact c '
-                    . 'JOIN Center r '
-                    . 'ON r.id=c.center_id '
-                    . 'WHERE r.center="' . $site . '" '
-                    . 'AND fy(c.contact_date) = ' . $fy . ' '
-                    . 'GROUP BY monthname(c.contact_date) '
-                    . 'ORDER BY c.contact_date';
+            $sql = 'SELECT COUNT(DISTINCT c.household_id) N FROM contact c JOIN center r ON r.id=c.center_id WHERE r.center=';
+            $sql .= "'$site'";
+            $sql .= ' AND fy(c.contact_date) = ';
+            $sql .= "'$fy'";
+            $sql .= ' GROUP BY monthname(c.contact_date) ORDER BY c.contact_date';
             $query = $this->conn->fetchAll($sql);
             foreach ($query as $array) {
                 $seriesString .= $array['N'] . ',';
