@@ -127,16 +127,8 @@ class ContactTest extends ManaWebTestCase
         $form = $crawler->selectButton('Submit')->form();
         $form['select_center[center]'] = $truckee;
         $crawler = $this->client->submit($form);
-file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("No contacts found")')->count());
 
-//        $crawler = $this->client->request('GET', '/contact/latestReport');
-//        $tahoe = $this->fixtures->getReference('tahoe')->getId();
-//        $form = $crawler->selectButton('Submit')->form();
-//        $form['select_center[center]'] = $tahoe;
-//        $crawler = $this->client->submit($form);
-//        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
-//
-//        $this->assertGreaterThan(0, $crawler->filter('html:contains("Open with")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("No contacts found")')->count());
     }
+
 }

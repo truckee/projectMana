@@ -7,35 +7,35 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-class StatusType extends AbstractType {
-    
+class StatusType extends AbstractType
+{
     protected $years;
 
-    public function __construct($years) {
+    public function __construct($years)
+    {
         $this->years = $years;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder
-            ->add('status', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
+            ->add('status', ChoiceType::class, array(
                 'choices' => array('Yes' => 'Yes', 'No' => 'No'),
+                'choices_as_values' => true,
                 'label' => 'Change status to: ',
-                'attr' => array("class" => "smallform"),
                 ))
-            ->add('years', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
+            ->add('years', ChoiceType::class, array(
                 'choices' => $this->years,
-                'attr' => array("class" => "smallform"),
+                'choices_as_values' => true,
                 ))
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver) {
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'required' => false,
-            
+
         ));
     }
-
-
 }
-?>

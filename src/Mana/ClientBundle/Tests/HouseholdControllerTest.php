@@ -129,12 +129,15 @@ class HouseholdControllerTest extends ManaWebTestCase
 
         $form = $crawler->selectButton('Submit')->form();
         $form['household[compliance]'] = 1;
+        $form['household[shared]'] = 1;
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Compliance date required")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Shared date required")')->count());
 
         $truckee = $this->fixtures->getReference('truckee')->getId();
         $form['household[complianceDate]'] = '6/1/2015';
+        $form['household[sharedDate]'] = '6/1/2015';
         $form['household[center]'] = $truckee;
         $crawler = $this->client->submit($form);
 
@@ -171,29 +174,55 @@ class HouseholdControllerTest extends ManaWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Sorry, no households were found")')->count());
     }
 
-//    public function testChangeHouseOptions()
-//    {
-//        $crawler = $this->login();
-//        $id = $this->fixtures->getReference('house1')->getId();
-//        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
-//        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
-//
-//        $foodstamp = $this->fixtures->getReference('fsNo')->getId();
-//        $fsamount = $this->fixtures->getReference('fsamount2')->getId();
-//        $housing = $this->fixtures->getReference('own')->getId();
-//        $income = $this->fixtures->getReference('medIncome')->getId();
-//        $unemployed = $this->fixtures->getReference('unemployed')->getId();
-//
-//        $form = $crawler->selectButton('Submit')->form();
-//        $truckee = $this->fixtures->getReference('truckee')->getId();
-//        $form['household[foodstamp]'] = $foodstamp;
-//        $form['household[income]'] = $income;
-//        $form['household[center]'] = $truckee;
-//        $form['household[reason]'] = $reason;
-//        $form['household[phone]'] = '123-4567';
-//        $form['household[areacode]'] = '123';
-//        $crawler = $this->client->submit($form);
+    public function testValidateHousehold()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('house1')->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
 
-//        $this->assertGreaterThan(0, $crawler->filter('html:contains("Household updated")')->count());
-//    }
+        $foodstamp = $this->fixtures->getReference('fsNo')->getId();
+        $income = $this->fixtures->getReference('medIncome')->getId();
+        $truckee = $this->fixtures->getReference('truckee')->getId();
+        $future = date_format(new \DateTime('next year'), 'm/d/Y');
+
+        $form = $crawler->selectButton('Submit')->form();
+        $form['household[foodstamp]'] = $foodstamp;
+        $form['household[income]'] = $income;
+        $form['household[center]'] = $truckee;
+        $form['household[compliance]'] = '1';
+        $form['household[complianceDate]'] = $future;
+        $form['household[shared]'] = '1';
+        $form['household[sharedDate]'] = $future;
+        $form['household[phones][0][phoneNumber]'] = '12367';
+        $form['household[phones][0][areacode]'] = '12';
+        
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Phone # must be xxx-yyyy")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Area code must be 3 digits")')->count());
+        $this->assertEquals(1, $crawler->filter('html:contains("Date may not be in future")')->count());
+    }
+
+    public function testValidateSharedDate()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('house1')->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
+
+        $foodstamp = $this->fixtures->getReference('fsNo')->getId();
+        $income = $this->fixtures->getReference('medIncome')->getId();
+        $truckee = $this->fixtures->getReference('truckee')->getId();
+        $future = date_format(new \DateTime('next year'), 'm/d/Y');
+
+        $form = $crawler->selectButton('Submit')->form();
+        $form['household[foodstamp]'] = $foodstamp;
+        $form['household[income]'] = $income;
+        $form['household[center]'] = $truckee;
+        $form['household[shared]'] = '1';
+        $form['household[sharedDate]'] = $future;
+
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Date may not be in future")')->count());
+    }
 }

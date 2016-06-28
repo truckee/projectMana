@@ -16,13 +16,14 @@ namespace Mana\ClientBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Mana\ClientBundle\Form\Field\CenterEnabledChoiceType;
 
 class SelectCenterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('center', new Field\CenterEnabledChoiceType());
+            ->add('center', CenterEnabledChoiceType::class);
     }
     
     public function configureOptions(OptionsResolver $resolver)

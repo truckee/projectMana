@@ -4,8 +4,6 @@
 namespace Mana\ClientBundle\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
-//use Symfony\Component\Form\Exception\TransformationFailedException;
-//use Mana\ClientBundle\Entity\Member;
 
 class AgeToDOB implements DataTransformerInterface {
 

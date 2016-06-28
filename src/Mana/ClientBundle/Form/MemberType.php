@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Mana\ClientBundle\Form\Field\YesNoChoiceType;
 
 class MemberType extends AbstractType
 {
@@ -29,11 +30,12 @@ class MemberType extends AbstractType
                 ->add('dob', DobAgeType::class, array(
                     'label' => 'DOB or age:',
                 ))
-                ->add('sex', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
+                ->add('sex', ChoiceType::class, array(
                     'label' => 'Gender:',
                     'placeholder' => 'Select gender',
                     'choices' => array('Male' => 'Male', 'Female' => 'Female'),
-                ))
+                    'choices_as_values'  => true,
+                    ))
                 ->add('ethnicity', EntityType::class, array(
                     'label' => 'Ethnicity:',
                     'class' => 'ManaClientBundle:Ethnicity',
@@ -46,9 +48,7 @@ class MemberType extends AbstractType
                         ;
                     },
                 ))
-                ->add('include', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
-                    'choices' => array('Yes' => 1, 'No' => 0),
-                    'choices_as_values' => true,
+                ->add('include', YesNoChoiceType::class, array(
                     'label' => 'Include? ',
                 ))
                 ->add('excludeDate', DateType::class, array(

@@ -6,8 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Mana\ClientBundle\Form\Field\CenterEnabledChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Mana\ClientBundle\Form\Field\NoYesChoiceType;
 
 class HouseholdRequiredType extends AbstractType
 {
@@ -18,8 +18,7 @@ class HouseholdRequiredType extends AbstractType
                 ->add('center', CenterEnabledChoiceType::class, array(
                     'label' => 'Site ',
                 ))
-                ->add('compliance', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
-                    'choices' => array('0' => 'No', '1' => 'Yes'),
+                ->add('compliance', NoYesChoiceType::class, array(
                 ))
                 ->add('complianceDate', DateType::class, array(
                     'attr' => [
@@ -28,8 +27,7 @@ class HouseholdRequiredType extends AbstractType
                     'widget' => 'single_text',
                     'format' => 'MM/dd/yyyy',
                 ))
-                ->add('shared', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
-                    'choices' => array('0' => 'No', '1' => 'Yes'),
+                ->add('shared', NoYesChoiceType::class, array(
                 ))
                 ->add('sharedDate', DateType::class, array(
                     'attr' => [

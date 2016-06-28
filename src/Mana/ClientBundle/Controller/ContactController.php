@@ -30,7 +30,7 @@ class ContactController extends Controller {
         }
         $contact = new Contact();
         $contact->setContactDate(date_create());
-        $form = $this->createForm(\Mana\ClientBundle\Form\ContactType::class, $contact);
+        $form = $this->createForm(ContactType::class, $contact);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -65,7 +65,7 @@ class ContactController extends Controller {
         if (!$contact) {
             throw $this->createNotFoundException('Unable to find Contact.');
         }
-        $form = $this->createForm(\Mana\ClientBundle\Form\ContactType::class, $contact);
+        $form = $this->createForm(ContactType::class, $contact);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -94,7 +94,7 @@ class ContactController extends Controller {
     public function deleteAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
         $contact = $em->getRepository('ManaClientBundle:Contact')->find($id);
-        $form = $this->createForm(\Mana\ClientBundle\Form\ContactType::class, $contact);
+        $form = $this->createForm(ContactType::class, $contact);
         if ($request->isMethod('POST')) {
             $household = $contact->getHousehold();
             $hid = $household->getId();
@@ -119,7 +119,7 @@ class ContactController extends Controller {
      */
     public function addContactsAction(Request $request) {
         $contact = new Contact();
-        $form = $this->createForm(\Mana\ClientBundle\Form\ContactType::class, $contact);
+        $form = $this->createForm(ContactType::class, $contact);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -176,7 +176,7 @@ class ContactController extends Controller {
      */
     public function latestReportAction(Request $request) {
         $center = new Center();
-        $form = $this->createForm(\Mana\ClientBundle\Form\SelectCenterType::class, $center);
+        $form = $this->createForm(SelectCenterType::class, $center);
         $form->handleRequest($request);
         if ($form->isValid()) {
             //time limit extension required for multi-page rendering

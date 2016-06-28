@@ -26,7 +26,7 @@ class HouseholdHeadType extends AbstractType
                 ->add('dob', DobAgeType::class, array(
                     'label' => 'DOB or age ',
                 ))
-                ->add('sex', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
+                ->add('sex', ChoiceType::class, array(
                     'label' => 'Gender ',
                     'placeholder' => 'Select gender',
                     'choices' => array('Male' => 'Male', 'Female' => 'Female'),

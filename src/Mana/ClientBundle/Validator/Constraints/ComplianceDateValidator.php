@@ -17,7 +17,7 @@ class ComplianceDateValidator extends ConstraintValidator
         $compliance = $data->getCompliance();
         $complianceDate = $data->getComplianceDate();
         $isDateObj = is_object($complianceDate);
-        if (( 1 === $compliance && !$isDateObj)) {
+        if ( '1' === $compliance && !$isDateObj) {
 
             $this->context->addViolation($constraint->message, array('%string%' => $value));
 

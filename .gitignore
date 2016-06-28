@@ -6,7 +6,7 @@
 !app/logs/.gitkeep
 /app/phpunit.xml
 /bin/
-/composer.phar
+/c3.php
 /nbproject/
 /vendor/*
 /web/bundles/

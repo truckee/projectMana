@@ -17,10 +17,11 @@ class SharedDateValidator extends ConstraintValidator
         $shared = $data->getShared();
         $shareddate = $data->getSharedDate();
         $isDateObj = is_object($shareddate);
-        if (( 1 === $shared && !$isDateObj )) {
+        if ( '1' === $shared && !$isDateObj ) {
 
-            $this->context->addViolation($constraint->message, array('%string%' => $value));
-
+            $this->context->buildViolation($constraint->message)
+                ->setParameter('%string%', $value)
+                ->addViolation();
             return false;
         }
 

@@ -9,7 +9,9 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Mana\ClientBundle\Form\Field\CenterEnabledChoiceType;
 
 class ContactType extends AbstractType
 {
@@ -17,7 +19,7 @@ class ContactType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('center', new Field\CenterEnabledChoiceType())
+                ->add('center', CenterEnabledChoiceType::class)
                 ->add('contactDesc', EntityType::class, array(
                     'class' => 'ManaClientBundle:ContactDesc',
                     'label' => 'Contact type',
@@ -37,10 +39,8 @@ class ContactType extends AbstractType
                     'format' => 'M/d/y',
                     'years' => range(date('Y'), date('Y') - 5),
                 ))
-                ->add('household', ChoiceType::class, array(
+                ->add('household', CheckboxType::class, array(
                     'mapped' => false,
-                    'expanded' => true,
-                    'multiple' => true,
                 ))
                 ->add('householdId', TextType::class, array(
                     'mapped' => false,

@@ -51,6 +51,20 @@ class StatisticsControllerTest extends ManaWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("General Statistics for '.$reportDate.'")')->count());
     }
 
+    public function testDateValidator()
+    {
+        $crawler = $this->login();
+        $crawler = $this->client->request('GET', '/reports/general');
+        $form = $crawler->selectButton('Submit')->form();
+        $form['report_criteria[startMonth]'] = 1;
+        $form['report_criteria[endMonth]'] = 1;
+        $form['report_criteria[startYear]'] = 2016;
+        $form['report_criteria[endYear]'] = 2015;
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("End date must be same or later than start date")')->count());
+    }
+
     public function testCenterGeneralStatistics()
     {
         $crawler = $this->login();

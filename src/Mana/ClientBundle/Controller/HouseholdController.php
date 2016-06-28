@@ -11,6 +11,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Mana\ClientBundle\Form\HouseholdType;
+use Mana\ClientBundle\Form\HouseholdRequiredType;
 
 /**
  * Client controller.
@@ -68,7 +70,7 @@ class HouseholdController extends Controller
         $household = new Household();
         $head = new Member();
         $new = true;
-        $form = $this->createForm(\Mana\ClientBundle\Form\HouseholdRequiredType::class, $household);
+        $form = $this->createForm(HouseholdRequiredType::class, $household);
         $formHead = $this->createForm(\Mana\ClientBundle\Form\MemberType::class, $head);
         $form->handleRequest($request);
         $formHead->handleRequest($request);
@@ -136,7 +138,7 @@ class HouseholdController extends Controller
             $phone = new Phone();
             $household->addPhone($phone);
         }
-        $form = $this->createForm(\Mana\ClientBundle\Form\HouseholdType::class, $household, ['new' => $new]);
+        $form = $this->createForm(HouseholdType::class, $household, ['new' => $new]);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $em->getRepository('ManaClientBundle:Member')->initialize($household);

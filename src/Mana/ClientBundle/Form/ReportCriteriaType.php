@@ -12,6 +12,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Mana\ClientBundle\Validator\Constraints\CenterOrCounty;
 use Mana\ClientBundle\Validator\Constraints\StartEndDate;
+use Mana\ClientBundle\Form\Field\CenterEnabledChoiceType;
 
 class ReportCriteriaType extends AbstractType {
 
@@ -26,26 +27,29 @@ class ReportCriteriaType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-                ->add('startMonth', \Mana\ClientBundle\Form\Field\MonthType::class, array(
+                ->add('startMonth', MonthType::class, array(
                     'data' => $this->month,
                     'placeholder' => false,
                     'constraints' => array(
                         new StartEndDate(),
                     ),
                 ))
-                ->add('endMonth', \Mana\ClientBundle\Form\Field\MonthType::class, array(
+                ->add('endMonth', MonthType::class, array(
                     'data' => $this->month,
                     'placeholder' => false,
                         )
                 )
-                ->add('startYear', \Mana\ClientBundle\Form\Field\YearType::class, array(
+                ->add('startYear', YearType::class, array(
                     'data' => $this->year,
                     'placeholder' => false,
                         )
                 )
-                ->add('endYear', \Mana\ClientBundle\Form\Field\YearType::class, array(
+                ->add('endYear', YearType::class, array(
                     'data' => $this->year,
                     'placeholder' => false,
+                    'constraints' => [
+                        new StartEndDate(),
+                    ]
                         )
                 )
                 ->add('contact_type', EntityType::class, array(
@@ -70,11 +74,12 @@ class ReportCriteriaType extends AbstractType {
                                 ->orderBy('c.county', 'ASC');
                     },
                 ))
-                ->add('center', new Field\CenterEnabledChoiceType())
+                ->add('center', CenterEnabledChoiceType::class)
                 ->add('dest', 'hidden')
-                ->add('columnType', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                ->add('columnType', ChoiceType::class, [
                     'mapped' => FALSE,
-                    'choices' => ['center' => 'By site', 'county' => 'By county'],
+                    'choices' => ['By site' => 'center', 'By county' => 'county'],
+                    'choices_as_values'  => true,
                     'expanded' => TRUE,
                     'data' => 'center',
                 ])
@@ -83,10 +88,7 @@ class ReportCriteriaType extends AbstractType {
 
     public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
-            'csrf_protection' => false,
             'required' => false,
-            'attr' => array("class" => "smallform"),
-            'validation_groups' => array('reports'),
         ));
     }
 

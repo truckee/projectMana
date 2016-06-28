@@ -19,11 +19,3 @@ modules:
             user: 'projectmana'
             password: 'OrangeWhite'
             dump: tests/_data/dump.sql
-
-coverage:
-    enabled: true
-    whitelist:
-        include:
-            - src/*
-        exclude:
-            - app/cache/*

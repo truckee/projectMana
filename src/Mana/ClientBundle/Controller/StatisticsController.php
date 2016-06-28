@@ -25,7 +25,7 @@ class StatisticsController extends Controller
      * @Route("/general", name="stats_general")
      */
     public function generalAction(Request $request) {
-        $form = $this->createForm(new ReportCriteriaType());
+        $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:typeLocationCriteria.html.twig';
         $form->handleRequest($request);
@@ -89,7 +89,7 @@ class StatisticsController extends Controller
      * @Route("/details", name="stats_details")
      */
     public function detailsAction(Request $request) {
-        $form = $this->createForm(new ReportCriteriaType());
+        $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
         $form->handleRequest($request);
@@ -129,7 +129,7 @@ class StatisticsController extends Controller
      * @Template()
      */
     public function multiAction(Request $request) {
-        $form = $this->createForm(new ReportCriteriaType());
+        $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
         $form->handleRequest($request);
@@ -278,7 +278,7 @@ class StatisticsController extends Controller
      * @Route("/employmentProfile", name="employment_profile")
      */
     public function employmentProfileAction(Request $request) {
-        $form = $this->createForm(new ReportCriteriaType());
+        $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:profileCriteria.html.twig';
@@ -307,7 +307,7 @@ class StatisticsController extends Controller
      * @Route("/incomeProfile", name="income_profile")
      */
     public function incomeProfileAction(Request $request) {
-        $form = $this->createForm(new ReportCriteriaType());
+        $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:profileCriteria.html.twig';
@@ -337,7 +337,7 @@ class StatisticsController extends Controller
      * @Route("/foodstampYesNoProfile", name="foodstampYesNo_profile")
      */
     public function foodstampYesNoProfileAction(Request $request) {
-        $form = $this->createForm(new ReportCriteriaType());
+        $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:profileCriteria.html.twig';
@@ -368,7 +368,7 @@ class StatisticsController extends Controller
      */
     public function foodstampHowMuchProfileAction(Request $request) {
 
-        $form = $this->createForm(new ReportCriteriaType());
+        $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:profileCriteria.html.twig';
@@ -398,7 +398,7 @@ class StatisticsController extends Controller
      * @Route("/reasonProfile", name="reason_profile")
      */
     public function reasonProfileAction(Request $request) {
-        $form = $this->createForm(new ReportCriteriaType());
+        $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:profileCriteria.html.twig';
@@ -428,7 +428,7 @@ class StatisticsController extends Controller
      * @Route("/notfoodstampProfile", name="notfoodstamp_profile")
      */
     public function notfoodstampProfileAction(Request $request) {
-        $form = $this->createForm(new ReportCriteriaType());
+        $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:profileCriteria.html.twig';
@@ -458,7 +458,7 @@ class StatisticsController extends Controller
      * @Template()
      */
     public function snapProfileAction(Request $request) {
-        $form = $this->createForm(new ReportCriteriaType());
+        $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:dateCriteria.html.twig';
         $criteriaTemplates[] = 'ManaClientBundle:Statistics:profileCriteria.html.twig';

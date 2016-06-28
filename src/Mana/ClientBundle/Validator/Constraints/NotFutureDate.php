@@ -11,9 +11,5 @@ class NotFutureDate extends Constraint
 
 {
     public $message = 'Date may not be in future';
-//    public $contactDate;
-//    public $startYear;
-//    public $endMonth;
-//    public $endYear;
 }
 ?>

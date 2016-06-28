@@ -115,7 +115,6 @@ class Household
         $this->contacts = new ArrayCollection();
         $this->addresses = new ArrayCollection();
         $this->phones = new ArrayCollection();
-        $this->appliances = new ArrayCollection();
         $this->reasons = new ArrayCollection();
     }
 
@@ -548,10 +547,10 @@ class Household
     }
 
     /**
-     * @var boolean
      *
      * @ORM\Column(name="compliance_date", type="date", nullable=true)
      * @ManaAssert\ComplianceDate
+     * @ManaAssert\NotFutureDate
      */
     protected $complianceDate;
 
@@ -613,6 +612,7 @@ class Household
      *
      * @ORM\Column(name="shared_date", type="date", nullable=true)
      * @ManaAssert\SharedDate
+     * @ManaAssert\NotFutureDate
      */
     protected $sharedDate;
 

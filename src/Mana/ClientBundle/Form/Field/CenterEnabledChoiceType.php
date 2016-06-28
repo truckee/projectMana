@@ -6,12 +6,13 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class CenterEnabledChoiceType extends AbstractType
 {
 
     public function getParent() {
-        return 'entity';
+        return EntityType::class;
     }
 
     public function configureOptions(OptionsResolver $resolver) {
