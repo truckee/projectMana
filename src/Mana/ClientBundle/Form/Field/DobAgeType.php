@@ -6,6 +6,8 @@ namespace Mana\ClientBundle\Form\Field;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 use Mana\ClientBundle\Form\DataTransformer\AgeToDOB;
 
 class DobAgeType extends AbstractType {
@@ -24,7 +26,7 @@ class DobAgeType extends AbstractType {
     }
 
     public function getParent() {
-        return 'text';
+        return TextType::class;
     }
 
 }

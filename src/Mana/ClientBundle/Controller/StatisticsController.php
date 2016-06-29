@@ -144,7 +144,7 @@ class StatisticsController extends Controller
                 $flash = $this->get('braincrafted_bootstrap.flash');
                 $flash->alert('No instances of multiple same-date contacts found');
                 
-                return $this->redirect($this->getRequest()->headers->get('referer'));
+                return $this->redirect($request->headers->get('referer'));
             }
             
             return array('multi' => $multi,

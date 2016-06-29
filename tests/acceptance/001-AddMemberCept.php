@@ -19,7 +19,7 @@ $I->fillField('qtext', 'MoreThanOne Member');
 $I->click('#search');
 $I->click('Select');
 $I->click('Add member');
-$I->waitForJS("return $.active == 0;", 2);
+$I->waitForJS("return $.active == 0;", 5);
 $I->see('Add household member');
 
 $I->fillField('#member_fname', 'Hieronymous');
@@ -27,17 +27,17 @@ $I->fillField('#member_sname', 'Bosch');
 $I->selectOption('form select[name="member[sex]"]', 'Male');
 $I->selectOption('form select[name="member[ethnicity]"]', 'Cau');
 $I->click('button#submit');
-$I->waitForJS("return $.active == 0;", 2);
+$I->waitForJS("return $.active == 0;", 5);
 $I->see('DOB must be valid date or age');
 
 $I->fillField("#member_dob", 44);
 $I->click('button#submit');
-$I->waitForJS("return $.active == 0;", 2);
+$I->waitForJS("return $.active == 0;", 5);
 $I->see('Hieronymous Bosch has been added');
 
 $I->click('Close');
 $I->click('#memberId3');
-$I->waitForJS("return $.active == 0;", 2);
+$I->waitForJS("return $.active == 0;", 5);
 $I->see('Edit household member');
 $I->see('Include?');
 
@@ -48,7 +48,7 @@ $I->dontSee('Include?');
 $I->fillField("#member_dob", 12);
 $I->selectOption('form select[name="member[sex]"]', 'Female');
 $I->click('button#submit');
-$I->waitForJS("return $.active == 0;", 2);
+$I->waitForJS("return $.active == 0;", 5);
 $I->see('has been updated');
 
 $I->click('Close');
@@ -61,10 +61,10 @@ $isIncluded = $I->grabTextFrom('span#include2');
 $I->assertContains('Include', $isIncluded);
 
 $I->click('#memberId5');
-$I->waitForJS("return $.active == 0;", 2);
+$I->waitForJS("return $.active == 0;", 5);
 $I->selectOption('#member_include', 'No');
 $I->click('button#submit');
-$I->waitForJS("return $.active == 0;", 2);
+$I->waitForJS("return $.active == 0;", 5);
 $I->click('Close');
-$I->waitForJS("return $.active == 0;", 2);
+$I->waitForJS("return $.active == 0;", 5);
 $I->see('Excluded');

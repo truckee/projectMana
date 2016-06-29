@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Mana\ClientBundle\Entity\Contact;
 use Mana\ClientBundle\Entity\Center;
 use Mana\ClientBundle\Form\ContactType;
+use Mana\ClientBundle\Form\SelectCenterType;
 
 /**
  * Contact controller.

@@ -2,7 +2,7 @@ services:
     form.type.dob_age:
       class: Mana\ClientBundle\Form\Field\DobAgeType
       tags:
-        - {name:form.type, alias:dob_age}
+        - {name:form.type}
 
     searches:
       class: Mana\ClientBundle\Utilities\Searches

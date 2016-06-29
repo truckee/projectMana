@@ -2,17 +2,18 @@
 
 namespace Mana\ClientBundle\Form;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Doctrine\ORM\EntityRepository;
+use Mana\ClientBundle\Form\Field\CenterEnabledChoiceType;
 use Mana\ClientBundle\Form\Field\MonthType;
 use Mana\ClientBundle\Form\Field\YearType;
-use Doctrine\ORM\EntityRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Mana\ClientBundle\Validator\Constraints\CenterOrCounty;
 use Mana\ClientBundle\Validator\Constraints\StartEndDate;
-use Mana\ClientBundle\Form\Field\CenterEnabledChoiceType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ReportCriteriaType extends AbstractType {
 
@@ -75,7 +76,7 @@ class ReportCriteriaType extends AbstractType {
                     },
                 ))
                 ->add('center', CenterEnabledChoiceType::class)
-                ->add('dest', 'hidden')
+                ->add('dest', HiddenType::class)
                 ->add('columnType', ChoiceType::class, [
                     'mapped' => FALSE,
                     'choices' => ['By site' => 'center', 'By county' => 'county'],

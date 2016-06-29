@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Mana\ClientBundle\Form\HouseholdType;
 use Mana\ClientBundle\Form\HouseholdRequiredType;
+use Mana\ClientBundle\Form\MemberType;
 
 /**
  * Client controller.
@@ -71,7 +72,7 @@ class HouseholdController extends Controller
         $head = new Member();
         $new = true;
         $form = $this->createForm(HouseholdRequiredType::class, $household);
-        $formHead = $this->createForm(\Mana\ClientBundle\Form\MemberType::class, $head);
+        $formHead = $this->createForm(MemberType::class, $head);
         $form->handleRequest($request);
         $formHead->handleRequest($request);
         if ($form->isValid() && $formHead->isValid()) {
@@ -170,7 +171,7 @@ class HouseholdController extends Controller
         $qtext = $request->query->get('qtext');
         if ($qtext == '') {
             $flash->alert("No search criteria were entered");
-            return $this->redirect($this->getRequest()->headers->get('referer'));
+            return $this->redirect($request->headers->get('referer'));
         }
 
         if (is_numeric($qtext)) {
@@ -179,7 +180,7 @@ class HouseholdController extends Controller
             $household = $em->getRepository('ManaClientBundle:Household')->find($qtext);
             if (!$household) {
                 $flash->alert('Sorry, household not found');
-                return $this->redirect($this->getRequest()->headers->get('referer'));
+                return $this->redirect($request->headers->get('referer'));
             }
             return $this->redirectToRoute('household_show', array('id' => $qtext));
         } else {
@@ -188,7 +189,7 @@ class HouseholdController extends Controller
             $found = $searches->getMembers($qtext);
             if (count($found) == 0 || !$found) {
                 $flash->alert('Sorry, no households were found');
-                return $this->redirect($this->getRequest()->headers->get('referer'));
+                return $this->redirect($request->headers->get('referer'));
             }
 
             if (count($found) == 1) {

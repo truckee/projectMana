@@ -25,7 +25,9 @@ use Mana\ClientBundle\Entity\Housing;
 use Mana\ClientBundle\Entity\Income;;
 use Mana\ClientBundle\Entity\Notfoodstamp;
 use Mana\ClientBundle\Entity\Reason;
+use Mana\ClientBundle\Entity\Relationship;
 use Mana\ClientBundle\Entity\State;
+use Mana\ClientBundle\Entity\Work;
 
 /**
  * Description of Constants.
@@ -245,6 +247,18 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
         $income2->setEnabled(true);
         $this->setReference('medIncome', $income2);
         $manager->persist($income2);
+
+        $relation = new Relationship();
+        $relation->setRelation('related');
+        $relation->setEnabled(true);
+        $this->setReference('related', $relation);
+        $manager->persist($relation);
+
+        $work = new Work();
+        $work->setEnabled(true);
+        $work->setWork('work');
+        $this->setReference('work', $work);
+        $manager->persist($work);
         
         $manager->flush();
     }

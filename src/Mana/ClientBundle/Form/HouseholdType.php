@@ -4,13 +4,13 @@ namespace Mana\ClientBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
 use Mana\ClientBundle\Form\AddressType;
-use Mana\ClientBundle\Form\Field\NoYesChoiceType;
-use Mana\ClientBundle\Form\Field\YesNoChoiceType;
-use Mana\ClientBundle\Form\Field\CenterEnabledChoiceType;
 use Mana\ClientBundle\Form\Field\CenterAllChoiceType;
-use Mana\ClientBundle\Form\PhoneType;
+use Mana\ClientBundle\Form\Field\CenterEnabledChoiceType;
 use Mana\ClientBundle\Form\Field\MonthType;
+use Mana\ClientBundle\Form\Field\NoYesChoiceType;
 use Mana\ClientBundle\Form\Field\YearType;
+use Mana\ClientBundle\Form\Field\YesNoChoiceType;
+use Mana\ClientBundle\Form\PhoneType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -115,7 +115,7 @@ class HouseholdType extends AbstractType
                     },
                 ))
                 ->add('phones', CollectionType::class, array(
-                    'entry_type' => new PhoneType(),
+                    'entry_type' => PhoneType::class,
                     'label' => 'Phone: ',
                     'allow_add' => true,
                     'allow_delete' => false,
