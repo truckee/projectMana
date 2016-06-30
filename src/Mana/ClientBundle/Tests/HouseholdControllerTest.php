@@ -12,16 +12,13 @@
 
 namespace Mana\ClientBundle\Tests;
 
-use Mana\ClientBundle\Tests\ManaWebTestCase;
-
 /**
- * Description of HouseholdControllerTest
+ * Description of HouseholdControllerTest.
  *
  * @author George
  */
 class HouseholdControllerTest extends ManaWebTestCase
 {
-
     public function setup()
     {
         $this->client = static::makeClient();
@@ -65,12 +62,13 @@ class HouseholdControllerTest extends ManaWebTestCase
         return $this->client->submit($form);
     }
 
-    public function testLogin() {
+    public function testLogin()
+    {
         $crawler = $this->login();
-        
+
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Project MANA")')->count());
     }
-    
+
     public function testNewHousehold()
     {
         $crawler = $this->submitNewHousehold();
@@ -114,7 +112,7 @@ class HouseholdControllerTest extends ManaWebTestCase
     {
         $crawler = $this->login();
         $id = $this->fixtures->getReference('house1')->getId();
-        $crawler = $this->client->request('GET', '/household/' . $id . '/show');
+        $crawler = $this->client->request('GET', '/household/'.$id.'/show');
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Household View")')->count());
     }
@@ -123,7 +121,7 @@ class HouseholdControllerTest extends ManaWebTestCase
     {
         $crawler = $this->login();
         $id = $this->fixtures->getReference('house1')->getId();
-        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
+        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Household Edit")')->count());
 
@@ -178,7 +176,7 @@ class HouseholdControllerTest extends ManaWebTestCase
     {
         $crawler = $this->login();
         $id = $this->fixtures->getReference('house1')->getId();
-        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
+        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
 
         $foodstamp = $this->fixtures->getReference('fsNo')->getId();
         $income = $this->fixtures->getReference('medIncome')->getId();
@@ -195,7 +193,7 @@ class HouseholdControllerTest extends ManaWebTestCase
         $form['household[sharedDate]'] = $future;
         $form['household[phones][0][phoneNumber]'] = '12367';
         $form['household[phones][0][areacode]'] = '12';
-        
+
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Phone # must be xxx-yyyy")')->count());
@@ -207,7 +205,7 @@ class HouseholdControllerTest extends ManaWebTestCase
     {
         $crawler = $this->login();
         $id = $this->fixtures->getReference('house1')->getId();
-        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
+        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
 
         $foodstamp = $this->fixtures->getReference('fsNo')->getId();
         $income = $this->fixtures->getReference('medIncome')->getId();
