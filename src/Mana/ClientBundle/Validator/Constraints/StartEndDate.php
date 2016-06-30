@@ -1,14 +1,15 @@
 <?php
+
 namespace Mana\ClientBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Validates start date before end date
+ * Validates start date before end date.
+ *
  * @Annotation
  */
 class StartEndDate extends Constraint
-
 {
     public $message = 'End date must be same or later than start date';
     public $startMonth;
@@ -16,4 +17,3 @@ class StartEndDate extends Constraint
     public $endMonth;
     public $endYear;
 }
-?>

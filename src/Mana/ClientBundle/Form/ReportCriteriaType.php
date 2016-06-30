@@ -15,18 +15,20 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ReportCriteriaType extends AbstractType {
-
+class ReportCriteriaType extends AbstractType
+{
     private $month;
     private $year;
 
-    public function __construct() {
-        $date = strtotime(date('Y-m') . " -1 month");
+    public function __construct()
+    {
+        $date = strtotime(date('Y-m').' -1 month');
         $this->month = date('n', $date);
         $this->year = date('Y', $date);
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder
                 ->add('startMonth', MonthType::class, array(
                     'data' => $this->month,
@@ -50,14 +52,14 @@ class ReportCriteriaType extends AbstractType {
                     'placeholder' => false,
                     'constraints' => [
                         new StartEndDate(),
-                    ]
+                    ],
                         )
                 )
                 ->add('contact_type', EntityType::class, array(
                     'class' => 'ManaClientBundle:ContactDesc',
                     'choice_label' => 'contactDesc',
                     'placeholder' => 'Select contact type',
-                    'query_builder' => function(EntityRepository $er) {
+                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('c')
                                 ->where('c.enabled = 1')
                                 ->orderBy('c.contactDesc', 'ASC');
@@ -70,7 +72,7 @@ class ReportCriteriaType extends AbstractType {
                     'class' => 'ManaClientBundle:County',
                     'choice_label' => 'county',
                     'placeholder' => 'Select county',
-                    'query_builder' => function(EntityRepository $er) {
+                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('c')
                                 ->orderBy('c.county', 'ASC');
                     },
@@ -78,19 +80,19 @@ class ReportCriteriaType extends AbstractType {
                 ->add('center', CenterEnabledChoiceType::class)
                 ->add('dest', HiddenType::class)
                 ->add('columnType', ChoiceType::class, [
-                    'mapped' => FALSE,
+                    'mapped' => false,
                     'choices' => ['By site' => 'center', 'By county' => 'county'],
-                    'choices_as_values'  => true,
-                    'expanded' => TRUE,
+                    'choices_as_values' => true,
+                    'expanded' => true,
                     'data' => 'center',
                 ])
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver) {
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'required' => false,
         ));
     }
-
 }

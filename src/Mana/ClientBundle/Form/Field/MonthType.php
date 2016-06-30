@@ -9,7 +9,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class MonthType extends AbstractType
 {
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $months = array(
@@ -38,5 +37,3 @@ class MonthType extends AbstractType
         return ChoiceType::class;
     }
 }
-
-?>

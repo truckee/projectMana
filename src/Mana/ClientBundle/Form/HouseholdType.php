@@ -3,14 +3,12 @@
 namespace Mana\ClientBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
-use Mana\ClientBundle\Form\AddressType;
 use Mana\ClientBundle\Form\Field\CenterAllChoiceType;
 use Mana\ClientBundle\Form\Field\CenterEnabledChoiceType;
 use Mana\ClientBundle\Form\Field\MonthType;
 use Mana\ClientBundle\Form\Field\NoYesChoiceType;
 use Mana\ClientBundle\Form\Field\YearType;
 use Mana\ClientBundle\Form\Field\YesNoChoiceType;
-use Mana\ClientBundle\Form\PhoneType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -22,8 +20,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class HouseholdType extends AbstractType
 {
-
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $this->new = $options['new'];
         $builder
                 ->add('active', YesNoChoiceType::class, array(
@@ -60,7 +58,7 @@ class HouseholdType extends AbstractType
                     'choice_label' => 'status',
                     'placeholder' => '',
                     'label' => 'Food stamp status: ',
-                    'query_builder' => function(EntityRepository $er) {
+                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('f')
                                 ->orderBy('f.id', 'ASC')
                         ;
@@ -71,10 +69,10 @@ class HouseholdType extends AbstractType
                     'choice_label' => 'amount',
                     'label' => 'If foodstamps, how much?',
                     'placeholder' => '',
-                    'query_builder' => function(EntityRepository $er) {
+                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('f')
                                 ->orderBy('f.amount', 'ASC')
-                                ->where("f.enabled=1");
+                                ->where('f.enabled=1');
                     },
                 ))
                 ->add('housing', EntityType::class, array(
@@ -82,11 +80,11 @@ class HouseholdType extends AbstractType
                     'choice_label' => 'housing',
                     'placeholder' => '',
                     'label' => 'Housing: ',
-                    'query_builder' => function(EntityRepository $er) use($options) {
+                    'query_builder' => function (EntityRepository $er) use ($options) {
                         if (true === $options['new']) {
                             return $er->createQueryBuilder('h')
                                     ->orderBy('h.housing', 'ASC')
-                                    ->where("h.enabled=1");
+                                    ->where('h.enabled=1');
                         } else {
                             return $er->createQueryBuilder('h')
                                     ->orderBy('h.housing', 'ASC');
@@ -98,9 +96,9 @@ class HouseholdType extends AbstractType
                     'choice_label' => 'income',
                     'placeholder' => '',
                     'label' => 'Income bracket: ',
-                    'query_builder' => function(EntityRepository $er) {
+                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('i')
-                                ->where("i.enabled=1");
+                                ->where('i.enabled=1');
                     },
                 ))
                 ->add('notfoodstamp', EntityType::class, array(
@@ -108,10 +106,10 @@ class HouseholdType extends AbstractType
                     'label' => 'If not food stamps, why not? ',
                     'choice_label' => 'notfoodstamp',
                     'placeholder' => '',
-                    'query_builder' => function(EntityRepository $er) {
+                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('f')
                                 ->orderBy('f.notfoodstamp', 'ASC')
-                                ->where("f.enabled=1");
+                                ->where('f.enabled=1');
                     },
                 ))
                 ->add('phones', CollectionType::class, array(
@@ -130,10 +128,10 @@ class HouseholdType extends AbstractType
                     'attr' => [
                         'class' => 'form-inline',
                     ],
-                    'query_builder' => function(EntityRepository $er) {
+                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('r')
                                 ->orderBy('r.reason', 'ASC')
-                                ->where("r.enabled=1");
+                                ->where('r.enabled=1');
                     },
                 ))
                 ->add('shared', NoYesChoiceType::class, array(
@@ -159,12 +157,12 @@ class HouseholdType extends AbstractType
         });
     }
 
-    public function configureOptions(OptionsResolver $resolver) {
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'data_class' => 'Mana\ClientBundle\Entity\Household',
             'required' => false,
             'new' => null,
         ));
     }
-
 }

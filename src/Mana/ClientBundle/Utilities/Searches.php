@@ -7,13 +7,14 @@ namespace Mana\ClientBundle\Utilities;
 use Doctrine\ORM\EntityManager;
 
 /**
- * returns set of households whose heads are possible matches for new head
+ * returns set of households whose heads are possible matches for new head.
  */
-class Searches {
-
+class Searches
+{
     private $em;
 
-    public function __construct(EntityManager $em) {
+    public function __construct(EntityManager $em)
+    {
         $this->em = $em;
     }
 
@@ -22,14 +23,14 @@ class Searches {
         $em = $this->em;
         $site = $em->getRepository('ManaClientBundle:Center')->find($site);
         $maxDate = $em->createQuery('SELECT MAX(c.contactDate) FROM '
-                . 'ManaClientBundle:Contact c WHERE c.center = :site')
+                .'ManaClientBundle:Contact c WHERE c.center = :site')
                 ->setParameter('site', $site)
                 ->getSingleScalarResult();
         $contacts = $em->createQuery('SELECT c FROM ManaClientBundle:Contact c '
-                . 'JOIN ManaClientBundle:Household h WITH c.household = h '
-                . 'JOIN ManaClientBundle:Member m WITH h.head = m '
-                . 'WHERE c.center = :site AND c.contactDate = :date '
-                . 'ORDER BY m.sname, m.fname')
+                .'JOIN ManaClientBundle:Household h WITH c.household = h '
+                .'JOIN ManaClientBundle:Member m WITH h.head = m '
+                .'WHERE c.center = :site AND c.contactDate = :date '
+                .'ORDER BY m.sname, m.fname')
                 ->setParameters(['site' => $site, 'date' => $maxDate])
                 ->getResult();
 
@@ -40,15 +41,18 @@ class Searches {
     }
 
     /**
-     * get members that match input name
+     * get members that match input name.
+     *
      * @param type $qtext
+     *
      * @return array
      */
-    public function getMembers($qtext) {
+    public function getMembers($qtext)
+    {
         $string = trim($qtext);
         $length = strpos($qtext, ' ');
         if (empty($length)) {
-            return null;
+            return;
         }
         $name = addslashes($string);
         $conn = $this->em->getConnection();
@@ -59,8 +63,7 @@ class Searches {
         foreach ($members as $member) {
             $found[] = $this->em->getRepository('ManaClientBundle:Member')->find($member['id']);
         }
-        
+
         return $found;
     }
-
 }

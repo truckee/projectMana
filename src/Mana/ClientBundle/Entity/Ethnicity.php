@@ -3,10 +3,11 @@
 namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 //use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Ethnicity
+ * Ethnicity.
  *
  * @ORM\Table(name="ethnicity")
  * @ORM\Entity
@@ -14,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Ethnicity
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -44,18 +45,17 @@ class Ethnicity
     protected $members;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->members = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -63,9 +63,10 @@ class Ethnicity
     }
 
     /**
-     * Set ethnicity
+     * Set ethnicity.
      *
      * @param string $ethnicity
+     *
      * @return Ethnicity
      */
     public function setEthnicity($ethnicity)
@@ -76,9 +77,9 @@ class Ethnicity
     }
 
     /**
-     * Get ethnicity
+     * Get ethnicity.
      *
-     * @return string 
+     * @return string
      */
     public function getEthnicity()
     {
@@ -86,9 +87,10 @@ class Ethnicity
     }
 
     /**
-     * Set abbreviation
+     * Set abbreviation.
      *
      * @param string $abbreviation
+     *
      * @return Ethnicity
      */
     public function setAbbreviation($abbreviation)
@@ -99,9 +101,9 @@ class Ethnicity
     }
 
     /**
-     * Get abbreviation
+     * Get abbreviation.
      *
-     * @return string 
+     * @return string
      */
     public function getAbbreviation()
     {
@@ -109,9 +111,10 @@ class Ethnicity
     }
 
     /**
-     * Add members
+     * Add members.
      *
      * @param \Mana\ClientBundle\Entity\Member $members
+     *
      * @return Ethnicity
      */
     public function addMember(\Mana\ClientBundle\Entity\Member $members)
@@ -122,7 +125,7 @@ class Ethnicity
     }
 
     /**
-     * Remove members
+     * Remove members.
      *
      * @param \Mana\ClientBundle\Entity\Member $members
      */
@@ -132,9 +135,9 @@ class Ethnicity
     }
 
     /**
-     * Get members
+     * Get members.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getMembers()
     {
@@ -142,30 +145,33 @@ class Ethnicity
     }
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=true)
      */
     protected $enabled;
 
     /**
-     * Set enabled
+     * Set enabled.
      *
-     * @param boolean $enabled
+     * @param bool $enabled
+     *
      * @return enabled
      */
-    public function setEnabled($enabled) {
+    public function setEnabled($enabled)
+    {
         $this->enabled = $enabled;
 
         return $this;
     }
 
     /**
-     * Get enabled
+     * Get enabled.
      *
-     * @return boolean 
+     * @return bool
      */
-    public function getEnabled() {
+    public function getEnabled()
+    {
         return $this->enabled;
     }
 }

@@ -8,7 +8,6 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class ComplianceDateValidator extends ConstraintValidator
 {
-
     public function validate($value, Constraint $constraint)
     {
         $accessor = PropertyAccess::createPropertyAccessor();
@@ -17,8 +16,7 @@ class ComplianceDateValidator extends ConstraintValidator
         $compliance = $data->getCompliance();
         $complianceDate = $data->getComplianceDate();
         $isDateObj = is_object($complianceDate);
-        if ( '1' === $compliance && !$isDateObj) {
-
+        if ('1' === $compliance && !$isDateObj) {
             $this->context->addViolation($constraint->message, array('%string%' => $value));
 
             return false;

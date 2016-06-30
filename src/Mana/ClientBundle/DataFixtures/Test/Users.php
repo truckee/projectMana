@@ -21,13 +21,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Mana\ClientBundle\Entity\User;
 
 /**
- * Description of AdminUser
+ * Description of AdminUser.
  *
  * @author George
  */
 class Users extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
-
     /**
      * @var ContainerInterface
      */
@@ -53,7 +52,7 @@ class Users extends AbstractFixture implements OrderedFixtureInterface, Containe
         $userAdmin->setFname('Benny');
         $userAdmin->setSname('Borko');
         $userAdmin->setEmail('bborko@bogus.info');
-        $userAdmin->setEnabled(TRUE);
+        $userAdmin->setEnabled(true);
         $manager->persist($userAdmin);
 
         $userPlain = new User();
@@ -66,7 +65,7 @@ class Users extends AbstractFixture implements OrderedFixtureInterface, Containe
         $userPlain->setFname('Dingle');
         $userPlain->setSname('Berry');
         $userPlain->setEmail('dberry@bogus.info');
-        $userPlain->setEnabled(TRUE);
+        $userPlain->setEnabled(true);
         $manager->persist($userPlain);
 
         $manager->flush();
@@ -76,5 +75,4 @@ class Users extends AbstractFixture implements OrderedFixtureInterface, Containe
     {
         return 1; // the order in which fixtures will be loaded
     }
-
 }

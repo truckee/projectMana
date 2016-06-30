@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Center
+ * Center.
  *
  * @ORM\Table(name="center")
  * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\CenterRepository")
@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Center
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -50,18 +50,17 @@ class Center
     protected $contacts;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->contacts = new ArrayCollection;
+        $this->contacts = new ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -69,9 +68,10 @@ class Center
     }
 
     /**
-     * Set center
+     * Set center.
      *
      * @param string $center
+     *
      * @return Center
      */
     public function setCenter($center)
@@ -82,9 +82,9 @@ class Center
     }
 
     /**
-     * Get center
+     * Get center.
      *
-     * @return string 
+     * @return string
      */
     public function getCenter()
     {
@@ -92,9 +92,10 @@ class Center
     }
 
     /**
-     * Set county
+     * Set county.
      *
      * @param string $county
+     *
      * @return Center
      */
     public function setCounty($county)
@@ -105,9 +106,9 @@ class Center
     }
 
     /**
-     * Get county
+     * Get county.
      *
-     * @return string 
+     * @return string
      */
     public function getCounty()
     {
@@ -115,9 +116,10 @@ class Center
     }
 
     /**
-     * Add contacts
+     * Add contacts.
      *
      * @param \Mana\ClientBundle\Entity\Contact $contacts
+     *
      * @return Center
      */
     public function addContact(\Mana\ClientBundle\Entity\Contact $contacts)
@@ -128,7 +130,7 @@ class Center
     }
 
     /**
-     * Remove contacts
+     * Remove contacts.
      *
      * @param \Mana\ClientBundle\Entity\Contact $contacts
      */
@@ -138,9 +140,9 @@ class Center
     }
 
     /**
-     * Get contacts
+     * Get contacts.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getContacts()
     {
@@ -148,30 +150,33 @@ class Center
     }
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=true)
      */
     protected $enabled;
 
     /**
-     * Set enabled
+     * Set enabled.
      *
-     * @param boolean $enabled
+     * @param bool $enabled
+     *
      * @return enabled
      */
-    public function setEnabled($enabled) {
+    public function setEnabled($enabled)
+    {
         $this->enabled = $enabled;
 
         return $this;
     }
 
     /**
-     * Get enabled
+     * Get enabled.
      *
-     * @return boolean 
+     * @return bool
      */
-    public function getEnabled() {
+    public function getEnabled()
+    {
         return $this->enabled;
     }
 
@@ -182,34 +187,44 @@ class Center
      */
     protected $households;
 
-
     /**
-     * Add households
+     * Add households.
+     *
      * @codeCoverageIgnore
+     *
      * @param \Mana\ClientBundle\Entity\Household $households
+     *
      * @return Household
      */
-    public function addHousehold(\Mana\ClientBundle\Entity\Household $household) {
+    public function addHousehold(\Mana\ClientBundle\Entity\Household $household)
+    {
         $this->households[] = $household;
         $household->setManySideSingular($this);
+
         return $this;
     }
 
     /**
-     * Remove households
+     * Remove households.
+     *
      * @codeCoverageIgnore
+     *
      * @param \Mana\ClientBundle\Entity\Household $households
      */
-    public function removeHousehold(\Mana\ClientBundle\Entity\Household $household) {
+    public function removeHousehold(\Mana\ClientBundle\Entity\Household $household)
+    {
         $this->households->removeElement($household);
     }
 
     /**
-     * Get households
+     * Get households.
+     *
      * @codeCoverageIgnore
-     * @return \Doctrine\Common\Collections\Collection 
+     *
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getHouseholds() {
+    public function getHouseholds()
+    {
         return $this->households;
     }
 }

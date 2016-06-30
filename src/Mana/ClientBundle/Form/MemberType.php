@@ -18,8 +18,8 @@ use Mana\ClientBundle\Form\Field\YesNoChoiceType;
 
 class MemberType extends AbstractType
 {
-
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder
                 ->add('fname', TextType::class, array(
                     'label' => 'First name:',
@@ -34,7 +34,7 @@ class MemberType extends AbstractType
                     'label' => 'Gender:',
                     'placeholder' => 'Select gender',
                     'choices' => array('Male' => 'Male', 'Female' => 'Female'),
-                    'choices_as_values'  => true,
+                    'choices_as_values' => true,
                     ))
                 ->add('ethnicity', EntityType::class, array(
                     'label' => 'Ethnicity:',
@@ -42,7 +42,7 @@ class MemberType extends AbstractType
                     'choice_label' => 'abbreviation',
                     'expanded' => false,
                     'placeholder' => 'Select ethnicity',
-                    'query_builder' => function(EntityRepository $er) {
+                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('e')
                                 ->orderBy('e.abbreviation', 'ASC')
                         ;
@@ -60,7 +60,7 @@ class MemberType extends AbstractType
                     'label' => 'Offenses: ',
                     'expanded' => true,
                     'multiple' => true,
-                    'query_builder' => function(EntityRepository $er) {
+                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('e')
                                 ->orderBy('e.offence', 'ASC')
                                 ->where('e.enabled=1');
@@ -72,13 +72,13 @@ class MemberType extends AbstractType
                     'choice_label' => 'relation',
                     'expanded' => false,
                     'placeholder' => 'Select relation to head',
-                    'query_builder' => function(EntityRepository $er) {
+                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('r')
                                 ->orderBy('r.relation', 'ASC')
                                 ->where('r.enabled=1');
                     },
                 ))
-                ->add('isHead', CheckboxType::class,array(
+                ->add('isHead', CheckboxType::class, array(
                     'mapped' => false,
                     'label' => 'Head? ',
                 ))
@@ -87,16 +87,17 @@ class MemberType extends AbstractType
                     'choice_label' => 'work',
                     'placeholder' => 'Select work',
                     'label' => 'Work:',
-                    'query_builder' => function(EntityRepository $er) {
+                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('w')
                                 ->orderBy('w.work', 'ASC')
-                                ->where("w.enabled=1");
+                                ->where('w.enabled=1');
                     },
                 ))
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver) {
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'data_class' => 'Mana\ClientBundle\Entity\Member',
             'required' => false,

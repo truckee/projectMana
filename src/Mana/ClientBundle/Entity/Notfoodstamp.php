@@ -3,19 +3,18 @@
 namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Mana\ClientBundle\Entity\Household;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Notfoodstamp
+ * Notfoodstamp.
  *
  * @ORM\Table(name="notfoodstamp")
  * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\NotfoodstampRepository")
  */
-class Notfoodstamp {
-
+class Notfoodstamp
+{
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -24,7 +23,7 @@ class Notfoodstamp {
     protected $id;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="notfoodstamp", type="string", nullable=false)
      * @Assert\NotBlank(message="Reason may not be blank")
@@ -32,60 +31,67 @@ class Notfoodstamp {
     protected $notfoodstamp;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     protected $enabled;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
-     * Set notfoodstamp
+     * Set notfoodstamp.
      *
-     * @param integer $notfoodstamp
+     * @param int $notfoodstamp
+     *
      * @return notfoodstamp
      */
-    public function setNotfoodstamp($notfoodstamp) {
+    public function setNotfoodstamp($notfoodstamp)
+    {
         $this->notfoodstamp = $notfoodstamp;
 
         return $this;
     }
 
     /**
-     * Get notfoodstamp
+     * Get notfoodstamp.
      *
-     * @return integer 
+     * @return int
      */
-    public function getNotfoodstamp() {
+    public function getNotfoodstamp()
+    {
         return $this->notfoodstamp;
     }
 
     /**
-     * Set enabled
+     * Set enabled.
      *
-     * @param integer $enabled
+     * @param int $enabled
+     *
      * @return enabled
      */
-    public function setEnabled($enabled) {
+    public function setEnabled($enabled)
+    {
         $this->enabled = $enabled;
 
         return $this;
     }
 
     /**
-     * Get enabled
+     * Get enabled.
      *
-     * @return integer 
+     * @return int
      */
-    public function getEnabled() {
+    public function getEnabled()
+    {
         return $this->enabled;
     }
 
@@ -96,12 +102,13 @@ class Notfoodstamp {
      */
     protected $households;
 
-    public function addHousehold(Household $household) {
+    public function addHousehold(Household $household)
+    {
         $this->households[] = $household;
     }
 
-    public function getHouseholds() {
+    public function getHouseholds()
+    {
         return $this->households;
     }
-
 }

@@ -7,16 +7,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * ContactDesc
+ * ContactDesc.
  *
  * @ORM\Table(name="contact_type")
  * @ORM\Entity
  */
 class ContactDesc
 {
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -40,7 +39,7 @@ class ContactDesc
     protected $contacts;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -48,9 +47,9 @@ class ContactDesc
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -58,9 +57,10 @@ class ContactDesc
     }
 
     /**
-     * Set contactDesc
+     * Set contactDesc.
      *
      * @param string $contactDesc
+     *
      * @return ContactDesc
      */
     public function setContactDesc($contactDesc)
@@ -71,7 +71,7 @@ class ContactDesc
     }
 
     /**
-     * Get contactDesc
+     * Get contactDesc.
      *
      * @return string
      */
@@ -81,9 +81,10 @@ class ContactDesc
     }
 
     /**
-     * Add contacts
+     * Add contacts.
      *
      * @param \Mana\ClientBundle\Entity\Contact $contacts
+     *
      * @return ContactDesc
      */
     public function addContact(\Mana\ClientBundle\Entity\Contact $contacts)
@@ -94,7 +95,7 @@ class ContactDesc
     }
 
     /**
-     * Remove contacts
+     * Remove contacts.
      *
      * @param \Mana\ClientBundle\Entity\Contact $contacts
      */
@@ -104,7 +105,7 @@ class ContactDesc
     }
 
     /**
-     * Get contacts
+     * Get contacts.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -114,15 +115,16 @@ class ContactDesc
     }
 
     /**
-     * @var integer
+     * @var int
      * @ORM\Column(name="enabled", type="boolean", nullable=true)
      */
     protected $enabled;
 
     /**
-     * Set enabled
+     * Set enabled.
      *
-     * @param integer $enabled
+     * @param int $enabled
+     *
      * @return enabled
      */
     public function setEnabled($enabled)
@@ -133,13 +135,12 @@ class ContactDesc
     }
 
     /**
-     * Get enabled
+     * Get enabled.
      *
-     * @return integer
+     * @return int
      */
     public function getEnabled()
     {
         return $this->enabled;
     }
-
 }

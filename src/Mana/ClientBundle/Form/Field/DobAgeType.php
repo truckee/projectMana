@@ -7,26 +7,27 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-
 use Mana\ClientBundle\Form\DataTransformer\AgeToDOB;
 
-class DobAgeType extends AbstractType {
-
-    public function configureOptions(OptionsResolver $resolver) {
+class DobAgeType extends AbstractType
+{
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'required' => false,
-            'invalid_message' => "DOB or age not valid",
+            'invalid_message' => 'DOB or age not valid',
         ));
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $transformer = new AgeToDOB();
 
         $builder->addModelTransformer($transformer);
     }
 
-    public function getParent() {
+    public function getParent()
+    {
         return TextType::class;
     }
-
 }

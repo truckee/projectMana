@@ -10,7 +10,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class CenterAllChoiceType extends AbstractType
 {
-    public function getParent() {
+    public function getParent()
+    {
         return EntityType::class;
     }
 
@@ -20,13 +21,13 @@ class CenterAllChoiceType extends AbstractType
                     'class' => 'ManaClientBundle:Center',
                     'choice_label' => 'center',
                     'placeholder' => 'Select site',
-                    'attr' => array("class" => "smallform"),
-                    'query_builder' => function(EntityRepository $er) {
+                    'attr' => array('class' => 'smallform'),
+                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('c')
                                 ->orderBy('c.center', 'ASC')
                                 ;
                     },
-                    'constraints' => array(new NotBlank(array('message' => 'Site must be selected')),),
+                    'constraints' => array(new NotBlank(array('message' => 'Site must be selected'))),
             ));
     }
 }

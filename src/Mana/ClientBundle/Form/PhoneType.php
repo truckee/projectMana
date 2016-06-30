@@ -9,22 +9,22 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class PhoneType extends AbstractType
 {
-     /**
+    /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('areacode', TextType::class, array(
-                'attr' => array('size' => 2)
+                'attr' => array('size' => 2),
             ))
             ->add('phoneNumber', TextType::class, array(
-                'attr' => array('size' => 8)
+                'attr' => array('size' => 8),
             ))
         ;
     }
-    
+
     /**
      * @param OptionsResolver $resolver
      */

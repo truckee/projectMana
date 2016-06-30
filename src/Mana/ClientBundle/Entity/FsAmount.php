@@ -3,20 +3,18 @@
 namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Mana\ClientBundle\Entity\Household;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * FsAmount
+ * FsAmount.
  *
  * @ORM\Table(name="fs_amount")
  * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\FsAmountRepository")
  */
 class FsAmount
 {
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -25,7 +23,7 @@ class FsAmount
     protected $id;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="amount", type="string", nullable=false)
      * @Assert\NotBlank(message="Bracket may not be blank")
@@ -33,16 +31,16 @@ class FsAmount
     protected $amount;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     protected $enabled;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -50,9 +48,10 @@ class FsAmount
     }
 
     /**
-     * Set amount
+     * Set amount.
      *
-     * @param integer $amount
+     * @param int $amount
+     *
      * @return amount
      */
     public function setAmount($amount)
@@ -63,9 +62,9 @@ class FsAmount
     }
 
     /**
-     * Get fsamount
+     * Get fsamount.
      *
-     * @return integer
+     * @return int
      */
     public function getAmount()
     {
@@ -73,9 +72,10 @@ class FsAmount
     }
 
     /**
-     * Set enabled
+     * Set enabled.
      *
-     * @param integer $enabled
+     * @param int $enabled
+     *
      * @return enabled
      */
     public function setEnabled($enabled)
@@ -86,9 +86,9 @@ class FsAmount
     }
 
     /**
-     * Get enabled
+     * Get enabled.
      *
-     * @return integer
+     * @return int
      */
     public function getEnabled()
     {
@@ -105,7 +105,6 @@ class FsAmount
     public function addHousehold(Household $household)
     {
         $this->households[] = $household;
-//        $household->addFsAmount($this);
     }
 
     public function getHouseholds()
@@ -117,5 +116,4 @@ class FsAmount
     {
         return $this->amount;
     }
-
 }

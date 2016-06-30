@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Offence
+ * Offence.
  *
  * @ORM\Table("offence")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Offence
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -31,17 +31,16 @@ class Offence
     private $offence;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -49,22 +48,23 @@ class Offence
     }
 
     /**
-     * Set offence
+     * Set offence.
      *
      * @param string $offence
+     *
      * @return Offence
      */
     public function setOffence($offence)
     {
         $this->offence = $offence;
-    
+
         return $this;
     }
 
     /**
-     * Get offence
+     * Get offence.
      *
-     * @return string 
+     * @return string
      */
     public function getOffence()
     {
@@ -72,22 +72,23 @@ class Offence
     }
 
     /**
-     * Set enabled
+     * Set enabled.
      *
-     * @param boolean $enabled
+     * @param bool $enabled
+     *
      * @return Offence
      */
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
-    
+
         return $this;
     }
 
     /**
-     * Get enabled
+     * Get enabled.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getEnabled()
     {
@@ -101,11 +102,13 @@ class Offence
      */
     protected $members;
 
-    public function addMember(Member $member) {
+    public function addMember(Member $member)
+    {
         $this->members[] = $member;
     }
 
-    public function getMembers() {
+    public function getMembers()
+    {
         return $this->members;
     }
 }

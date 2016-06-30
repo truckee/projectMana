@@ -6,15 +6,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Work
+ * Work.
  *
  * @ORM\Table(name="work")
  * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\WorkRepository")
  */
-class Work {
-
+class Work
+{
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -23,7 +23,7 @@ class Work {
     protected $id;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="work", type="string", nullable=false)
      * @Assert\NotBlank(message="Work may not be blank")
@@ -31,60 +31,67 @@ class Work {
     protected $work;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     protected $enabled;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
-     * Set work
+     * Set work.
      *
-     * @param integer $work
+     * @param int $work
+     *
      * @return work
      */
-    public function setWork($work) {
+    public function setWork($work)
+    {
         $this->work = $work;
 
         return $this;
     }
 
     /**
-     * Get work
+     * Get work.
      *
-     * @return integer 
+     * @return int
      */
-    public function getWork() {
+    public function getWork()
+    {
         return $this->work;
     }
 
     /**
-     * Set enabled
+     * Set enabled.
      *
-     * @param integer $enabled
+     * @param int $enabled
+     *
      * @return enabled
      */
-    public function setEnabled($enabled) {
+    public function setEnabled($enabled)
+    {
         $this->enabled = $enabled;
 
         return $this;
     }
 
     /**
-     * Get enabled
+     * Get enabled.
      *
-     * @return integer 
+     * @return int
      */
-    public function getEnabled() {
+    public function getEnabled()
+    {
         return $this->enabled;
     }
 
@@ -95,12 +102,13 @@ class Work {
      */
     protected $members;
 
-    public function addMember(Member $member) {
+    public function addMember(Member $member)
+    {
         $this->members[] = $member;
     }
 
-    public function getMembers() {
+    public function getMembers()
+    {
         return $this->members;
     }
-
 }

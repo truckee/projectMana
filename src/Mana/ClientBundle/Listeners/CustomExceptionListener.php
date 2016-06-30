@@ -17,13 +17,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
 /**
- * Description of CustomExceptionListener
+ * Description of CustomExceptionListener.
  *
  * @author George
  */
 class CustomExceptionListener
 {
-
     private $recipient;
     private $twig;
 
@@ -38,8 +37,7 @@ class CustomExceptionListener
         $exception = $event->getException();
         if (method_exists($exception, 'getStatusCode')) {
             $statusCode = $exception->getStatusCode();
-        }
-        else {
+        } else {
             $statusCode = false;
         }
 
@@ -52,28 +50,26 @@ class CustomExceptionListener
 
         if (404 === $statusCode) {
             $content = $this->twig->render('ManaClientBundle:Default:error404.html.twig');
-        }
-        else {
+        } else {
             $subject = 'Project MANA error';
             $to = $this->recipient;
             $messge = $this->twig->render('ManaClientBundle:Default:error_mail.html.twig', array(
                 'error' => $data,
             ));
-            $headers = 'From: error_prone@projectmana.org' . "\n";
+            $headers = 'From: error_prone@projectmana.org'."\n";
 
             $wasSent = mail($to, $subject, $messge, $headers);
 
             $good = 'An error has occurred; support has been notified.';
-            $bad = "Please contact support regarding this message";
+            $bad = 'Please contact support regarding this message';
 
             $message = ($wasSent) ? $good : $bad;
 
             $content = $this->twig->render('ManaClientBundle:Default:message.html.twig', array(
-                'message' => $message
+                'message' => $message,
             ));
         }
         $response = new Response($content);
         $event->setResponse($response);
     }
-
 }

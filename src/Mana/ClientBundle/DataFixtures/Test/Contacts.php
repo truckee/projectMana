@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 
-
 //src\Mana\ClientBundle\DataFixtures\Test\Contacts.php
 
 namespace Mana\ClientBundle\DataFixtures\Test;
@@ -19,8 +18,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Mana\ClientBundle\Entity\Contact;
 
 /**
- * Contacts
- *
+ * Contacts.
  */
 class Contacts extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -46,13 +44,10 @@ class Contacts extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($contact);
 
         $manager->flush();
-        
-        
     }
 
     public function getOrder()
     {
         return 4; // the order in which fixtures will be loaded
     }
-    
 }

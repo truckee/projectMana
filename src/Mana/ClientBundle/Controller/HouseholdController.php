@@ -22,9 +22,9 @@ use Mana\ClientBundle\Form\MemberType;
  */
 class HouseholdController extends Controller
 {
-
     /**
      * Finds and displays a Household entity.
+     *
      * @Route("/{id}/show", name="household_show")
      * @Template()
      */
@@ -37,10 +37,10 @@ class HouseholdController extends Controller
         if (!$household) {
             throw $this->createNotFoundException('Unable to find Household entity.');
         }
-        $templates[] = "ManaClientBundle:Member:memberShowBlock.html.twig";
-        $templates[] = "ManaClientBundle:Household:show_content.html.twig";
-        $templates[] = "ManaClientBundle:Address:addressShowBlock.html.twig";
-        $templates[] = "ManaClientBundle:Household:contactShowBlock.html.twig";
+        $templates[] = 'ManaClientBundle:Member:memberShowBlock.html.twig';
+        $templates[] = 'ManaClientBundle:Household:show_content.html.twig';
+        $templates[] = 'ManaClientBundle:Address:addressShowBlock.html.twig';
+        $templates[] = 'ManaClientBundle:Household:contactShowBlock.html.twig';
 
         return array(
             'household' => $household,
@@ -52,7 +52,8 @@ class HouseholdController extends Controller
 
     /**
      * Displays a form to create a new Household entity
-     * First, validate a new member to be head of household
+     * First, validate a new member to be head of household.
+     *
      * @Route("/new", name="household_new")
      * @Template()
      */
@@ -65,7 +66,8 @@ class HouseholdController extends Controller
             //household appears in session if new data selected in match_results
             $household = $em->merge($session->get('household'));
             $head = $em->merge($session->get('head'));
-            $id = $em->getRepository("ManaClientBundle:Household")->initialize($household, $head, $session);
+            $id = $em->getRepository('ManaClientBundle:Household')->initialize($household, $head, $session);
+
             return $this->redirectToRoute('household_edit', array('id' => $id));
         }
         $household = new Household();
@@ -85,7 +87,7 @@ class HouseholdController extends Controller
                 'sname' => $head->getSname(),
                 'dob' => date_format($head->getDob(), 'Y-m-d'),
             );
-            $searchFor = $head->getFname() . ' ' . $head->getSname();
+            $searchFor = $head->getFname().' '.$head->getSname();
             $searches = $this->get('searches');
             $found = $searches->getMembers($searchFor);
             $session->set('household', $household);
@@ -93,7 +95,8 @@ class HouseholdController extends Controller
 
             if (count($found) === 0) {
                 //when there are no matches, create member as head with incoming data
-                $id = $em->getRepository("ManaClientBundle:Household")->initialize($household, $head, $session);
+                $id = $em->getRepository('ManaClientBundle:Household')->initialize($household, $head, $session);
+
                 return $this->redirectToRoute('household_edit', array('id' => $id));
             } else {
                 //send new data plus matches to match_results
@@ -105,10 +108,12 @@ class HouseholdController extends Controller
                     'matched' => $found,
                     'title' => 'Match Results',
                 );
+
                 return $this->render(
-                        "ManaClientBundle:Member:match_results.html.twig", $match_results);
+                        'ManaClientBundle:Member:match_results.html.twig', $match_results);
             }
         }
+
         return array(
             'formType' => 'New Household',
             'form' => $form->createView(),
@@ -118,7 +123,8 @@ class HouseholdController extends Controller
     }
 
     /**
-     * Display household edit form
+     * Display household edit form.
+     *
      * @Route("/{id}/edit", name="household_edit")
      * @Template()
      */
@@ -146,7 +152,7 @@ class HouseholdController extends Controller
             $em->persist($household);
             $em->flush();
             $flash = $this->get('braincrafted_bootstrap.flash');
-            $flash->alert("Household updated");
+            $flash->alert('Household updated');
 
             return $this->redirectToRoute('household_show', array('id' => $household->getId()));
         }
@@ -160,8 +166,10 @@ class HouseholdController extends Controller
     }
 
     /**
-     * Display results of client search
+     * Display results of client search.
+     *
      * @param Request $request
+     *
      * @return type
      * @Route("/_search", name = "_search")
      */
@@ -170,7 +178,8 @@ class HouseholdController extends Controller
         $flash = $this->get('braincrafted_bootstrap.flash');
         $qtext = $request->query->get('qtext');
         if ($qtext == '') {
-            $flash->alert("No search criteria were entered");
+            $flash->alert('No search criteria were entered');
+
             return $this->redirect($request->headers->get('referer'));
         }
 
@@ -180,8 +189,10 @@ class HouseholdController extends Controller
             $household = $em->getRepository('ManaClientBundle:Household')->find($qtext);
             if (!$household) {
                 $flash->alert('Sorry, household not found');
+
                 return $this->redirect($request->headers->get('referer'));
             }
+
             return $this->redirectToRoute('household_show', array('id' => $qtext));
         } else {
             // search for head of household
@@ -189,11 +200,13 @@ class HouseholdController extends Controller
             $found = $searches->getMembers($qtext);
             if (count($found) == 0 || !$found) {
                 $flash->alert('Sorry, no households were found');
+
                 return $this->redirect($request->headers->get('referer'));
             }
 
             if (count($found) == 1) {
                 $id = $found[0]->getHousehold()->getId();
+
                 return $this->redirectToRoute('household_show', array('id' => $id));
             } else {
                 return $this->render('ManaClientBundle:Household:search.html.twig',
@@ -207,7 +220,8 @@ class HouseholdController extends Controller
     }
 
     /**
-     * get household data by id for json response
+     * get household data by id for json response.
+     *
      * @Route("/contact/{id}", name="household_contact")
      */
     public function contactAction($id)
@@ -224,12 +238,13 @@ class HouseholdController extends Controller
             ]);
             $response = new Response($content);
         }
-        
+
         return $response;
     }
 
     /**
-     * Create and download registration card for household
+     * Create and download registration card for household.
+     *
      * @Route("/{id}/card", name="house_card")
      */
     public function cardAction($id)
@@ -241,13 +256,13 @@ class HouseholdController extends Controller
         $sname = $head->getSname();
 
         $offences = $head->getOffences();
-        $code = "";
+        $code = '';
         foreach ($offences as $offence) {
             $violation = $offence->getOffence();
             $code .= substr($violation, 0, 1);
         }
 
-        $filename = $sname . $fname . '_Card.pdf';
+        $filename = $sname.$fname.'_Card.pdf';
 
         $stylesheetXml = $this->renderView('ManaClientBundle:Household:pdfstyle.xml.twig', array());
 
@@ -262,10 +277,11 @@ class HouseholdController extends Controller
             ), $response);
         $xml = $response->getContent();
         $content = $facade->render($xml, $stylesheetXml);
+
         return new Response($content, 200,
             array(
             'content-type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename=' . $filename,
+            'Content-Disposition' => 'attachment; filename='.$filename,
         ));
     }
 }

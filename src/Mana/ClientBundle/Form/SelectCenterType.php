@@ -25,13 +25,11 @@ class SelectCenterType extends AbstractType
         $builder
             ->add('center', CenterEnabledChoiceType::class);
     }
-    
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'csrf_protection' => false,
             'required' => false,
             ));
-}
-
+    }
 }

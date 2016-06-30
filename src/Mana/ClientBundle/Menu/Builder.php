@@ -9,7 +9,6 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 
 class Builder extends ContainerAware
 {
-
     public function mainMenu(FactoryInterface $factory, array $options)
     {
         $menu = $factory->createItem('root');
@@ -18,22 +17,21 @@ class Builder extends ContainerAware
         $request = $this->container->get('request');
         $routeName = $request->get('_route');
 
-        if ($routeName <> 'home') {
+        if ($routeName != 'home') {
             $menu->addChild('Home', array(
                 'route' => 'home',
             ));
         }
 
-
         if ($routeName === 'household_edit' || $routeName === 'household_show') {
             $id = $request->get('id');
-            $menu->addChild("Add contact", array(
+            $menu->addChild('Add contact', array(
                 'route' => 'contact_new',
-                'routeParameters' => array('id' => $id)
+                'routeParameters' => array('id' => $id),
             ));
         }
 
-        $menu->addChild("New contacts", array(
+        $menu->addChild('New contacts', array(
             'route' => 'contacts_add',
         ));
 
@@ -44,11 +42,11 @@ class Builder extends ContainerAware
         $menu->addChild('New household', array(
             'route' => 'household_new',
         ));
-        
+
         $menu->addChild('Reports', array(
             'route' => 'report_menu',
         ));
-        
+
         if ($securityContext->isGranted('ROLE_ADMIN')) {
             $menu->addChild('Options & users', array(
                 'route' => 'easyadmin',
@@ -84,11 +82,11 @@ class Builder extends ContainerAware
     {
         $menu = $factory->createItem('root');
 
-        $menu->addChild("General Statistics", array(
+        $menu->addChild('General Statistics', array(
             'route' => 'stats_general',
         ));
 
-        $menu->addChild("Distribution details", array(
+        $menu->addChild('Distribution details', array(
             'route' => 'stats_details',
         ));
 
@@ -96,7 +94,7 @@ class Builder extends ContainerAware
             'route' => 'latest_contacts',
         ));
 
-        $menu->addChild("Multiple contacts", array(
+        $menu->addChild('Multiple contacts', array(
             'route' => 'multi_contacts',
         ));
 
@@ -106,7 +104,7 @@ class Builder extends ContainerAware
     public function logoutMenu(FactoryInterface $factory, array $options)
     {
         $menu = $factory->createItem('root');
-        $menu->addChild("Log out", array(
+        $menu->addChild('Log out', array(
             'route' => 'logout',
         ));
 

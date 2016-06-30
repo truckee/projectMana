@@ -7,7 +7,7 @@ namespace Mana\ClientBundle\Utilities;
 use Doctrine\ORM\EntityManager;
 
 /**
- * Description of Crosstab
+ * Description of Crosstab.
  *
  * @author George
  */
@@ -15,20 +15,21 @@ class Crosstab
 {
     private $em;
 
-    public function __construct(EntityManager $em) {
+    public function __construct(EntityManager $em)
+    {
         $this->em = $em;
     }
 
     /**
-     * 
-     * @param array $data = data array
+     * @param array $data      = data array
      * @param array $rowLabels
      * @param array $colLabels
+     *
      * @return array
      */
     public function crosstabQuery($data, $rowLabels, $colLabels)
     {
-        $profile = $this->profileArray( $rowLabels, $colLabels);
+        $profile = $this->profileArray($rowLabels, $colLabels);
         foreach ($data as $array) {
             if (!array_key_exists('total', $profile[$array['rowLabel']])) {
                 $profile[$array['rowLabel']]['total'] = 0;
@@ -50,8 +51,8 @@ class Crosstab
                 $profile['total'][$key] += $value;
             }
         }
-        
-        return $profile; 
+
+        return $profile;
     }
 
     private function profileArray($rows, $cols)
@@ -67,24 +68,23 @@ class Crosstab
 
         return $profile;
     }
-    
+
     /**
-     * 
      * @param string $query
-     * @param array $criteria ['startMonth', 'startYear', 'endMonth', 'endYear']
+     * @param array  $criteria ['startMonth', 'startYear', 'endMonth', 'endYear']
+     *
      * @return string
      */
     public function setDateCriteria($criteria)
     {
-//        $startMonth = $criteria['startMonth'];
+        //        $startMonth = $criteria['startMonth'];
 //        $startYear = $criteria['startYear'];
         $startText = $criteria['startDate'];
 //        $endMonth = $criteria['endMonth'];
 //        $endYear = $criteria['endYear'];
 //        $endDate = new \DateTime($endMonth . '/01/' . $endYear);
         $endText = $criteria['endDate'];
-        
+
         return "'$startText' AND '$endText' ";
-               
     }
 }

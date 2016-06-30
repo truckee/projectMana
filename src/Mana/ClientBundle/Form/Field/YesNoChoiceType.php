@@ -17,12 +17,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
- * YesNoChoiceType
- *
+ * YesNoChoiceType.
  */
 class YesNoChoiceType extends AbstractType
 {
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(

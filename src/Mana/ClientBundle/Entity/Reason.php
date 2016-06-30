@@ -3,20 +3,18 @@
 namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Mana\ClientBundle\Entity\Household;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Reason
+ * Reason.
  *
  * @ORM\Table(name="reason")
  * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\ReasonRepository")
  */
 class Reason
 {
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -33,16 +31,16 @@ class Reason
     protected $reason;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     protected $enabled;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -50,9 +48,10 @@ class Reason
     }
 
     /**
-     * Set reason
+     * Set reason.
      *
-     * @param integer $reason
+     * @param int $reason
+     *
      * @return reason
      */
     public function setReason($reason)
@@ -63,9 +62,9 @@ class Reason
     }
 
     /**
-     * Get reason
+     * Get reason.
      *
-     * @return integer
+     * @return int
      */
     public function getReason()
     {
@@ -73,9 +72,10 @@ class Reason
     }
 
     /**
-     * Set enabled
+     * Set enabled.
      *
-     * @param integer $enabled
+     * @param int $enabled
+     *
      * @return enabled
      */
     public function setEnabled($enabled)
@@ -86,9 +86,9 @@ class Reason
     }
 
     /**
-     * Get enabled
+     * Get enabled.
      *
-     * @return integer
+     * @return int
      */
     public function getEnabled()
     {
@@ -111,5 +111,4 @@ class Reason
     {
         return $this->households;
     }
-
 }

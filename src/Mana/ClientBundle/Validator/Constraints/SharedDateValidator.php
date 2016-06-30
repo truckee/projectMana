@@ -8,7 +8,6 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class SharedDateValidator extends ConstraintValidator
 {
-
     public function validate($value, Constraint $constraint)
     {
         $accessor = PropertyAccess::createPropertyAccessor();
@@ -17,11 +16,11 @@ class SharedDateValidator extends ConstraintValidator
         $shared = $data->getShared();
         $shareddate = $data->getSharedDate();
         $isDateObj = is_object($shareddate);
-        if ( '1' === $shared && !$isDateObj ) {
-
+        if ('1' === $shared && !$isDateObj) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('%string%', $value)
                 ->addViolation();
+
             return false;
         }
 

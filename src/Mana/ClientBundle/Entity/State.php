@@ -7,16 +7,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * State
+ * State.
  *
  * @ORM\Table(name="state")
  * @ORM\Entity
  */
 class State
 {
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -40,17 +39,17 @@ class State
     protected $addresses;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->addresses = new ArrayCollection;
+        $this->addresses = new ArrayCollection();
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -58,9 +57,10 @@ class State
     }
 
     /**
-     * Set state
+     * Set state.
      *
      * @param string $state
+     *
      * @return State
      */
     public function setState($state)
@@ -71,7 +71,7 @@ class State
     }
 
     /**
-     * Get state
+     * Get state.
      *
      * @return string
      */
@@ -81,20 +81,22 @@ class State
     }
 
     /**
-     * Add addresses
+     * Add addresses.
      *
      * @param \Mana\ClientBundle\Entity\Address $addresses
+     *
      * @return State
      */
     public function addAddress(\Mana\ClientBundle\Entity\Address $address)
     {
         $this->addresses[] = $address;
         $member->setState($this);
+
         return $this;
     }
 
     /**
-     * Remove addresses
+     * Remove addresses.
      *
      * @param \Mana\ClientBundle\Entity\Address $addresses
      */
@@ -104,7 +106,7 @@ class State
     }
 
     /**
-     * Get addresses
+     * Get addresses.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -114,15 +116,16 @@ class State
     }
 
     /**
-     * @var integer
+     * @var int
      * @ORM\Column(name="enabled", type="boolean", nullable=true)
      */
     protected $enabled;
 
     /**
-     * Set enabled
+     * Set enabled.
      *
-     * @param integer $enabled
+     * @param int $enabled
+     *
      * @return enabled
      */
     public function setEnabled($enabled)
@@ -133,13 +136,12 @@ class State
     }
 
     /**
-     * Get enabled
+     * Get enabled.
      *
-     * @return integer
+     * @return int
      */
     public function getEnabled()
     {
         return $this->enabled;
     }
-
 }

@@ -12,12 +12,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 class StatusController extends Controller
 {
-
     /**
      * @Route("", name="status")
      * @Template()
      */
-    public function showAction() {
+    public function showAction()
+    {
         $status = $this->get('status');
         $statusYears = $status->getYearStatus();
 
@@ -29,17 +29,16 @@ class StatusController extends Controller
 
     /**
      * @Route("/select", name="status_change")
-     *
      */
-    public function changeAction(Request $request) {
+    public function changeAction(Request $request)
+    {
         $em = $this->getDoctrine()->getManager();
         $data = $request->get('status');
         $status = $this->get('status');
         $status->setStatus($data);
         $flash = $this->get('braincrafted_bootstrap.flash');
-        $flash->alert("Household status updated");
+        $flash->alert('Household status updated');
 
         return $this->redirectToRoute('status');
     }
-
 }

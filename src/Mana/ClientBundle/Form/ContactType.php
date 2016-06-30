@@ -14,7 +14,6 @@ use Mana\ClientBundle\Form\Field\CenterEnabledChoiceType;
 
 class ContactType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -24,7 +23,7 @@ class ContactType extends AbstractType
                     'label' => 'Contact type',
                     'choice_label' => 'contactDesc',
                     'placeholder' => 'Select contact type',
-                    'query_builder' => function(EntityRepository $er) {
+                    'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('c')
                         ->where('c.enabled=1')
                         ->orderBy('c.contactDesc', 'ASC')
@@ -51,9 +50,7 @@ class ContactType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Mana\ClientBundle\Entity\Contact',
-            'csrf_protection' => false,
             'required' => false,
         ));
     }
-
 }

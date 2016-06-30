@@ -15,17 +15,16 @@ namespace Mana\ClientBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * CountyRepository
- *
+ * CountyRepository.
  */
 class CountyRepository extends EntityRepository
 {
     public function colLabels($dateCriteria)
     {
-        $str = "select distinct cty.county from county cty
+        $str = 'select distinct cty.county from county cty
             join contact c on c.county_id = cty.id
             where c.contact_date BETWEEN __DATE_CRITERIA__ 
-            order by county";
+            order by county';
         $sql = str_replace('__DATE_CRITERIA__', $dateCriteria, $str);
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->executeQuery($sql);
@@ -34,8 +33,7 @@ class CountyRepository extends EntityRepository
         foreach ($colArray as $array) {
             $colLabels[] = $array['county'];
         }
-        
+
         return $colLabels;
     }
-    
 }

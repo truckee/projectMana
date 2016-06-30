@@ -8,7 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DefaultController extends Controller
 {
-
     /**
      * @Route("/home", name="home")
      * @Template()
@@ -17,7 +16,7 @@ class DefaultController extends Controller
     {
         return array();
     }
-    
+
     /**
      * @Route("/reportMenu", name="report_menu")
      * @Template()
@@ -28,22 +27,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/message", name="message")
-     * @Template()
-     *
-     * @param string $message
-     */
-    public function messageAction()
-    {
-        $session = $this->getRequest()->getSession();
-        $message = $session->get('message');
-        $session->set('message', '');
-        return array('message' => $message);
-    }
-
-    /**
-     *
-     * scriptAction returns javascript code to generate distribution chart
+     * scriptAction returns javascript code to generate distribution chart.
      *
      * @return script
      */

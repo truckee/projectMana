@@ -6,16 +6,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Income
+ * Income.
  *
  * @ORM\Table(name="income")
  * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\IncomeRepository")
  */
 class Income
 {
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -49,15 +48,15 @@ class Income
     }
 
     /**
-     * @var integer
+     * @var int
      * @ORM\Column(name="enabled", type="boolean", nullable=true)
      */
     protected $enabled;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -65,9 +64,10 @@ class Income
     }
 
     /**
-     * Set income
+     * Set income.
      *
      * @param string $income
+     *
      * @return Income
      */
     public function setIncome($income)
@@ -78,7 +78,7 @@ class Income
     }
 
     /**
-     * Get income
+     * Get income.
      *
      * @return string
      */
@@ -88,9 +88,10 @@ class Income
     }
 
     /**
-     * Set enabled
+     * Set enabled.
      *
-     * @param integer $enabled
+     * @param int $enabled
+     *
      * @return enabled
      */
     public function setEnabled($enabled)
@@ -101,9 +102,9 @@ class Income
     }
 
     /**
-     * Get enabled
+     * Get enabled.
      *
-     * @return integer
+     * @return int
      */
     public function getEnabled()
     {
@@ -114,5 +115,4 @@ class Income
     {
         return $this->income;
     }
-
 }

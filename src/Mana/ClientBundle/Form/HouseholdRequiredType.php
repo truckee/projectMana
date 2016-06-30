@@ -11,7 +11,6 @@ use Mana\ClientBundle\Form\Field\NoYesChoiceType;
 
 class HouseholdRequiredType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -46,5 +45,4 @@ class HouseholdRequiredType extends AbstractType
             'required' => false,
         ));
     }
-
 }

@@ -5,13 +5,14 @@ namespace Mana\ClientBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Description of MemberRepository
+ * Description of MemberRepository.
  *
  * @author George
  */
-class MemberRepository extends EntityRepository {
-
-    public function initialize($household) {
+class MemberRepository extends EntityRepository
+{
+    public function initialize($household)
+    {
         $em = $this->getEntityManager();
         $members = $household->getMembers();
         $sname = $household->getHead()->getSname();
@@ -21,11 +22,7 @@ class MemberRepository extends EntityRepository {
             if (empty($memberSname)) {
                 $member->setSname($sname);
             }
-//            $excluded = $member->getExcludeDate();
-//            if ($member->getInclude() == 'No' && empty($excluded)) {
-//                $member->setExcludeDate(new \DateTime);
-//            }
             $em->persist($member);
         }
     }
-}    
+}

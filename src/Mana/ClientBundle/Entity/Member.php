@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Mana\ClientBundle\Validator\Constraints as ManaAssert;
 
 /**
- * Client
+ * Client.
  *
  * @ORM\Table(name="member", indexes={
  *      @ORM\Index(name="idx_client_household_idx", columns={"household_id"}),
@@ -17,9 +17,8 @@ use Mana\ClientBundle\Validator\Constraints as ManaAssert;
  */
 class Member
 {
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -96,9 +95,10 @@ class Member
     protected $household;
 
     /**
-     * Set fname
+     * Set fname.
      *
      * @param string $fname
+     *
      * @return Member
      */
     public function setFname($fname)
@@ -109,7 +109,7 @@ class Member
     }
 
     /**
-     * Get fname
+     * Get fname.
      *
      * @return string
      */
@@ -119,9 +119,10 @@ class Member
     }
 
     /**
-     * Set sname
+     * Set sname.
      *
      * @param string $sname
+     *
      * @return Member
      */
     public function setSname($sname)
@@ -132,7 +133,7 @@ class Member
     }
 
     /**
-     * Get sname
+     * Get sname.
      *
      * @return string
      */
@@ -142,9 +143,10 @@ class Member
     }
 
     /**
-     * Set dob
+     * Set dob.
      *
      * @param \DateTime $dob
+     *
      * @return Member
      */
     public function setDob($dob)
@@ -155,7 +157,7 @@ class Member
     }
 
     /**
-     * Get dob
+     * Get dob.
      *
      * @return \DateTime
      */
@@ -165,9 +167,10 @@ class Member
     }
 
     /**
-     * Set include
+     * Set include.
      *
      * @param string $include
+     *
      * @return Member
      */
     public function setInclude($include)
@@ -178,7 +181,7 @@ class Member
     }
 
     /**
-     * Get include
+     * Get include.
      *
      * @return string
      */
@@ -188,9 +191,10 @@ class Member
     }
 
     /**
-     * Set excludeDate
+     * Set excludeDate.
      *
      * @param \DateTime $excludeDate
+     *
      * @return Member
      */
     public function setExcludeDate($excludeDate)
@@ -201,7 +205,7 @@ class Member
     }
 
     /**
-     * Get excludeDate
+     * Get excludeDate.
      *
      * @return \DateTime
      */
@@ -211,9 +215,10 @@ class Member
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return Member
      */
     public function setId($id)
@@ -224,9 +229,9 @@ class Member
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -234,9 +239,10 @@ class Member
     }
 
     /**
-     * Set sex
+     * Set sex.
      *
      * @param string $sex
+     *
      * @return Member
      */
     public function setSex($sex)
@@ -247,7 +253,7 @@ class Member
     }
 
     /**
-     * Get sex
+     * Get sex.
      *
      * @return string
      */
@@ -257,9 +263,10 @@ class Member
     }
 
     /**
-     * Set ethnicity
+     * Set ethnicity.
      *
      * @param \Mana\ClientBundle\Entity\Ethnicity $ethnicity
+     *
      * @return Member
      */
     public function setEthnicity(\Mana\ClientBundle\Entity\Ethnicity $ethnicity = null)
@@ -270,7 +277,7 @@ class Member
     }
 
     /**
-     * Get ethnicity
+     * Get ethnicity.
      *
      * @return \Mana\ClientBundle\Entity\Ethnicity
      */
@@ -280,9 +287,10 @@ class Member
     }
 
     /**
-     * Set household
+     * Set household.
      *
      * @param \Mana\ClientBundle\Entity\Household $household
+     *
      * @return Member
      */
     public function setHousehold(\Mana\ClientBundle\Entity\Household $household = null)
@@ -293,7 +301,7 @@ class Member
     }
 
     /**
-     * Get household
+     * Get household.
      *
      * @return \Mana\ClientBundle\Entity\Household
      */
@@ -313,9 +321,10 @@ class Member
     protected $relation;
 
     /**
-     * Set relation
+     * Set relation.
      *
      * @param \Mana\ClientBundle\Entity\Relationship $relation
+     *
      * @return Contact
      */
     public function setRelation(Relationship $relation = null)
@@ -326,7 +335,7 @@ class Member
     }
 
     /**
-     * Get relation
+     * Get relation.
      *
      * @return \Mana\ClientBundle\Entity\Relationship
      */
@@ -353,7 +362,7 @@ class Member
     }
 
     /**
-     * Remove offences
+     * Remove offences.
      *
      * @param \Mana\ClientBundle\Entity\Offence $offences
      */
@@ -379,9 +388,10 @@ class Member
     protected $work;
 
     /**
-     * Set work
+     * Set work.
      *
      * @param \Mana\ClientBundle\Entity\Work $work
+     *
      * @return Contact
      */
     public function setWork(Work $work = null)
@@ -392,7 +402,7 @@ class Member
     }
 
     /**
-     * Get work
+     * Get work.
      *
      * @return \Mana\ClientBundle\Entity\Work
      */
@@ -400,5 +410,4 @@ class Member
     {
         return $this->work;
     }
-
 }

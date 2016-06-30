@@ -5,27 +5,31 @@ namespace Mana\ClientBundle\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 
-class AgeToDOB implements DataTransformerInterface {
-
-    public function reverseTransform($dob) {
-
+class AgeToDOB implements DataTransformerInterface
+{
+    public function reverseTransform($dob)
+    {
         if (null == $dob || '' == $dob) {
-            return null;
+            return;
         }
         if ((substr_count($dob, '/') == 2 && strtotime($dob))) {
             $date = new \DateTime($dob);
+
             return $date;
         }
         if (is_numeric($dob)) {
             $date = new \DateTime();
-            $interval = 'P' . $dob . 'Y';
+            $interval = 'P'.$dob.'Y';
             $date->sub(new \DateInterval($interval));
+
             return $date;
         }
-        return null;
+
+        return;
     }
 
-    public function transform($client) {
+    public function transform($client)
+    {
         if (null == $client) {
             return '';
         }
@@ -33,6 +37,4 @@ class AgeToDOB implements DataTransformerInterface {
             return date_format($client, 'm/d/Y');
         }
     }
-
 }
-?>

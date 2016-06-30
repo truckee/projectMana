@@ -3,18 +3,17 @@
 namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Mana\ClientBundle\Entity\Address;
 
 /**
- * AddressType
+ * AddressType.
  *
  * @ORM\Table(name="address_type")
  * @ORM\Entity
  */
-class AddressType {
-
+class AddressType
+{
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -23,67 +22,74 @@ class AddressType {
     protected $id;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="address_type", type="string", nullable=false)
      */
     protected $addresstype;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     protected $enabled;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
-     * Set addresstype
+     * Set addresstype.
      *
-     * @param integer $addresstype
+     * @param int $addresstype
+     *
      * @return addresstype
      */
-    public function setAddresstype($addresstype) {
+    public function setAddresstype($addresstype)
+    {
         $this->addresstype = $addresstype;
 
         return $this;
     }
 
     /**
-     * Get addresstype
+     * Get addresstype.
      *
-     * @return integer 
+     * @return int
      */
-    public function getAddresstype() {
+    public function getAddresstype()
+    {
         return $this->addresstype;
     }
 
     /**
-     * Set enabled
+     * Set enabled.
      *
-     * @param integer $enabled
+     * @param int $enabled
+     *
      * @return enabled
      */
-    public function setEnabled($enabled) {
+    public function setEnabled($enabled)
+    {
         $this->enabled = $enabled;
 
         return $this;
     }
 
     /**
-     * Get enabled
+     * Get enabled.
      *
-     * @return integer 
+     * @return int
      */
-    public function getEnabled() {
+    public function getEnabled()
+    {
         return $this->enabled;
     }
 
@@ -94,13 +100,13 @@ class AddressType {
      */
     protected $addresses;
 
-    public function addAddress(Address $address) {
+    public function addAddress(Address $address)
+    {
         $this->addresses[] = $address;
-//        $address->addAddresstype($this);
     }
 
-    public function getAddresses() {
+    public function getAddresses()
+    {
         return $this->addresses;
     }
-
 }

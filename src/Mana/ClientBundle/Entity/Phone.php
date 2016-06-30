@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Mana\ClientBundle\Validator\Constraints as ManaAssert;
 
 /**
- * Phone
+ * Phone.
  *
  * @ORM\Table(name="phone")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Mana\ClientBundle\Validator\Constraints as ManaAssert;
 class Phone
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -49,9 +49,9 @@ class Phone
     protected $household;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -59,9 +59,10 @@ class Phone
     }
 
     /**
-     * Set areacode
+     * Set areacode.
      *
      * @param string $areacode
+     *
      * @return Phone
      */
     public function setAreacode($areacode)
@@ -72,9 +73,9 @@ class Phone
     }
 
     /**
-     * Get areacode
+     * Get areacode.
      *
-     * @return string 
+     * @return string
      */
     public function getAreacode()
     {
@@ -82,9 +83,10 @@ class Phone
     }
 
     /**
-     * Set phoneNumber
+     * Set phoneNumber.
      *
      * @param string $phoneNumber
+     *
      * @return Phone
      */
     public function setPhoneNumber($phoneNumber)
@@ -95,9 +97,9 @@ class Phone
     }
 
     /**
-     * Get phoneNumber
+     * Get phoneNumber.
      *
-     * @return string 
+     * @return string
      */
     public function getPhoneNumber()
     {
@@ -105,9 +107,10 @@ class Phone
     }
 
     /**
-     * Set household
+     * Set household.
      *
      * @param \Mana\ClientBundle\Entity\Household $household
+     *
      * @return Phone
      */
     public function setHousehold(\Mana\ClientBundle\Entity\Household $household = null)
@@ -118,9 +121,9 @@ class Phone
     }
 
     /**
-     * Get household
+     * Get household.
      *
-     * @return \Mana\ClientBundle\Entity\Household 
+     * @return \Mana\ClientBundle\Entity\Household
      */
     public function getHousehold()
     {

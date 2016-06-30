@@ -7,20 +7,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Mana\ClientBundle\Validator\Constraints as ManaAssert;
 
 /**
- * Contact
+ * Contact.
  *
  * @ORM\Entity
  * @ORM\Table(name="contact", indexes={@ORM\Index(name="idx_contact_household_idx", columns={"household_id"}), @ORM\Index(name="idx_contact_type_idx", columns={"contact_type_id"}), @ORM\Index(name="idx_contact_center_idx", columns={"center_id"})})
- * 
  */
 class Contact
 {
-    
-    public function __construct() {
+    public function __construct()
+    {
         $this->contactDate = new \DateTime();
     }
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -37,7 +36,7 @@ class Contact
     protected $contactDate;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="first", type="boolean", nullable=true)
      */
@@ -84,9 +83,9 @@ class Contact
     protected $center;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -94,9 +93,10 @@ class Contact
     }
 
     /**
-     * Set contactDate
+     * Set contactDate.
      *
      * @param \DateTime $contactDate
+     *
      * @return Contact
      */
     public function setContactDate($contactDate)
@@ -107,9 +107,9 @@ class Contact
     }
 
     /**
-     * Get contactDate
+     * Get contactDate.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getContactDate()
     {
@@ -117,9 +117,10 @@ class Contact
     }
 
     /**
-     * Set first
+     * Set first.
      *
-     * @param boolean $first
+     * @param bool $first
+     *
      * @return Contact
      */
     public function setFirst($first)
@@ -130,9 +131,9 @@ class Contact
     }
 
     /**
-     * Get first
+     * Get first.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getFirst()
     {
@@ -140,9 +141,10 @@ class Contact
     }
 
     /**
-     * Set center
+     * Set center.
      *
      * @param \Mana\ClientBundle\Entity\Center $center
+     *
      * @return Contact
      */
     public function setCenter(\Mana\ClientBundle\Entity\Center $center = null)
@@ -153,9 +155,9 @@ class Contact
     }
 
     /**
-     * Get center
+     * Get center.
      *
-     * @return \Mana\ClientBundle\Entity\Center 
+     * @return \Mana\ClientBundle\Entity\Center
      */
     public function getCenter()
     {
@@ -163,9 +165,10 @@ class Contact
     }
 
     /**
-     * Set household
+     * Set household.
      *
      * @param \Mana\ClientBundle\Entity\Household $household
+     *
      * @return Contact
      */
     public function setHousehold(\Mana\ClientBundle\Entity\Household $household = null)
@@ -176,9 +179,9 @@ class Contact
     }
 
     /**
-     * Get household
+     * Get household.
      *
-     * @return \Mana\ClientBundle\Entity\Household 
+     * @return \Mana\ClientBundle\Entity\Household
      */
     public function getHousehold()
     {
@@ -186,9 +189,10 @@ class Contact
     }
 
     /**
-     * Set contactDesc
+     * Set contactDesc.
      *
      * @param \Mana\ClientBundle\Entity\ContactDesc $contactDesc
+     *
      * @return Contact
      */
     public function setContactDesc(\Mana\ClientBundle\Entity\ContactDesc $contactDesc = null)
@@ -199,9 +203,9 @@ class Contact
     }
 
     /**
-     * Get contactDesc
+     * Get contactDesc.
      *
-     * @return \Mana\ClientBundle\Entity\ContactDesc 
+     * @return \Mana\ClientBundle\Entity\ContactDesc
      */
     public function getContactDesc()
     {
@@ -209,9 +213,10 @@ class Contact
     }
 
     /**
-     * Set county
+     * Set county.
      *
      * @param \Mana\ClientBundle\Entity\County $county
+     *
      * @return Contact
      */
     public function setCounty(\Mana\ClientBundle\Entity\County $county = null)
@@ -222,9 +227,9 @@ class Contact
     }
 
     /**
-     * Get county
+     * Get county.
      *
-     * @return \Mana\ClientBundle\Entity\County 
+     * @return \Mana\ClientBundle\Entity\County
      */
     public function getCounty()
     {

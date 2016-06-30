@@ -6,20 +6,22 @@ use Doctrine\DBAL\Connection;
 
 /**
  * find active status of households by year and
- * change status on request
+ * change status on request.
  */
-class Status {
-
+class Status
+{
     private $conn;
 
-    public function __construct(Connection $conn) {
+    public function __construct(Connection $conn)
+    {
         $this->conn = $conn;
     }
 
-    public function getYearStatus() {
-        $sql = "select max(year(contact_date)) Year, if(active=1,1,0) Active, if(active=0,1,0) Inactive from contact c
+    public function getYearStatus()
+    {
+        $sql = 'select max(year(contact_date)) Year, if(active=1,1,0) Active, if(active=0,1,0) Inactive from contact c
             join household h on h.id = c.household_id
-            group by household_id";
+            group by household_id';
         $statusYears = $this->conn->fetchAll($sql);
         $statusYearArray = array();
         foreach ($statusYears as $status) {
@@ -31,16 +33,18 @@ class Status {
             $statusYearArray[$status['Year']]['Inactive'] += $status['Inactive'];
         }
         krsort($statusYearArray);
+
         return $statusYearArray;
     }
 
-    public function setStatus($changes) {
+    public function setStatus($changes)
+    {
         set_time_limit(0);
-        $sql = "select household_id id  from contact c
+        $sql = 'select household_id id  from contact c
             join household h on c.household_id = h.id
             where h.active = ?
             group by c.household_id
-            having max(year(contact_date)) = ?";
+            having max(year(contact_date)) = ?';
         foreach ($changes as $year => $action) {
             if ($action == 'active') {
                 $stmt = $this->conn->executeQuery($sql, array(0, $year));
@@ -63,5 +67,4 @@ class Status {
             }
         }
     }
-
 }

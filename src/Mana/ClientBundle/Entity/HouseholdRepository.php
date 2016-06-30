@@ -6,13 +6,13 @@ use Doctrine\ORM\EntityRepository;
 
 class HouseholdRepository extends EntityRepository
 {
-
     /**
-     * Set initial values for household entity
+     * Set initial values for household entity.
      * 
      * @param type $household
      * @param type $member
      * @param type $session
+     *
      * @return mixed
      */
     public function initialize($household, $member, $session = null)
@@ -27,8 +27,8 @@ class HouseholdRepository extends EntityRepository
         $relation = $em->getRepository('ManaClientBundle:Relationship')->findOneBy(['relation' => 'Self']);
         $member->setRelation($relation);
         $foodstamp = $household->getFoodstamp();
-        if (empty($foodstamp)){
-            $unk = $em->getRepository("ManaClientBundle:FsStatus")->findOneBy(['status' => 'Unknown']);
+        if (empty($foodstamp)) {
+            $unk = $em->getRepository('ManaClientBundle:FsStatus')->findOneBy(['status' => 'Unknown']);
             $household->setFoodstamp($unk);
         }
         //if from match results, add & set head of household
@@ -41,6 +41,7 @@ class HouseholdRepository extends EntityRepository
         $em->persist($household);
         $em->flush();
         $id = $household->getId();
+
         return $id;
     }
 
@@ -63,27 +64,4 @@ class HouseholdRepository extends EntityRepository
         }
         $em->flush();
     }
-
-    /**
-     * Household version flags:
-     * 0: version 2
-     * 1: v1, single member
-     * >1: v1, more than 1 member
-     * @param type $id
-     */
-    public function getHouseholdVersionFlag($id)
-    {
-        $em = $this->getEntityManager();
-        $size = $em->createQuery(
-                        "select count(m.fname) size from ManaClientBundle:Member m "
-                        . "where m.household =  $id")
-                ->getSingleScalarResult();
-        $dob = $em->createQuery(
-                        " select m.dob from  ManaClientBundle:Member m "
-                        . "join ManaClientBundle:Household h with h.head = m "
-                        . "where h.id =  $id")
-                ->getSingleScalarResult();
-        return (!empty($dob)) ? 0 : $size;
-    }
-
 }

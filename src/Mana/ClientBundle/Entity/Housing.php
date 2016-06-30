@@ -3,19 +3,18 @@
 namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Mana\ClientBundle\Entity\Household;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Housing
+ * Housing.
  *
  * @ORM\Table(name="housing")
  * @ORM\Entity
  */
-class Housing {
-
+class Housing
+{
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -24,7 +23,7 @@ class Housing {
     protected $id;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="housing", type="string", nullable=false)
      * @Assert\NotBlank(message="Housing may not be blank")
@@ -32,60 +31,67 @@ class Housing {
     protected $housing;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     protected $enabled;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
-     * Set housing
+     * Set housing.
      *
-     * @param integer $housing
+     * @param int $housing
+     *
      * @return housing
      */
-    public function setHousing($housing) {
+    public function setHousing($housing)
+    {
         $this->housing = $housing;
 
         return $this;
     }
 
     /**
-     * Get housing
+     * Get housing.
      *
-     * @return integer 
+     * @return int
      */
-    public function getHousing() {
+    public function getHousing()
+    {
         return $this->housing;
     }
 
     /**
-     * Set enabled
+     * Set enabled.
      *
-     * @param integer $enabled
+     * @param int $enabled
+     *
      * @return enabled
      */
-    public function setEnabled($enabled) {
+    public function setEnabled($enabled)
+    {
         $this->enabled = $enabled;
 
         return $this;
     }
 
     /**
-     * Get enabled
+     * Get enabled.
      *
-     * @return integer 
+     * @return int
      */
-    public function getEnabled() {
+    public function getEnabled()
+    {
         return $this->enabled;
     }
 
@@ -96,13 +102,13 @@ class Housing {
      */
     protected $households;
 
-    public function addHousehold(Household $household) {
+    public function addHousehold(Household $household)
+    {
         $this->households[] = $household;
-//        $household->addHousing($this);
     }
 
-    public function getHouseholds() {
+    public function getHouseholds()
+    {
         return $this->households;
     }
-
 }

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Mana\ClientBundle\Entity\Usertable
+ * Mana\ClientBundle\Entity\Usertable.
  *
  * @ORM\Table(name="usertable")
  * @ORM\Entity
@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User extends BaseUser
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -24,7 +24,7 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @var string $fname
+     * @var string
      *
      * @ORM\Column(name="fname", type="string", length=25, nullable=false)
      * @Assert\NotBlank(message = "First name may not be empty")
@@ -32,7 +32,7 @@ class User extends BaseUser
     protected $fname;
 
     /**
-     * @var string $sname
+     * @var string
      *
      * @ORM\Column(name="sname", type="string", length=45, nullable=false)
      * @Assert\NotBlank(message = "Last name may not be empty")
@@ -40,22 +40,23 @@ class User extends BaseUser
     protected $sname;
 
     /**
-     * Set fname
+     * Set fname.
      *
      * @param string $fname
+     *
      * @return Usertable
      */
     public function setFname($fname)
     {
         $this->fname = $fname;
-    
+
         return $this;
     }
 
     /**
-     * Get fname
+     * Get fname.
      *
-     * @return string 
+     * @return string
      */
     public function getFname()
     {
@@ -63,22 +64,23 @@ class User extends BaseUser
     }
 
     /**
-     * Set sname
+     * Set sname.
      *
      * @param string $sname
+     *
      * @return Usertable
      */
     public function setSname($sname)
     {
         $this->sname = $sname;
-    
+
         return $this;
     }
 
     /**
-     * Get sname
+     * Get sname.
      *
-     * @return string 
+     * @return string
      */
     public function getSname()
     {

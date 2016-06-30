@@ -7,16 +7,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * County
+ * County.
  *
  * @ORM\Table(name="county")
  * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\CountyRepository")
  */
 class County
 {
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -47,18 +46,18 @@ class County
     protected $contacts;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->centers = new ArrayCollection;
-        $this->contacts = new ArrayCollection;
+        $this->centers = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -66,9 +65,10 @@ class County
     }
 
     /**
-     * Set county
+     * Set county.
      *
      * @param string $county
+     *
      * @return County
      */
     public function setCounty($county)
@@ -79,7 +79,7 @@ class County
     }
 
     /**
-     * Get county
+     * Get county.
      *
      * @return string
      */
@@ -89,9 +89,10 @@ class County
     }
 
     /**
-     * Add centers
+     * Add centers.
      *
      * @param \Mana\ClientBundle\Entity\Center $centers
+     *
      * @return County
      */
     public function addCenter(\Mana\ClientBundle\Entity\Center $centers)
@@ -102,7 +103,7 @@ class County
     }
 
     /**
-     * Remove centers
+     * Remove centers.
      *
      * @param \Mana\ClientBundle\Entity\Center $centers
      */
@@ -112,7 +113,7 @@ class County
     }
 
     /**
-     * Get centers
+     * Get centers.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -122,9 +123,10 @@ class County
     }
 
     /**
-     * Add contacts
+     * Add contacts.
      *
      * @param \Mana\ClientBundle\Entity\Contact $contacts
+     *
      * @return County
      */
     public function addContact(\Mana\ClientBundle\Entity\Contact $contacts)
@@ -135,7 +137,7 @@ class County
     }
 
     /**
-     * Remove contacts
+     * Remove contacts.
      *
      * @param \Mana\ClientBundle\Entity\Contact $contacts
      */
@@ -145,7 +147,7 @@ class County
     }
 
     /**
-     * Get contacts
+     * Get contacts.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -162,20 +164,22 @@ class County
     protected $addresses;
 
     /**
-     * Add addresses
+     * Add addresses.
      *
      * @param \Mana\ClientBundle\Entity\Address $addresses
+     *
      * @return Household
      */
     public function addAddress(\Mana\ClientBundle\Entity\Address $address)
     {
         $this->addresses[] = $address;
         $address->setCounty($this);
+
         return $this;
     }
 
     /**
-     * Remove addresses
+     * Remove addresses.
      *
      * @param \Mana\ClientBundle\Entity\Address $addresses
      */
@@ -185,7 +189,7 @@ class County
     }
 
     /**
-     * Get addresses
+     * Get addresses.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -195,16 +199,17 @@ class County
     }
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=true)
      */
     protected $enabled;
 
     /**
-     * Set enabled
+     * Set enabled.
      *
-     * @param boolean $enabled
+     * @param bool $enabled
+     *
      * @return enabled
      */
     public function setEnabled($enabled)
@@ -215,18 +220,12 @@ class County
     }
 
     /**
-     * Get enabled
+     * Get enabled.
      *
-     * @return boolean
+     * @return bool
      */
     public function getEnabled()
     {
         return $this->enabled;
     }
-
-    public function __toString()
-    {
-        return $this->getCounty();
-    }
-
 }

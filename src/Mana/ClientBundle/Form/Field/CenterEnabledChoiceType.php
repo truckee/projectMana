@@ -10,25 +10,25 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class CenterEnabledChoiceType extends AbstractType
 {
-
-    public function getParent() {
+    public function getParent()
+    {
         return EntityType::class;
     }
 
-    public function configureOptions(OptionsResolver $resolver) {
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'class' => 'ManaClientBundle:Center',
             'label' => 'Site',
             'choice_label' => 'center',
             'placeholder' => 'Select site',
-            'query_builder' => function(EntityRepository $er) {
+            'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('c')
                                 ->where('c.enabled=1')
                                 ->orderBy('c.center', 'ASC')
                 ;
             },
-            'constraints' => array(new NotBlank(array('message' => 'No site elected', 'groups' => array('Contact'))))
+            'constraints' => array(new NotBlank(array('message' => 'No site elected', 'groups' => array('Contact')))),
         ));
     }
-
 }

@@ -22,7 +22,7 @@ use Mana\ClientBundle\Entity\Ethnicity;
 use Mana\ClientBundle\Entity\FsAmount;
 use Mana\ClientBundle\Entity\FsStatus;
 use Mana\ClientBundle\Entity\Housing;
-use Mana\ClientBundle\Entity\Income;;
+use Mana\ClientBundle\Entity\Income;
 use Mana\ClientBundle\Entity\Notfoodstamp;
 use Mana\ClientBundle\Entity\Reason;
 use Mana\ClientBundle\Entity\Relationship;
@@ -187,19 +187,19 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
         $addType2->setEnabled(true);
         $this->setReference('mailing', $addType2);
         $manager->persist($addType2);
-        
+
         $ca = new State();
         $ca->setState('CA');
         $ca->setEnabled(true);
         $this->setReference('ca', $ca);
         $manager->persist($ca);
-        
+
         $nv = new State();
         $nv->setState('NV');
         $nv->setEnabled(true);
         $this->setReference('nv', $nv);
         $manager->persist($nv);
-        
+
         $notQualified = new Notfoodstamp();
         $notQualified->setNotfoodstamp('Not qualified');
         $notQualified->setEnabled(true);
@@ -235,7 +235,7 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
         $unemployed->setEnabled(true);
         $this->setReference('unemployed', $unemployed);
         $manager->persist($unemployed);
-        
+
         $income1 = new Income();
         $income1->setIncome('0 - 500');
         $income1->setEnabled(true);
@@ -259,7 +259,7 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
         $work->setWork('work');
         $this->setReference('work', $work);
         $manager->persist($work);
-        
+
         $manager->flush();
     }
 

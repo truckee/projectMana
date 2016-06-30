@@ -14,16 +14,19 @@ use Mana\ClientBundle\Form\SelectCenterType;
 
 /**
  * Contact controller.
+ *
  * @Route("/contact")
  */
-class ContactController extends Controller {
-
+class ContactController extends Controller
+{
     /**
      * Displays a form to create a new Contact entity.
+     *
      * @Route("/{id}/new", name="contact_new")
      * @Template("ManaClientBundle:Contact:edit.html.twig")
      */
-    public function newAction(Request $request, $id) {
+    public function newAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('ManaClientBundle:Household')->find($id);
         if (!$household) {
@@ -57,10 +60,12 @@ class ContactController extends Controller {
 
     /**
      * Displays a form to edit an existing Contact entity.
+     *
      * @Route("/{id}/edit", name="contact_edit")
      * @Template()
      */
-    public function editAction(Request $request, $id) {
+    public function editAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
         $contact = $em->getRepository('ManaClientBundle:Contact')->find($id);
         if (!$contact) {
@@ -75,10 +80,11 @@ class ContactController extends Controller {
             $em->flush();
             $hid = $contact->getHousehold()->getId();
             $flash = $this->get('braincrafted_bootstrap.flash');
-            $flash->alert("Contact has been updated");
+            $flash->alert('Contact has been updated');
 
             return $this->redirectToRoute('contact_new', array('id' => $hid));
         }
+
         return array(
             'household' => $contact->getHousehold(),
             'form' => $form->createView(),
@@ -89,10 +95,12 @@ class ContactController extends Controller {
 
     /**
      * Deletes a Contact entity.
+     *
      * @Route("/{id}/delete", name="contact_delete")
      * @Template()
      */
-    public function deleteAction(Request $request, $id) {
+    public function deleteAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
         $contact = $em->getRepository('ManaClientBundle:Contact')->find($id);
         $form = $this->createForm(ContactType::class, $contact);
@@ -103,10 +111,11 @@ class ContactController extends Controller {
             $em->persist($household);
             $em->flush();
             $flash = $this->get('braincrafted_bootstrap.flash');
-            $flash->alert("Contact has been deleted");
+            $flash->alert('Contact has been deleted');
 
             return $this->redirectToRoute('contact_new', array('id' => $hid));
         }
+
         return array(
             'contact' => $contact,
             'form' => $form->createView(),
@@ -118,7 +127,8 @@ class ContactController extends Controller {
      * @Route("/addContacts", name="contacts_add")
      * @Template()
      */
-    public function addContactsAction(Request $request) {
+    public function addContactsAction(Request $request)
+    {
         $contact = new Contact();
         $form = $this->createForm(ContactType::class, $contact);
         $form->handleRequest($request);
@@ -135,14 +145,15 @@ class ContactController extends Controller {
             $n = count($households);
             $flash = $this->get('braincrafted_bootstrap.flash');
             if ($n !== 0) {
-                $em->getRepository("ManaClientBundle:Household")->addContacts($households, $contactData);
+                $em->getRepository('ManaClientBundle:Household')->addContacts($households, $contactData);
                 $flash->alert("$n $desc contacts added for $centerName");
             } else {
                 $flash->alert('No contacts were added');
+
                 return $this->redirectToRoute('contacts_add');
             }
-            
         }
+
         return array(
             'form' => $form->createView(),
             'title' => 'Add contacts',
@@ -151,10 +162,12 @@ class ContactController extends Controller {
 
     /**
      * returning latest contacts w/ households & distribution
-     * at given center
+     * at given center.
+     *
      * @Route("/latest/{site}")
      */
-    public function mostRecentContactsAction($site) {
+    public function mostRecentContactsAction($site)
+    {
         $searches = $this->get('searches');
         $contacts = $searches->getLatest($site);
         $em = $this->getDoctrine()->getManager();
@@ -170,12 +183,13 @@ class ContactController extends Controller {
 
     /**
      * For selected center, generates checklist of households at most recent
-     * distribution
+     * distribution.
      * 
      * @Route("/latestReport", name="latest_contacts")
      * @Template()
      */
-    public function latestReportAction(Request $request) {
+    public function latestReportAction(Request $request)
+    {
         $center = new Center();
         $form = $this->createForm(SelectCenterType::class, $center);
         $form->handleRequest($request);
@@ -188,7 +202,8 @@ class ContactController extends Controller {
             $found = $searches->getLatest($id);
             if (count($found['contacts']) == 0 || empty($found)) {
                 $flash = $this->get('braincrafted_bootstrap.flash');
-               $flash->alert("No contacts found for $location");
+                $flash->alert("No contacts found for $location");
+
                 return $this->redirectToRoute('latest_contacts');
             }
             $facade = $this->get('ps_pdf.facade');
@@ -199,18 +214,19 @@ class ContactController extends Controller {
                 'contacts' => $found['contacts'],
                     ), $response);
             $date = new \DateTime($found['latestDate']);
-            $filename = str_replace(' ', '', $location) . date_format($date, '_Ymd') . '.pdf';
+            $filename = str_replace(' ', '', $location).date_format($date, '_Ymd').'.pdf';
             $xml = $response->getContent();
             $stylesheet = $this->renderView('ManaClientBundle:Contact:contact.xml.twig', array());
             $content = $facade->render($xml, $stylesheet);
-            return new Response($content, 200, array
-                ('content-type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename=' . $filename
+
+            return new Response($content, 200, array('content-type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename='.$filename,
             ));
         }
+
         return array(
             'title' => 'Select center',
-            'form' => $form->createView()
+            'form' => $form->createView(),
         );
     }
 }

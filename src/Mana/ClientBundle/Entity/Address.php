@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Address
+ * Address.
  *
  * @ORM\Table(name="address", indexes={@ORM\Index(name="idx_address_household_idx", columns={"household_id"}), @ORM\Index(name="idx_address_state_idx", columns={"state_id"})})
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Address
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -72,12 +72,10 @@ class Address
      */
     protected $state;
 
-
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -85,9 +83,10 @@ class Address
     }
 
     /**
-     * Set line1
+     * Set line1.
      *
      * @param string $line1
+     *
      * @return Address
      */
     public function setLine1($line1)
@@ -98,9 +97,9 @@ class Address
     }
 
     /**
-     * Get line1
+     * Get line1.
      *
-     * @return string 
+     * @return string
      */
     public function getLine1()
     {
@@ -108,9 +107,10 @@ class Address
     }
 
     /**
-     * Set line2
+     * Set line2.
      *
      * @param string $line2
+     *
      * @return Address
      */
     public function setLine2($line2)
@@ -121,9 +121,9 @@ class Address
     }
 
     /**
-     * Get line2
+     * Get line2.
      *
-     * @return string 
+     * @return string
      */
     public function getLine2()
     {
@@ -131,9 +131,10 @@ class Address
     }
 
     /**
-     * Set city
+     * Set city.
      *
      * @param string $city
+     *
      * @return Address
      */
     public function setCity($city)
@@ -144,9 +145,9 @@ class Address
     }
 
     /**
-     * Get city
+     * Get city.
      *
-     * @return string 
+     * @return string
      */
     public function getCity()
     {
@@ -154,9 +155,10 @@ class Address
     }
 
     /**
-     * Set zip
+     * Set zip.
      *
      * @param string $zip
+     *
      * @return Address
      */
     public function setZip($zip)
@@ -167,9 +169,9 @@ class Address
     }
 
     /**
-     * Get zip
+     * Get zip.
      *
-     * @return string 
+     * @return string
      */
     public function getZip()
     {
@@ -177,9 +179,10 @@ class Address
     }
 
     /**
-     * Set household
+     * Set household.
      *
      * @param \Mana\ClientBundle\Entity\Household $household
+     *
      * @return Address
      */
     public function setHousehold(\Mana\ClientBundle\Entity\Household $household = null)
@@ -190,9 +193,9 @@ class Address
     }
 
     /**
-     * Get household
+     * Get household.
      *
-     * @return \Mana\ClientBundle\Entity\Household 
+     * @return \Mana\ClientBundle\Entity\Household
      */
     public function getHousehold()
     {
@@ -200,9 +203,10 @@ class Address
     }
 
     /**
-     * Set state
+     * Set state.
      *
      * @param \Mana\ClientBundle\Entity\State $state
+     *
      * @return Address
      */
     public function setState(\Mana\ClientBundle\Entity\State $state = null)
@@ -213,9 +217,9 @@ class Address
     }
 
     /**
-     * Get state
+     * Get state.
      *
-     * @return \Mana\ClientBundle\Entity\State 
+     * @return \Mana\ClientBundle\Entity\State
      */
     public function getState()
     {
@@ -233,9 +237,10 @@ class Address
     protected $county;
 
     /**
-     * Set county
+     * Set county.
      *
      * @param \Mana\ClientBundle\Entity\County $county
+     *
      * @return Contact
      */
     public function setCounty(County $county = null)
@@ -246,9 +251,9 @@ class Address
     }
 
     /**
-     * Get county
+     * Get county.
      *
-     * @return \Mana\ClientBundle\Entity\County 
+     * @return \Mana\ClientBundle\Entity\County
      */
     public function getCounty()
     {
@@ -266,9 +271,10 @@ class Address
     protected $addresstype;
 
     /**
-     * Set addresstype
+     * Set addresstype.
      *
      * @param \Mana\ClientBundle\Entity\OneSideEntity $addresstype
+     *
      * @return Contact
      */
     public function setAddresstype(Addresstype $addresstype = null)
@@ -279,9 +285,9 @@ class Address
     }
 
     /**
-     * Get addresstype
+     * Get addresstype.
      *
-     * @return \Mana\ClientBundle\Entity\OneSideEntity 
+     * @return \Mana\ClientBundle\Entity\OneSideEntity
      */
     public function getAddresstype()
     {

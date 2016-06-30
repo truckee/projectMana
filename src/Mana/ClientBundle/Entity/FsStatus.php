@@ -3,10 +3,9 @@
 namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Mana\ClientBundle\Entity\Household;
 
 /**
- * Fs_status
+ * Fs_status.
  *
  * @ORM\Table(name="fs_status")
  * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\FsStatusRepository")
@@ -14,7 +13,7 @@ use Mana\ClientBundle\Entity\Household;
 class FsStatus
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -29,34 +28,34 @@ class FsStatus
      */
     private $status;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
         return $this->id;
     }
-    
+
     /**
-     * Set status
+     * Set status.
      *
      * @param string $status
+     *
      * @return Fs_status
      */
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
     /**
-     * Get status
+     * Get status.
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {
@@ -70,12 +69,13 @@ class FsStatus
      */
     protected $households;
 
-    public function addHousehold(Household $household) {
+    public function addHousehold(Household $household)
+    {
         $this->households[] = $household;
-//        $household->addFsAmount($this);
     }
 
-    public function getHouseholds() {
+    public function getHouseholds()
+    {
         return $this->households;
     }
 }

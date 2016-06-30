@@ -4,27 +4,19 @@ namespace Mana\ClientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use Mana\ClientBundle\Entity\Member;
-use Mana\ClientBundle\Entity\Address;
-use Mana\ClientBundle\Entity\Phone;
-use Mana\ClientBundle\Entity\Notfoodstamp;
-use Mana\ClientBundle\Entity\Housing;
-use Mana\ClientBundle\Entity\FsAmount;
-use Mana\ClientBundle\Entity\FsStatus;
 use Symfony\Component\Validator\Constraints as Assert;
 use Mana\ClientBundle\Validator\Constraints as ManaAssert;
 
 /**
- * Household
+ * Household.
  *
  * @ORM\Table(name="household")
  * @ORM\Entity(repositoryClass="Mana\ClientBundle\Entity\HouseholdRepository")
  */
 class Household
 {
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -33,14 +25,14 @@ class Household
     protected $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="hoh_id", type="integer", nullable=true)
      */
     protected $hohId;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=true)
      */
@@ -54,14 +46,14 @@ class Household
     protected $dateAdded;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="arrivalMonth", type="integer", nullable=true)
      */
     protected $arrivalmonth;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="arrivalYear", type="integer", nullable=true)
      */
@@ -107,7 +99,7 @@ class Household
     protected $phones;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -119,9 +111,9 @@ class Household
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -129,9 +121,10 @@ class Household
     }
 
     /**
-     * Set active
+     * Set active.
      *
-     * @param boolean $active
+     * @param bool $active
+     *
      * @return Household
      */
     public function setActive($active)
@@ -142,9 +135,9 @@ class Household
     }
 
     /**
-     * Get active
+     * Get active.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getActive()
     {
@@ -152,9 +145,10 @@ class Household
     }
 
     /**
-     * Set dateAdded
+     * Set dateAdded.
      *
      * @param \DateTime $dateAdded
+     *
      * @return Household
      */
     public function setDateAdded($dateAdded)
@@ -165,9 +159,9 @@ class Household
     }
 
     /**
-     * Get dateAdded
+     * Get dateAdded.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateAdded()
     {
@@ -175,9 +169,10 @@ class Household
     }
 
     /**
-     * Set foodstamp
+     * Set foodstamp.
      *
-     * @param boolean $foodstamp
+     * @param bool $foodstamp
+     *
      * @return Household
      */
     public function setFoodstamp($foodstamp)
@@ -188,9 +183,9 @@ class Household
     }
 
     /**
-     * Get foodstamp
+     * Get foodstamp.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getFoodstamp()
     {
@@ -198,9 +193,10 @@ class Household
     }
 
     /**
-     * Set arrivalmonth
+     * Set arrivalmonth.
      *
-     * @param integer $arrivalmonth
+     * @param int $arrivalmonth
+     *
      * @return Household
      */
     public function setArrivalmonth($arrivalmonth)
@@ -211,9 +207,9 @@ class Household
     }
 
     /**
-     * Get arrivalmonth
+     * Get arrivalmonth.
      *
-     * @return integer 
+     * @return int
      */
     public function getArrivalmonth()
     {
@@ -221,9 +217,10 @@ class Household
     }
 
     /**
-     * Set arrivalyear
+     * Set arrivalyear.
      *
-     * @param integer $arrivalyear
+     * @param int $arrivalyear
+     *
      * @return Household
      */
     public function setArrivalyear($arrivalyear)
@@ -234,9 +231,9 @@ class Household
     }
 
     /**
-     * Get arrivalyear
+     * Get arrivalyear.
      *
-     * @return integer 
+     * @return int
      */
     public function getArrivalyear()
     {
@@ -244,20 +241,22 @@ class Household
     }
 
     /**
-     * Add members
+     * Add members.
      *
      * @param \Mana\ClientBundle\Entity\Member $members
+     *
      * @return Household
      */
     public function addMember(Member $member)
     {
         $this->members[] = $member;
         $member->setHousehold($this);
+
         return $this;
     }
 
     /**
-     * Remove members
+     * Remove members.
      *
      * @param \Mana\ClientBundle\Entity\Member $members
      */
@@ -267,9 +266,9 @@ class Household
     }
 
     /**
-     * Get members
+     * Get members.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getMembers()
     {
@@ -277,20 +276,22 @@ class Household
     }
 
     /**
-     * Add contacts
+     * Add contacts.
      *
      * @param \Mana\ClientBundle\Entity\Contact $contacts
+     *
      * @return Household
      */
     public function addContact(\Mana\ClientBundle\Entity\Contact $contact)
     {
         $this->contacts[] = $contact;
         $contact->setHousehold($this);
+
         return $this;
     }
 
     /**
-     * Remove contacts
+     * Remove contacts.
      *
      * @param \Mana\ClientBundle\Entity\Contact $contacts
      */
@@ -300,9 +301,9 @@ class Household
     }
 
     /**
-     * Get contacts
+     * Get contacts.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getContacts()
     {
@@ -310,20 +311,22 @@ class Household
     }
 
     /**
-     * Add address
+     * Add address.
      *
      * @param \Mana\ClientBundle\Entity\Address $address
+     *
      * @return Household
      */
     public function addAddress(Address $address)
     {
         $this->addresses[] = $address;
         $address->setHousehold($this);
+
         return $this;
     }
 
     /**
-     * Remove addresses
+     * Remove addresses.
      *
      * @param \Mana\ClientBundle\Entity\Address $address
      */
@@ -333,9 +336,9 @@ class Household
     }
 
     /**
-     * Get addresses
+     * Get addresses.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAddresses()
     {
@@ -343,20 +346,22 @@ class Household
     }
 
     /**
-     * Add phone
+     * Add phone.
      *
      * @param \Mana\ClientBundle\Entity\Phone $phone
+     *
      * @return Household
      */
     public function addPhone(Phone $phone)
     {
         $this->phones[] = $phone;
         $phone->setHousehold($this);
+
         return $this;
     }
 
     /**
-     * Remove phones
+     * Remove phones.
      *
      * @param \Mana\ClientBundle\Entity\Phone $phone
      */
@@ -366,9 +371,9 @@ class Household
     }
 
     /**
-     * Get phones
+     * Get phones.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getPhones()
     {
@@ -378,6 +383,7 @@ class Household
     public function setHead($member)
     {
         $this->head = $member;
+
         return $this;
     }
 
@@ -397,9 +403,10 @@ class Household
     protected $housing;
 
     /**
-     * Set housing
+     * Set housing.
      *
      * @param \Mana\ClientBundle\Entity\Housing $housing
+     *
      * @return Contact
      */
     public function setHousing(Housing $housing = null)
@@ -410,9 +417,9 @@ class Household
     }
 
     /**
-     * Get housing
+     * Get housing.
      *
-     * @return \Mana\ClientBundle\Entity\Housing 
+     * @return \Mana\ClientBundle\Entity\Housing
      */
     public function getHousing()
     {
@@ -430,9 +437,10 @@ class Household
     protected $notfoodstamp;
 
     /**
-     * Set notfoodstamp
+     * Set notfoodstamp.
      *
      * @param \Mana\ClientBundle\Entity\Notfoodstamp $notfoodstamp
+     *
      * @return Contact
      */
     public function setNotfoodstamp(Notfoodstamp $notfoodstamp = null)
@@ -443,9 +451,9 @@ class Household
     }
 
     /**
-     * Get notfoodstamp
+     * Get notfoodstamp.
      *
-     * @return \Mana\ClientBundle\Entity\Notfoodstamp 
+     * @return \Mana\ClientBundle\Entity\Notfoodstamp
      */
     public function getNotfoodstamp()
     {
@@ -453,7 +461,7 @@ class Household
     }
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="FsStatus", inversedBy="households")
      * @ORM\JoinColumns({
@@ -472,9 +480,10 @@ class Household
     protected $fsamount;
 
     /**
-     * Set fsamount
+     * Set fsamount.
      *
      * @param \Mana\ClientBundle\Entity\FsAmount $fsamount
+     *
      * @return Contact
      */
     public function setFsamount(FsAmount $fsamount = null)
@@ -485,9 +494,9 @@ class Household
     }
 
     /**
-     * Get fsamount
+     * Get fsamount.
      *
-     * @return \Mana\ClientBundle\Entity\Fsamount 
+     * @return \Mana\ClientBundle\Entity\Fsamount
      */
     public function getFsamount()
     {
@@ -517,16 +526,17 @@ class Household
     }
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="compliance", type="boolean", nullable=true)
      */
     protected $compliance;
 
     /**
-     * Set compliance
+     * Set compliance.
      *
-     * @param boolean $compliance
+     * @param bool $compliance
+     *
      * @return compliance
      */
     public function setCompliance($compliance)
@@ -537,9 +547,9 @@ class Household
     }
 
     /**
-     * Get compliance
+     * Get compliance.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getCompliance()
     {
@@ -547,7 +557,6 @@ class Household
     }
 
     /**
-     *
      * @ORM\Column(name="compliance_date", type="date", nullable=true)
      * @ManaAssert\ComplianceDate
      * @ManaAssert\NotFutureDate
@@ -555,9 +564,10 @@ class Household
     protected $complianceDate;
 
     /**
-     * Set complianceDate
+     * Set complianceDate.
      *
-     * @param boolean $complianceDate
+     * @param bool $complianceDate
+     *
      * @return complianceDate
      */
     public function setComplianceDate($complianceDate)
@@ -568,9 +578,9 @@ class Household
     }
 
     /**
-     * Get complianceDate
+     * Get complianceDate.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getComplianceDate()
     {
@@ -578,16 +588,17 @@ class Household
     }
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="shared", type="boolean", nullable=true)
      */
     protected $shared;
 
     /**
-     * Set shared
+     * Set shared.
      *
-     * @param boolean $shared
+     * @param bool $shared
+     *
      * @return shared
      */
     public function setShared($shared)
@@ -598,9 +609,9 @@ class Household
     }
 
     /**
-     * Get shared
+     * Get shared.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getShared()
     {
@@ -608,7 +619,7 @@ class Household
     }
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="shared_date", type="date", nullable=true)
      * @ManaAssert\SharedDate
@@ -617,9 +628,10 @@ class Household
     protected $sharedDate;
 
     /**
-     * Set shareddate
+     * Set shareddate.
      *
      * @param date $sharedDate
+     *
      * @return shareddate
      */
     public function setSharedDate($sharedDate)
@@ -630,9 +642,9 @@ class Household
     }
 
     /**
-     * Get shareddate
+     * Get shareddate.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getSharedDate()
     {
@@ -650,9 +662,10 @@ class Household
     protected $income;
 
     /**
-     * Set income
+     * Set income.
      *
      * @param \Mana\ClientBundle\Entity\OneSideEntity $income
+     *
      * @return Contact
      */
     public function setIncome(Income $income = null)
@@ -663,9 +676,9 @@ class Household
     }
 
     /**
-     * Get income
+     * Get income.
      *
-     * @return \Mana\ClientBundle\Entity\OneSideEntity 
+     * @return \Mana\ClientBundle\Entity\OneSideEntity
      */
     public function getIncome()
     {
@@ -684,9 +697,10 @@ class Household
     protected $center;
 
     /**
-     * Set center
+     * Set center.
      *
      * @param \Mana\ClientBundle\Entity\Center $center
+     *
      * @return Contact
      */
     public function setCenter(Center $center = null)
@@ -697,13 +711,12 @@ class Household
     }
 
     /**
-     * Get center
+     * Get center.
      *
-     * @return \Mana\ClientBundle\Entity\Center 
+     * @return \Mana\ClientBundle\Entity\Center
      */
     public function getCenter()
     {
         return $this->center;
     }
-
 }

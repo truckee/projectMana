@@ -9,7 +9,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class YearType extends AbstractType
 {
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $range = range(Date('Y'), Date('Y') - 50, -1);
@@ -28,5 +27,3 @@ class YearType extends AbstractType
         return ChoiceType::class;
     }
 }
-
-?>
