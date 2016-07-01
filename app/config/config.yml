@@ -23,8 +23,6 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
-#    form_themes:
-#        - 'form/fields.html.twig'
 
 # Doctrine Configuration
 doctrine:
@@ -37,18 +35,13 @@ doctrine:
         user:     "%database_user%"
         password: "%database_password%"
         charset:  UTF8
-        mapping_types: 
-            enum:       string 
+        mapping_types:
+            enum:       string
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         entity_managers:
           default:
             auto_mapping: true
-#            dql:
-#              string_functions:
-#                Soundex: Mana\ClientBundle\DQL\Soundex
-#              datetime_functions: 
-#                Year: DoctrineExtensions\Query\Mysql\Year
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -58,7 +51,6 @@ swiftmailer:
     password:  "%mailer_password%"
 
 braincrafted_bootstrap:
-#     less_filter: lessphp
      css_preprocessor: lessphp
 
 monolog:
