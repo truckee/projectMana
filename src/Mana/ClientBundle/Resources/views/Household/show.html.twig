@@ -3,7 +3,7 @@
     <div class="panel panel-primary">
         <div class="panel-heading">
             Household View<br>
-            ID: {{household.id}}; Head: {{household.head.fname}} {{household.head.sname}}
+            {% include 'ManaClientBundle:Household:householdHeading.html.twig' %}
         </div>
         {% include 'ManaClientBundle:Default:templates.html.twig' %}
         <div class="panel-body">

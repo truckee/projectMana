@@ -126,6 +126,7 @@ $(document).ready(function () {
                                         if (member.isHead) {
                                             memberHTML = '<span id="include' + memberId + '"><b>Head</b></span>';
                                             $("#row" + memberId).css({"background-color":"lightyellow"});
+                                            $('#household_heading').text(member.fname + ' ' + member.sname);
                                             if (member.id !== member.headId) {
                                                 headHTML = '<span id="include' + member.headId + '"><b>Include: </b> Yes</span>'
                                                 $("#include" + member.headId).html(headHTML);
