@@ -8,12 +8,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DefaultController extends Controller
 {
+
     /**
      * @Route("/home", name="home")
      * @Template()
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         return array();
     }
 
@@ -21,8 +21,7 @@ class DefaultController extends Controller
      * @Route("/reportMenu", name="report_menu")
      * @Template()
      */
-    public function reportMenuAction()
-    {
+    public function reportMenuAction() {
         return array();
     }
 
@@ -31,13 +30,22 @@ class DefaultController extends Controller
      *
      * @return script
      */
-    public function scriptAction()
-    {
+    public function scriptAction() {
         $reports = $this->get('reports');
         $chart = $reports->getFiscalYearToDate();
 
         return $this->render('ManaClientBundle:Default:script.js.twig', array(
-            'chart' => $chart,
+                    'chart' => $chart,
         ));
     }
+
+    /**
+     * @Route("/xp")
+     */
+    public function exceptionAction() {
+        throw new \Exception('An exceptional exception');
+        
+        return [];
+    }
+
 }
