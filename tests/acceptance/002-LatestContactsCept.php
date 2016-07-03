@@ -22,28 +22,21 @@ $I->selectOption('form select[name="contact[contactDesc]"]', 'FACE');
 $I->selectOption('form select[name="contact[center]"]', 'Truckee');
 $I->see('Collecting data');
 
-$I->waitForJS("return $.active == 0;", 5);
+$I->waitForJS('return $.active == 0;', 10);
 $I->see('Most recent contacts for Truckee');
 $I->click('Submit contacts');
-$I->waitForJS("return $.active == 0;", 5);
+$I->waitForJS('return $.active == 0;', 10);
 $I->see('No contacts were added');
 
 $I->selectOption('form select[name="contact[contactDesc]"]', 'FACE');
 $I->selectOption('form select[name="contact[center]"]', 'Truckee');
-$I->waitForJS("return $.active == 0;", 5);
-$I->fillField("#contact_householdId", 1);
+$I->waitForJS('return $.active == 0;', 10);
+$I->fillField('#contact_householdId', 1);
 $I->click('button#contact_household_button');
-$I->waitForJS("return $.active == 0;", 5);
+$I->waitForJS('return $.active == 0;', 10);
 $I->see('Head, Single');
 $I->click('Submit contacts');
 
 $I->fillField('qtext', 'Single Head');
 $I->click('#search');
 $I->see('FACE');
-
-//$I->click('Reports');
-//$I->click('Most recent contacts (PDF)');
-//$I->selectOption('form select[name="select_center[center]"]', 'Truckee');
-//$I->click('Submit');
-//$I->waitForJS("return $.active == 0;", 5);
-//$I->see('Open with');
