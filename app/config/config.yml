@@ -67,9 +67,9 @@ monolog:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: Mana\ClientBundle\Entity\User
+    user_class: Truckee\ProjectmanaBundle\Entity\User
     from_email:
-        address:        projectmana.app@gmail.com
+        address:        Projectmana.app@gmail.com
         sender_name:    Application Support
     service:
         mailer: fos_user.mailer.twig_swift

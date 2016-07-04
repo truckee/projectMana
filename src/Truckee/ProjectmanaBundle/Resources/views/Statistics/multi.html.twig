@@ -1,0 +1,24 @@
+{% extends "TruckeeProjectmanaBundle:Default:layout.html.twig" %}
+{% block body %}
+    <div class="panel panel-info">
+        <div class="panel-heading text-center">{{ reportHeader|raw }}</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-1">ID</div>
+                <div class="col-sm-2">Head of household</div>
+                <div class="col-sm-2">Site</div>
+                <div class="col-sm-2">Date</div>
+                <div class="col-sm-4">Contact</div>
+            </div>
+            {% for contact in multi %}
+                <div class="row">
+                    <div class="col-sm-1">{{ contact.id }}</div>
+                    <div class="col-sm-2">{{ contact.fname }} {{ contact.sname }}</div>
+                    <div class="col-sm-2">{{ contact.center }}</div>
+                    <div class="col-sm-2">{{ contact.contact_date }}</div>
+                    <div class="col-sm-4">{{ contact.contact_desc }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

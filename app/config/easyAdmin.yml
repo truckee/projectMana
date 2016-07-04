@@ -32,7 +32,7 @@ easy_admin:
             - { label: 'Home', route: 'home' }
     entities:
         Site:
-            class: Mana\ClientBundle\Entity\Center
+            class: Truckee\ProjectmanaBundle\Entity\Center
             label: Sites
             list:
                 title: '%%entity_label%%'
@@ -45,10 +45,10 @@ easy_admin:
                 fields:
                     - {property: 'center', label: 'Site'}
                     - enabled
-                    - {property: 'county', type: 'entity', type_options: { class: Mana\ClientBundle\Entity\County }}
+                    - {property: 'county', type: 'entity', type_options: { class: Truckee\ProjectmanaBundle\Entity\County }}
                 form_options: { validation_groups: ['Options'] }
         Ethnicity:
-            class: Mana\ClientBundle\Entity\Ethnicity
+            class: Truckee\ProjectmanaBundle\Entity\Ethnicity
             label: Ethnicities
             list:
                 title: '%%entity_label%%'
@@ -57,7 +57,7 @@ easy_admin:
                 title: '%%entity_label%%'
                 fields: [ethnicity, abbreviation, enabled]
         ContactType:
-            class: Mana\ClientBundle\Entity\ContactDesc
+            class: Truckee\ProjectmanaBundle\Entity\ContactDesc
             label: Contact types
             list:
                 title: '%%entity_label%%'
@@ -70,7 +70,7 @@ easy_admin:
                     - {property: 'contactDesc', label: 'Type'}
                     - enabled
         County:
-            class: Mana\ClientBundle\Entity\County
+            class: Truckee\ProjectmanaBundle\Entity\County
             label: Counties
             list:
                 fields: [county, enabled]
@@ -78,7 +78,7 @@ easy_admin:
                 fields: [county, enabled]
                 form_options: { validation_groups: ['Options'] }
         FoodStampBracket:
-            class: Mana\ClientBundle\Entity\FsAmount
+            class: Truckee\ProjectmanaBundle\Entity\FsAmount
             label: Foodstamp brackets
             list:
                 title: '%%entity_label%%'
@@ -88,7 +88,7 @@ easy_admin:
                     - {property: amount, label: Bracket}
                     - enabled
         FoodstampStatus:
-            class: Mana\ClientBundle\Entity\FsStatus
+            class: Truckee\ProjectmanaBundle\Entity\FsStatus
             label: Foodstamp status
             list:
                 title: '%%entity_label%%'
@@ -97,7 +97,7 @@ easy_admin:
                 title: '%%entity_label%%'
                 fields: [status]
         Housing:
-            class: Mana\ClientBundle\Entity\Housing
+            class: Truckee\ProjectmanaBundle\Entity\Housing
             label: Housing
             list:
                 title: '%%entity_label%%'
@@ -106,7 +106,7 @@ easy_admin:
                 title: '%%entity_label%%'
                 fields: [housing, enabled]
         Income:
-            class: Mana\ClientBundle\Entity\Income
+            class: Truckee\ProjectmanaBundle\Entity\Income
             label: Income brackets
             list:
                 title: '%%entity_label%%'
@@ -119,7 +119,7 @@ easy_admin:
                     - {property: 'income', label: 'Bracket'}
                     - enabled
 #        IncomeSource:
-#            class: Mana\ClientBundle\Entity\IncomeSource
+#            class: Truckee\ProjectmanaBundle\Entity\IncomeSource
 #            label: Income sources
 #            list:
 #                title: '%%entity_label%%'
@@ -128,7 +128,7 @@ easy_admin:
 #                title: '%%entity_label%%'
 #                fields: [incomeSource, enabled]
         Notfoodstamp:
-            class: Mana\ClientBundle\Entity\Notfoodstamp
+            class: Truckee\ProjectmanaBundle\Entity\Notfoodstamp
             label: Why not foodstamps
             list:
                 title: '%%entity_label%%'
@@ -137,7 +137,7 @@ easy_admin:
                 title: '%%entity_label%%'
                 fields: [notfoodstamp, enabled]
         Offense:
-            class: Mana\ClientBundle\Entity\Offence
+            class: Truckee\ProjectmanaBundle\Entity\Offence
             label: Offense
             list:
                 title: '%%entity_label%%'
@@ -150,7 +150,7 @@ easy_admin:
                     - {property: 'offence', label: 'Offense', type_options: {by_reference: false}}
                     - enabled
         InsufficientFood:
-            class: Mana\ClientBundle\Entity\Reason
+            class: Truckee\ProjectmanaBundle\Entity\Reason
             label: 'Insufficient food'
             disabled_actions: ['edit']
             list:
@@ -160,7 +160,7 @@ easy_admin:
                 title: '%%entity_label%%'
                 fields: [reason, enabled]
         Relationship:
-            class: Mana\ClientBundle\Entity\Relationship
+            class: Truckee\ProjectmanaBundle\Entity\Relationship
             label: Relationship
             list:
                 title: '%%entity_label%%'
@@ -173,7 +173,7 @@ easy_admin:
                     - {property: relation, label: 'Relation to head'}
                     - enabled
         State:
-            class: Mana\ClientBundle\Entity\State
+            class: Truckee\ProjectmanaBundle\Entity\State
             label: State
             list:
                 title: '%%entity_label%%'
@@ -184,7 +184,7 @@ easy_admin:
                     - {property: 'state', type_options: {by_reference: false}}
                     - enabled
         Work:
-            class: Mana\ClientBundle\Entity\Work
+            class: Truckee\ProjectmanaBundle\Entity\Work
             label: 'Work'
             list:
                 title: '%%entity_label%%'
@@ -194,7 +194,7 @@ easy_admin:
                 fields: [work, enabled]
                 
         User:
-            class: Mana\ClientBundle\Entity\User
+            class: Truckee\ProjectmanaBundle\Entity\User
             list:
                 fields: 
                     - 'enabled'

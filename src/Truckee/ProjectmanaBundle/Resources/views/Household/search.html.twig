@@ -1,0 +1,19 @@
+{# src\Truckee\ProjectmanaBundle\Resources\views\Default\search.html.twig #}
+{% extends "TruckeeProjectmanaBundle:Default:layout.html.twig" %}
+{% block body %}
+<div class="panel panel-info" style="width:80%; margin-left: 10%;">
+    <div class="panel-heading">Search Results for {{ searchedFor }}<br>
+    * = Household is inactive
+</div>
+<table class="table">
+    <tr>
+        <th>Options
+        <th>ID
+        <th>Name/Head
+        <th>DOB
+        <th>Address
+    </tr>
+{% include "TruckeeProjectmanaBundle:Member:matchBlock.html.twig" %}
+</table>
+</div>
+{% endblock %}
