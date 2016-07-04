@@ -1,0 +1,21 @@
+{% extends "TruckeeProjectmanaBundle:Default:layout.html.twig" %}
+
+{% block body %}
+    <div class="panel panel-info">
+        <div class="panel-heading">{{ title }} for {{ contact.household.head.fname }} {{ contact.household.head.sname }}</div>
+        <div class="panel-body">
+            <form action="{{ path("contact_delete", {'id': contact.id }) }}" method="post">
+                <div class="row">
+                    <div class="col-sm-2"><b>Date: </b>{{ contact.contactDate|date('m/d/Y') }}</div>
+                    <div class="col-sm-3"><b>Type: </b>{{contact.contactDesc.contactDesc }}</div>
+                    <div class="col-sm-2">{% if contact.center is not null %}<b>Site: </b>{{ contact.center.center }}
+                        {% elseif contact.center is not empty %}<b>County</b>{{ contact.center.county.county }}{% endif %}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><input type="submit" name="submit" value="Delete contact"></div>
+                    <div class="col-sm-2"><input type="reset" name="reset" value="Cancel" onclick="history.go(-1);return false;"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+            {% endblock %}

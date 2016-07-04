@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<pdf>
+    <page class="card">
+        <table>
+            <tr>
+                <td width="2in" border.type="none">
+                    <p>ID: {{ household.id }}<br />
+                        Name: {{ household.head.fname }} {{ household.head.sname }}<br />
+{% if household.head.dob is not null %}<code font-size="8">DOB: {{ household.head.dob|date('m/d/Y') }}</code>{% endif %}
+{% if code != "" %}<br />{{code}}{% endif %}
+                    </p>
+                    Members:<br />
+{% for member in household.members if member.id != household.hohId and member.include == '1'%}
+			{{ member.fname }} {{ member.sname }}
+{% if member.dob is not null %}
+<br /><code font-size="8">DOB: {{ member.dob|date('m/d/Y') }}</code> {% endif %}<br />
+{% endfor %}
+<br />
+{% if household.center is not null %}
+First site: {{ household.center.center }}{% endif %}
+                </td>
+                <td border.type="none">
+                    <p>Distributions:</p>
+                    <table>
+                        <tr>
+                            <td padding="2">Month</td>
+                            <td padding="2" text-align="center">Week 1</td>
+                            <td padding="2" text-align="center">Week 2</td>
+                            <td padding="2" text-align="center">Week 3</td>
+                            <td padding="2" text-align="center">Week 4</td>
+                            <td padding="2" text-align="center">Week 5</td>
+                            <td padding="2">E|C|date</td>
+                        </tr>
+                        <tr>
+                            <td padding="2">July</td>
+{% include "TruckeeProjectmanaBundle:Household:cardMonthInclude.html.twig" %}                       
+                        </tr>
+                        <tr>
+                            <td padding="2">August</td>
+{% include "TruckeeProjectmanaBundle:Household:cardMonthInclude.html.twig" %}                       
+                        </tr>
+                        <tr>
+                            <td padding="2">September</td>
+{% include "TruckeeProjectmanaBundle:Household:cardMonthInclude.html.twig" %}                       
+                        </tr>
+                        <tr>
+                            <td padding="2">October</td>
+{% include "TruckeeProjectmanaBundle:Household:cardMonthInclude.html.twig" %}                       
+                        </tr>
+                        <tr>
+                            <td padding="2">November</td>
+{% include "TruckeeProjectmanaBundle:Household:cardMonthInclude.html.twig" %}                       
+                        </tr>
+                        <tr>
+                            <td padding="2">December</td>
+{% include "TruckeeProjectmanaBundle:Household:cardMonthInclude.html.twig" %}                       
+                        </tr>
+                        <tr>
+                            <td padding="2">January</td>
+{% include "TruckeeProjectmanaBundle:Household:cardMonthInclude.html.twig" %}                       
+                        </tr>
+                        <tr>
+                            <td padding="2">February</td>
+{% include "TruckeeProjectmanaBundle:Household:cardMonthInclude.html.twig" %}                       
+                        </tr>
+                        <tr>
+                            <td padding="2">March</td>
+{% include "TruckeeProjectmanaBundle:Household:cardMonthInclude.html.twig" %}                       
+                        </tr>
+                        <tr>
+                            <td padding="2">April</td>
+{% include "TruckeeProjectmanaBundle:Household:cardMonthInclude.html.twig" %}                       
+                        </tr>
+                        <tr>
+                            <td padding="2">May</td>
+{% include "TruckeeProjectmanaBundle:Household:cardMonthInclude.html.twig" %}                       
+                        </tr>
+                        <tr>
+                            <td padding="2">June</td>
+{% include "TruckeeProjectmanaBundle:Household:cardMonthInclude.html.twig" %}                       
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <div text-align="center">{{ date|date('F d, Y') }}</div>
+    </page>
+</pdf>

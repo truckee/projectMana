@@ -17,7 +17,7 @@ monolog:
             handler: swift
         swift:
             type:       swift_mailer
-            from_email: 'sandbox@projectmana.org'
+            from_email: 'sandbox@Projectmana.org'
             to_email:   %mailer_user%
             # or list of recipients
             # to_email:   ['dev1@example.com', 'dev2@example.com', ...]

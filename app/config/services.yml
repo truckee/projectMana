@@ -1,30 +1,30 @@
 services:
     form.type.dob_age:
-      class: Mana\ClientBundle\Form\Field\DobAgeType
+      class: Truckee\ProjectmanaBundle\Form\Field\DobAgeType
       tags:
         - {name:form.type}
 
     searches:
-      class: Mana\ClientBundle\Utilities\Searches
+      class: Truckee\ProjectmanaBundle\Utilities\Searches
       arguments:
         em: '@doctrine.orm.entity_manager'
 
     reports:
-      class: Mana\ClientBundle\Utilities\Reports
+      class: Truckee\ProjectmanaBundle\Utilities\Reports
       arguments:
         conn: '@doctrine.dbal.default_connection'
 
     status:
-      class: Mana\ClientBundle\Utilities\Status
+      class: Truckee\ProjectmanaBundle\Utilities\Status
       arguments:
         conn: '@doctrine.dbal.default_connection'
 
     mana.crosstab:
-      class: Mana\ClientBundle\Utilities\Crosstab
+      class: Truckee\ProjectmanaBundle\Utilities\Crosstab
       arguments:
         em: '@doctrine.orm.entity_manager'
 
     mana.user_manipulator:
-        class:      Mana\ClientBundle\Utilities\UserManipulator
+        class:      Truckee\ProjectmanaBundle\Utilities\UserManipulator
         arguments:  ['@fos_user.user_manager']
 

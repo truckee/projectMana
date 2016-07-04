@@ -1,5 +1,5 @@
 mana_project:
-    resource: "@ManaClientBundle/Controller/"
+    resource: "@TruckeeProjectmanaBundle/Controller/"
     type:     annotation
 
 logout:
@@ -7,10 +7,10 @@ logout:
 
 root:
     path: /
-    defaults:  { _controller: ManaClientBundle:Default:index }
+    defaults:  { _controller: TruckeeProjectmanaBundle:Default:index }
 
 easy_admin_bundle:
-    resource: "@ManaClientBundle/Controller/ManaUserController.php"
+    resource: "@TruckeeProjectmanaBundle/Controller/UserController.php"
     type:     annotation
     prefix:   /optionsAdmin
 
