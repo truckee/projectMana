@@ -86,4 +86,20 @@ class User extends BaseUser
     {
         return $this->sname;
     }
+
+    public function hasRoleAdmin()
+    {
+        return $this->hasRole('ROLE_ADMIN');
+    }
+
+    public function setHasRoleAdmin($isAdmin)
+    {
+        if (true == $isAdmin && false == $this->hasRole('ROLE_ADMIN')) {
+            $this->addRole('ROLE_ADMIN');
+        }
+        if (false == $isAdmin && true == $this->hasRole('ROLE_ADMIN')) {
+            $this->removeRole('ROLE_ADMIN');
+        }
+        $this->isAdmin = $isAdmin;
+    }
 }

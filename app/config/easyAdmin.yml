@@ -7,7 +7,7 @@ easy_admin:
         color_scheme: 'light'
         menu:
             - label: 'Contacts'
-              children: 
+              children:
                     - { entity: 'ContactType', default: true, params: { sortField: 'contactDesc', sortDirection: 'ASC' }}
                     - { entity: 'County', params: { sortField: 'county', sortDirection: 'ASC' }}
                     - { entity: 'Site', params: { sortField: 'center', sortDirection: 'ASC' }}
@@ -61,12 +61,12 @@ easy_admin:
             label: Contact types
             list:
                 title: '%%entity_label%%'
-                fields: 
+                fields:
                     - {property: 'contactDesc', label: 'Type'}
                     - enabled
             form:
                 title: '%%entity_label%%'
-                fields: 
+                fields:
                     - {property: 'contactDesc', label: 'Type'}
                     - enabled
         County:
@@ -110,12 +110,12 @@ easy_admin:
             label: Income brackets
             list:
                 title: '%%entity_label%%'
-                fields: 
+                fields:
                     - {property: 'income', label: 'Bracket'}
                     - enabled
             form:
                 title: '%%entity_label%%'
-                fields: 
+                fields:
                     - {property: 'income', label: 'Bracket'}
                     - enabled
 #        IncomeSource:
@@ -141,12 +141,12 @@ easy_admin:
             label: Offense
             list:
                 title: '%%entity_label%%'
-                fields: 
+                fields:
                     - {property: 'offence', label: 'Offense'}
                     - enabled
             form:
                 title: '%%entity_label%%'
-                fields: 
+                fields:
                     - {property: 'offence', label: 'Offense', type_options: {by_reference: false}}
                     - enabled
         InsufficientFood:
@@ -164,12 +164,12 @@ easy_admin:
             label: Relationship
             list:
                 title: '%%entity_label%%'
-                fields: 
+                fields:
                     - {property: relation, label: 'Relation to head'}
                     - enabled
             form:
                 title: '%%entity_label%%'
-                fields: 
+                fields:
                     - {property: relation, label: 'Relation to head'}
                     - enabled
         State:
@@ -180,7 +180,7 @@ easy_admin:
                 fields: [state, enabled]
             form:
                 title: '%%entity_label%%'
-                fields: 
+                fields:
                     - {property: 'state', type_options: {by_reference: false}}
                     - enabled
         Work:
@@ -192,11 +192,11 @@ easy_admin:
             form:
                 title: '%%entity_label%%'
                 fields: [work, enabled]
-                
+
         User:
             class: Truckee\ProjectmanaBundle\Entity\User
             list:
-                fields: 
+                fields:
                     - 'enabled'
                     - 'username'
                     - {property: 'fname', label: 'First name'}
@@ -205,23 +205,16 @@ easy_admin:
                     - 'roles'
                     - 'lastLogin'
             edit:
-                fields: 
+                fields:
                     - 'enabled'
                     - 'username'
                     - {property: 'fname', label: 'First name'}
                     - {property: 'sname', label: 'Last name'}
                     - {property: 'email', type: 'email'}
-                    - 'roles'
-#                    - property: 'roles'
-#                      type: 'choice'
-#                      type_options:
-#                          expanded: true
-#                          choices: 
-#                            'ROLE_USER': 'Normal user'
-#                            'ROLE_ADMIN': 'Administrator'             
+                    - {property: 'hasRoleAdmin', label: 'Is admin?', type: checkbox}
                 form_options: { validation_groups: ['Profile'] }
             new:
-                fields: 
+                fields:
                     - 'enabled'
                     - 'username'
                     - {property: 'fname', label: 'First name'}
