@@ -211,7 +211,7 @@ easy_admin:
                     - {property: 'fname', label: 'First name'}
                     - {property: 'sname', label: 'Last name'}
                     - {property: 'email', type: 'email'}
-                    - {property: 'hasRoleAdmin', label: 'Is admin?', type: checkbox}
+                    - {property: 'hasRoleAdmin', label: 'Role', type: choice, type_options: {choices: {0: 'ROLE_USER', 1: 'ROLE_ADMIN'}}}
                 form_options: { validation_groups: ['Profile'] }
             new:
                 fields:
@@ -220,6 +220,6 @@ easy_admin:
                     - {property: 'fname', label: 'First name'}
                     - {property: 'sname', label: 'Last name'}
                     - {property: 'email', type: 'email'}
-                    - {property: 'plainPassword', label: 'Password'}
-                    - 'roles'
+                    - {property: 'plainPassword', label: 'Password', type: text}
+                    - {property: 'hasRoleAdmin', label: 'Role', type: choice, type_options: {choices: {0: 'ROLE_USER', 1: 'ROLE_ADMIN'}}}
                 form_options: { validation_groups: ['Registration'] }
