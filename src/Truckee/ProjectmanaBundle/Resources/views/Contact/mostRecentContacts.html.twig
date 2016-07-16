@@ -13,7 +13,7 @@
 <div id="latestContacts" action="{{ path("contacts_add") }}" method="post">
     {% for contact in contacts %}
         <div class="row">
-            <div class="col-sm-1"><input type="checkbox" id="idSelect" name="contact_household[{{ contact.household.id }}]" value="{{ contact.household.id }}"></div>
+            <div class="col-sm-1"><input type="checkbox" id="idSelect{{ contact.household.id }}" name="contact_household[{{ contact.household.id }}]" value="{{ contact.household.id }}"></div>
             <div class="col-sm-1 text-right">{{ contact.household.id }}</div>
             <div class="col-sm-3">{{ contact.household.head.sname }}, {{ contact.household.head.fname }}</div>
             <div class="col-sm-3">{{ contact.contactDesc.contactDesc }}</div>

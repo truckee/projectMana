@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-sm-1"><input type="checkbox" checked="checked" id="idSelect" name="contact_household[{{ household.id }}]" value="{{ household.id }}"></div>
+    <div class="col-sm-1"><input type="checkbox" checked="checked" id="idSelect{{ household.id }}" name="contact_household[{{ household.id }}]" value="{{ household.id }}"></div>
     <div class="col-sm-1 text-right">{{household.id }}</div>
     <div class="col-sm-3">{{ household.head.sname }}, {{ household.head.fname }}</div>
 </div>

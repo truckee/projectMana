@@ -9,6 +9,7 @@
 
 $(document).ready(function () {
     var contactForm = $('#contact_form');
+    $("#contact_center").val("");
 
     $("#contact_household_button").click(function () {
         var houseId = $("#contact_householdId").val();
@@ -23,7 +24,7 @@ $(document).ready(function () {
                     present = true;
                     return;
                 }
-            })
+            });
             if (!present) {
                 var where = $(location).attr('pathname');
                 var url = where.replace('contact/addContacts', 'household/contact/' + houseId);
@@ -34,9 +35,10 @@ $(document).ready(function () {
                     } else {
                         alert('Household does not exist');
                     }
-                })
+                });
             } else {
-                alert("Household already listed")
+                $("#idSelect" + houseId).prop('checked', true);
+                alert("Listed household now included");
             }
             $("#contact_householdId").val("");
         }
