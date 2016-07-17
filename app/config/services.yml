@@ -28,3 +28,11 @@ services:
         class:      Truckee\ProjectmanaBundle\Utilities\UserManipulator
         arguments:  ['@fos_user.user_manager']
 
+    app.menu_builder:
+        class: Truckee\ProjectmanaBundle\Menu\MenuBuilder
+        arguments: ["@knp_menu.factory", '@security.authorization_checker', '@request_stack']
+        tags:
+            - { name: knp_menu.menu_builder, method: createMainMenu, alias: main }
+            - { name: knp_menu.menu_builder, method: logoutMenu, alias: logout }
+            - { name: knp_menu.menu_builder, method: reportsMenu, alias: reportsMenu }
+            - { name: knp_menu.menu_builder, method: profileMenu, alias: profileMenu }

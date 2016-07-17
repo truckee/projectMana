@@ -34,7 +34,7 @@
                                     <a class="navbar-brand" href="#"></a>
                                 </div>
                                 <div class="collapse navbar-collapse navbar-ex1-collapse">
-                                    {{ knp_menu_render('TruckeeProjectmanaBundle:Builder:mainMenu',{'style': 'navbar'})  }}
+                                    {{ knp_menu_render('main', {'style': 'navbar'})  }}
                                     <form action="{{ path('_search') }}" id="household_search" class="navbar-form navbar-left" role="search">
                                         <div class="form-group">
                                             <input type="text" name="qtext" method="get" class="form-control" placeholder="Full name or ID">
@@ -43,7 +43,7 @@
                                             <span id="search" class="glyphicon glyphicon-search"></span>
                                         </button>
                                     </form>
-                                    {{ knp_menu_render('TruckeeProjectmanaBundle:Builder:logoutMenu', { 'style': 'navbar-right' }) }}
+                                    {{ knp_menu_render('logout', { 'style': 'navbar-right' }) }}
                                 </div>
                             </nav>
                         {% endspaceless %}

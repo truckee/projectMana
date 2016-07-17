@@ -1,4 +1,4 @@
-{% extends "TruckeeProjectmanaBundle:Default:layout.html.twig" %}
+{% extends "AppBundle:Default:layout.html.twig" %}
 {% block body %}
     <div class="panel panel-info">
         <div class="panel-heading text-center">
@@ -16,10 +16,10 @@
             </div>
             <div class="row">
                 <div class="col-sm-3">
-                    {{ knp_menu_render('TruckeeProjectmanaBundle:Builder:reportsMenu') }}
+                    {{ knp_menu_render('reportsMenu') }}
                 </div>
                 <div class="col-sm-3">
-                    {{ knp_menu_render('TruckeeProjectmanaBundle:Builder:profileMenu') }}
+                    {{ knp_menu_render('profileMenu') }}
                 </div>
             </div>
         </div>
