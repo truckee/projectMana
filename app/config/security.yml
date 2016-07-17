@@ -1,10 +1,10 @@
 security:
     encoders:
-      FOS\UserBundle\Model\UserInterface: bcrypt
-#        algorithm: md5
-#        ignore_case: true
-#        encode_as_base64: false
-#        iterations: 1
+      FOS\UserBundle\Model\UserInterface: 
+        algorithm: md5
+        ignore_case: true
+        encode_as_base64: false
+        iterations: 1
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
