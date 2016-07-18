@@ -67,7 +67,7 @@ monolog:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: Truckee\ProjectmanaBundle\Entity\User
+    user_class: 'Truckee\ProjectmanaBundle\Entity\User'
     from_email:
         address:        Projectmana.app@gmail.com
         sender_name:    Application Support

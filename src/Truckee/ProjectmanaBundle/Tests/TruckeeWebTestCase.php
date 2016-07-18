@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-//src\Truckee\ProjectmanaBundle\Tests\Controller\TruckeeWebTestCase.php
+//src\Truckee\ProjectmanaBundle\Test\Controller\TruckeeWebTestCase.php
 
 namespace Truckee\ProjectmanaBundle\Tests;
 

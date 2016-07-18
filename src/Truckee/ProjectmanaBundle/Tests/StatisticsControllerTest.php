@@ -5,7 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-//src\Truckee\ProjectmanaBundle\DataFixtures\Test\StatisticsControllerTest.php
+//src\Truckee\ProjectmanaBundle\Test\StatisticsControllerTest.php
 namespace Truckee\ProjectmanaBundle\Tests;
 
 /**

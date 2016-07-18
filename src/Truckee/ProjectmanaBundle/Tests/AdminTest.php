@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-//src\Truckee\ProjectmanaBundle\DataFixtures\Test\AdminControllerTest.php
+//src\Truckee\ProjectmanaBundle\Test\AdminControllerTest.php
 
 namespace Truckee\ProjectmanaBundle\Tests;
 
