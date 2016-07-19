@@ -5,7 +5,7 @@ mana_project:
 logout:
     path:   /logout
 
-root:
+home:
     path: /
     defaults:  { _controller: TruckeeProjectmanaBundle:Default:index }
 

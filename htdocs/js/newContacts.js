@@ -46,11 +46,11 @@ $(document).ready(function () {
 
     $("#contact_center").change(function () {
         center = $("#contact_center").val();
+        contactForm.html("");
         $(".alert").html("");
         $(".alert").removeClass('alert-warning');
         if (center === "") {
             $("#householdById").hide();
-            contactForm.html("");
         } else {
             $("#householdById").show();
             $("#dialog").dialog('open');

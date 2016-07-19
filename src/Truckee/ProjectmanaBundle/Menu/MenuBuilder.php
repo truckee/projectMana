@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Truckee\ProjectmanaBundle\Menu;
 
 use Knp\Menu\FactoryInterface;
@@ -41,7 +35,7 @@ class MenuBuilder
 
         $request = $this->requestStack->getCurrentRequest();
         $routeName = $request->get('_route');
-        if ($routeName != 'home') {
+        if ('home' != $routeName) {
             $menu->addChild('Home', array(
                 'route' => 'home',
             ));
