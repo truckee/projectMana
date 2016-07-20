@@ -79,7 +79,7 @@ class HouseholdControllerTest extends TruckeeWebTestCase
     public function testFoodStamps()
     {
         $crawler = $this->submitNewHousehold();
-        $crawler = $this->client->request('GET', '/home');
+        $crawler = $this->client->request('GET', '/');
         $form = $crawler->filter('#household_search')->form();
         $form['qtext'] = 'Benny Borko';
         $crawler = $this->client->submit($form);
