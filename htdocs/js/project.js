@@ -59,25 +59,6 @@ $(document).ready(function () {
         return false;
     });
 
-    //statistics criteria
-    $('#report_criteria_county').change(function () {
-        var me = $(this).val();
-        if (me !== "") {
-            $('#center_select').hide();
-        } else {
-            $('#center_select').show();
-        }
-    });
-
-    $('#report_criteria_center').change(function () {
-        var me = $(this).val();
-        if (me !== "") {
-            $('#county_select').hide();
-        } else {
-            $('#county_select').show();
-        }
-    });
-
     $(document).on("click", "#selectAll", function () {
         if ($("#selectAll").prop("checked")) {
             $("input[type='checkbox']").prop("checked", true);
