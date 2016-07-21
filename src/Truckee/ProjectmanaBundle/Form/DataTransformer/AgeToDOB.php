@@ -1,4 +1,14 @@
 <?php
+
+/*
+ * This file is part of the Truckee\Projectmana package.
+ *
+ * (c) George W. Brooks
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 // src/Mana/ClientBundle/Resources/views/Form/DataTransformer/AgeToDOB.php
 
 namespace Truckee\ProjectmanaBundle\Form\DataTransformer;
