@@ -1,23 +1,9 @@
 {% extends "TruckeeProjectmanaBundle:Default:layout.html.twig" %}
 {% block body %}
     <div class="panel panel-primary">
-        <div class="panel-heading clearfix">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="panel-title">
-                        Household View<br>
-                        {% include 'TruckeeProjectmanaBundle:Household:householdHeading.html.twig' %}
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    {{ knp_menu_render('household', {'style': 'navbar'}) }}
-                </div>
-            </div>
-        </div>
-        {% include 'TruckeeProjectmanaBundle:Default:templates.html.twig' %}
+        {% include 'TruckeeProjectmanaBundle:Household:householdHeading.html.twig' %}
         <div class="panel-body">
-            <div class="text-center"><a class="btn-sm btn-info" href="{{ path("household_edit", {'id':household.id}) }}">Edit household</a>
-                {#<a class="btn-sm btn-info" href="{{ path("house_card", {'id':household.id}) }}">Create card</a>#}</div>
+            {% include 'TruckeeProjectmanaBundle:Default:templates.html.twig' %}
         </div>
     </div>
 {% endblock %}

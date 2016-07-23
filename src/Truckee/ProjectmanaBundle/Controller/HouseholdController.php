@@ -54,7 +54,7 @@ class HouseholdController extends Controller
         return array(
             'household' => $household,
             'hohId' => $household->getHead()->getId(),
-            'title' => 'View Household',
+            'title' => 'Household View',
             'templates' => $templates,
         );
     }
@@ -168,7 +168,7 @@ class HouseholdController extends Controller
 
         return array(
             'form' => $form->createView(),
-            'title' => 'Edit Household',
+            'title' => 'Household Edit',
             'household' => $household,
             'hohId' => $household->getHead()->getId(),
         );

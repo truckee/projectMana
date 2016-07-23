@@ -49,16 +49,6 @@ class MenuBuilder
                 'route' => 'home',
             ));
         }
-        if ($routeName === 'household_edit' || $routeName === 'household_show') {
-            $id = $request->get('id');
-            $menu->addChild('Add contact',
-                array(
-                'route' => 'contact_new',
-                'routeParameters' => array('id' => $id),
-            ));
-        }
-
-//        $menu->addChild('Home', array('route' => 'home'));
 
         $menu->addChild('New contacts', array(
             'route' => 'contacts_add',
@@ -92,6 +82,7 @@ class MenuBuilder
     public function householdMenu(array $options)
     {
         $request = $this->requestStack->getCurrentRequest();
+        $route = $request->attributes->get('_route');
         $id = $request->get('id');
         $menu = $this->factory->createItem('root');
         $title = 'Household contacts';
@@ -103,6 +94,15 @@ class MenuBuilder
         $menu[$title]->setLinkAttributes([
             'class' => 'btn btn-info btn-sm',
         ]);
+        if ('household_show' === $route) {
+            $menu->addChild('Edit household', [
+                'route' => 'household_edit',
+                'routeParameters' => array('id' => $id),
+            ]);
+            $menu['Edit household']->setLinkAttributes([
+                'class' => 'btn btn-info btn-sm',
+            ]);
+        }
 
         return $menu;
     }
