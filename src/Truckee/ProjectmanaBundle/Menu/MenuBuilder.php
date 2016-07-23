@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Truckee\Projectmana package.
  *
@@ -22,7 +21,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  */
 class MenuBuilder
 {
-
     private $factory;
     private $checker;
     private $requestStack;
@@ -33,13 +31,15 @@ class MenuBuilder
      * Add any other dependency you need
      */
     public function __construct(
-    FactoryInterface $factory, AuthorizationCheckerInterface $checker, RequestStack $requestStack) {
+    FactoryInterface $factory, AuthorizationCheckerInterface $checker, RequestStack $requestStack)
+    {
         $this->factory = $factory;
         $this->checker = $checker;
         $this->requestStack = $requestStack;
     }
 
-    public function createMainMenu(array $options) {
+    public function createMainMenu(array $options)
+    {
         $menu = $this->factory->createItem('root');
 
         $request = $this->requestStack->getCurrentRequest();
@@ -51,7 +51,8 @@ class MenuBuilder
         }
         if ($routeName === 'household_edit' || $routeName === 'household_show') {
             $id = $request->get('id');
-            $menu->addChild('Add contact', array(
+            $menu->addChild('Add contact',
+                array(
                 'route' => 'contact_new',
                 'routeParameters' => array('id' => $id),
             ));
@@ -88,7 +89,43 @@ class MenuBuilder
         return $menu;
     }
 
-    public function profileMenu(array $options) {
+    public function householdMenu(array $options)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        $id = $request->get('id');
+        $menu = $this->factory->createItem('root');
+        $title = 'Household contacts';
+        $menu->addChild($title,
+            array(
+            'route' => 'contact_new',
+            'routeParameters' => array('id' => $id),
+        ));
+        $menu[$title]->setLinkAttributes([
+            'class' => 'btn btn-info btn-sm',
+        ]);
+
+        return $menu;
+    }
+
+    public function returnFromContacts(array $options)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        $uri = $request->headers->get('referer');
+        $menu = $this->factory->createItem('root');
+        $title = 'return';
+        $menu->addChild($title, [
+            'label' => 'Return to household',
+            'uri' => $uri,
+        ]);
+        $menu[$title]->setLinkAttributes([
+            'class' => 'btn btn-info btn-sm',
+        ]);
+
+        return $menu;
+    }
+
+    public function profileMenu(array $options)
+    {
         $menu = $this->factory->createItem('root');
         $menu->addChild('Employment', array(
             'route' => 'employment_profile',
@@ -106,7 +143,8 @@ class MenuBuilder
         return $menu;
     }
 
-    public function reportsMenu(array $options) {
+    public function reportsMenu(array $options)
+    {
         $menu = $this->factory->createItem('root');
 
         $menu->addChild('General Statistics', array(
@@ -128,7 +166,8 @@ class MenuBuilder
         return $menu;
     }
 
-    public function logoutMenu(array $options) {
+    public function logoutMenu(array $options)
+    {
         $menu = $this->factory->createItem('root');
         $menu->addChild('Log out', array(
             'route' => 'logout',
@@ -136,5 +175,4 @@ class MenuBuilder
 
         return $menu;
     }
-
 }

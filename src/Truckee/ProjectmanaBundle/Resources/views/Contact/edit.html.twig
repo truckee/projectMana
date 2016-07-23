@@ -1,14 +1,25 @@
 {% extends "TruckeeProjectmanaBundle:Default:layout.html.twig" %}
 {% block body %}
     <div class="panel panel-info">
-        <div class="panel-heading">{{ title }} for Household<br>
-            ID: {{household.id}}; Head: {{ household.head.fname }} {{ household.head.sname }}</div>
+        <div class="panel-heading clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="panel-title">
+                        {{ title }} for Household<br>
+                        ID: {{household.id}}; Head: {{ household.head.fname }} {{ household.head.sname }}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    {{ knp_menu_render('return') }}
+                </div>
+            </div>
+        </div>
         <div class="panel-body">
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <a class="btn btn-info" href="{{ path('household_show', {'id':household.id}) }}">Household view</a>
-                        </div>
-                        </div>
+            <div class="row">
+                <!--                <div class="col-sm-3">
+                                    <a class="btn btn-info" href="{{ path('household_show', {'id':household.id}) }}">Household view</a>
+                                </div>-->
+            </div>
             {% if title == 'Edit Contact' %}
                 <form action="{{ path("contact_edit", {'id': contact.id}) }}" method="post">
                 {% else %}
@@ -32,7 +43,7 @@
                         <div class="col-sm-3">
                             {% if title == 'New Contact' %}<input type="reset">
                             {% else %}<input type="reset" name="reset" value="Cancel" onclick="history.go(-1);
-                                return false;">
+                                        return false;">
                             {% endif %}
                         </div>
                     </div>

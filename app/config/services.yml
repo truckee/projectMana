@@ -36,3 +36,5 @@ services:
             - { name: knp_menu.menu_builder, method: logoutMenu, alias: logout }
             - { name: knp_menu.menu_builder, method: reportsMenu, alias: reportsMenu }
             - { name: knp_menu.menu_builder, method: profileMenu, alias: profileMenu }
+            - { name: knp_menu.menu_builder, method: householdMenu, alias: household }
+            - { name: knp_menu.menu_builder, method: returnFromContacts, alias: return }
