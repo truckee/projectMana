@@ -83,5 +83,5 @@ assetic:
     filters:
         lessphp:
              file: %kernel.root_dir%/../vendor/oyejorge/less.php/lessc.inc.php
-             apply_to: "\.less$"
+             apply_to: '\.less$'
         cssrewrite: ~

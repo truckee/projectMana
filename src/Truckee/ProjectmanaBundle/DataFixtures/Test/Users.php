@@ -14,11 +14,10 @@
 namespace Truckee\ProjectmanaBundle\DataFixtures\Test;
 
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Truckee\ProjectmanaBundle\Entity\User;
 
 /**
  * Description of AdminUser.
@@ -42,33 +41,32 @@ class Users extends AbstractFixture implements OrderedFixtureInterface, Containe
 
     public function load(ObjectManager $manager)
     {
-        $userAdmin = new User();
-        $userAdmin->setUsername('admin');
-        $factory = $this->container->get('security.encoder_factory');
-        $encoder = $factory->getEncoder($userAdmin);
-        $password = $encoder->encodePassword('manapw', $userAdmin->getSalt());
-        $userAdmin->setPassword($password);
-        $userAdmin->setRoles(array('ROLE_ADMIN'));
-        $userAdmin->setFname('Benny');
-        $userAdmin->setSname('Borko');
-        $userAdmin->setEmail('bborko@bogus.info');
-        $userAdmin->setEnabled(true);
-        $manager->persist($userAdmin);
+        // Get our userManager, you must implement `ContainerAwareInterface`
+        $userManager = $this->container->get('fos_user.user_manager');
 
-        $userPlain = new User();
-        $userPlain->setUsername('dberry');
-        $factory = $this->container->get('security.encoder_factory');
-        $encoder = $factory->getEncoder($userPlain);
-        $password = $encoder->encodePassword('mana', $userPlain->getSalt());
-        $userPlain->setPassword($password);
-        $userPlain->setRoles(array('ROLE_USER'));
-        $userPlain->setFname('Dingle');
-        $userPlain->setSname('Berry');
-        $userPlain->setEmail('dberry@bogus.info');
-        $userPlain->setEnabled(true);
-        $manager->persist($userPlain);
+        $admin = $userManager->createUser();
+        $admin->setUsername('admin');
+        $admin->setFname('Benny');
+        $admin->setSname('Borko');
+        $admin->setEmail('admin@bogus.info');
+        $admin->setPlainPassword('manapw');
+        $admin->setEnabled(true);
+        $admin->setRoles(array('ROLE_ADMIN'));
 
-        $manager->flush();
+        // Update the user
+        $userManager->updateUser($admin, true);
+
+        $user = $userManager->createUser();
+        $user->setUsername('dberry');
+        $user->setFname('Dingle');
+        $user->setSname('Berry');
+        $user->setEmail('dberry@domain.com');
+        $user->setPlainPassword('password');
+        $user->setEnabled(true);
+        $user->setRoles(array('ROLE_USER'));
+
+        // Update the user
+        $userManager->updateUser($user, true);
     }
 
     public function getOrder()
