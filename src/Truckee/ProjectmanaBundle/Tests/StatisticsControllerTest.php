@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Truckee\Projectmana package.
  *
@@ -10,6 +9,7 @@
  */
 
 //src\Truckee\ProjectmanaBundle\Test\StatisticsControllerTest.php
+
 namespace Truckee\ProjectmanaBundle\Tests;
 
 /**
@@ -19,16 +19,21 @@ namespace Truckee\ProjectmanaBundle\Tests;
  */
 class StatisticsControllerTest extends TruckeeWebTestCase
 {
+
     public function setup()
     {
+        $date = new \DateTime();
+        $firstDay = new \DateTime(date_format($date, 'F') . ' 1,' . date_format($date, 'Y'));
+        $lastMonth = $firstDay->sub(new \DateInterval('P1D'));
+        $this->lastMonth = date_format($lastMonth, 'F, Y');
         $this->client = static::makeClient();
         $this->client->followRedirects();
         $this->fixtures = $this->loadFixtures([
-                    'Truckee\ProjectmanaBundle\DataFixtures\Test\Users',
-                    'Truckee\ProjectmanaBundle\DataFixtures\Test\Constants',
-                    'Truckee\ProjectmanaBundle\DataFixtures\Test\Households',
-                    'Truckee\ProjectmanaBundle\DataFixtures\Test\Contacts',
-                ])->getReferenceRepository();
+                'Truckee\ProjectmanaBundle\DataFixtures\Test\Users',
+                'Truckee\ProjectmanaBundle\DataFixtures\Test\Constants',
+                'Truckee\ProjectmanaBundle\DataFixtures\Test\Households',
+                'Truckee\ProjectmanaBundle\DataFixtures\Test\Contacts',
+            ])->getReferenceRepository();
 //        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
     }
 
@@ -49,10 +54,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $crawler = $this->client->request('GET', '/reports/general');
         $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
-        $date = new \DateTime('last month');
-        $reportDate = date_format($date, 'F, Y');
 
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("General Statistics for '.$reportDate.'")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("General Statistics for ' . $this->lastMonth . '")')->count());
     }
 
     public function testDateValidator()
@@ -66,7 +69,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $form['report_criteria[endYear]'] = 2015;
         $crawler = $this->client->submit($form);
 
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("End date must be same or later than start date")')->count());
+        $this->assertGreaterThan(0,
+            $crawler->filter('html:contains("End date must be same or later than start date")')->count());
     }
 
     public function testCenterGeneralStatistics()
@@ -77,10 +81,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $truckee = $this->fixtures->getReference('truckee')->getId();
         $form['report_criteria[center]']->select($truckee);
         $crawler = $this->client->submit($form);
-        $date = new \DateTime('last month');
-        $reportDate = date_format($date, 'F, Y');
 
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("General Statistics for '.$reportDate.'")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("General Statistics for ' . $this->lastMonth . '")')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Truckee")')->count());
     }
 
@@ -90,10 +92,9 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $crawler = $this->client->request('GET', '/reports/details');
         $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
-        $date = new \DateTime('last month');
-        $reportDate = date_format($date, 'F, Y');
 
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Distribution Details for '.$reportDate.'")')->count());
+        $this->assertGreaterThan(0,
+            $crawler->filter('html:contains("Distribution Details for ' . $this->lastMonth . '")')->count());
     }
 
     public function testMultipleContacts()
@@ -105,7 +106,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $date = new \DateTime('last month');
         $reportDate = date_format($date, 'F, Y');
 
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("No instances of multiple same-date contacts found")')->count());
+        $this->assertGreaterThan(0,
+            $crawler->filter('html:contains("No instances of multiple same-date contacts found")')->count());
     }
 
     public function testFoodbank()
