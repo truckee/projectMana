@@ -22,7 +22,6 @@ class StartEndDateValidator extends ConstraintValidator
         $accessor = PropertyAccess::createPropertyAccessor();
         $data = $accessor->getValue($this->context->getRoot(), 'data');
 
-//        $submitted = $this->context->getRoot()->getChildren();
         $startMonth = $data['startMonth'];
         $startYear = $data['startYear'];
         $endMonth = $data['endMonth'];
