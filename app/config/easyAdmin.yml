@@ -202,7 +202,7 @@ easy_admin:
                     - {property: 'fname', label: 'First name'}
                     - {property: 'sname', label: 'Last name'}
                     - {property: 'email', type: 'email'}
-                    - 'roles'
+                    - {property: 'hasRoleAdmin', label: 'Is admin?'}
                     - 'lastLogin'
             edit:
                 fields:
@@ -212,14 +212,13 @@ easy_admin:
                     - {property: 'sname', label: 'Last name'}
                     - {property: 'email', type: 'email'}
                     - property: 'hasRoleAdmin'
-                      label: 'Role'
+                      label: 'Is admin?'
                       type: choice
                       type_options:
                         choices: 
-                            'ROLE_USER': 0
-                            'ROLE_ADMIN': 1
+                            'No': 'No'
+                            'Yes': 'Yes'
                         choices_as_values: true
-#                    - {property: 'hasRoleAdmin', label: 'Role', type: choice, type_options: {choices: {'ROLE_USER': 0, 'ROLE_ADMIN': 1}}, choices_as_values: true}}}
                 form_options: { validation_groups: ['Profile'] }
             new:
                 fields:
@@ -230,11 +229,11 @@ easy_admin:
                     - {property: 'email', type: 'email'}
                     - {property: 'plainPassword', label: 'Password', type: text}
                     - property: 'hasRoleAdmin'
-                      label: 'Role'
+                      label: 'Is admin?'
                       type: choice
                       type_options:
                         choices: 
-                            'ROLE_USER': 0
-                            'ROLE_ADMIN': 1
+                            'No': 'No'
+                            'Yes': 'Yes'
                         choices_as_values: true
                 form_options: { validation_groups: ['Registration'] }
