@@ -215,7 +215,7 @@ easy_admin:
                       label: 'Is admin?'
                       type: choice
                       type_options:
-                        choices: 
+                        choices:
                             'No': 'No'
                             'Yes': 'Yes'
                         choices_as_values: true
@@ -232,8 +232,8 @@ easy_admin:
                       label: 'Role'
                       type: choice
                       type_options:
-                        choices: 
-                            'ROLE_USER': 0
-                            'ROLE_ADMIN': 1
+                        choices:
+                            'No': 'No'
+                            'Yes': 'Yes'
                         choices_as_values: true
                 form_options: { validation_groups: ['Registration'] }
