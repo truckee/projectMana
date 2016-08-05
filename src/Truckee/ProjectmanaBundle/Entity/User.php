@@ -98,15 +98,15 @@ class User extends BaseUser
 
     public function hasRoleAdmin()
     {
-        return $this->hasRole('ROLE_ADMIN');
+        return ($this->hasRole('ROLE_ADMIN')) ? 'Yes' : 'No';
     }
 
     public function setHasRoleAdmin($isAdmin)
     {
-        if (true == $isAdmin && false == $this->hasRole('ROLE_ADMIN')) {
+        if ('Yes' === $isAdmin && 'No' === $this->hasRole('ROLE_ADMIN')) {
             $this->addRole('ROLE_ADMIN');
         }
-        if (false == $isAdmin && true == $this->hasRole('ROLE_ADMIN')) {
+        if ('No' === $isAdmin && 'Yes' == $this->hasRole('ROLE_ADMIN')) {
             $this->removeRole('ROLE_ADMIN');
         }
         $this->isAdmin = $isAdmin;
