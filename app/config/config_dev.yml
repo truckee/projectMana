@@ -11,6 +11,9 @@ web_profiler:
 
 swiftmailer:
     disable_delivery: false
+    transport: gmail
+    username:  '%mailer_user%'
+    password:  '%mailer_password%'
     
 monolog:
     handlers:
