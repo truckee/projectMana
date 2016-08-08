@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Truckee\ProjectmanaBundle\Form\ReportCriteriaType;
 
 /**
@@ -37,8 +36,8 @@ class StatisticsController extends Controller
     public function generalAction(Request $request)
     {
         $form = $this->createForm(ReportCriteriaType::class);
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:dateCriteria.html.twig';
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:typeLocationCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/typeLocationCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $criteria = $request->request->get('report_criteria');
@@ -51,23 +50,23 @@ class StatisticsController extends Controller
             $statistics = $data['statistics'];
             $templateSpecs = $specs['templateCriteria'];
             $templateSpecs['reportType'] = 'General Statistics';
-            $templates[] = 'TruckeeProjectmanaBundle:Statistics:individualsServed.html.twig';
-            $templates[] = 'TruckeeProjectmanaBundle:Statistics:householdsServed.html.twig';
+            $templates[] = 'Statistics/individualsServed.html.twig';
+            $templates[] = 'Statistics/householdsServed.html.twig';
             if ('' === $specs['reportCriteria']['contact_type']) {
-                $templates[] = 'TruckeeProjectmanaBundle:Statistics:newWithoutType.html.twig';
+                $templates[] = 'Statistics/newWithoutType.html.twig';
             } else {
-                $templates[] = 'TruckeeProjectmanaBundle:Statistics:newWithType.html.twig';
+                $templates[] = 'Statistics/newWithType.html.twig';
             }
-            $templates[] = 'TruckeeProjectmanaBundle:Statistics:ethnicityDistribution.html.twig';
-            $templates[] = 'TruckeeProjectmanaBundle:Statistics:ageGenderDistribution.html.twig';
-            $templates[] = 'TruckeeProjectmanaBundle:Statistics:residencyDistribution.html.twig';
+            $templates[] = 'Statistics/ethnicityDistribution.html.twig';
+            $templates[] = 'Statistics/ageGenderDistribution.html.twig';
+            $templates[] = 'Statistics/residencyDistribution.html.twig';
             if ('' === $templateSpecs['county'].$templateSpecs['center']) {
                 $statistics['countyStats'] = $reports->getCountyStats();
-                $templates[] = 'TruckeeProjectmanaBundle:Statistics:countyDistribution.html.twig';
+                $templates[] = 'Statistics/countyDistribution.html.twig';
             }
-            $templates[] = 'TruckeeProjectmanaBundle:Statistics:familySizeDistribution.html.twig';
+            $templates[] = 'Statistics/familySizeDistribution.html.twig';
             if ($specs['reportCriteria']['startDate'] === $specs['reportCriteria']['endDate']) {
-                $templates[] = 'TruckeeProjectmanaBundle:Statistics:frequencyDistributionForMonth.html.twig';
+                $templates[] = 'Statistics/frequencyDistributionForMonth.html.twig';
             }
 
             $report = array(
@@ -81,10 +80,10 @@ class StatisticsController extends Controller
             $session = $request->getSession();
             $session->set('report', $report);
 
-            return $this->render('TruckeeProjectmanaBundle:Statistics:statistics.html.twig', $report);
+            return $this->render('Statistics/statistics.html.twig', $report);
         }
 
-        return $this->render('TruckeeProjectmanaBundle:Statistics:report_criteria.html.twig', array(
+        return $this->render('Statistics/report_criteria.html.twig', array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'stats_general',
@@ -104,7 +103,7 @@ class StatisticsController extends Controller
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:dateCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $reports = $this->get('reports');
@@ -114,7 +113,7 @@ class StatisticsController extends Controller
             $data = $reports->getDetails();
             $templateSpecs = $specs['templateCriteria'];
             $templateSpecs['reportType'] = 'Distribution Details';
-            $templates[] = 'TruckeeProjectmanaBundle:Statistics:details.html.twig';
+            $templates[] = 'Statistics/details.html.twig';
 
             $report = array(
                 'excel' => 'Details',
@@ -126,10 +125,10 @@ class StatisticsController extends Controller
             );
             $session->set('report', $report);
 
-            return $this->render('TruckeeProjectmanaBundle:Statistics:statistics.html.twig', $report);
+            return $this->render('Statistics/statistics.html.twig', $report);
         }
 
-        return $this->render('TruckeeProjectmanaBundle:Statistics:report_criteria.html.twig', array(
+        return $this->render('Statistics/report_criteria.html.twig', array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'title' => 'Report criteria',
@@ -140,13 +139,12 @@ class StatisticsController extends Controller
 
     /**
      * @Route("/multi", name="multi_contacts")
-     * @Template()
      */
     public function multiAction(Request $request)
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:dateCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $reports = $this->get('reports');
@@ -162,13 +160,13 @@ class StatisticsController extends Controller
                 return $this->redirect($request->headers->get('referer'));
             }
 
-            return array('multi' => $multi,
+            return $this->render('Statistics/multi.html.twig', array('multi' => $multi,
                 'title' => 'Multiple contacts',
                 'reportHeader' => $this->getReportHeader($templateSpecs),
-            );
+            ));
         }
 
-        return $this->render('TruckeeProjectmanaBundle:Statistics:report_criteria.html.twig', array(
+        return $this->render('Statistics/report_criteria.html.twig', array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'title' => 'Report criteria',
@@ -197,7 +195,7 @@ class StatisticsController extends Controller
         $filename .= ($startText == $endText) ? $startText : $startText.'-'.$endText;
         $filename .= $center.$county.$type.'.xls';
 
-        $response = $this->render('TruckeeProjectmanaBundle:Statistics:excel'.$template.'.html.twig', $report);
+        $response = $this->render('Statistics/excel'.$template.'.html.twig', $report);
         $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
         $response->headers->set('Content-Disposition', 'attachment; filename='.$filename);
         $response->headers->set('Pragma', 'public');
@@ -237,7 +235,7 @@ class StatisticsController extends Controller
             'ctyStats' => $ctyStats,
         );
 
-        return $this->render('TruckeeProjectmanaBundle:Statistics:foodbank.html.twig', $report);
+        return $this->render('Statistics/foodbank.html.twig', $report);
     }
 
     /**
@@ -299,8 +297,8 @@ class StatisticsController extends Controller
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:dateCriteria.html.twig';
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:profileCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
@@ -314,7 +312,7 @@ class StatisticsController extends Controller
             return $response;
         }
 
-        return $this->render('TruckeeProjectmanaBundle:Statistics:report_criteria.html.twig', array(
+        return $this->render('Statistics/report_criteria.html.twig', array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'employment_profile',
@@ -330,8 +328,8 @@ class StatisticsController extends Controller
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:dateCriteria.html.twig';
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:profileCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
@@ -345,7 +343,7 @@ class StatisticsController extends Controller
             return $response;
         }
 
-        return $this->render('TruckeeProjectmanaBundle:Statistics:report_criteria.html.twig', array(
+        return $this->render('Statistics/report_criteria.html.twig', array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'income_profile',
@@ -361,8 +359,8 @@ class StatisticsController extends Controller
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:dateCriteria.html.twig';
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:profileCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
@@ -376,7 +374,7 @@ class StatisticsController extends Controller
             return $response;
         }
 
-        return $this->render('TruckeeProjectmanaBundle:Statistics:report_criteria.html.twig', array(
+        return $this->render('Statistics/report_criteria.html.twig', array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'foodstampYesNo_profile',
@@ -392,8 +390,8 @@ class StatisticsController extends Controller
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:dateCriteria.html.twig';
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:profileCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
@@ -407,7 +405,7 @@ class StatisticsController extends Controller
             return $response;
         }
 
-        return $this->render('TruckeeProjectmanaBundle:Statistics:report_criteria.html.twig', array(
+        return $this->render('Statistics/report_criteria.html.twig', array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'foodstampHowMuch_profile',
@@ -423,8 +421,8 @@ class StatisticsController extends Controller
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:dateCriteria.html.twig';
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:profileCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
@@ -438,7 +436,7 @@ class StatisticsController extends Controller
             return $response;
         }
 
-        return $this->render('TruckeeProjectmanaBundle:Statistics:report_criteria.html.twig', array(
+        return $this->render('Statistics/report_criteria.html.twig', array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'reason_profile',
@@ -454,8 +452,8 @@ class StatisticsController extends Controller
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:dateCriteria.html.twig';
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:profileCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $response = new Response();
@@ -469,7 +467,7 @@ class StatisticsController extends Controller
             return $response;
         }
 
-        return $this->render('TruckeeProjectmanaBundle:Statistics:report_criteria.html.twig', array(
+        return $this->render('Statistics/report_criteria.html.twig', array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'notfoodstamp_profile',
@@ -480,14 +478,13 @@ class StatisticsController extends Controller
 
     /**
      * @Route("/snapProfile", name="snap_profile")
-     * @Template()
      */
     public function snapProfileAction(Request $request)
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteria = $request->request->get('report_criteria');
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:dateCriteria.html.twig';
-        $criteriaTemplates[] = 'TruckeeProjectmanaBundle:Statistics:profileCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $specs = $this->specs($criteria);
@@ -500,10 +497,12 @@ class StatisticsController extends Controller
             $reportData = $this->not($reportSpecs);
             $content .= $this->profilerPlain($reportData, $templateSpecs);
 
-            return ['content' => $content];
+            return $this->render('Statistics/snapProfile.html.twig', [
+                'content' => $content,
+                ]);
         }
 
-        return $this->render('TruckeeProjectmanaBundle:Statistics:report_criteria.html.twig', array(
+        return $this->render('Statistics/report_criteria.html.twig', array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'snap_profile',
@@ -517,7 +516,7 @@ class StatisticsController extends Controller
         $xp = $this->container->get('mana.crosstab');
         $profile = $xp->crosstabQuery($reportData['data'], $reportData['rowLabels'], $reportData['colLabels']);
 
-        return $this->renderView('TruckeeProjectmanaBundle:Statistics:profile.html.twig', ['profile' => $profile,
+        return $this->renderView('Statistics/profile.html.twig', ['profile' => $profile,
                     'rowHeader' => $reportData['rowHeader'],
                     'rowLabels' => $reportData['rowLabels'],
                     'colLabels' => $reportData['colLabels'],
@@ -533,7 +532,7 @@ class StatisticsController extends Controller
         $xp = $this->container->get('mana.crosstab');
         $profile = $xp->crosstabQuery($reportData['data'], $reportData['rowLabels'], $reportData['colLabels']);
 
-        return $this->renderView('TruckeeProjectmanaBundle:Statistics:profile_content.html.twig', ['profile' => $profile,
+        return $this->renderView('Statistics/profile_content.html.twig', ['profile' => $profile,
                     'rowHeader' => $reportData['rowHeader'],
                     'rowLabels' => $reportData['rowLabels'],
                     'colLabels' => $reportData['colLabels'],

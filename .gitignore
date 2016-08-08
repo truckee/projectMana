@@ -8,5 +8,5 @@
 /bin/
 /nbproject/
 /vendor/*
-/htdocs/bundles/
+/htdocs/bundles/*
 /tests/_output/*

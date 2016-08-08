@@ -14,7 +14,6 @@ namespace Truckee\ProjectmanaBundle\Controller;
 use Truckee\ProjectmanaBundle\Entity\Member;
 use Truckee\ProjectmanaBundle\Form\MemberType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +25,6 @@ class MemberController extends Controller
 {
     /**
      * @Route("/edit/{id}", name="member_edit")
-     * @Template()
      */
     public function editAction(Request $request, $id)
     {
@@ -35,24 +33,24 @@ class MemberController extends Controller
         if (!$member) {
             throw $this->createNotFoundException('Unable to find Member.');
         }
-        $templates[] = 'TruckeeProjectmanaBundle:Member:memberFormRows.html.twig';
+        $templates[] = 'Member/memberFormRows.html.twig';
         $include = $member->getInclude();
         if (true == $include) {
             $household = $member->getHousehold();
             $headId = $household->getHead()->getId();
             if ($member->getId() === $headId) {
-                array_unshift($templates, 'TruckeeProjectmanaBundle:Member:headShowForm.html.twig');
+                array_unshift($templates, 'Member/headShowForm.html.twig');
+                $templates[] = 'Member/headOffensesForm.html.twig';
             } else {
-                array_unshift($templates, 'TruckeeProjectmanaBundle:Member:includeForm.html.twig');
+                array_unshift($templates, 'Member/includeForm.html.twig');
             }
         } else {
-            $template = 'TruckeeProjectmanaBundle:Member:excludedShow.html.twig';
+            $template = 'Member/excludedShow.html.twig';
         }
 
         $form = $this->createForm(MemberType::class, $member);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $data = $form->getData();
             $isHead = $form['isHead']->getData();
             if (true === $isHead) {
                 $household->setHead($member);
@@ -80,23 +78,22 @@ class MemberController extends Controller
             return $response;
         }
 
-        return [
+        return $this->render('Member/edit.html.twig', [
             'form' => $form->createView(),
             'templates' => $templates,
             'id' => $id,
             'headId' => $headId,
-        ];
+        ]);
     }
 
     /**
      * @Route("/add/{houseId}", name="member_add")
-     * @Template()
      */
     public function addAction(Request $request, $houseId)
     {
         $member = new Member();
         $form = $this->createForm(MemberType::class, $member);
-        $templates[] = 'TruckeeProjectmanaBundle:Member:memberFormRows.html.twig';
+        $templates[] = 'Member/memberFormRows.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -110,7 +107,7 @@ class MemberController extends Controller
             $em->persist($household);
             $em->flush();
             $name = $member->getFname().' '.$member->getSname();
-            $view = $this->renderView('TruckeeProjectmanaBundle:Member:memberShowBlock_content.html.twig', [
+            $view = $this->renderView('Member/memberShowBlock_content.html.twig', [
                 'member' => $member,
                 'hohId' => $household->getHead()->getId(),
             ]);
@@ -123,16 +120,15 @@ class MemberController extends Controller
             return $response;
         }
 
-        return [
+        return $this->render('Member/add.html.twig', [
             'form' => $form->createView(),
             'templates' => $templates,
             'houseId' => $houseId,
-        ];
+        ]);
     }
 
     /**
      * @Route("/householdMember/{id}", name="house_member")
-     * @Template()
      */
     public function memberHeadShowAction($id)
     {
@@ -143,12 +139,12 @@ class MemberController extends Controller
             $household = $member->getHousehold();
             $headId = $household->getHead()->getId();
             if ($member->getId() === $headId) {
-                $template = 'TruckeeProjectmanaBundle:Member:headShow.html.twig';
+                $template = 'Member/headShow.html.twig';
             } else {
-                $template = 'TruckeeProjectmanaBundle:Member:includeShow.html.twig';
+                $template = 'Member/includeShow.html.twig';
             }
         } else {
-            $template = 'TruckeeProjectmanaBundle:Member:excludedShow.html.twig';
+            $template = 'Member/excludedShow.html.twig';
         }
 
         return $this->render($template, ['member' => $member]);

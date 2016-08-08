@@ -69,6 +69,9 @@ class MemberType extends AbstractType
                     'label' => 'Offenses: ',
                     'expanded' => true,
                     'multiple' => true,
+                    'attr' => [
+                        'class' => 'form-inline',
+                    ],
                     'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('e')
                                 ->orderBy('e.offence', 'ASC')

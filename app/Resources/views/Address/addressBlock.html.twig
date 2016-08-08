@@ -1,6 +1,6 @@
 <div class="panel panel-info" id="address-list">
     <div class="panel-heading">Addresses</div>
-        <div id="addressWidget" data-prototype="{% filter escape %}{% include 'TruckeeProjectmanaBundle:Address:address_prototype.html.twig' with {'form': form.addresses.vars.prototype} %}{% endfilter %}"></div>
+        <div id="addressWidget" data-prototype="{% filter escape %}{% include 'Address/address_prototype.html.twig' with {'form': form.addresses.vars.prototype} %}{% endfilter %}"></div>
     <div id="addressForm">
     {%for address in form.addresses%}
         <div class="panel-body">

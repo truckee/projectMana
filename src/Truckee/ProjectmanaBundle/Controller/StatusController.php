@@ -14,7 +14,6 @@ namespace Truckee\ProjectmanaBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
  * @Route("/status")
@@ -23,17 +22,16 @@ class StatusController extends Controller
 {
     /**
      * @Route("", name="status")
-     * @Template()
      */
     public function showAction()
     {
         $status = $this->get('status');
         $statusYears = $status->getYearStatus();
 
-        return array(
+        return $this->render('Status/show.html.twig', array(
             'statusYears' => $statusYears,
             'title' => 'Household status',
-        );
+        ));
     }
 
     /**

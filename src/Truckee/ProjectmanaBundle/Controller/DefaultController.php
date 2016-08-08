@@ -13,26 +13,23 @@ namespace Truckee\ProjectmanaBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DefaultController extends Controller
 {
     /**
      * @Route("/", name="home")
-     * @Template()
      */
     public function indexAction()
     {
-        return array();
+        return $this->render('Default/index.html.twig');
     }
 
     /**
      * @Route("/reportMenu", name="report_menu")
-     * @Template()
      */
     public function reportMenuAction()
     {
-        return array();
+        return $this->render('Default/reportMenu.html.twig');
     }
 
     /**
@@ -45,7 +42,7 @@ class DefaultController extends Controller
         $reports = $this->get('reports');
         $chart = $reports->getFiscalYearToDate();
 
-        return $this->render('TruckeeProjectmanaBundle:Default:script.js.twig', array(
+        return $this->render('Default/script.js.twig', array(
                     'chart' => $chart,
         ));
     }

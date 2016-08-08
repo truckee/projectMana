@@ -16,7 +16,6 @@ use Truckee\ProjectmanaBundle\Entity\Household;
 use Truckee\ProjectmanaBundle\Entity\Member;
 use Truckee\ProjectmanaBundle\Entity\Phone;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,7 +34,6 @@ class HouseholdController extends Controller
      * Finds and displays a Household entity.
      *
      * @Route("/{id}/show", name="household_show")
-     * @Template()
      */
     public function showAction(Request $request, $id)
     {
@@ -46,17 +44,17 @@ class HouseholdController extends Controller
         if (!$household) {
             throw $this->createNotFoundException('Unable to find Household entity.');
         }
-        $templates[] = 'TruckeeProjectmanaBundle:Member:memberShowBlock.html.twig';
-        $templates[] = 'TruckeeProjectmanaBundle:Household:show_content.html.twig';
-        $templates[] = 'TruckeeProjectmanaBundle:Address:addressShowBlock.html.twig';
-        $templates[] = 'TruckeeProjectmanaBundle:Household:contactShowBlock.html.twig';
+        $templates[] = 'Member/memberShowBlock.html.twig';
+        $templates[] = 'Household/show_content.html.twig';
+        $templates[] = 'Address/addressShowBlock.html.twig';
+        $templates[] = 'Household/contactShowBlock.html.twig';
 
-        return array(
+        return $this->render('Household/show.html.twig', array(
             'household' => $household,
             'hohId' => $household->getHead()->getId(),
             'title' => 'Household View',
             'templates' => $templates,
-        );
+        ));
     }
 
     /**
@@ -64,7 +62,6 @@ class HouseholdController extends Controller
      * First, validate a new member to be head of household.
      *
      * @Route("/new", name="household_new")
-     * @Template()
      */
     public function newAction(Request $request)
     {
@@ -118,24 +115,22 @@ class HouseholdController extends Controller
                     'title' => 'Match Results',
                 );
 
-                return $this->render(
-                        'TruckeeProjectmanaBundle:Member:match_results.html.twig', $match_results);
+                return $this->render('Member/match_results.html.twig', $match_results);
             }
         }
 
-        return array(
+        return $this->render('Household/new.html.twig', array(
             'formType' => 'New Household',
             'form' => $form->createView(),
             'formHead' => $formHead->createView(),
             'title' => 'New Household',
-        );
+        ));
     }
 
     /**
      * Display household edit form.
      *
      * @Route("/{id}/edit", name="household_edit")
-     * @Template()
      */
     public function editAction(Request $request, $id)
     {
@@ -166,12 +161,12 @@ class HouseholdController extends Controller
             return $this->redirectToRoute('household_show', array('id' => $household->getId()));
         }
 
-        return array(
+        return $this->render('Household/edit.html.twig', array(
             'form' => $form->createView(),
             'title' => 'Household Edit',
             'household' => $household,
             'hohId' => $household->getHead()->getId(),
-        );
+        ));
     }
 
     /**
@@ -218,7 +213,7 @@ class HouseholdController extends Controller
 
                 return $this->redirectToRoute('household_show', array('id' => $id));
             } else {
-                return $this->render('TruckeeProjectmanaBundle:Household:search.html.twig',
+                return $this->render('Household/search.html.twig',
                         array(
                         'searchedFor' => $qtext,
                         'matched' => $found,
@@ -241,7 +236,7 @@ class HouseholdController extends Controller
         if (!$household) {
             $response = new Response('');
         } else {
-            $content = $this->renderView('TruckeeProjectmanaBundle:Contact:addHouseholdContact.html.twig',
+            $content = $this->renderView('Contact/addHouseholdContact.html.twig',
                 [
                 'household' => $household,
             ]);
