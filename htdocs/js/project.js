@@ -16,6 +16,13 @@ $(document).ready(function () {
         resizable: true,
         modal: true,
         width: '80%',
+        open: function () {
+            if ($("#member_isHead").prop("checked") === false) {
+                $("#memberOffenses").hide();
+            } else {
+                $("#memberOffenses").show();
+            }
+        },
     });
 
     $('.js-datepicker').datepicker({
@@ -39,9 +46,11 @@ $(document).ready(function () {
         if ($("input[name='member[isHead]']").prop('checked') === true) {
             $("select[name='member[include]']").hide();
             $("label[for='member_include']").hide();
+            $("#memberOffenses").show();
         } else {
             $("select[name='member[include]']").show();
             $("label[for='member_include']").show();
+            $("#memberOffenses").hide();
         }
     });
 
@@ -106,12 +115,12 @@ $(document).ready(function () {
                                     } else {
                                         if (member.isHead) {
                                             memberHTML = '<span id="include' + memberId + '"><b>Head</b></span>';
-                                            $("#row" + memberId).css({"background-color":"lightyellow"});
+                                            $("#row" + memberId).css({"background-color": "lightyellow"});
                                             $('#household_heading').text(member.fname + ' ' + member.sname);
                                             if (member.id !== member.headId) {
                                                 headHTML = '<span id="include' + member.headId + '"><b>Include: </b> Yes</span>'
                                                 $("#include" + member.headId).html(headHTML);
-                                                $("#row" + member.headId).css({"background-color":""});
+                                                $("#row" + member.headId).css({"background-color": ""});
                                             }
                                         } else {
                                             memberHTML = '<span id="include' + memberId + '"><b>Include: </b> Yes</span>';
@@ -137,8 +146,8 @@ $(document).ready(function () {
                     ],
                 });
                 $('#memberEditDialog').html(data);
-
-                $('#memberEditDialog').dialog('open');
+                $('#memberEditDialog').dialog('open'
+                        );
             });
         }
 
@@ -201,26 +210,20 @@ function foodStampShowHide(option) {
     //Blank option === ""
     if (option === "" || option > "2") {
         $("label[for=household_fsamount]").parent().hide();
-//        $("select#household_fsamount").hide();
         $("select#household_fsamount").val("");
         $("label[for=household_notfoodstamp]").parent().hide();
-//        $("select#household_notfoodstamp").hide();
         $("select#household_notfoodstamp").val("");
     }
     //No foodstamps: option === "1"
     if (option === "1") {
         $("label[for=household_notfoodstamp]").parent().show();
-//        $("select#household_notfoodstamp").show();
         $("label[for=household_fsamount]").parent().hide();
-//        $("select#household_fsamount").hide();
         $("select#household_fsamount").val("");
     }
     //Yes option === "2"
     if (option === "2") {
         $("label[for=household_fsamount]").parent().show();
-//        $("select#household_fsamount").show();
         $("label[for=household_notfoodstamp]").parent().hide();
-//        $("select#household_notfoodstamp").hide();
         $("select#household_notfoodstamp").val("");
     }
 }

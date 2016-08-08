@@ -40,7 +40,6 @@ class MemberController extends Controller
             $headId = $household->getHead()->getId();
             if ($member->getId() === $headId) {
                 array_unshift($templates, 'Member/headShowForm.html.twig');
-                $templates[] = 'Member/headOffensesForm.html.twig';
             } else {
                 array_unshift($templates, 'Member/includeForm.html.twig');
             }
