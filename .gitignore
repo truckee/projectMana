@@ -10,6 +10,7 @@
 /htdocs/bundles/*
 /tests/_output/*
 
+/web/*
 /var/*
 !/var/cache
 /var/cache/*
