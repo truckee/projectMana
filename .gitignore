@@ -6,7 +6,6 @@
 !app/logs/.gitkeep
 /app/phpunit.xml
 /bin/
-/nbproject/
 /vendor/*
 /htdocs/bundles/*
 /tests/_output/*
