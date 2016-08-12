@@ -114,7 +114,7 @@ class MemberController extends Controller
                 'view' => $view,
                 'name' => $name,
             ];
-            $response = new Response(\GuzzleHttp\json_encode($content, JSON_HEX_QUOT | JSON_HEX_TAG));
+            $response = new Response(json_encode($content, JSON_HEX_QUOT | JSON_HEX_TAG));
 
             return $response;
         }
