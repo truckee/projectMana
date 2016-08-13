@@ -161,9 +161,15 @@ class MenuBuilder
             'route' => 'stats_details',
         ));
 
-        $menu->addChild('Most recent contacts (PDF)', array(
+        $menu->addChild('New contacts (PDF)');
+        $menu['New contacts (PDF)']->addChild('Most recent', [
             'route' => 'latest_contacts',
-        ));
+            'routeParameters' => ['source' => 'Most recent'],
+        ]);
+        $menu['New contacts (PDF)']->addChild('FY to date', [
+            'route' => 'latest_contacts',
+            'routeParameters' => ['source' => 'FY to date'],
+        ]);
 
         $menu->addChild('Multiple contacts', array(
             'route' => 'multi_contacts',

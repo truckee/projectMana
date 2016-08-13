@@ -157,7 +157,7 @@ class ContactController extends Controller
             } else {
                 $flash->alert('No contacts were added');
 
-                return $this->redirectToRoute('contacts_add', ['source'  => $source]);
+                return $this->redirectToRoute('contacts_add', ['source' => $source]);
             }
         }
 
@@ -179,7 +179,7 @@ class ContactController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $center = $em->getRepository('TruckeeProjectmanaBundle:Center')->find($site);
-            $searches = $this->get('searches');
+        $searches = $this->get('searches');
         if ('Most recent' === $source) {
             $contacts = $searches->getLatest($site);
         }
@@ -201,9 +201,9 @@ class ContactController extends Controller
      * For selected center, generates PDF checklist of households at most recent
      * distribution.
      * 
-     * @Route("/latestReport", name="latest_contacts")
+     * @Route("/latestReport/{source}", name="latest_contacts")
      */
-    public function latestReportAction(Request $request)
+    public function latestReportAction(Request $request, $source)
     {
         $center = new Center();
         $form = $this->createForm(SelectCenterType::class, $center);
@@ -214,12 +214,18 @@ class ContactController extends Controller
             $searches = $this->get('searches');
             $id = $center->getCenter()->getId();
             $location = $center->getCenter()->getCenter();
-            $found = $searches->getLatest($id);
+            if ('Most recent' === $source) {
+                $found = $searches->getLatest($id);
+            }
+            if ('FY to date' === $source) {
+                $found['contacts'] = $searches->getHeadsFYToDate($id);
+                $found['latestDate'] =  date_format(new \DateTime(), 'm/d/Y');
+            }
             if (count($found['contacts']) == 0 || empty($found)) {
                 $flash = $this->get('braincrafted_bootstrap.flash');
                 $flash->alert("No contacts found for $location");
 
-                return $this->redirectToRoute('latest_contacts');
+                return $this->redirectToRoute('latest_contacts', ['source' => $source]);
             }
             $facade = $this->get('ps_pdf.facade');
             $response = new Response();
@@ -227,10 +233,11 @@ class ContactController extends Controller
                 array(
                 'date' => $found['latestDate'],
                 'center' => $location,
+                'source' => $source,
                 'contacts' => $found['contacts'],
                 ), $response);
             $date = new \DateTime($found['latestDate']);
-            $filename = str_replace(' ', '', $location) . date_format($date, '_Ymd') . '.pdf';
+            $filename = str_replace(' ', '', $source . $location) . date_format($date, '_Ymd') . '.pdf';
             $xml = $response->getContent();
             $stylesheet = $this->renderView('Contact/contact.xml.twig', array());
             $content = $facade->render($xml, $stylesheet);
@@ -245,6 +252,7 @@ class ContactController extends Controller
                 array(
                 'title' => 'Select center',
                 'form' => $form->createView(),
+                'source' => $source,
         ));
     }
 }
