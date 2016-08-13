@@ -30,7 +30,7 @@ services:
 
     app.menu_builder:
         class: Truckee\ProjectmanaBundle\Menu\MenuBuilder
-        arguments: ["@knp_menu.factory", '@security.authorization_checker', '@request_stack']
+        arguments: ['@knp_menu.factory', '@security.authorization_checker', '@request_stack']
         tags:
             - { name: knp_menu.menu_builder, method: createMainMenu, alias: main }
             - { name: knp_menu.menu_builder, method: logoutMenu, alias: logout }

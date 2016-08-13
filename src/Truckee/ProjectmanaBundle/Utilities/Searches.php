@@ -75,4 +75,39 @@ class Searches
 
         return $found;
     }
-}
+
+    public function getHeadsFYToDate($site)
+    {
+        $date = new \DateTime();
+        $year = date_format($date, 'Y');
+        $month = date_format($date, 'n');
+        $fy = ($month < 7) ? $year : $year + 1;
+        $startDate = $fy - 1 . '-07-01';
+        $endDate = $fy . '-06-30';
+
+        $em = $this->em;
+        $loc = $em->getRepository('TruckeeProjectmanaBundle:Center')->find($site);
+        $contacts = $em->createQuery('SELECT c FROM TruckeeProjectmanaBundle:Contact c '
+                . 'JOIN TruckeeProjectmanaBundle:Household h WITH c.household = h '
+                . 'JOIN TruckeeProjectmanaBundle:Member m WITH h.head = m '
+                . 'WHERE c.center = :site AND c.contactDate >= :startDate '
+                . 'AND c.contactDate <= :endDate '
+                . 'ORDER BY m.sname, m.fname')
+            ->setParameters([
+                'site' => $loc,
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                ])
+            ->getResult();
+
+        return $contacts;
+        }
+
+    private function getFY()
+    {
+        $year = date_format(new \DateTime(), 'Y');
+        $month = date_format(new \DateTime(), 'n');
+        $fy = ($month < 7) ? $year : $year + 1;
+
+        return $fy;
+    }}

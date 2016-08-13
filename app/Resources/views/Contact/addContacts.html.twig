@@ -1,9 +1,9 @@
 {% extends "layout.html.twig" %}
 {% block body %}
-    <form action="{{ path("contacts_add") }}" method="post">
+    <form action="{{ path("contacts_add", {'source': source}) }}" method="post">
         <div class="row">
             <div class="col-sm-4">
-                <h3>{{ label_info('Add contacts') }}</h3>
+                <h3>{{ label_info('Add contacts from '~source) }}</h3>
                 <p>{{ form_row(form.contactDate) }}</p>
                 <p>{{ form_row(form.contactDesc) }}</p>
                 <p>{{ form_row(form.center)}}</p>

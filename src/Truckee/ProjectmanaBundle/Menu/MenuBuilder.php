@@ -50,9 +50,15 @@ class MenuBuilder
             ));
         }
 
-        $menu->addChild('New contacts', array(
-            'route' => 'contacts_add',
-        ));
+        $menu->addChild('New contacts');
+        $menu['New contacts']->addChild('Most recent', [
+             'route' => 'contacts_add',
+            'routeParameters' => ['source' => 'Most recent'],
+        ]);
+        $menu['New contacts']->addChild('FY to date', [
+             'route' => 'contacts_add',
+            'routeParameters' => ['source' => 'FY to date'],
+        ]);
 
         $menu->addChild('New household', array(
             'route' => 'household_new',

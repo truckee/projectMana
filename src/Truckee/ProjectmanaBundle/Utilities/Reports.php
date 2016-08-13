@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Truckee\Projectmana package.
  *
@@ -70,7 +69,7 @@ class Reports
             $sql = 'select id from county where enabled=1';
             $stmt = $this->conn->query($sql);
             while ($row = $stmt->fetch()) {
-                array_push($this->criteria, $where." and county_id = $row[id]");
+                array_push($this->criteria, $where . " and county_id = $row[id]");
             }
         } else {
             array_push($this->criteria, $where);
@@ -170,7 +169,7 @@ class Reports
             (contact_type_id, household_id, contact_date, first, center_id, county_id)
             select contact_type_id, household_id, contact_date, first, center_id, county_id
             from contact '
-                .$criteria;
+            . $criteria;
         $this->conn->exec($sql);
 
         $sql = 'delete from temp_member';
@@ -286,8 +285,8 @@ class Reports
     private function setNewByType($criterion)
     {
         //get new households for specific report type
-        $sql = 'select count(distinct household_id) NewByType from temp_contact'.
-                $criterion.' and `first` = 1';
+        $sql = 'select count(distinct household_id) NewByType from temp_contact' .
+            $criterion . ' and `first` = 1';
         $this->newByType = $this->conn->fetchAssoc($sql);
     }
 
@@ -302,9 +301,9 @@ class Reports
     {
         //all new households
         $sql = 'select count(*) NewMembers from temp_member m
-            join temp_contact c on m.household_id = c.household_id'.
-                $criterion.
-                ' and `first` = 1';
+            join temp_contact c on m.household_id = c.household_id' .
+            $criterion .
+            ' and `first` = 1';
         $this->newMembers = $this->conn->fetchAssoc($sql);
     }
 
@@ -455,7 +454,7 @@ group by cty.county';
             $counties = $db->query($sqlCounties)->fetchAll();
             $categories = ['UIS', 'TIS', 'UHS', 'THS'];
             foreach ($categories as $category) {
-                $varname = $category.'Data';
+                $varname = $category . 'Data';
                 foreach ($counties as $county) {
                     ${$varname}[] = array('county' => $county['county'], $category => 0);
                 }
@@ -481,19 +480,23 @@ group by cty.county';
         $data = [];
         foreach ($UISData as $array) {
             $data[$array['county']]['UIS'] = $array['UIS'];
-            $data[$array['county']]['UISPCT'] = (0 < $totals['UISTotal']) ? sprintf('%01.1f', 100 * ($array['UIS'] / $totals['UISTotal'])).'%' : 0;
+            $data[$array['county']]['UISPCT'] = (0 < $totals['UISTotal']) ? sprintf('%01.1f',
+                    100 * ($array['UIS'] / $totals['UISTotal'])) . '%' : 0;
         }
         foreach ($UHSData as $array) {
             $data[$array['county']]['UHS'] = $array['UHS'];
-            $data[$array['county']]['UHSPCT'] = (0 < $totals['UHSTotal']) ? sprintf('%01.1f', 100 * ($array['UHS'] / $totals['UHSTotal'])).'%' : 0;
+            $data[$array['county']]['UHSPCT'] = (0 < $totals['UHSTotal']) ? sprintf('%01.1f',
+                    100 * ($array['UHS'] / $totals['UHSTotal'])) . '%' : 0;
         }
         foreach ($TISData as $array) {
             $data[$array['county']]['TIS'] = $array['TIS'];
-            $data[$array['county']]['TISPCT'] = (0 < $totals['TISTotal']) ? sprintf('%01.1f', 100 * ($array['TIS'] / $totals['TISTotal'])).'%' : 0;
+            $data[$array['county']]['TISPCT'] = (0 < $totals['TISTotal']) ? sprintf('%01.1f',
+                    100 * ($array['TIS'] / $totals['TISTotal'])) . '%' : 0;
         }
         foreach ($THSData as $array) {
             $data[$array['county']]['THS'] = $array['THS'];
-            $data[$array['county']]['THSPCT'] = (0 < $totals['THSTotal']) ? sprintf('%01.1f', 100 * ($array['THS'] / $totals['THSTotal'])).'%' : 0;
+            $data[$array['county']]['THSPCT'] = (0 < $totals['THSTotal']) ? sprintf('%01.1f',
+                    100 * ($array['THS'] / $totals['THSTotal'])) . '%' : 0;
         }
 
         return $data;
@@ -595,18 +598,17 @@ group by cty.county';
         return $multis;
     }
 
-    public function getFiscalYearToDate()
+    public function getDistsFYToDate()
     {
-        $year = date_format(new \DateTime(), 'Y');
+        $fy = $this->getFY();
         $month = date_format(new \DateTime(), 'n');
-        $fy = ($month < 7) ? $year : $year + 1;
         $chart['fy'] = $fy;
         $fy_months = array_merge(range(7, 12), range(1, 6));
         $i = 0;
         for ($i = 0; $fy_months[$i] != $month; ++$i) {
-            $chart['categories'][] = "'".date_format(new \DateTime('2000-'.$fy_months[$i].'-01'), 'F')."', ";
+            $chart['categories'][] = "'" . date_format(new \DateTime('2000-' . $fy_months[$i] . '-01'), 'F') . "', ";
         }
-        $chart['categories'][] = "'".date_format(new \DateTime('2000-'.$fy_months[$i].'-01'), 'F')."'";
+        $chart['categories'][] = "'" . date_format(new \DateTime('2000-' . $fy_months[$i] . '-01'), 'F') . "'";
         $sqlSites = 'SELECT center FROM center WHERE enabled = TRUE ORDER BY center ASC';
         $siteQuery = $this->conn->fetchAll($sqlSites);
 
@@ -621,12 +623,21 @@ group by cty.county';
             $sql .= ' GROUP BY monthname(c.contact_date) ORDER BY c.contact_date';
             $query = $this->conn->fetchAll($sql);
             foreach ($query as $array) {
-                $seriesString .= $array['N'].',';
+                $seriesString .= $array['N'] . ',';
             }
-            $series .= $seriesString.']}, ';
+            $series .= $seriesString . ']}, ';
         }
-        $chart['series'] = $series.']';
+        $chart['series'] = $series . ']';
 
         return $chart;
+    }
+
+    private function getFY()
+    {
+        $year = date_format(new \DateTime(), 'Y');
+        $month = date_format(new \DateTime(), 'n');
+        $fy = ($month < 7) ? $year : $year + 1;
+
+        return $fy;
     }
 }

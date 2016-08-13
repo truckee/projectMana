@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Truckee\Projectmana package.
  *
@@ -27,6 +26,7 @@ use Truckee\ProjectmanaBundle\Form\SelectCenterType;
  */
 class ContactController extends Controller
 {
+
     /**
      * Displays a form to create a new Contact entity.
      *
@@ -58,10 +58,11 @@ class ContactController extends Controller
             return $this->redirectToRoute('contact_new', array('id' => $id));
         }
 
-        return $this->render('Contact/edit.html.twig', array(
-            'form' => $form->createView(),
-            'household' => $household,
-            'title' => 'New Contact',
+        return $this->render('Contact/edit.html.twig',
+                array(
+                'form' => $form->createView(),
+                'household' => $household,
+                'title' => 'New Contact',
         ));
     }
 
@@ -91,11 +92,12 @@ class ContactController extends Controller
             return $this->redirectToRoute('contact_new', array('id' => $hid));
         }
 
-        return $this->render('Contact/edit.html.twig', array(
-            'household' => $contact->getHousehold(),
-            'form' => $form->createView(),
-            'contact' => $contact,
-            'title' => 'Edit Contact',
+        return $this->render('Contact/edit.html.twig',
+                array(
+                'household' => $contact->getHousehold(),
+                'form' => $form->createView(),
+                'contact' => $contact,
+                'title' => 'Edit Contact',
         ));
     }
 
@@ -121,17 +123,18 @@ class ContactController extends Controller
             return $this->redirectToRoute('contact_new', array('id' => $hid));
         }
 
-        return $this->render('Contact/delete.html.twig', array(
-            'contact' => $contact,
-            'form' => $form->createView(),
-            'title' => 'Delete Contact',
+        return $this->render('Contact/delete.html.twig',
+                array(
+                'contact' => $contact,
+                'form' => $form->createView(),
+                'title' => 'Delete Contact',
         ));
     }
 
     /**
-     * @Route("/addContacts", name="contacts_add")
+     * @Route("/addContacts/{source}", name="contacts_add")
      */
-    public function addContactsAction(Request $request)
+    public function addContactsAction(Request $request, $source)
     {
         $contact = new Contact();
         $form = $this->createForm(ContactType::class, $contact);
@@ -154,13 +157,15 @@ class ContactController extends Controller
             } else {
                 $flash->alert('No contacts were added');
 
-                return $this->redirectToRoute('contacts_add');
+                return $this->redirectToRoute('contacts_add', ['source'  => $source]);
             }
         }
 
-        return $this->render('Contact/addContacts.html.twig', array(
-            'form' => $form->createView(),
-            'title' => 'Add contacts',
+        return $this->render('Contact/addContacts.html.twig',
+                array(
+                'form' => $form->createView(),
+                'title' => 'Add contacts',
+                'source' => $source,
         ));
     }
 
@@ -168,25 +173,32 @@ class ContactController extends Controller
      * returning latest contacts w/ households & distribution
      * at given center.
      *
-     * @Route("/latest/{site}")
+     * @Route("/latest/{site}/{source}")
      */
-    public function mostRecentContactsAction($site)
+    public function mostRecentContactsAction($site, $source)
     {
-        $searches = $this->get('searches');
-        $contacts = $searches->getLatest($site);
         $em = $this->getDoctrine()->getManager();
         $center = $em->getRepository('TruckeeProjectmanaBundle:Center')->find($site);
-        $content = $this->renderView('Contact/mostRecentContacts.html.twig', [
+            $searches = $this->get('searches');
+        if ('Most recent' === $source) {
+            $contacts = $searches->getLatest($site);
+        }
+        if ('FY to date' === $source) {
+            $contacts['contacts'] = $searches->getHeadsFYToDate($site);
+        }
+        $content = $this->renderView('Contact/mostRecentContacts.html.twig',
+            [
             'contacts' => $contacts['contacts'],
             'site' => $center,
-            ]);
+            'source' => $source,
+        ]);
         $response = new Response($content);
 
         return $response;
     }
 
     /**
-     * For selected center, generates checklist of households at most recent
+     * For selected center, generates PDF checklist of households at most recent
      * distribution.
      * 
      * @Route("/latestReport", name="latest_contacts")
@@ -211,25 +223,28 @@ class ContactController extends Controller
             }
             $facade = $this->get('ps_pdf.facade');
             $response = new Response();
-            $this->render('Contact/roster.html.twig', array(
+            $this->render('Contact/roster.html.twig',
+                array(
                 'date' => $found['latestDate'],
                 'center' => $location,
                 'contacts' => $found['contacts'],
-                    ), $response);
+                ), $response);
             $date = new \DateTime($found['latestDate']);
-            $filename = str_replace(' ', '', $location).date_format($date, '_Ymd').'.pdf';
+            $filename = str_replace(' ', '', $location) . date_format($date, '_Ymd') . '.pdf';
             $xml = $response->getContent();
             $stylesheet = $this->renderView('Contact/contact.xml.twig', array());
             $content = $facade->render($xml, $stylesheet);
 
-            return new Response($content, 200, array('content-type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename='.$filename,
+            return new Response($content, 200,
+                array('content-type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename=' . $filename,
             ));
         }
 
-        return $this->render('Contact/latestReport.html.twig', array(
-            'title' => 'Select center',
-            'form' => $form->createView(),
+        return $this->render('Contact/latestReport.html.twig',
+                array(
+                'title' => 'Select center',
+                'form' => $form->createView(),
         ));
     }
 }

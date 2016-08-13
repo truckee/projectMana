@@ -58,7 +58,8 @@ $(document).ready(function () {
                     .find(".ui-dialog-titlebar-close") // find the close button for this dialog
                     .hide();
             var where = $(location).attr('pathname');
-            var url = where.replace('contact/addContacts', 'contact/latest/' + center);
+            source = where.split('/').reverse()[0];
+            var url = where.replace('contact/addContacts/' + source, 'contact/latest/' + center + '/' + source);
             var jqxhr = $.get(url, function (data) {
                 if (data.length > 0) {
                     contactForm.html(data);

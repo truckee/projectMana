@@ -85,3 +85,7 @@ assetic:
              file: %kernel.root_dir%/../vendor/oyejorge/less.php/lessc.inc.php
              apply_to: '\.less$'
         cssrewrite: ~
+
+knp_menu:
+    twig:  # use "twig: false" to disable the Twig extension and the TwigRenderer
+        template: BraincraftedBootstrapBundle:Menu:bootstrap.html.twig

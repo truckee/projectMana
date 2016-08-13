@@ -40,7 +40,7 @@ class DefaultController extends Controller
     public function scriptAction()
     {
         $reports = $this->get('reports');
-        $chart = $reports->getFiscalYearToDate();
+        $chart = $reports->getDistsFYToDate();
 
         return $this->render('Default/script.js.twig', array(
                     'chart' => $chart,
