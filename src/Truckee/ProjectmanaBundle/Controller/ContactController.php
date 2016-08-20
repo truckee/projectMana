@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Truckee\Projectmana package.
  *
@@ -32,8 +33,7 @@ class ContactController extends Controller
      *
      * @Route("/{id}/new", name="contact_new")
      */
-    public function newAction(Request $request, $id)
-    {
+    public function newAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
         if (!$household) {
@@ -58,11 +58,10 @@ class ContactController extends Controller
             return $this->redirectToRoute('contact_new', array('id' => $id));
         }
 
-        return $this->render('Contact/edit.html.twig',
-                array(
-                'form' => $form->createView(),
-                'household' => $household,
-                'title' => 'New Contact',
+        return $this->render('Contact/edit.html.twig', array(
+                    'form' => $form->createView(),
+                    'household' => $household,
+                    'title' => 'New Contact',
         ));
     }
 
@@ -71,8 +70,7 @@ class ContactController extends Controller
      *
      * @Route("/{id}/edit", name="contact_edit")
      */
-    public function editAction(Request $request, $id)
-    {
+    public function editAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
         $contact = $em->getRepository('TruckeeProjectmanaBundle:Contact')->find($id);
         if (!$contact) {
@@ -92,12 +90,11 @@ class ContactController extends Controller
             return $this->redirectToRoute('contact_new', array('id' => $hid));
         }
 
-        return $this->render('Contact/edit.html.twig',
-                array(
-                'household' => $contact->getHousehold(),
-                'form' => $form->createView(),
-                'contact' => $contact,
-                'title' => 'Edit Contact',
+        return $this->render('Contact/edit.html.twig', array(
+                    'household' => $contact->getHousehold(),
+                    'form' => $form->createView(),
+                    'contact' => $contact,
+                    'title' => 'Edit Contact',
         ));
     }
 
@@ -106,8 +103,7 @@ class ContactController extends Controller
      *
      * @Route("/{id}/delete", name="contact_delete")
      */
-    public function deleteAction(Request $request, $id)
-    {
+    public function deleteAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
         $contact = $em->getRepository('TruckeeProjectmanaBundle:Contact')->find($id);
         $form = $this->createForm(ContactType::class, $contact);
@@ -123,19 +119,17 @@ class ContactController extends Controller
             return $this->redirectToRoute('contact_new', array('id' => $hid));
         }
 
-        return $this->render('Contact/delete.html.twig',
-                array(
-                'contact' => $contact,
-                'form' => $form->createView(),
-                'title' => 'Delete Contact',
+        return $this->render('Contact/delete.html.twig', array(
+                    'contact' => $contact,
+                    'form' => $form->createView(),
+                    'title' => 'Delete Contact',
         ));
     }
 
     /**
      * @Route("/addContacts/{source}", name="contacts_add")
      */
-    public function addContactsAction(Request $request, $source)
-    {
+    public function addContactsAction(Request $request, $source) {
         $contact = new Contact();
         $form = $this->createForm(ContactType::class, $contact);
         $form->handleRequest($request);
@@ -161,11 +155,10 @@ class ContactController extends Controller
             }
         }
 
-        return $this->render('Contact/addContacts.html.twig',
-                array(
-                'form' => $form->createView(),
-                'title' => 'Add contacts',
-                'source' => $source,
+        return $this->render('Contact/addContacts.html.twig', array(
+                    'form' => $form->createView(),
+                    'title' => 'Add contacts',
+                    'source' => $source,
         ));
     }
 
@@ -175,8 +168,7 @@ class ContactController extends Controller
      *
      * @Route("/latest/{site}/{source}")
      */
-    public function mostRecentContactsAction($site, $source)
-    {
+    public function mostRecentContactsAction($site, $source) {
         $em = $this->getDoctrine()->getManager();
         $center = $em->getRepository('TruckeeProjectmanaBundle:Center')->find($site);
         $searches = $this->get('searches');
@@ -185,10 +177,11 @@ class ContactController extends Controller
         }
         if ('FY to date' === $source) {
             $contacts['contacts'] = $searches->getHeadsFYToDate($site);
-        }
-        $content = $this->renderView('Contact/mostRecentContacts.html.twig',
-            [
+            $contacts['latestDate'] = new \DateTime();
+        }   
+        $content = $this->renderView('Contact/mostRecentContacts.html.twig', [
             'contacts' => $contacts['contacts'],
+            'latestDate' => $contacts['latestDate'],
             'site' => $center,
             'source' => $source,
         ]);
@@ -203,8 +196,7 @@ class ContactController extends Controller
      * 
      * @Route("/latestReport/{source}", name="latest_contacts")
      */
-    public function latestReportAction(Request $request, $source)
-    {
+    public function latestReportAction(Request $request, $source) {
         $center = new Center();
         $form = $this->createForm(SelectCenterType::class, $center);
         $form->handleRequest($request);
@@ -219,7 +211,7 @@ class ContactController extends Controller
             }
             if ('FY to date' === $source) {
                 $found['contacts'] = $searches->getHeadsFYToDate($id);
-                $found['latestDate'] =  date_format(new \DateTime(), 'm/d/Y');
+                $found['latestDate'] = date_format(new \DateTime(), 'm/d/Y');
             }
             if (count($found['contacts']) == 0 || empty($found)) {
                 $flash = $this->get('braincrafted_bootstrap.flash');
@@ -229,30 +221,28 @@ class ContactController extends Controller
             }
             $facade = $this->get('ps_pdf.facade');
             $response = new Response();
-            $this->render('Contact/roster.html.twig',
-                array(
+            $this->render('Contact/roster.html.twig', array(
                 'date' => $found['latestDate'],
                 'center' => $location,
                 'source' => $source,
                 'contacts' => $found['contacts'],
-                ), $response);
+                    ), $response);
             $date = new \DateTime($found['latestDate']);
             $filename = str_replace(' ', '', $source . $location) . date_format($date, '_Ymd') . '.pdf';
             $xml = $response->getContent();
             $stylesheet = $this->renderView('Contact/contact.xml.twig', array());
             $content = $facade->render($xml, $stylesheet);
 
-            return new Response($content, 200,
-                array('content-type' => 'application/pdf',
+            return new Response($content, 200, array('content-type' => 'application/pdf',
                 'Content-Disposition' => 'attachment; filename=' . $filename,
             ));
         }
 
-        return $this->render('Contact/latestReport.html.twig',
-                array(
-                'title' => 'Select center',
-                'form' => $form->createView(),
-                'source' => $source,
+        return $this->render('Contact/latestReport.html.twig', array(
+                    'title' => 'Select center',
+                    'form' => $form->createView(),
+                    'source' => $source,
         ));
     }
+
 }
