@@ -117,7 +117,7 @@ class ContactTest extends TruckeeWebTestCase
     public function testLatestContacts()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/contact/latestReport');
+        $crawler = $this->client->request('GET', '/contact/latestReport/Most recent');
         $truckee = $this->fixtures->getReference('truckee')->getId();
         $form = $crawler->selectButton('Submit')->form();
         $form['select_center[center]'] = $truckee;
