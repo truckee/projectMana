@@ -56,4 +56,19 @@ class DefaultController extends Controller
 
         return [];
     }
+
+    /**
+     * @Route("/fy/{id}")
+     */
+    public function fyAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
+        $search = $this->get('searches');
+        $fys = $search->memberAge($id);
+
+        return $this->render('Default/fy.html.twig',[
+            'fys' => $fys,
+        ]);
+    }
 }
