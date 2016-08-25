@@ -423,24 +423,20 @@ class Reports
         $db = $this->conn;
         $sqlUIS = 'select cty.county, count(distinct tm.id) as UIS from temp_member tm
 join temp_contact tc on tm.household_id = tc.household_id
-right outer join county cty on cty.id = tc.county_id
-where cty.enabled = 1
+join county cty on cty.id = tc.county_id
 group by cty.county';
 
         $sqlUHS = 'select cty.county, count(distinct tc.household_id) as UHS from temp_contact tc
-right outer join county cty on cty.id = tc.county_id
-where cty.enabled = 1
+join county cty on cty.id = tc.county_id
 group by cty.county';
 
         $sqlTIS = 'select cty.county, count(tm.id) as TIS from temp_member tm
 join temp_contact tc on tm.household_id = tc.household_id
-right outer join county cty on cty.id = tc.county_id
-where cty.enabled = 1
+join county cty on cty.id = tc.county_id
 group by cty.county';
 
         $sqlTHS = 'select cty.county, count(tc.household_id) as THS from temp_contact tc
-right outer join county cty on cty.id = tc.county_id
-where cty.enabled = 1
+join county cty on cty.id = tc.county_id
 group by cty.county';
 
         $UISData = $db->query($sqlUIS)->fetchAll();
