@@ -125,4 +125,16 @@ class Searches
         return $fys;
     }
 
+    public function residency($id)
+    {
+        $em = $this->em;
+//        $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
+        $fys = $em->createQuery('SELECT  RESIDENCY(h) FROM TruckeeProjectmanaBundle:Household h '
+            . 'WHERE h = :h')
+            ->setParameter('h', $id)
+            ->getResult();
+
+        return $fys;
+    }
+
 }

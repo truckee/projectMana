@@ -65,7 +65,7 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
         $search = $this->get('searches');
-        $fys = $search->memberAge($id);
+        $fys = $search->contactsFY($id);
 
         return $this->render('Default/fy.html.twig',[
             'fys' => $fys,

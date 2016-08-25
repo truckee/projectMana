@@ -8,16 +8,18 @@
  * file that was distributed with this source code.
  */
 
-//src\Truckee\ProjectmanaBundle\DQL\AgeFunction.php
+//src\Truckee\ProjectmanaBundle\DQL\ResidencyFunction.php
 
 namespace Truckee\ProjectmanaBundle\DQL;
 
 use Truckee\ProjectmanaBundle\DQL\SingleParameterFunction;
+
 /**
- * AgeFunction
+ * ResidencyFunction
  *
  */
-class AgeFunction extends SingleParameterFunction
+class ResidencyFunction extends SingleParameterFunction
 {
-    public $functionName = 'AGE';
+    public $functionName = 'RESIDENCY';
+
 }

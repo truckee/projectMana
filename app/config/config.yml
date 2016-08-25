@@ -44,8 +44,10 @@ doctrine:
             auto_mapping: true
             dql:
                 numeric_functions:
-                    fy: Truckee\ProjectmanaBundle\DQL\FiscalYearFunction
-                    age: Truckee\ProjectmanaBundle\DQL\AgeFunction
+                    FY: Truckee\ProjectmanaBundle\DQL\FiscalYearFunction
+                    AGE: Truckee\ProjectmanaBundle\DQL\AgeFunction
+                    RESIDENCY: Truckee\ProjectmanaBundle\DQL\ResidencyFunction
+                    HOUSEHOLDSIZE: Truckee\ProjectmanaBundle\DQL\HouseholdSizeFunction
 
 # Swiftmailer Configuration
 swiftmailer:

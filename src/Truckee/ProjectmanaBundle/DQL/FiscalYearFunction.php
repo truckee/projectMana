@@ -9,27 +9,14 @@
 
 namespace Truckee\ProjectmanaBundle\DQL;
 
-use Doctrine\ORM\Query\AST\Functions\FunctionNode;
-use Doctrine\ORM\Query\Lexer;
+use Truckee\ProjectmanaBundle\DQL\SingleParameterFunction;
 
 /**
  * FiscalYearFunction ::= "FY" "(" ArithmeticPrimary ")"
  *
  */
-class FiscalYearFunction extends FunctionNode
+class FiscalYearFunction extends SingleParameterFunction
 {
-    public $dateExpression = null;
+    public $functionName = 'FY';
 
-    public function parse(\Doctrine\ORM\Query\Parser $parser)
-    {
-        $parser->match(Lexer::T_IDENTIFIER);
-        $parser->match(Lexer::T_OPEN_PARENTHESIS);
-        $this->dateExpression = $parser->ArithmeticPrimary();
-        $parser->match(Lexer::T_CLOSE_PARENTHESIS);
-    }
-
-    public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
-    {
-        return 'FY(' . $this->dateExpression->dispatch($sqlWalker) . ')';
-    }
 }

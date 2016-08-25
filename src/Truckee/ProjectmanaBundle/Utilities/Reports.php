@@ -11,6 +11,7 @@
 namespace Truckee\ProjectmanaBundle\Utilities;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Project MANA statistics.
@@ -18,11 +19,14 @@ use Doctrine\DBAL\Connection;
 class Reports
 {
     private $conn;
-    private $_where;    //single value where clause
+    private $commonCriteria;
+//    private $commonWhereClause;
+//    private $commonParameters;
     private $ageDist;
     private $ageGenderDist;
     private $criteria;
     private $details;
+    private $em;
     private $end;
     private $ethDist;
     private $familyDist;
@@ -39,22 +43,30 @@ class Reports
     private $uniqIndividuals;
     private $uniqNewIndividuals;
 
-    public function __construct(Connection $conn)
+    public function __construct(EntityManager $em)
     {
-        $this->conn = $conn;
+        $this->em = $em;
+        $this->conn = $em->getConnection();
     }
 
-    private function setCriteria($criteria)
+    private function setCriteria_old($criteria)
     {
         $this->start = $criteria['startDate'];
         $this->end = $criteria['endDate'];
+//        $incoming = array(
+//            'contactType' => (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '',
+//            'county' => (!empty($criteria['county'])) ? $criteria['county'] : '',
+//            'center' => (!empty($criteria['center'])) ? $criteria['center'] : '',
+//        );
         $incoming = array(
             'contact_type_id' => (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '',
             'county_id' => (!empty($criteria['county'])) ? $criteria['county'] : '',
             'center_id' => (!empty($criteria['center'])) ? $criteria['center'] : '',
         );
+//        $where = ' WHERE contactDate >= :start AND contactDate <= :end ';
         $where = " where contact_date >= '$this->start' and contact_date <= '$this->end' ";
 
+//        $options = array('contactType', 'county', 'center');
         $options = array('contact_type_id', 'county_id', 'center_id');
         foreach ($options as $opt) {
             if ('' !== $incoming[$opt]) {
@@ -70,21 +82,60 @@ class Reports
             $stmt = $this->conn->query($sql);
             while ($row = $stmt->fetch()) {
                 array_push($this->criteria, $where . " and county_id = $row[id]");
+                dump($this->criteria);
             }
         } else {
             array_push($this->criteria, $where);
         }
     }
 
+    public function setCriteria($criteria)
+    {
+        $parameters = ['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']];
+        $incoming = array(
+            'contactType' => (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '',
+            'county' => (!empty($criteria['county'])) ? $criteria['county'] : '',
+            'center' => (!empty($criteria['center'])) ? $criteria['center'] : '',
+        );
+        $where = ' WHERE contactDate >= :startDate AND contactDate <= :endDate';
+        $options = array('contactType', 'county', 'center');
+        foreach ($options as $opt) {
+            if ('' !== $incoming[$opt]) {
+                $where .= " and $opt = :$opt";
+                $parameters[$opt] = $incoming[$opt];
+            }
+        }
+        //set criteria for common statistics
+        $this->commonCriteria['whereClause'] = $where;
+        $this->commonCriteria['parameters'] = $parameters;
+//        $this->commonWhereClause = $where;
+//        $this->commonParameters = $parameters;
+        //set criteria for multiple counties
+        $this->criteria = array();
+        if (!$incoming['county'] && !$incoming['center']) {
+            $query = $this->em->createQuery('SELECT c.id FROM TruckeeProjectmanaBundle:County c WHERE c.enabled = true')
+                ->getArrayResult();
+            foreach ($query as $row) {
+                $parameters['county'] = $row['id'];
+                $this->criteria[] = ['whereClause' => $where . " and county = :county", 'parameters' => $parameters];
+            }
+        } else {
+            $this->criteria['whereClause'] = $where;
+            $this->criteria['parameters'] = $parameters;
+        }
+
+        return $this->criteria;
+    }
+
     public function setStats($criteria)
     {
         $this->setCriteria($criteria);
         //fill tables for common statistics
-        $this->makeTempTables($this->_where);
+        $this->makeTempTables($this->commonCriteria);
 
         //calculate common statistics
-        $this->setNewByType($this->_where);
-        $this->setNewMembers($this->_where);
+        $this->setNewByType($this->commonCriteria);
+        $this->setNewMembers($this->commonCriteria);
         $this->setNewHouseholds();
         $this->setUniqNewIndividuals();
         $this->setUniqHouseholds();
@@ -163,39 +214,48 @@ class Reports
         /*
          * establish tables for basis of calculations
          */
-        $sql = 'delete from temp_contact';
-        $this->conn->exec($sql);
-        $sql = 'insert into temp_contact
+        $db = $this->conn;
+        $whereClause = $criteria['whereClause'];
+        $parameters = $criteria['parameters'];
+
+        $this->em->createQuery('DELETE FROM TruckeeProjectmanaBundle:TempContact')->execute();
+        $sqlContact = 'insert into temp_contact
             (contact_type_id, household_id, contact_date, first, center_id, county_id)
             select contact_type_id, household_id, contact_date, first, center_id, county_id
             from contact '
-            . $criteria;
-        $this->conn->exec($sql);
+            . $whereClause;
+        $stmtContact = $db->prepare($sqlContact);
+        $stmtContact->execute($parameters);
+//        $db->exec($sql);
 
-        $sql = 'delete from temp_member';
-        $this->conn->exec($sql);
-
+        $this->em->createQuery('DELETE FROM TruckeeProjectmanaBundle:TempMember')->execute();
         //note use of custom MySQL age() function
-        $sql = "INSERT INTO temp_member
+        $sqlMember = "INSERT INTO temp_member
             (id, household_id, sex, age, ethnicity_id)
             select distinct m.id, m.household_id, sex,
             age(m.dob), ethnicity_id
             from member m
             join temp_contact ct on m.household_id = ct.household_id where
-            (exclude_date > '$this->start' or exclude_date is null) and (dob < '$this->start' or dob is null)";
-        $n = $this->conn->exec($sql);
+            (exclude_date > :start or exclude_date is null) and (dob < :start or dob is null)";
+        $stmtMember = $db->prepare($sqlMember);
+        $start = ['start' => $parameters['startDate']];
+        $stmtMember->execute($start);
 
-        $sql = 'delete from temp_household';
-        $this->conn->exec($sql);
+//        $sql = 'delete from temp_household';
+//        $this->conn->exec($sql);
+        $this->em->createQuery('DELETE FROM TruckeeProjectmanaBundle:TempHousehold')->execute();
 
         //note use of custom MySQL residency()), household_size() functions
-        $sql = "INSERT INTO temp_household
+        $sqlHousehold = "INSERT INTO temp_household
             (id, hoh_id, res, size, date_added)
             select distinct h.id, hoh_id,
             residency(h.id),
-            household_size(h.id, '$this->start'), date_added from household h
+            household_size(h.id, :start), date_added from household h
             join temp_contact c on c.household_id = h.id";
-        $n = $this->conn->exec($sql);
+        $stmtHousehold = $db->prepare($sqlHousehold);
+        $start = ['start' => $parameters['startDate']];
+        $stmtHousehold->execute($start);
+        die('Check temp tables');
     }
 
     protected function getAgeDist()
@@ -509,7 +569,7 @@ group by cty.county';
         //Individuals or Households
 
         $this->setCriteria($criteria, 'details');
-        $this->makeTempTables($this->_where);
+        $this->makeTempTables($this->commonCriteria);
 
         $countystats = array();
         $sql = 'select county, contact_desc, sum(N) UIS from (
