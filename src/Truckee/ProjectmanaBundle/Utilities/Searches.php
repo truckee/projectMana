@@ -101,4 +101,40 @@ class Searches
         return $contacts;
     }
 
+    public function contactsFY($id)
+    {
+        $em = $this->em;
+        $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
+        $fys = $em->createQuery('SELECT FY(c.contactDate) as FY FROM TruckeeProjectmanaBundle:Contact c '
+            . 'WHERE c.household = :h')
+            ->setParameter('h', $household)
+            ->getResult();
+
+        return $fys;
+    }
+
+    public function memberAge($id)
+    {
+        $em = $this->em;
+        $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
+        $fys = $em->createQuery('SELECT age(m.dob) as age FROM TruckeeProjectmanaBundle:Member m '
+            . 'WHERE m.household = :h')
+            ->setParameter('h', $household)
+            ->getResult();
+
+        return $fys;
+    }
+
+    public function residency($id)
+    {
+        $em = $this->em;
+//        $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
+        $fys = $em->createQuery('SELECT  RESIDENCY(h) FROM TruckeeProjectmanaBundle:Household h '
+            . 'WHERE h = :h')
+            ->setParameter('h', $id)
+            ->getResult();
+
+        return $fys;
+    }
+
 }

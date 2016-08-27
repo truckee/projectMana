@@ -11,6 +11,7 @@
 namespace Truckee\ProjectmanaBundle\Utilities;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Project MANA statistics.
@@ -18,11 +19,12 @@ use Doctrine\DBAL\Connection;
 class Reports
 {
     private $conn;
-    private $_where;    //single value where clause
+    private $commonCriteria;
     private $ageDist;
     private $ageGenderDist;
     private $criteria;
     private $details;
+    private $em;
     private $end;
     private $ethDist;
     private $familyDist;
@@ -39,52 +41,49 @@ class Reports
     private $uniqIndividuals;
     private $uniqNewIndividuals;
 
-    public function __construct(Connection $conn)
+    public function __construct(EntityManager $em)
     {
-        $this->conn = $conn;
+        $this->em = $em;
+        $this->conn = $em->getConnection();
     }
 
-    private function setCriteria($criteria)
+    public function setCriteria($criteria)
     {
-        $this->start = $criteria['startDate'];
-        $this->end = $criteria['endDate'];
+        $parameters = ['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']];
         $incoming = array(
-            'contact_type_id' => (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '',
-            'county_id' => (!empty($criteria['county'])) ? $criteria['county'] : '',
-            'center_id' => (!empty($criteria['center'])) ? $criteria['center'] : '',
+            'county' => (!empty($criteria['county'])) ? $criteria['county'] : '',
+            'center' => (!empty($criteria['center'])) ? $criteria['center'] : '',
         );
-        $where = " where contact_date >= '$this->start' and contact_date <= '$this->end' ";
-
-        $options = array('contact_type_id', 'county_id', 'center_id');
+        $newWhere = ' WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate';
+        $tableWhere = ' WHERE c.contact_date >= :startDate AND c.contact_date <= :endDate';
+        $options = array('county', 'center');
         foreach ($options as $opt) {
             if ('' !== $incoming[$opt]) {
-                $where .= " and $opt = $incoming[$opt]";
+                $newWhere .= " and c.$opt = :$opt";
+                $tableWhere .= ' and c.' . $opt . '_id = :' . $opt;
+                $parameters[$opt] = $incoming[$opt];
             }
+        }
+        if (!empty($criteria['contact_type'])) {
+            $newWhere .= ' and c.contactType = :contactType';
+            $tableWhere .= ' and c.contact_type_id  = :contactType';
+            $parameters['contactType'] = $criteria['contact_type'];
         }
         //set criteria for common statistics
-        $this->_where = $where;
-        //set criteria for multiple counties
-        $this->criteria = array();
-        if (!$incoming['county_id'] && !$incoming['center_id']) {
-            $sql = 'select id from county where enabled=1';
-            $stmt = $this->conn->query($sql);
-            while ($row = $stmt->fetch()) {
-                array_push($this->criteria, $where . " and county_id = $row[id]");
-            }
-        } else {
-            array_push($this->criteria, $where);
-        }
+        $this->commonCriteria['newWhereClause'] = $newWhere;
+        $this->commonCriteria['tableWhereClause'] = $tableWhere;
+        $this->commonCriteria['parameters'] = $parameters;
     }
 
     public function setStats($criteria)
     {
         $this->setCriteria($criteria);
         //fill tables for common statistics
-        $this->makeTempTables($this->_where);
+        $this->makeTempTables($this->commonCriteria);
 
         //calculate common statistics
-        $this->setNewByType($this->_where);
-        $this->setNewMembers($this->_where);
+        $this->setNewByType($this->commonCriteria);
+        $this->setNewMembers($this->commonCriteria);
         $this->setNewHouseholds();
         $this->setUniqNewIndividuals();
         $this->setUniqHouseholds();
@@ -92,7 +91,7 @@ class Reports
         $this->setFamilyDist();
         $this->setFreqDist();
         $this->setEthDist();
-        $this->setAgeDist();
+//        $this->setAgeDist();
         $this->setAgeGenderDist();
         $this->setUniqIndividuals();
         $this->setTotalIndividuals();
@@ -103,20 +102,16 @@ class Reports
             $statistics[$key] = (!empty($item)) ? $item : 0;
         }
         foreach ($this->residency as $key => $value) {
-            $item = $this->residency[$key];
-            $statistics[$key] = (!empty($item)) ? $item : 0;
+            $statistics[$key] = $value;
         }
         foreach ($this->familyDist as $key => $value) {
-            $item = $this->familyDist[$key];
-            $statistics[$key] = (!empty($item)) ? $item : 0;
+            $statistics[$key] = $value;
         }
         foreach ($this->freqDist as $key => $value) {
-            $item = $this->freqDist[$key];
-            $statistics[$key] = (!empty($item)) ? $item : 0;
+            $statistics[$key] = $value;
         }
         foreach ($this->ethDist as $key => $value) {
-            $item = $this->ethDist[$key];
-            $statistics[$key] = (!empty($item)) ? $item : 0;
+            $statistics[$key] = $value;
         }
         foreach ($this->ageGenderDist as $key => $value) {
             $item = $this->ageGenderDist[$key];
@@ -128,8 +123,8 @@ class Reports
         $statistics['Unique New Individuals'] = (!empty($item)) ? $item : 0;
 
         $ti = $this->getTotalIndividuals();
-        $item = $ti['IS'];
-        $statistics['IS'] = (!empty($item)) ? $item : 0;
+        $item = $ti['TIS'];
+        $statistics['TIS'] = (!empty($item)) ? $item : 0;
 
         $uis = $this->getUniqIndividuals();
         $item = $uis['UIS'];
@@ -163,39 +158,49 @@ class Reports
         /*
          * establish tables for basis of calculations
          */
-        $sql = 'delete from temp_contact';
-        $this->conn->exec($sql);
-        $sql = 'insert into temp_contact
+        $db = $this->conn;
+        $whereClause = $criteria['tableWhereClause'];
+        $parameters = $criteria['parameters'];
+
+        $this->em->createQuery('DELETE FROM TruckeeProjectmanaBundle:TempContact')->execute();
+        $db->exec('ALTER TABLE temp_contact AUTO_INCREMENT = 0');
+
+        $sqlContact = 'insert into temp_contact
             (contact_type_id, household_id, contact_date, first, center_id, county_id)
             select contact_type_id, household_id, contact_date, first, center_id, county_id
-            from contact '
-            . $criteria;
-        $this->conn->exec($sql);
+            from contact c '
+            . $whereClause;
+        $stmtContact = $db->prepare($sqlContact);
+        $stmtContact->execute($parameters);
 
-        $sql = 'delete from temp_member';
-        $this->conn->exec($sql);
+        $this->em->createQuery('DELETE FROM TruckeeProjectmanaBundle:TempMember')->execute();
+        $db->exec('ALTER TABLE temp_member AUTO_INCREMENT = 0');
 
         //note use of custom MySQL age() function
-        $sql = "INSERT INTO temp_member
+        $sqlMember = "INSERT INTO temp_member
             (id, household_id, sex, age, ethnicity_id)
             select distinct m.id, m.household_id, sex,
             age(m.dob), ethnicity_id
             from member m
             join temp_contact ct on m.household_id = ct.household_id where
-            (exclude_date > '$this->start' or exclude_date is null) and (dob < '$this->start' or dob is null)";
-        $n = $this->conn->exec($sql);
+            (exclude_date > :start or exclude_date is null) and (dob < :start or dob is null)";
+        $stmtMember = $db->prepare($sqlMember);
+        $start = ['start' => $parameters['startDate'], 'start' => $parameters['startDate']];
+        $stmtMember->execute($start);
 
-        $sql = 'delete from temp_household';
-        $this->conn->exec($sql);
+        $this->em->createQuery('DELETE FROM TruckeeProjectmanaBundle:TempHousehold')->execute();
+        $db->exec('ALTER TABLE temp_household AUTO_INCREMENT = 0');
 
         //note use of custom MySQL residency()), household_size() functions
-        $sql = "INSERT INTO temp_household
-            (id, hoh_id, res, size, date_added)
+        $sqlHousehold = "INSERT INTO temp_household
+            (id, hoh_id, res, size, size_text, date_added)
             select distinct h.id, hoh_id,
-            residency(h.id),
-            household_size(h.id, '$this->start'), date_added from household h
+            res(h.id, :start),
+            size(h.id, :start), size_text(h.id, :start), date_added from household h
             join temp_contact c on c.household_id = h.id";
-        $n = $this->conn->exec($sql);
+        $stmtHousehold = $db->prepare($sqlHousehold);
+        $start = ['start' => $parameters['startDate'], 'start' => $parameters['startDate']];
+        $stmtHousehold->execute($start);
     }
 
     protected function getAgeDist()
@@ -285,164 +290,217 @@ class Reports
     private function setNewByType($criterion)
     {
         //get new households for specific report type
-        $sql = 'select count(distinct household_id) NewByType from temp_contact' .
-            $criterion . ' and `first` = 1';
-        $this->newByType = $this->conn->fetchAssoc($sql);
+        $queryNewType = $this->em->createQuery('SELECT COUNT(DISTINCT c.household) NewByType FROM TruckeeProjectmanaBundle:TempContact c '
+                . $criterion['newWhereClause'] . " AND c.first = true")
+            ->setParameters($criterion['parameters'])
+            ->getSingleResult();
+
+        $this->newByType = $queryNewType;
     }
 
     private function setNewHouseholds()
     {
         //get new households for specific report type
         $sql = 'select count(distinct household_id) NewHouseholds from temp_contact where `first` = 1';
-        $this->newHouseholds = $this->conn->fetchAssoc($sql);
+        $qb = $this->em->createQuery('SELECT COUNT(DISTINCT c.household) NewHouseholds FROM TruckeeProjectmanaBundle:TempContact c '
+                . 'WHERE c.first = true')
+            ->getSingleResult();
+
+        $this->newHouseholds = $qb;
     }
 
     private function setNewMembers($criterion)
     {
         //all new households
-        $sql = 'select count(*) NewMembers from temp_member m
-            join temp_contact c on m.household_id = c.household_id' .
-            $criterion .
-            ' and `first` = 1';
-        $this->newMembers = $this->conn->fetchAssoc($sql);
+        $queryNewMembers = $this->em->createQuery('SELECT COUNT(m) NewMembers FROM TruckeeProjectmanaBundle:TempMember m '
+                . 'JOIN TruckeeProjectmanaBundle:TempContact c WITH m.household = c.household '
+                . $criterion['newWhereClause'] . " AND c.first = true")
+            ->setParameters($criterion['parameters'])
+            ->getSingleResult();
+
+        $this->newMembers = $queryNewMembers;
     }
 
     private function setTotalHouseholds()
     {
-        $sql = "select count(household_id) 'THS' from temp_contact";
-        $this->totalHouseholds = $this->conn->fetchAssoc($sql);
+        $qb = $this->em->createQuery('SELECT COUNT(c.household) THS FROM TruckeeProjectmanaBundle:TempContact c ')
+            ->getSingleResult();
+
+        $this->totalHouseholds = $qb;
     }
 
     private function setUniqNewIndividuals()
     {
         //unique new participants
-        $sql = "select count(*) 'UNI' from temp_member m
-            join temp_contact c on m.household_id = c.household_id
-            and first = 1";
-        $this->uniqNewIndividuals = $this->conn->fetchAssoc($sql);
+        $qb = $this->em->createQuery('SELECT COUNT(m) UNI FROM TruckeeProjectmanaBundle:TempMember m '
+                . 'JOIN TruckeeProjectmanaBundle:TempContact c WITH m.household = c.household '
+                . 'WHERE c.first = true')
+            ->getSingleResult();
+
+        $this->uniqNewIndividuals = $qb;
     }
 
     private function setUniqHouseholds()
     {
-        $sql = "select count(*) 'UHS' from temp_household";
-        $this->uniqHouseholds = $this->conn->fetchAssoc($sql);
+        $qb = $this->em->createQuery('SELECT COUNT(h) UHS FROM TruckeeProjectmanaBundle:TempHousehold h')
+            ->getSingleResult();
+
+        $this->uniqHouseholds = $qb;
     }
 
     private function setResidency()
     {
-        $sql = "select  sum(if(res<1,size,0)) as '< 1 month',
-            sum(if(1<=res and res<=24,size,0)) as '1 mo - 2 yrs',
-            sum(if(24<res,size,0)) as '>=2 yrs' from (
-            select m.household_id, res, size from temp_member m
-            join temp_household h on m.household_id = h.id group by m.household_id) A";
-        $res = $this->conn->fetchAssoc($sql);
-        $this->residency = $res;
+        $resArray = ['< 1 month', '1 mo - 2 yrs', '>=2 yrs'];
+        $qb = $this->em->createQuery('SELECT SUM(h.size) FROM TruckeeProjectmanaBundle:TempHousehold h '
+            . 'WHERE h.res = :res');
+        foreach ($resArray as $res) {
+            $n = $qb->setParameter('res', $res)->getSingleScalarResult();
+            $residency[$res] = (null === $n) ? 0 : $n;
+        }
+
+        $this->residency = $residency;
     }
 
     private function setFamilyDist()
     {
-        $sql = "select sum(if(size=1,1,0)) as 'Single', sum(if(size=2,1,0)) as 'Two',
-            sum(if(size=3,1,0)) as 'Three', sum(if(size=4,1,0)) as 'Four',
-            sum(if(size=5,1,0)) as 'Five', sum(if(size>5,1,0)) as 'Six or more' from (
-            select size from temp_household
-            ) A";
-        $this->familyDist = $this->conn->fetchAssoc($sql);
+        $familyArray = ['Single', 'Two', 'Three', 'Four', 'Five', 'Six or more'];
+        $qb = $this->em->createQuery('SELECT COUNT(h.size) FROM TruckeeProjectmanaBundle:TempHousehold h '
+            . 'WHERE h.sizeText = :size');
+        foreach ($familyArray as $size) {
+            $n = $qb->setParameter('size', $size)->getSingleScalarResult();
+            $familyDist[$size] = (null === $n) ? 0 : $n;
+        }
+
+        $this->familyDist = $familyDist;
     }
 
     private function setFreqDist()
     {
-        $sql = "select sum(if(freq=1,size,0)) '1x', sum(if(freq=2,size,0)) '2x', sum(if(freq=3,size,0)) '3x', sum(if(4<=freq,size,0)) '4x' from (
-            (select c.household_id, count(*) freq from temp_contact c
-            group by c.household_id) Freqs
-            join
-            (select id, size from temp_household ) Sizes
-            on Freqs.household_id = Sizes.id)";
-        $this->freqDist = $this->conn->fetchAssoc($sql);
+        $frequency = ['1x' => 0, '2x' => 0, '3x' => 0, '4x' => 0];
+        $qbSizes = $this->em->createQuery('SELECT h.id, h.size S FROM TruckeeProjectmanaBundle:TempHousehold h')->getResult();
+        foreach ($qbSizes as $row) {
+            $sizes[$row['id']] = $row['S'];
+        }
+        $qbFreqs = $this->em->createQuery('SELECT c.household, COUNT(c) N FROM TruckeeProjectmanaBundle:TempContact c '
+                . 'GROUP BY c.household')->getResult();
+        foreach ($qbFreqs as $freq) {
+            $household = $freq['household'];
+            $size = $sizes[$household];
+            switch ($freq['N']) {
+                case 1:
+                    $frequency['1x'] += $size;
+                    break;
+                case 2:
+                    $frequency['2x'] += $size;
+                    break;
+                case 3:
+                    $frequency['3x'] += $size;
+                    break;
+                default:
+                    $frequency['4x'] += $size;
+                    break;
+            }
+        }
+
+        $this->freqDist = $frequency;
     }
 
     private function setEthDist()
     {
-        $ethDist = array();
-        $sql = 'select ethnicity, count(ethnicity_id) N from ethnicity e
-            left outer join temp_member m on e.id = m.ethnicity_id
-            left outer join temp_household h on m.household_id = h.id
-            where m.id <> h.hoh_id or
-            (m.id = h.hoh_id and m.age is not null) or m.ethnicity_id is null
-            group by ethnicity';
-        $stmt = $this->conn->query($sql);
-        while ($row = $stmt->fetch()) {
-            $ethDist[$row['ethnicity']] = $row['N'];
+        $qb = $this->em->createQuery('SELECT e FROM TruckeeProjectmanaBundle:Ethnicity e WHERE e.enabled = true')->getResult();
+        foreach ($qb as $row) {
+            $queryEth = $this->em->createQuery('SELECT COUNT(m) N FROM TruckeeProjectmanaBundle:TempMember m '
+                    . 'JOIN TruckeeProjectmanaBundle:TempHousehold h WITH m.household = h '
+                    . 'WHERE (m <> h.head OR (m = h.head AND m.age IS NOT NULL)) AND m.ethnicity = :eth')
+                ->setParameter('eth', $row)
+                ->getSingleResult();
+            $ethDist[$row->getEthnicity()] = $queryEth['N'];
         }
+
         $this->ethDist = $ethDist;
-    }
-
-    private function setAgeDist()
-    {
-        $sql = "select sum(if(age<6,1,0)) as 'Under 6', sum(if(6<=age and age<19,1,0)) as '6 - 18',
-            sum(if(19<=age and age<60,1,0)) as '19 - 59', sum(if(age>=60,1,0)) as '60+' from
-            temp_member m where m.age is not null";
-        $age = $this->conn->fetchAssoc($sql);
-
-        $this->ageDist = $age;
     }
 
     private function setAgeGenderDist()
     {
-        $sql = "select sum(if(age<18 and sex='Female',1,0)) as 'FC',
-            sum(if(age<18 and sex='Male',1,0)) as 'MC',
-            sum(if(age>=18 and sex='Female',1,0)) as 'FA',
-            sum(if(age>=18 and sex='Male',1,0)) as 'MA' from
-            temp_member m
-            where m.age is not null";
-        $ageGenderDist = $this->conn->fetchAssoc($sql);
+        $ageDist = ['Under 6' => 0, '6 - 18' => 0, '19 - 59' => 0, '60+' => 0];
+        $ageGenderDist = ['FC' => 0, 'MC' => 0, 'FA' => 0, 'MA' => 0];
+        $qb = $this->em->createQuery('SELECT m.age, m.sex FROM TruckeeProjectmanaBundle:TempMember m')->getResult();
+        foreach ($qb as $row) {
+            switch (true) {
+                case $row['age'] < 6 && $row['sex'] == 'Female':
+                    $ageDist['Under 6'] ++;
+                    $ageGenderDist['FC'] ++;
+                    break;
+                case $row['age'] < 19 && $row['sex'] == 'Female':
+                    $ageDist['6 - 18'] ++;
+                    $ageGenderDist['FC'] ++;
+                    break;
+                case $row['age'] < 59 && $row['sex'] == 'Female':
+                    $ageDist['19 - 59'] ++;
+                    $ageGenderDist['FA'] ++;
+                    break;
+                case $row['age'] >= 60 && $row['sex'] == 'Female':
+                    $ageDist['60+'] ++;
+                    $ageGenderDist['FA'] ++;
+                    break;
+                case $row['age'] < 6 && $row['sex'] == 'Male':
+                    $ageDist['Under 6'] ++;
+                    $ageGenderDist['MC'] ++;
+                    break;
+                case $row['age'] < 19 && $row['sex'] == 'Male':
+                    $ageDist['6 - 18'] ++;
+                    $ageGenderDist['MC'] ++;
+                    break;
+                case $row['age'] < 59 && $row['sex'] == 'Male':
+                    $ageDist['19 - 59'] ++;
+                    $ageGenderDist['MA'] ++;
+                    break;
+                case $row['age'] >= 60 && $row['sex'] == 'Male':
+                    $ageDist['60+'] ++;
+                    $ageGenderDist['MA'] ++;
+                    break;
 
+                default:
+                    break;
+            }
+        }
+
+        $this->ageDist = $ageDist;
         $this->ageGenderDist = $ageGenderDist;
     }
 
     private function setUniqIndividuals()
     {
         //unique members
-        $sql = 'select sum(size) UIS from temp_household';
-        $this->uniqIndividuals = $this->conn->fetchAssoc($sql);
+        $qb = $this->em->createQuery('SELECT SUM(h.size) UIS FROM TruckeeProjectmanaBundle:TempHousehold h')->getSingleResult();
+        $this->uniqIndividuals = $qb;
     }
 
     private function setTotalIndividuals()
     {
-        $sql = "select sum(freq*size) 'IS' from (
-            (select c.household_id, count(*) freq
-            from temp_contact c
-            group by c.household_id) Freqs
-            join
-            (select id, size from temp_household ) Sizes
-            on Freqs.household_id = Sizes.id)";
-        $this->totalIndividuals = $this->conn->fetchAssoc($sql);
+        $qb = $this->em->createQuery("SELECT SUM(h.size) TIS FROM TruckeeProjectmanaBundle:TempHousehold h "
+                . 'JOIN TruckeeProjectmanaBundle:TempContact c WITH c.household = h')->getSingleResult();
+        $this->totalIndividuals = $qb;
     }
 
     public function getCountyStats()
     {
+        $joinPhrase = 'JOIN TruckeeProjectmanaBundle:County cty WITH c.county = cty GROUP BY cty.county';
         $db = $this->conn;
-        $sqlUIS = 'select cty.county, count(distinct tm.id) as UIS from temp_member tm
-join temp_contact tc on tm.household_id = tc.household_id
-join county cty on cty.id = tc.county_id
-group by cty.county';
+        $UISData = $this->em->createQuery('SELECT cty.county, COUNT(DISTINCT m) UIS FROM TruckeeProjectmanaBundle:TempMember m '
+                . 'JOIN TruckeeProjectmanaBundle:TempContact c WITH m.household = c.household '
+                . $joinPhrase)->getResult();
 
-        $sqlUHS = 'select cty.county, count(distinct tc.household_id) as UHS from temp_contact tc
-join county cty on cty.id = tc.county_id
-group by cty.county';
+        $UHSData = $this->em->createQuery('SELECT cty.county, COUNT(DISTINCT c.household) UHS FROM TruckeeProjectmanaBundle:TempContact c '
+                . $joinPhrase)->getResult();
 
-        $sqlTIS = 'select cty.county, count(tm.id) as TIS from temp_member tm
-join temp_contact tc on tm.household_id = tc.household_id
-join county cty on cty.id = tc.county_id
-group by cty.county';
 
-        $sqlTHS = 'select cty.county, count(tc.household_id) as THS from temp_contact tc
-join county cty on cty.id = tc.county_id
-group by cty.county';
+        $TISData = $this->em->createQuery('SELECT cty.county, COUNT(m) TIS FROM TruckeeProjectmanaBundle:TempMember m '
+                . 'JOIN TruckeeProjectmanaBundle:TempContact c WITH m.household = c.household '
+                . $joinPhrase)->getResult();
 
-        $UISData = $db->query($sqlUIS)->fetchAll();
-        $UHSData = $db->query($sqlUHS)->fetchAll();
-        $TISData = $db->query($sqlTIS)->fetchAll();
-        $THSData = $db->query($sqlTHS)->fetchAll();
+        $THSData = $this->em->createQuery('SELECT cty.county, COUNT(c.household) THS FROM TruckeeProjectmanaBundle:TempContact c '
+                . $joinPhrase)->getResult();
 
         $totals['UISTotal'] = 0;
         $totals['UHSTotal'] = 0;
@@ -509,64 +567,52 @@ group by cty.county';
         //Individuals or Households
 
         $this->setCriteria($criteria, 'details');
-        $this->makeTempTables($this->_where);
+        $this->makeTempTables($this->commonCriteria);
+        $countyDescQuery = $this->em->createQuery('SELECT DISTINCT cty.county, d.contactDesc FROM TruckeeProjectmanaBundle:TempContact c '
+                . 'JOIN TruckeeProjectmanaBundle:County cty WITH c.county = cty '
+                . 'JOIN TruckeeProjectmanaBundle:ContactDesc d WITH c.contactType = d '
+                . 'ORDER BY cty.county, d.contactDesc')->getResult();
 
-        $countystats = array();
-        $sql = 'select county, contact_desc, sum(N) UIS from (
-            select distinct county, contact_desc, t1.household_id, N from temp_contact t1
-            join county t2 on t2.id = t1.county_id
-            join contact_type t3 on t3.id = t1.contact_type_id
-            join (select m.household_id, if(count(m.household_id)>1 and h.date_added is null,count(m.household_id)-1,count(m.household_id))  N
-            from temp_member m
-            join temp_household h on m.household_id = h.id
-            group by m.household_id) t4
-            on t4.household_id = t1.household_id
-            order  by county, contact_desc) t5
-            group by county, contact_desc';
-        $resultUIS = $this->conn->fetchAll($sql);
-        foreach ($resultUIS as $value) {
-            $countystats[$value['county']][$value['contact_desc']]['uniqInd'] = $value['UIS'];
+        $countystats = [];
+        foreach ($countyDescQuery as $countyDesc) {
+            $county = $countyDesc['county'];
+            $desc = $countyDesc['contactDesc'];
+            $countystats[$county][$desc]['uniqInd'] = 0;
+            $countystats[$county][$desc]['uniqHouse'] = 0;
+            $countystats[$county][$desc]['totalInd'] = 0;
+            $countystats[$county][$desc]['totalHouse'] = 0;
         }
 
-        $sql = "select county, contact_desc, sum(N) as 'IS' from (
-            select county, contact_desc, t1.household_id, N from temp_contact t1
-            join county t2 on t2.id = t1.county_id
-            join contact_type t3 on t3.id = t1.contact_type_id
-            join (select m.household_id, if(count(m.household_id)>1 and h.date_added is null,count(m.household_id)-1,count(m.household_id))  N
-            from temp_member m
-            join temp_household h on m.household_id = h.id
-            group by m.household_id) t4
-            on t4.household_id = t1.household_id
-            order  by county, contact_desc) t5
-            group by county, contact_desc";
-        $resultIS = $this->conn->fetchAll($sql);
-        foreach ($resultIS as $value) {
-            $countystats[$value['county']][$value['contact_desc']]['totalInd'] = $value['IS'];
+        $householdSizeQuery = $this->em->createQuery('SELECT h.id, h.size FROM TruckeeProjectmanaBundle:TempHousehold h')->getResult();
+        foreach ($householdSizeQuery as $row) {
+            $householdSizeArray[$row['id']] = $row['size'];
         }
-
-        $sql = 'select county, contact_desc, count(*) UHS from temp_household t1
-			join (select distinct county, contact_desc, household_id from temp_contact t1
-			join county t2 on t2.id = t1.county_id
-			join contact_type t3 on t3.id = t1.contact_type_id) t2
-			on t2.household_id = t1.id
-			group by county, contact_desc';
-        $resultUHS = $this->conn->fetchAll($sql);
-        foreach ($resultUHS as $value) {
-            $countystats[$value['county']][$value['contact_desc']]['uniqHouse'] = $value['UHS'];
+        $distinctCountyDescIndividualQuery = $this->em->createQuery('SELECT DISTINCT cty.county, d.contactDesc, c.household FROM TruckeeProjectmanaBundle:TempContact c '
+                . 'JOIN TruckeeProjectmanaBundle:County cty WITH c.county = cty '
+                . 'JOIN TruckeeProjectmanaBundle:ContactDesc d WITH c.contactType = d')->getResult();
+        $countyDescIndividualQuery = $this->em->createQuery('SELECT cty.county, d.contactDesc, c.household FROM TruckeeProjectmanaBundle:TempContact c '
+                . 'JOIN TruckeeProjectmanaBundle:County cty WITH c.county = cty '
+                . 'JOIN TruckeeProjectmanaBundle:ContactDesc d WITH c.contactType = d')->getResult();
+        foreach ($distinctCountyDescIndividualQuery as $distinctCountyDescIndividual) {
+            $houshold = $distinctCountyDescIndividual['household'];
+            $size = $householdSizeArray[$houshold];
+            $cty = $distinctCountyDescIndividual['county'];
+            $cDesc = $distinctCountyDescIndividual['contactDesc'];
+            $countystats[$cty][$cDesc]['uniqInd'] += $size;
+            $countystats[$cty][$cDesc]['uniqHouse'] ++;
         }
-
-        $sql = 'select county, contact_desc, count(household_id) THS from temp_contact t1
-			join county t2 on t2.id = t1.county_id
-			join contact_type t3 on t3.id = t1.contact_type_id
-			group by county, contact_desc';
-        $resultThs = $this->conn->fetchAll($sql);
-        foreach ($resultThs as $value) {
-            $countystats[$value['county']][$value['contact_desc']]['totalHouse'] = $value['THS'];
+        foreach ($countyDescIndividualQuery as $countyDescIndividual) {
+            $houshold = $countyDescIndividual['household'];
+            $size = $householdSizeArray[$houshold];
+            $cty = $countyDescIndividual['county'];
+            $cDesc = $countyDescIndividual['contactDesc'];
+            $countystats[$cty][$cDesc]['totalInd'] += $size;
+            $countystats[$cty][$cDesc]['totalHouse'] ++;
         }
         $details = array(
             'details' => $countystats,
-//            'specs' => $this->specs,
         );
+
         $this->details = $details;
     }
 
@@ -574,7 +620,6 @@ group by cty.county';
     {
         $data = array();
         $data['statistics'] = $this->statistics;
-//        $data['specs'] = $this->specs;
 
         return $data;
     }
@@ -582,20 +627,20 @@ group by cty.county';
     public function getMultiContacts($criteria)
     {
         $this->setCriteria($criteria);
-        $sql = "select distinct c1.household_id id, m.fname, m.sname, center,
-            date_format(c1.contact_date,'%m/%d/%Y') 'contact_date', contact_desc from contact c1
-            join contact c2 on c1.household_id = c2.household_id
-            join household h on c1.household_id = h.id
-            join member m on m.id = h.hoh_id
-            join center t1 on c1.center_id = t1.id
-            join contact_type t2 on c1.contact_type_id = t2.id
-            where c1.contact_date = c2.contact_date
-            and c1.id <> c2.id
-            and c1.contact_date between '$this->start' and '$this->end'
-            and c2.contact_date between '$this->start' and '$this->end' ";
-        $multis = $this->conn->fetchAll($sql);
+        $qb = $this->em->createQuery('SELECT DISTINCT IDENTITY(c1.household) id, m.fname, m.sname, '
+            . 'r.center, c1.contactDate, d.contactDesc FROM TruckeeProjectmanaBundle:Contact c1 '
+            . 'JOIN TruckeeProjectmanaBundle:Contact c2 WITH c1.household = c2.household '
+            . 'JOIN TruckeeProjectmanaBundle:Household h WITH c1.household = h '
+            . 'JOIN TruckeeProjectmanaBundle:Member m WITH m = h.head '
+            . 'JOIN TruckeeProjectmanaBundle:Center r WITH c1.center = r '
+            . 'JOIN TruckeeProjectmanaBundle:ContactDesc d WITH c1.contactDesc = d '
+            . 'WHERE c1.contactDate = c2.contactDate '
+            . 'AND c1 <> c2 '
+            . 'AND c1.contactDate >= :startDate AND c1.contactDate <= :endDate')
+            ->setParameters(['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']])
+            ->getResult();
 
-        return $multis;
+        return $qb;
     }
 
     public function getDistsFYToDate()
@@ -616,13 +661,13 @@ group by cty.county';
         foreach ($siteQuery as $siteArray) {
             $site = $siteArray['center'];
             $seriesString = "{name:'$site', data:[";
-            $sql = 'SELECT COUNT(DISTINCT c.household_id) N FROM contact c JOIN center r ON r.id=c.center_id WHERE r.center=';
-            $sql .= "'$site'";
-            $sql .= ' AND fy(c.contact_date) = ';
-            $sql .= "'$fy'";
-            $sql .= ' GROUP BY monthname(c.contact_date) ORDER BY c.contact_date';
-            $query = $this->conn->fetchAll($sql);
-            foreach ($query as $array) {
+            $qb = $this->em->createQuery('SELECT MONTHNAME(c.contactDate) Mo, COUNT(DISTINCT c.household) N FROM TruckeeProjectmanaBundle:Contact c '
+                . 'JOIN TruckeeProjectmanaBundle:Center r WITH c.center = r '
+                . 'WHERE r.center = :site AND FY(c.contactDate) = :fy '
+                . 'GROUP BY Mo ORDER BY c.contactDate')
+                ->setParameters(['site' => $site, 'fy' => $fy])
+                ->getResult();
+            foreach ($qb as $array) {
                 $seriesString .= $array['N'] . ',';
             }
             $series .= $seriesString . ']}, ';

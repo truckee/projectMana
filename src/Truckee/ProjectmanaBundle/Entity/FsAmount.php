@@ -34,7 +34,7 @@ class FsAmount
     /**
      * @var bool
      *
-     * @ORM\Column(name="amount", type="string", nullable=false)
+     * @ORM\Column(name="amount", type="string", nullable=true)
      * @Assert\NotBlank(message="Bracket may not be blank")
      */
     protected $amount;
@@ -42,7 +42,7 @@ class FsAmount
     /**
      * @var bool
      *
-     * @ORM\Column(name="enabled", type="boolean", nullable=false)
+     * @ORM\Column(name="enabled", type="boolean", nullable=true)
      */
     protected $enabled;
 

@@ -12,7 +12,7 @@ services:
     reports:
       class: Truckee\ProjectmanaBundle\Utilities\Reports
       arguments:
-        conn: '@doctrine.dbal.default_connection'
+        em: '@doctrine.orm.entity_manager'
 
     status:
       class: Truckee\ProjectmanaBundle\Utilities\Status

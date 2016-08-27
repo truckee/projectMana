@@ -65,7 +65,7 @@ class StatisticsController extends Controller
                 $templates[] = 'Statistics/countyDistribution.html.twig';
             }
             $templates[] = 'Statistics/familySizeDistribution.html.twig';
-            if ($specs['reportCriteria']['startDate'] === $specs['reportCriteria']['endDate']) {
+            if ($criteria['startMonth'] . $criteria['startYear'] === $criteria['endMonth'] . $criteria['endYear']) {
                 $templates[] = 'Statistics/frequencyDistributionForMonth.html.twig';
             }
 
