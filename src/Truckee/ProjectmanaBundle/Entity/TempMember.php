@@ -34,7 +34,7 @@ class TempMember
     /**
      * @var int
      *
-     * @ORM\Column(name="household_id", type="integer")
+     * @ORM\Column(name="household_id", type="integer", nullable=true)
      */
     protected $household;
 
@@ -48,12 +48,12 @@ class TempMember
     /**
      * @var int
      *
-     * @ORM\Column(name="age", type="integer")
+     * @ORM\Column(name="age", type="integer", nullable=true)
      */
     protected $age;
 
     /**
-     *   @ORM\Column(name="ethnicity_id", type="integer")
+     *   @ORM\Column(name="ethnicity_id", type="integer", nullable=true)
      */
     protected $ethnicity;
 

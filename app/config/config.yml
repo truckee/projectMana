@@ -48,6 +48,7 @@ doctrine:
                     AGE: Truckee\ProjectmanaBundle\DQL\AgeFunction
                     RESIDENCY: Truckee\ProjectmanaBundle\DQL\ResidencyFunction
                     HOUSEHOLDSIZE: Truckee\ProjectmanaBundle\DQL\HouseholdSizeFunction
+                    MONTHNAME: Truckee\ProjectmanaBundle\DQL\MonthNameFunction
 
 # Swiftmailer Configuration
 swiftmailer:

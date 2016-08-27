@@ -34,28 +34,35 @@ class TempHousehold
     /**
      * @var int
      *
-     * @ORM\Column(name="hoh_id", type="integer")
+     * @ORM\Column(name="hoh_id", type="integer", nullable=true)
      */
     protected $head;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="res", type="integer")
+     * @ORM\Column(name="res", type="string", nullable=true)
      */
     protected $res;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="size", type="integer")
+     * @ORM\Column(name="size", type="integer", nullable=true)
      */
     protected $size;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="size_text", type="string", nullable=true)
+     */
+    protected $sizeText;
+
+    /**
      * @var date
      *
-     * @ORM\Column(name="date_added", type="date")
+     * @ORM\Column(name="date_added", type="date", nullable=true)
      */
     protected $dateAdded;
 
@@ -77,6 +84,11 @@ class TempHousehold
     public function getSize()
     {
         return $this->size;
+    }
+
+    public function getSizeText()
+    {
+        return $this->size_text;
     }
 
     public function getDateAdded()

@@ -33,21 +33,21 @@ class TempContact
     /**
      * @var int
      *
-     * @ORM\Column(name="contact_type_id", type="integer")
+     * @ORM\Column(name="contact_type_id", type="integer", nullable=true)
      */
     protected $contactType;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="household_id", type="integer")
+     * @ORM\Column(name="household_id", type="integer", nullable=true)
      */
     protected $household;
 
     /**
      * @var date
      *
-     * @ORM\Column(name="contact_date", type="date")
+     * @ORM\Column(name="contact_date", type="date", nullable=true)
      */
     protected $contactDate;
 
@@ -61,14 +61,14 @@ class TempContact
     /**
      * @var int
      *
-     * @ORM\Column(name="center_id", type="integer")
+     * @ORM\Column(name="center_id", type="integer", nullable=true)
      */
     protected $center;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="county_id", type="integer")
+     * @ORM\Column(name="county_id", type="integer", nullable=true)
      */
     protected $county;
 
