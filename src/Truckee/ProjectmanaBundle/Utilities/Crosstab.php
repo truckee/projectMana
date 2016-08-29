@@ -13,8 +13,6 @@
 
 namespace Truckee\ProjectmanaBundle\Utilities;
 
-use Doctrine\ORM\EntityManager;
-
 /**
  * Description of Crosstab.
  *
@@ -22,13 +20,6 @@ use Doctrine\ORM\EntityManager;
  */
 class Crosstab
 {
-    private $em;
-
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-    }
-
     /**
      * @param array $data      = data array
      * @param array $rowLabels
@@ -79,21 +70,11 @@ class Crosstab
     }
 
     /**
-     * @param string $query
-     * @param array  $criteria ['startMonth', 'startYear', 'endMonth', 'endYear']
      *
-     * @return string
+     * @return array
      */
     public function setDateCriteria($criteria)
     {
-        //        $startMonth = $criteria['startMonth'];
-//        $startYear = $criteria['startYear'];
-        $startText = $criteria['startDate'];
-//        $endMonth = $criteria['endMonth'];
-//        $endYear = $criteria['endYear'];
-//        $endDate = new \DateTime($endMonth . '/01/' . $endYear);
-        $endText = $criteria['endDate'];
-
-        return "'$startText' AND '$endText' ";
+        return ['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']];
     }
 }

@@ -21,21 +21,16 @@ class FsAmountRepository extends EntityRepository
 {
     public function rowLabels($dateCriteria)
     {
-        $str = 'select distinct f.amount
-            FROM household h 
-            JOIN contact c ON c.household_id = h.id 
-            JOIN center r ON r.id = c.center_id 
-            JOIN fs_amount f ON h.fsamount_id = f.id 
-            WHERE c.contact_date BETWEEN __DATE_CRITERIA__
-            AND f.enabled = TRUE 
-            order by amount asc';
-        $sql = str_replace('__DATE_CRITERIA__', $dateCriteria, $str);
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->executeQuery($sql);
-        $rowArray = $stmt->fetchAll();
+        $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT f.amount FROM TruckeeProjectmanaBundle:Household h '
+            . 'JOIN TruckeeProjectmanaBundle:FsAmount f WITH h.fsamount = f '
+            . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
+            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
+            . 'AND f.enabled = TRUE ORDER BY f.amount ASC')
+            ->setParameters($dateCriteria)
+            ->getResult();
         $rowLabels = [];
-        foreach ($rowArray as $array) {
-            $rowLabels[] = $array['amount'];
+        foreach ($qb as $row) {
+            $rowLabels[] = $row['amount'];
         }
 
         return $rowLabels;
@@ -43,19 +38,20 @@ class FsAmountRepository extends EntityRepository
 
     public function crossTabData($dateCriteria, $profileType)
     {
-        $str = 'SELECT r.__TYPE__ colLabel, f.amount rowLabel, COUNT(DISTINCT h.id) N 
-            FROM household h 
-            JOIN contact c ON c.household_id = h.id 
-            JOIN __TYPE__ r ON r.id = c.__TYPE___id 
-            JOIN fs_amount f ON h.fsamount_id = f.id 
-            WHERE c.contact_date BETWEEN __DATE_CRITERIA__
-            AND f.enabled = TRUE 
-            GROUP BY colLabel, rowLabel';
-        $sql1 = str_replace('__DATE_CRITERIA__', $dateCriteria, $str);
-        $sql = str_replace('__TYPE__', $profileType, $sql1);
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->executeQuery($sql);
+        $entity = ucfirst($profileType);
+        $dql = 'SELECT r.__TYPE__ colLabel, f.amount rowLabel, COUNT(DISTINCT h.id) N '
+            . 'FROM TruckeeProjectmanaBundle:Household h '
+            . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
+            . 'JOIN TruckeeProjectmanaBundle:__ENTITY__ r WITH r = c.__TYPE__ '
+            . 'JOIN TruckeeProjectmanaBundle:FsAmount f WITH h.fsamount = f '
+            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
+            . 'AND f.enabled = TRUE  GROUP BY colLabel, rowLabel';
+        $dql = str_replace('__TYPE__', $profileType, $dql);
+        $dql = str_replace('__ENTITY__', $entity, $dql);
+        $qb = $this->getEntityManager()->createQuery($dql)
+            ->setParameters($dateCriteria)
+            ->getResult();
 
-        return $stmt->fetchAll();
+        return $qb;
     }
 }

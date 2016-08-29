@@ -21,8 +21,6 @@ services:
 
     mana.crosstab:
       class: Truckee\ProjectmanaBundle\Utilities\Crosstab
-      arguments:
-        em: '@doctrine.orm.entity_manager'
 
     mana.user_manipulator:
         class:      Truckee\ProjectmanaBundle\Utilities\UserManipulator

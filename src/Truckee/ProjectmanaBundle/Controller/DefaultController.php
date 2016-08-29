@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Truckee\Projectmana package.
  *
@@ -16,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class DefaultController extends Controller
 {
+
     /**
      * @Route("/", name="home")
      */
@@ -43,7 +43,7 @@ class DefaultController extends Controller
         $chart = $reports->getDistsFYToDate();
 
         return $this->render('Default/script.js.twig', array(
-                    'chart' => $chart,
+                'chart' => $chart,
         ));
     }
 
@@ -55,20 +55,5 @@ class DefaultController extends Controller
         throw new \Exception('An exceptional exception');
 
         return [];
-    }
-
-    /**
-     * @Route("/fy/{id}")
-     */
-    public function fyAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
-        $search = $this->get('searches');
-        $fys = $search->contactsFY($id);
-
-        return $this->render('Default/fy.html.twig',[
-            'fys' => $fys,
-        ]);
     }
 }

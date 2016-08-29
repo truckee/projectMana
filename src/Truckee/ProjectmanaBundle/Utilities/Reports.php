@@ -10,7 +10,6 @@
 
 namespace Truckee\ProjectmanaBundle\Utilities;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -22,10 +21,8 @@ class Reports
     private $commonCriteria;
     private $ageDist;
     private $ageGenderDist;
-    private $criteria;
     private $details;
     private $em;
-    private $end;
     private $ethDist;
     private $familyDist;
     private $freqDist;
@@ -33,7 +30,6 @@ class Reports
     private $newMembers;
     private $newHouseholds;
     private $residency;
-    private $start;
     private $statistics;
     private $totalHouseholds;
     private $totalIndividuals;

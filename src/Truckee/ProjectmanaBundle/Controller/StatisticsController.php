@@ -617,11 +617,14 @@ class StatisticsController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $xp = $this->container->get('mana.crosstab');
-        $dateCriteria = $xp->setDateCriteria($criteria);
+//        $dateCriteria = $xp->setDateCriteria($criteria);
         $columnType = $criteria['columnType'];
-        $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Notfoodstamp')->rowLabels($dateCriteria);
-        $colLabels = $em->getRepository('TruckeeProjectmanaBundle:'.$columnType)->colLabels($dateCriteria);
-        $data = $em->getRepository('TruckeeProjectmanaBundle:Notfoodstamp')->crossTabData($dateCriteria, $columnType);
+        $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Notfoodstamp')
+            ->rowLabels(['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']]);
+        $colLabels = $em->getRepository('TruckeeProjectmanaBundle:'.$columnType)
+            ->colLabels(['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']]);
+        $data = $em->getRepository('TruckeeProjectmanaBundle:Notfoodstamp')
+            ->crossTabData(['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']], $columnType);
         $reportData = [
             'reportTitle' => 'Households not receiving SNAP/CalFresh benefits',
             'reportSubTitle' => 'For the period ',
