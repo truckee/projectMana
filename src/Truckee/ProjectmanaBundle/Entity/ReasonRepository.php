@@ -21,20 +21,15 @@ class ReasonRepository extends EntityRepository
 {
     public function rowLabels($dateCriteria)
     {
-        $str = 'select distinct r.reason 
-        from reason r
-        join household_reason hr on hr.reason_id = r.id
-        join household h on h.id = hr.household_id
-        join contact c on c.household_id = h.id
-        WHERE c.contact_date BETWEEN __DATE_CRITERIA__
-        order by reason';
-        $sql = str_replace('__DATE_CRITERIA__', $dateCriteria, $str);
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->executeQuery($sql);
-        $rowArray = $stmt->fetchAll();
+        $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT r.reason FROM TruckeeProjectmanaBundle:Reason r '
+            . 'INNER JOIN r.households h INNER JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
+            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
+            . 'AND r.enabled = TRUE ORDER BY r.id ASC')
+            ->setParameters($dateCriteria)
+            ->getResult();
         $rowLabels = [];
-        foreach ($rowArray as $array) {
-            $rowLabels[] = $array['reason'];
+        foreach ($qb as $row) {
+            $rowLabels[] = $row['reason'];
         }
 
         return $rowLabels;
@@ -42,18 +37,20 @@ class ReasonRepository extends EntityRepository
 
     public function crossTabData($dateCriteria, $profileType)
     {
-        $str = 'select ctr.__TYPE__ colLabel, r.reason rowLabel, count(distinct h.id) N from household h
-            join contact c on c.household_id = h.id
-            join __TYPE__ ctr on ctr.id = c.__TYPE___id
-            join household_reason hr on hr.household_id = h.id
-            join reason r on r.id = hr.reason_id
-            WHERE c.contact_date BETWEEN  __DATE_CRITERIA__
-            GROUP BY colLabel, rowLabel';
-        $sql1 = str_replace('__DATE_CRITERIA__', $dateCriteria, $str);
-        $sql = str_replace('__TYPE__', $profileType, $sql1);
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->executeQuery($sql);
+        $entity = ucfirst($profileType);
+        $dql = 'SELECT ctr.__TYPE__ colLabel, r.reason rowLabel, COUNT(DISTINCT h.id) N '
+            . 'FROM TruckeeProjectmanaBundle:Reason r '
+            . 'JOIN r.households h '
+            . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
+            . 'JOIN TruckeeProjectmanaBundle:__ENTITY__ ctr WITH ctr = c.__TYPE__ '
+            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
+            . 'AND r.enabled = TRUE  GROUP BY colLabel, rowLabel';
+        $dql = str_replace('__TYPE__', $profileType, $dql);
+        $dql = str_replace('__ENTITY__', $entity, $dql);
+        $qb = $this->getEntityManager()->createQuery($dql)
+            ->setParameters($dateCriteria)
+            ->getResult();
 
-        return $stmt->fetchAll();
+        return $qb;
     }
 }

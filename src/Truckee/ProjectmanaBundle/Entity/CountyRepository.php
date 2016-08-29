@@ -21,17 +21,15 @@ class CountyRepository extends EntityRepository
 {
     public function colLabels($dateCriteria)
     {
-        $str = 'select distinct cty.county from county cty
-            join contact c on c.county_id = cty.id
-            where c.contact_date BETWEEN __DATE_CRITERIA__ 
-            order by county';
-        $sql = str_replace('__DATE_CRITERIA__', $dateCriteria, $str);
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->executeQuery($sql);
-        $colArray = $stmt->fetchAll();
+        $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT r.county FROM TruckeeProjectmanaBundle:County r '
+            . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.county = r '
+            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
+            . 'ORDER BY r.county')
+            ->setParameters($dateCriteria)
+            ->getResult();
         $colLabels = [];
-        foreach ($colArray as $array) {
-            $colLabels[] = $array['county'];
+        foreach ($qb as $row) {
+            $colLabels[] = $row['county'];
         }
 
         return $colLabels;

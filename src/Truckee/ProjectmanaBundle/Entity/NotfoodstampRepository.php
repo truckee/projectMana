@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Truckee\Projectmana package.
  * 
@@ -19,23 +18,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class NotfoodstampRepository extends EntityRepository
 {
+
     public function rowLabels($dateCriteria)
     {
-        $str = 'select distinct n.notfoodstamp
-            FROM household h 
-            JOIN contact c ON c.household_id = h.id 
-            JOIN center r ON r.id = c.center_id 
-            JOIN notfoodstamp n ON h.notfoodstamp_id = n.id 
-            WHERE c.contact_date BETWEEN __DATE_CRITERIA__
-            AND n.enabled = TRUE 
-            order by notfoodstamp asc';
-        $sql = str_replace('__DATE_CRITERIA__', $dateCriteria, $str);
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->executeQuery($sql);
-        $rowArray = $stmt->fetchAll();
+        $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT n.notfoodstamp FROM TruckeeProjectmanaBundle:Household h '
+                . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
+                . 'JOIN TruckeeProjectmanaBundle:Notfoodstamp n WITH h.notfoodstamp = n '
+                . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate ')
+            ->setParameters($dateCriteria)
+            ->getResult();
         $rowLabels = [];
-        foreach ($rowArray as $array) {
-            $rowLabels[] = $array['notfoodstamp'];
+        foreach ($qb as $row) {
+            $rowLabels[] = $row['notfoodstamp'];
         }
 
         return $rowLabels;
@@ -43,19 +37,20 @@ class NotfoodstampRepository extends EntityRepository
 
     public function crossTabData($dateCriteria, $profileType)
     {
-        $str = 'SELECT r.__TYPE__ colLabel, n.notfoodstamp rowLabel, COUNT(DISTINCT h.id) N 
-            FROM household h 
-            JOIN contact c ON c.household_id = h.id 
-            JOIN __TYPE__ r ON r.id = c.__TYPE___id 
-            JOIN notfoodstamp n ON h.notfoodstamp_id = n.id 
-            WHERE c.contact_date BETWEEN __DATE_CRITERIA__
-            AND n.enabled = TRUE 
-            GROUP BY colLabel, rowLabel';
-        $sql1 = str_replace('__DATE_CRITERIA__', $dateCriteria, $str);
-        $sql = str_replace('__TYPE__', $profileType, $sql1);
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->executeQuery($sql);
+        $entity = ucfirst($profileType);
+        $dql = 'SELECT r.__TYPE__ colLabel, n.notfoodstamp rowLabel, COUNT(DISTINCT h.id) N '
+            . 'FROM TruckeeProjectmanaBundle:Household h '
+            . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
+            . 'JOIN TruckeeProjectmanaBundle:__ENTITY__ r WITH r = c.__TYPE__ '
+            . 'JOIN TruckeeProjectmanaBundle:Notfoodstamp n WITH h.notfoodstamp = n '
+            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
+            . 'AND n.enabled = TRUE  GROUP BY colLabel, rowLabel';
+        $dql = str_replace('__TYPE__', $profileType, $dql);
+        $dql = str_replace('__ENTITY__', $entity, $dql);
+        $qb = $this->getEntityManager()->createQuery($dql)
+            ->setParameters($dateCriteria)
+            ->getResult();
 
-        return $stmt->fetchAll();
-    }
+        return $qb;
+        }
 }
