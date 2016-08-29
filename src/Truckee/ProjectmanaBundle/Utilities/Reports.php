@@ -187,7 +187,7 @@ class Reports
         $this->em->createQuery('DELETE FROM TruckeeProjectmanaBundle:TempHousehold')->execute();
         $db->exec('ALTER TABLE temp_household AUTO_INCREMENT = 0');
 
-        //note use of custom MySQL residency()), household_size() functions
+        //note use of custom MySQL res(), size() functions
         $sqlHousehold = "INSERT INTO temp_household
             (id, hoh_id, res, size, size_text, date_added)
             select distinct h.id, hoh_id,

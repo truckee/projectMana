@@ -45,9 +45,6 @@ doctrine:
             dql:
                 numeric_functions:
                     FY: Truckee\ProjectmanaBundle\DQL\FiscalYearFunction
-                    AGE: Truckee\ProjectmanaBundle\DQL\AgeFunction
-                    RESIDENCY: Truckee\ProjectmanaBundle\DQL\ResidencyFunction
-                    HOUSEHOLDSIZE: Truckee\ProjectmanaBundle\DQL\HouseholdSizeFunction
                     MONTHNAME: Truckee\ProjectmanaBundle\DQL\MonthNameFunction
 
 # Swiftmailer Configuration
