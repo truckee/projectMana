@@ -30,13 +30,18 @@ use Truckee\ProjectmanaBundle\Form\MemberType;
  */
 class HouseholdController extends Controller
 {
+
     /**
      * Finds and displays a Household entity.
+     * 
+     * @param object $request Request
+     * @param object $id Household id
+     * 
+     * @return template
      *
      * @Route("/{id}/show", name="household_show")
      */
-    public function showAction(Request $request, $id)
-    {
+    public function showAction(Request $request, $id) {
         $session = $request->getSession();
         $session->set('household', null);
         $em = $this->getDoctrine()->getManager();
@@ -50,21 +55,28 @@ class HouseholdController extends Controller
         $templates[] = 'Household/contactShowBlock.html.twig';
 
         return $this->render('Household/show.html.twig', array(
-            'household' => $household,
-            'hohId' => $household->getHead()->getId(),
-            'title' => 'Household View',
-            'templates' => $templates,
+                    'household' => $household,
+                    'hohId' => $household->getHead()->getId(),
+                    'title' => 'Household View',
+                    'templates' => $templates,
         ));
     }
 
     /**
-     * Displays a form to create a new Household entity
-     * First, validate a new member to be head of household.
+     * Create a new Household entity.
+     * 
+     * First, validate a new member to be head of household. If member name
+     * closely matches an existing member name, a list of those matches is 
+     * provided. Users can then either select the existing household containing 
+     * that name or continue to create a new household.
+     * 
+     * @param object $request Request
+     * 
+     * @return template
      *
      * @Route("/new", name="household_new")
      */
-    public function newAction(Request $request)
-    {
+    public function newAction(Request $request) {
         $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $houseTest = $session->get('household');
@@ -93,7 +105,7 @@ class HouseholdController extends Controller
                 'sname' => $head->getSname(),
                 'dob' => date_format($head->getDob(), 'Y-m-d'),
             );
-            $searchFor = $head->getFname().' '.$head->getSname();
+            $searchFor = $head->getFname() . ' ' . $head->getSname();
             $searches = $this->get('searches');
             $found = $searches->getMembers($searchFor);
             $session->set('household', $household);
@@ -120,20 +132,22 @@ class HouseholdController extends Controller
         }
 
         return $this->render('Household/new.html.twig', array(
-            'formType' => 'New Household',
-            'form' => $form->createView(),
-            'formHead' => $formHead->createView(),
-            'title' => 'New Household',
+                    'formType' => 'New Household',
+                    'form' => $form->createView(),
+                    'formHead' => $formHead->createView(),
+                    'title' => 'New Household',
         ));
     }
 
     /**
-     * Display household edit form.
+     * Edit existing household.
      *
+     * @param object $request Request
+     * @param object $id Household id
+     * 
      * @Route("/{id}/edit", name="household_edit")
      */
-    public function editAction(Request $request, $id)
-    {
+    public function editAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
         if (!$household) {
@@ -162,10 +176,10 @@ class HouseholdController extends Controller
         }
 
         return $this->render('Household/edit.html.twig', array(
-            'form' => $form->createView(),
-            'title' => 'Household Edit',
-            'household' => $household,
-            'hohId' => $household->getHead()->getId(),
+                    'form' => $form->createView(),
+                    'title' => 'Household Edit',
+                    'household' => $household,
+                    'hohId' => $household->getHead()->getId(),
         ));
     }
 
@@ -174,11 +188,11 @@ class HouseholdController extends Controller
      *
      * @param Request $request
      *
-     * @return type
+     * @return template
+     * 
      * @Route("/_search", name = "_search")
      */
-    public function searchAction(Request $request)
-    {
+    public function searchAction(Request $request) {
         $flash = $this->get('braincrafted_bootstrap.flash');
         $qtext = $request->query->get('qtext');
         if ($qtext == '') {
@@ -213,31 +227,33 @@ class HouseholdController extends Controller
 
                 return $this->redirectToRoute('household_show', array('id' => $id));
             } else {
-                return $this->render('Household/search.html.twig',
-                        array(
-                        'searchedFor' => $qtext,
-                        'matched' => $found,
-                        'title' => 'Search results',
+                return $this->render('Household/search.html.twig', array(
+                            'searchedFor' => $qtext,
+                            'matched' => $found,
+                            'title' => 'Search results',
                 ));
             }
         }
     }
 
     /**
-     * get household data by id for json response.
+     * Get household data by id.
+     * 
+     * Provides a json encoded string of household head data to be displayed 
+     * when adding contacts.
+     * 
+     * @param object $id Household id
      *
      * @Route("/contact/{id}", name="household_contact")
      */
-    public function contactAction($id)
-    {
+    public function contactAction($id) {
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
         if (!$household) {
             $response = new Response('');
         } else {
-            $content = $this->renderView('Contact/addHouseholdContact.html.twig',
-                [
+            $content = $this->renderView('Contact/addHouseholdContact.html.twig', [
                 'household' => $household,
             ]);
             $response = new Response($content);
@@ -246,46 +262,4 @@ class HouseholdController extends Controller
         return $response;
     }
 
-    /**
-     * Create and download registration card for household.
-     *
-     * @Route("/{id}/card", name="house_card")
-     */
-    public function cardAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
-        $head = $household->getHead();
-        $fname = $head->getFname();
-        $sname = $head->getSname();
-
-        $offences = $head->getOffences();
-        $code = '';
-        foreach ($offences as $offence) {
-            $violation = $offence->getOffence();
-            $code .= substr($violation, 0, 1);
-        }
-
-        $filename = $sname.$fname.'_Card.pdf';
-
-        $stylesheetXml = $this->renderView('TruckeeProjectmanaBundle:Household:pdfstyle.xml.twig', array());
-
-        $facade = $this->get('ps_pdf.facade');
-        $response = new Response();
-
-        $this->render('TruckeeProjectmanaBundle:Household:card.pdf.twig',
-            array(
-            'household' => $household,
-            'date' => date_create(),
-            'code' => $code,
-            ), $response);
-        $xml = $response->getContent();
-        $content = $facade->render($xml, $stylesheetXml);
-
-        return new Response($content, 200,
-            array(
-            'content-type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename='.$filename,
-        ));
-    }
 }
