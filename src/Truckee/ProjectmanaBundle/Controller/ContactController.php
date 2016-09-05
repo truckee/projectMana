@@ -29,7 +29,11 @@ class ContactController extends Controller
 {
 
     /**
-     * Displays a form to create a new Contact entity.
+     * Create a new Contact entity.
+     * 
+     * @param int $id Household id
+     * 
+     * @return template
      *
      * @Route("/{id}/new", name="contact_new")
      */
@@ -66,7 +70,11 @@ class ContactController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Contact entity.
+     * Edit an existing Contact entity.
+     * 
+     * @param int $id Contact id
+     * 
+     * @return template
      *
      * @Route("/{id}/edit", name="contact_edit")
      */
@@ -99,8 +107,12 @@ class ContactController extends Controller
     }
 
     /**
-     * Deletes a Contact entity.
+     * Delete a Contact entity.
      *
+     * @param int $id Contact id
+     * 
+     * @return template
+     * 
      * @Route("/{id}/delete", name="contact_delete")
      */
     public function deleteAction(Request $request, $id) {
@@ -127,6 +139,15 @@ class ContactController extends Controller
     }
 
     /**
+     * Add contacts.
+     * 
+     * Displays form to select site from which most recent contacts are
+     * gathered.  Allows selecting and adding households. Includes setting
+     * contact type.
+     * 
+     * @param object $request Request
+     * @param string $source Most recent/FY to date
+     * 
      * @Route("/addContacts/{source}", name="contacts_add")
      */
     public function addContactsAction(Request $request, $source) {
@@ -163,8 +184,12 @@ class ContactController extends Controller
     }
 
     /**
-     * returning latest contacts w/ households & distribution
-     * at given center.
+     * Collect set of households
+     * 
+     * @param string $site Site
+     * @param string $source Most recent/FY to date
+     *
+     * @return latest contacts: households & contact type at given center.
      *
      * @Route("/latest/{site}/{source}")
      */
@@ -191,8 +216,12 @@ class ContactController extends Controller
     }
 
     /**
-     * For selected center, generates PDF checklist of households at most recent
-     * distribution.
+     * Generates PDF checklist of households at most recent distribution.
+     * 
+     * @param object $request Request
+     * @param string $source Most recent/FY to date
+     * 
+     * @return file
      * 
      * @Route("/latestReport/{source}", name="latest_contacts")
      */

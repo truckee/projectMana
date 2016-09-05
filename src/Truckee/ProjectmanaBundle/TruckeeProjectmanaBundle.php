@@ -13,6 +13,9 @@ namespace Truckee\ProjectmanaBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * Base class for Truckee\Projectmana package.
+ */
 class TruckeeProjectmanaBundle extends Bundle
 {
 }

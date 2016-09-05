@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Truckee\Projectmana package.
  *
@@ -13,47 +14,46 @@ namespace Truckee\ProjectmanaBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
+/**
+ * Default controller.
+ */
 class DefaultController extends Controller
 {
 
     /**
+     * Home page for authorized users
+     * 
+     * @return template
+     * 
      * @Route("/", name="home")
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         return $this->render('Default/index.html.twig');
     }
 
     /**
+     * Present menu of report options.
+     * 
+     * @return template
+     * 
      * @Route("/reportMenu", name="report_menu")
      */
-    public function reportMenuAction()
-    {
+    public function reportMenuAction() {
         return $this->render('Default/reportMenu.html.twig');
     }
 
     /**
-     * scriptAction returns javascript code to generate distribution chart.
+     * Returns javascript code to generate distribution chart.
      *
      * @return script
      */
-    public function scriptAction()
-    {
+    public function scriptAction() {
         $reports = $this->get('reports');
         $chart = $reports->getDistsFYToDate();
 
         return $this->render('Default/script.js.twig', array(
-                'chart' => $chart,
+                    'chart' => $chart,
         ));
     }
 
-    /**
-     * @Route("/xp")
-     */
-    public function exceptionAction()
-    {
-        throw new \Exception('An exceptional exception');
-
-        return [];
-    }
 }
