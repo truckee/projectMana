@@ -1,0 +1,11 @@
+{% extends "layout.html.twig"%}
+{% block body %}
+    {% block button %}
+    <button id="menuToggle" class="btn btn-default hidden-print" type="submit" style="margin-top: 10px;">Printable view</button>
+    {% endblock %}
+    <div class="container">
+        {% block content %}
+{% include "Statistics/profile_content.html.twig" %}
+        {% endblock %}
+    </div>
+{% endblock body %}

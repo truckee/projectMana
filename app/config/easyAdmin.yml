@@ -1,0 +1,239 @@
+easy_admin:
+    site_name: 'Manage options'
+    disabled_actions: ['delete']
+    list:
+        max_results: 10
+    design:
+        color_scheme: 'light'
+        menu:
+            - label: 'Contacts'
+              children:
+                    - { entity: 'ContactType', default: true, params: { sortField: 'contactDesc', sortDirection: 'ASC' }}
+                    - { entity: 'County', params: { sortField: 'county', sortDirection: 'ASC' }}
+                    - { entity: 'Site', params: { sortField: 'center', sortDirection: 'ASC' }}
+            - label: 'Households'
+              children:
+                    - { entity: 'FoodStampBracket', params: { sortField: 'id', sortDirection: 'ASC'}}
+                    - { entity: 'FoodstampStatus', params: { sortField: 'status', sortDirection: 'ASC'}}
+                    - { entity: 'Housing', params: { sortField: 'housing', sortDirection: 'ASC'}}
+                    - { entity: 'Income', params: { sortField: 'id', sortDirection: 'ASC'}}
+                    - { entity: 'InsufficientFood', label: 'Insufficient food', params: { sortField: 'reason', sortDirection: 'ASC'}}
+                    - { entity: 'Notfoodstamp', params: { sortField: 'notfoodstamp', sortDirection: 'ASC'}}
+            - label: 'Members'
+              children:
+                    - { entity: 'Ethnicity', params: { sortField: 'ethnicity', sortDirection: 'ASC' } }
+                    - { entity: 'Offense', params: { sortField: 'offence', sortDirection: 'ASC' } }
+                    - { entity: 'Relationship', params: { sortField: 'relation', sortDirection: 'ASC' } }
+                    - { entity: 'State', params: { sortField: 'state', sortDirection: 'ASC' } }
+                    - { entity: 'Work', params: { sortField: 'work', sortDirection: 'ASC' } }
+#            - label: 'Users'
+#              children:
+            - { entity: 'User', params: { sortField: 'username', sortDirection: 'ASC' } }
+            - { label: 'Home', route: 'home' }
+    entities:
+        Site:
+            class: Truckee\ProjectmanaBundle\Entity\Center
+            label: Sites
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'center', label: 'Site'}
+                    - enabled
+                    - county
+            form:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'center', label: 'Site'}
+                    - enabled
+                    - {property: 'county', type: 'entity', type_options: { class: Truckee\ProjectmanaBundle\Entity\County }}
+                form_options: { validation_groups: ['Options'] }
+        Ethnicity:
+            class: Truckee\ProjectmanaBundle\Entity\Ethnicity
+            label: Ethnicities
+            list:
+                title: '%%entity_label%%'
+                fields: [ethnicity, abbreviation, enabled]
+            form:
+                title: '%%entity_label%%'
+                fields: [ethnicity, abbreviation, enabled]
+        ContactType:
+            class: Truckee\ProjectmanaBundle\Entity\ContactDesc
+            label: Contact types
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'contactDesc', label: 'Type'}
+                    - enabled
+            form:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'contactDesc', label: 'Type'}
+                    - enabled
+        County:
+            class: Truckee\ProjectmanaBundle\Entity\County
+            label: Counties
+            list:
+                fields: [county, enabled]
+            form:
+                fields: [county, enabled]
+                form_options: { validation_groups: ['Options'] }
+        FoodStampBracket:
+            class: Truckee\ProjectmanaBundle\Entity\FsAmount
+            label: Foodstamp brackets
+            list:
+                title: '%%entity_label%%'
+                fields: [bracket, enabled]
+            form:
+                fields:
+                    - {property: amount, label: Bracket}
+                    - enabled
+        FoodstampStatus:
+            class: Truckee\ProjectmanaBundle\Entity\FsStatus
+            label: Foodstamp status
+            list:
+                title: '%%entity_label%%'
+                fields: [status]
+            form:
+                title: '%%entity_label%%'
+                fields: [status]
+        Housing:
+            class: Truckee\ProjectmanaBundle\Entity\Housing
+            label: Housing
+            list:
+                title: '%%entity_label%%'
+                fields: [housing, enabled]
+            form:
+                title: '%%entity_label%%'
+                fields: [housing, enabled]
+        Income:
+            class: Truckee\ProjectmanaBundle\Entity\Income
+            label: Income brackets
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'income', label: 'Bracket'}
+                    - enabled
+            form:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'income', label: 'Bracket'}
+                    - enabled
+#        IncomeSource:
+#            class: Truckee\ProjectmanaBundle\Entity\IncomeSource
+#            label: Income sources
+#            list:
+#                title: '%%entity_label%%'
+#                fields: [incomeSource, enabled]
+#            form:
+#                title: '%%entity_label%%'
+#                fields: [incomeSource, enabled]
+        Notfoodstamp:
+            class: Truckee\ProjectmanaBundle\Entity\Notfoodstamp
+            label: Why not foodstamps
+            list:
+                title: '%%entity_label%%'
+                fields: [notfoodstamp, enabled]
+            form:
+                title: '%%entity_label%%'
+                fields: [notfoodstamp, enabled]
+        Offense:
+            class: Truckee\ProjectmanaBundle\Entity\Offence
+            label: Offense
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'offence', label: 'Offense'}
+                    - enabled
+            form:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'offence', label: 'Offense', type_options: {by_reference: false}}
+                    - enabled
+        InsufficientFood:
+            class: Truckee\ProjectmanaBundle\Entity\Reason
+            label: 'Insufficient food'
+            disabled_actions: ['edit']
+            list:
+                title: '%%entity_label%%'
+                fields: [reason, enabled]
+            form:
+                title: '%%entity_label%%'
+                fields: [reason, enabled]
+        Relationship:
+            class: Truckee\ProjectmanaBundle\Entity\Relationship
+            label: Relationship
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: relation, label: 'Relation to head'}
+                    - enabled
+            form:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: relation, label: 'Relation to head'}
+                    - enabled
+        State:
+            class: Truckee\ProjectmanaBundle\Entity\State
+            label: State
+            list:
+                title: '%%entity_label%%'
+                fields: [state, enabled]
+            form:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'state', type_options: {by_reference: false}}
+                    - enabled
+        Work:
+            class: Truckee\ProjectmanaBundle\Entity\Work
+            label: 'Work'
+            list:
+                title: '%%entity_label%%'
+                fields: [work, enabled]
+            form:
+                title: '%%entity_label%%'
+                fields: [work, enabled]
+
+        User:
+            class: Truckee\ProjectmanaBundle\Entity\User
+            list:
+                fields:
+                    - 'enabled'
+                    - 'username'
+                    - {property: 'fname', label: 'First name'}
+                    - {property: 'sname', label: 'Last name'}
+                    - {property: 'email', type: 'email'}
+                    - {property: 'hasRoleAdmin', label: 'Is admin?'}
+                    - 'lastLogin'
+            edit:
+                fields:
+                    - 'enabled'
+                    - 'username'
+                    - {property: 'fname', label: 'First name'}
+                    - {property: 'sname', label: 'Last name'}
+                    - {property: 'email', type: 'email'}
+                    - property: 'hasRoleAdmin'
+                      label: 'Is admin?'
+                      type: choice
+                      type_options:
+                        choices:
+                            'No': 'No'
+                            'Yes': 'Yes'
+                        choices_as_values: true
+                form_options: { validation_groups: ['Profile'] }
+            new:
+                fields:
+                    - 'enabled'
+                    - 'username'
+                    - {property: 'fname', label: 'First name'}
+                    - {property: 'sname', label: 'Last name'}
+                    - {property: 'email', type: 'email'}
+                    - {property: 'plainPassword', label: 'Password', type: text}
+                    - property: 'hasRoleAdmin'
+                      label: 'Is admin?'
+                      type: choice
+                      type_options:
+                        choices:
+                            'No': 'No'
+                            'Yes': 'Yes'
+                        choices_as_values: true
+                form_options: { validation_groups: ['Registration'] }

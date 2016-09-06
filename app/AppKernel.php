@@ -20,16 +20,17 @@ class AppKernel extends Kernel
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
-            new Mana\ClientBundle\ManaClientBundle(),
+            new Truckee\ProjectmanaBundle\TruckeeProjectmanaBundle(),
             new Ps\PdfBundle\PsPdfBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
+            new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
-            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
             $bundles[] = new Liip\FunctionalTestBundle\LiipFunctionalTestBundle();
             $bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
@@ -64,7 +65,8 @@ class AppKernel extends Kernel
 
         try {
             parent::initializeContainer();
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             $this->debug = $debug;
             throw $e;
         }

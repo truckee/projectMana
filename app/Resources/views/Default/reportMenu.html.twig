@@ -1,0 +1,27 @@
+{% extends "layout.html.twig" %}
+{% block body %}
+    <div class="panel panel-info">
+        <div class="panel-heading text-center">
+            Reports for
+            Project MANA distribution database application.
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    Reports
+                </div>
+                <div class="col-sm-3">
+                    Profiles
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    {{ knp_menu_render('reportsMenu') }}
+                </div>
+                <div class="col-sm-3">
+                    {{ knp_menu_render('profileMenu') }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

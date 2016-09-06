@@ -1,0 +1,43 @@
+<div class="panel-heading text-center">Family size</div>
+<div class="panel-body">
+    <div class="row">
+        <div class="col-sm-2 text-righ">
+            <b>One</b>
+        </div>
+        <div class="col-sm-2 text-righ">
+            <b>Two</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>Three</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>Four</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>Five</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>Six or more</b>
+        </div>
+    </div>
+    <div class="row">
+        <div id="famSize1" class="col-sm-2 text-righ">
+            {{ statistics['Single']|number_format }}
+        </div>
+        <div id="famSize2" class="col-sm-2 text-righ">
+            {{ statistics['Two']|number_format }}
+        </div>
+        <div id="famSize3" class="col-sm-2 text-right">
+            {{ statistics['Three']|number_format }}
+        </div>
+        <div id="famSize4" class="col-sm-2 text-right">
+            {{ statistics['Four']|number_format }}
+        </div>
+        <div id="famSize5" class="col-sm-2 text-right">
+            {{ statistics['Five']|number_format }}
+        </div>
+        <div id="famSize6" class="col-sm-2 text-right">
+            {{ statistics['Six or more']|number_format }}
+        </div>
+    </div>
+</div>

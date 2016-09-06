@@ -1,21 +1,18 @@
-mana_household:
-    resource: "@ManaClientBundle/Controller/"
+mana_project:
+    resource: "@TruckeeProjectmanaBundle/Controller/"
     type:     annotation
-    prefix:   /
-
-login_check:
-    pattern:   /login_check
-
-login_path:
-  pattern: /login
 
 logout:
-    pattern:   /logout
+    path:   /logout
 
-root:
-    pattern: /
-    defaults:  { _controller: ManaClientBundle:Default:index }
-       
 home:
-    pattern: /home
-    defaults:  { _controller: ManaClientBundle:Default:index }
+    path: /
+    defaults:  { _controller: TruckeeProjectmanaBundle:Default:index }
+
+easy_admin_bundle:
+    resource: "@EasyAdminBundle/Controller/"
+    type:     annotation
+    prefix:   /optionsAdmin
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
