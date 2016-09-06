@@ -27,11 +27,14 @@ $(document).ready(function () {
             });
             if (!present) {
                 var where = $(location).attr('pathname');
-                var url = where.replace('contact/addContacts', 'household/contact/' + houseId);
+                var source = where.substring(where.indexOf("addContacts")+11);
+                var loc = where.replace(source, '');
+                var url = loc.replace('contact/addContacts', 'household/contact/' + houseId);
                 $.get(url, function (data) {
                     //make sure household exists
                     if (data !== '') {
                         $("#latestContacts").prepend(data);
+                        alert('Household added');
                     } else {
                         alert('Household does not exist');
                     }
