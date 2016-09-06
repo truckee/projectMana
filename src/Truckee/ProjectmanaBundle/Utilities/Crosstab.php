@@ -21,6 +21,8 @@ namespace Truckee\ProjectmanaBundle\Utilities;
 class Crosstab
 {
     /**
+     * Organize row and column data for profile report
+     *
      * @param array $data      = data array
      * @param array $rowLabels
      * @param array $colLabels
@@ -55,6 +57,14 @@ class Crosstab
         return $profile;
     }
 
+    /**
+     * Initialize row, column entries to 0
+     *
+     * @param array $rows
+     * @param array $cols
+     *
+     * @return array
+     */
     private function profileArray($rows, $cols)
     {
         $colKeys = [];
@@ -70,6 +80,9 @@ class Crosstab
     }
 
     /**
+     * Convert $criteria dates to array for Doctrine parameter array
+     * 
+     * @param array $criteria Report critiera
      *
      * @return array
      */

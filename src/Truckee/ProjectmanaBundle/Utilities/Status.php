@@ -26,6 +26,11 @@ class Status
         $this->conn = $conn;
     }
 
+    /**
+     * Create array by year with count of active & inactive households
+     *
+     * @return array
+     */
     public function getYearStatus()
     {
         $sql = 'select max(year(contact_date)) Year, if(active=1,1,0) Active, if(active=0,1,0) Inactive from contact c
@@ -46,6 +51,11 @@ class Status
         return $statusYearArray;
     }
 
+    /**
+     * Bulk change of active status
+     *
+     * @param array $changes
+     */
     public function setStatus($changes)
     {
         set_time_limit(0);

@@ -189,7 +189,7 @@ class ContactController extends Controller
      * @param string $site Site
      * @param string $source Most recent/FY to date
      *
-     * @return latest contacts: households & contact type at given center.
+     * @return string
      *
      * @Route("/latest/{site}/{source}")
      */

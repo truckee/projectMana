@@ -26,9 +26,10 @@ class MenuBuilder
     private $requestStack;
 
     /**
+     * 
      * @param FactoryInterface $factory
-     *
-     * Add any other dependency you need
+     * @param AuthorizationCheckerInterface $checker
+     * @param RequestStack $requestStack
      */
     public function __construct(
     FactoryInterface $factory, AuthorizationCheckerInterface $checker, RequestStack $requestStack)

@@ -114,7 +114,7 @@ class ContactTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Contact has been deleted")')->count());
     }
 
-    public function testLatestContacts()
+    public function testMostRecentContacts()
     {
         $crawler = $this->login();
         $crawler = $this->client->request('GET', '/contact/latestReport/Most recent');
@@ -124,5 +124,35 @@ class ContactTest extends TruckeeWebTestCase
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("No contacts found")')->count());
+    }
+
+    public function testFYToDateContacts()
+    {
+        $crawler = $this->login();
+        $crawler = $this->client->request('GET', '/contact/latestReport/FY to date');
+        $truckee = $this->fixtures->getReference('truckee')->getId();
+        $form = $crawler->selectButton('Submit')->form();
+        $form['select_center[center]'] = $truckee;
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("No contacts found")')->count());
+    }
+
+    public function testMostRecentResponse()
+    {
+        $crawler = $this->login();
+        $truckee = $this->fixtures->getReference('truckee')->getId();
+        $crawler = $this->client->request('GET', '/contact/latest/' . $truckee . '/Most recent');
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Most recent contacts for Truckee")')->count());
+    }
+
+    public function testFYToDateResponse()
+    {
+        $crawler = $this->login();
+        $truckee = $this->fixtures->getReference('truckee')->getId();
+        $crawler = $this->client->request('GET', '/contact/latest/' . $truckee . '/FY to date');
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("FY to date contacts for Truckee")')->count());
     }
 }

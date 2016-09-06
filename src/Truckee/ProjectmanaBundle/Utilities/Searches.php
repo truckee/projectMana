@@ -15,7 +15,7 @@ namespace Truckee\ProjectmanaBundle\Utilities;
 use Doctrine\ORM\EntityManager;
 
 /**
- * returns set of households whose heads are possible matches for new head.
+ * Various searches requiring EntityManager.
  */
 class Searches
 {
@@ -26,6 +26,13 @@ class Searches
         $this->em = $em;
     }
 
+    /**
+     * Set of most recent households with distribution at given site
+     *
+     * @param ing $site
+     *
+     * @return array
+     */
     public function getLatest($site)
     {
         $em = $this->em;
@@ -50,9 +57,9 @@ class Searches
     }
 
     /**
-     * get members that match input name.
+     * Members that match input name.
      *
-     * @param type $qtext
+     * @param string $qtext
      *
      * @return array
      */
@@ -76,6 +83,13 @@ class Searches
         return $found;
     }
 
+    /**
+     * Heads of households with distributions at given site, FY to date
+     *
+     * @param int $site
+     *
+     * @return array
+     */
     public function getHeadsFYToDate($site)
     {
         $date = new \DateTime();

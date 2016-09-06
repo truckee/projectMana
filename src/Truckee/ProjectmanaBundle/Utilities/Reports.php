@@ -43,6 +43,13 @@ class Reports
         $this->conn = $em->getConnection();
     }
 
+    /**
+     * Organize criteria for reports
+     *
+     * @param array $criteria
+     *
+     * @return array report & template criteria
+     */
     public function setCriteria($criteria)
     {
         $parameters = ['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']];
@@ -71,6 +78,11 @@ class Reports
         $this->commonCriteria['parameters'] = $parameters;
     }
 
+    /**
+     * Set individual statistics
+     *
+     * @param array $criteria
+     */
     public function setStats($criteria)
     {
         $this->setCriteria($criteria);
@@ -87,7 +99,6 @@ class Reports
         $this->setFamilyDist();
         $this->setFreqDist();
         $this->setEthDist();
-//        $this->setAgeDist();
         $this->setAgeGenderDist();
         $this->setUniqIndividuals();
         $this->setTotalIndividuals();
@@ -149,6 +160,11 @@ class Reports
         $this->statistics = $statistics;
     }
 
+    /**
+     * Fill temp tables with date-specific data
+     *
+     * @param array $criteria
+     */
     private function makeTempTables($criteria)
     {
         /*
@@ -556,12 +572,17 @@ class Reports
         return $data;
     }
 
+    /**
+     * Set detail statistics.
+     *
+     * details creates an array $countyStats[county][type][category]
+     * where type = contact description, category is Unique or Total
+     * Individuals or Households.
+     *
+     * @param array $criteria
+     */
     public function setDetails($criteria)
     {
-        //details creates an array $countyStats[county][type][category]
-        //where type = contact description, category is Unique or Total
-        //Individuals or Households
-
         $this->setCriteria($criteria, 'details');
         $this->makeTempTables($this->commonCriteria);
         $countyDescQuery = $this->em->createQuery('SELECT DISTINCT cty.county, d.contactDesc FROM TruckeeProjectmanaBundle:TempContact c '
@@ -620,6 +641,13 @@ class Reports
         return $data;
     }
 
+    /**
+     * Get set of households with multiple same-date contacts
+     *
+     * @param type $criteria
+     *
+     * @return array
+     */
     public function getMultiContacts($criteria)
     {
         $this->setCriteria($criteria);
@@ -639,6 +667,11 @@ class Reports
         return $qb;
     }
 
+    /**
+     * Get site distributions by month for index page chart
+     *
+     * @return string
+     */
     public function getDistsFYToDate()
     {
         $fy = $this->getFY();
