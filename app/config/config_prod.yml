@@ -6,9 +6,9 @@ monolog:
         mail:
             type:         fingers_crossed
             # 500 errors are logged at the critical level
-            # action_level: critical
+            action_level: critical
             # to also log 400 level errors (but not 404's):
-            action_level: error
+            # action_level: error
             # excluded_404s:
             #     - ^/
             handler:      deduplicated
