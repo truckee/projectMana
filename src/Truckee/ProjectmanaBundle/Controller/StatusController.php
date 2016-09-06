@@ -16,6 +16,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 /**
+ * Controller for bulk management of household active status
+ *
+ * @return Response
+ *
  * @Route("/status")
  */
 class StatusController extends Controller

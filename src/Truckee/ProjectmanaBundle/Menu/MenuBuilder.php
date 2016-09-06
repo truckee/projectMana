@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 /**
  * Description of MenuBuilder
  *
- * @author George
+ * @author George Brooks
  */
 class MenuBuilder
 {

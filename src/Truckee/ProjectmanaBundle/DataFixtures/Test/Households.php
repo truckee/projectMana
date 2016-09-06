@@ -19,9 +19,9 @@ use Truckee\ProjectmanaBundle\Entity\Household;
 use Truckee\ProjectmanaBundle\Entity\Member;
 
 /**
- * Description of HouseholdV1Head.
+ * Households.
  *
- * @author George
+ * @author George Brooks
  */
 class Households extends AbstractFixture implements OrderedFixtureInterface
 {

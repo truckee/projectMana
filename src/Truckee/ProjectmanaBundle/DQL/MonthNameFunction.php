@@ -14,7 +14,10 @@ namespace Truckee\ProjectmanaBundle\DQL;
 
 use Doctrine\ORM\Query\AST\Functions\FunctionNode,
     Doctrine\ORM\Query\Lexer;
+
 /**
+ * Get name of month
+ *
  * @author Steve Lacey <steve@stevelacey.net>
  */
 class MonthNameFunction extends FunctionNode

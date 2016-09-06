@@ -10,7 +10,7 @@ home:
     defaults:  { _controller: TruckeeProjectmanaBundle:Default:index }
 
 easy_admin_bundle:
-    resource: "@TruckeeProjectmanaBundle/Controller/UserController.php"
+    resource: "@EasyAdminBundle/Controller/"
     type:     annotation
     prefix:   /optionsAdmin
 

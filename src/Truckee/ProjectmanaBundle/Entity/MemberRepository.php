@@ -14,12 +14,17 @@ namespace Truckee\ProjectmanaBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Description of MemberRepository.
+ * MemberRepository.
  *
- * @author George
+ * @author George Brooks
  */
 class MemberRepository extends EntityRepository
 {
+    /**
+     * Default  member surname = household head's surname
+     *
+     * @param object $household
+     */
     public function initialize($household)
     {
         $em = $this->getEntityManager();

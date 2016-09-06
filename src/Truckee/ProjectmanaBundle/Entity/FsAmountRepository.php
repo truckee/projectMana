@@ -19,6 +19,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class FsAmountRepository extends EntityRepository
 {
+    /**
+     * Get row labels for profile report
+     *
+     * @param array $dateCriteria
+     * @return array
+     */
     public function rowLabels($dateCriteria)
     {
         $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT f.amount FROM TruckeeProjectmanaBundle:Household h '
@@ -36,6 +42,14 @@ class FsAmountRepository extends EntityRepository
         return $rowLabels;
     }
 
+    /**
+     * Get profile data
+     *
+     * @param array $dateCriteria
+     * @param array $profileType
+     *
+     * @return array
+     */
     public function crossTabData($dateCriteria, $profileType)
     {
         $entity = ucfirst($profileType);

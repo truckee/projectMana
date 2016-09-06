@@ -33,7 +33,7 @@ class ContactController extends Controller
      * 
      * @param int $id Household id
      * 
-     * @return template
+     * @return Response
      *
      * @Route("/{id}/new", name="contact_new")
      */
@@ -74,7 +74,7 @@ class ContactController extends Controller
      * 
      * @param int $id Contact id
      * 
-     * @return template
+     * @return Response
      *
      * @Route("/{id}/edit", name="contact_edit")
      */
@@ -111,7 +111,7 @@ class ContactController extends Controller
      *
      * @param int $id Contact id
      * 
-     * @return template
+     * @return Response
      * 
      * @Route("/{id}/delete", name="contact_delete")
      */

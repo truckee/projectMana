@@ -18,10 +18,16 @@ use Doctrine\ORM\EntityRepository;
 /**
  * Description of CenterRepository.
  *
- * @author George
+ * @author George Brooks
  */
 class CenterRepository extends EntityRepository
 {
+    /**
+     * Get column headers for profile by site reports
+     * 
+     * @param array $dateCriteria
+     * @return array
+     */
     public function colLabels($dateCriteria)
     {
         $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT r.center FROM TruckeeProjectmanaBundle:Center r '

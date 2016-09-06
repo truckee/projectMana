@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-//src\Truckee\ProjectmanaBundle\Test\TruckeeWebTestCase.php
+//src\Truckee\ProjectmanaBundle\Tests\TruckeeWebTestCase.php
 
 namespace Truckee\ProjectmanaBundle\Tests;
 
@@ -18,7 +18,7 @@ use Liip\FunctionalTestBundle\Test\WebTestCase;
 /**
  * Description of TruckeeWebTestCase.
  *
- * @author George
+ * @author George Brooks
  */
 class TruckeeWebTestCase extends WebTestCase
 {

@@ -14,7 +14,7 @@ namespace Truckee\ProjectmanaBundle\Tests;
 /**
  * Description of StatusTest.
  *
- * @author George
+ * @author George Brooks
  */
 class StatusTest extends TruckeeWebTestCase
 {

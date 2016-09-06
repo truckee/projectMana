@@ -23,7 +23,7 @@ class DefaultController extends Controller
     /**
      * Home page for authorized users
      * 
-     * @return template
+     * @return Response
      * 
      * @Route("/", name="home")
      */
@@ -34,7 +34,7 @@ class DefaultController extends Controller
     /**
      * Present menu of report options.
      * 
-     * @return template
+     * @return Response
      * 
      * @Route("/reportMenu", name="report_menu")
      */

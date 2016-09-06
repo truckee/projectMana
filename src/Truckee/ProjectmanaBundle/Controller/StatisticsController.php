@@ -18,7 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Truckee\ProjectmanaBundle\Form\ReportCriteriaType;
 
 /**
- * Present various Mana statistics.
+ * Present various Project MANA statistics.
  *
  * @Route("/reports")
  */
@@ -27,10 +27,10 @@ class StatisticsController extends Controller
     /**
      * General statistics report.
      *
-     * @param Request $request
-     * @param type    $dest
+     * @param object Request $request
      *
-     * @return type
+     * @return Response
+     *
      * @Route("/general", name="stats_general")
      */
     public function generalAction(Request $request)
@@ -93,10 +93,12 @@ class StatisticsController extends Controller
     }
 
     /**
-     * details report.
+     * Details report.
      *
-     * @param type $month
-     * @param type $year
+     * @param object Request $request
+     *
+     * @return Response
+     *
      * @Route("/details", name="stats_details")
      */
     public function detailsAction(Request $request)
@@ -138,6 +140,12 @@ class StatisticsController extends Controller
     }
 
     /**
+     * Multiple contact in period report
+     *
+     * @param object Request $request
+     *
+     * @return Response
+     *
      * @Route("/multi", name="multi_contacts")
      */
     public function multiAction(Request $request)
@@ -178,6 +186,10 @@ class StatisticsController extends Controller
     /**
      * Export Excel file.
      *
+     * @param object Request $request
+     *
+     * @return Response
+     *
      * @Route("/excel", name="stats_excel")
      */
     public function excelAction(Request $request)
@@ -205,11 +217,12 @@ class StatisticsController extends Controller
     }
 
     /**
-     * create monthly Food Bank report page.
+     * Monthly Food Bank report page.
      *
-     * @param Request $request
-     * @param type    $month
-     * @param type    $year
+     * @param int    $month
+     * @param int    $year
+     *
+     * @return Response
      *
      * @Route("/foodbank/{year}/{month}", name="foodbank")
      */
@@ -239,13 +252,18 @@ class StatisticsController extends Controller
     }
 
     /**
-     * Returns array of 
-     *      array of criteria for generating report
-     *      array of criteria for templates.
+     * Returns report criteria
+     *
+     * Input consists of
+     *  startMonth, startYear, endMonth, endYear
+     *  optionally: center, county, contact_type, columnType
+     * Output array consists of
+     *  criteria for calculating data
+     *  criteria to display in template
      * 
      * @param array $criteria
      *
-     * @return array($contact)type, $center, $county)
+     * @return array
      */
     private function specs($criteria)
     {
@@ -291,6 +309,12 @@ class StatisticsController extends Controller
     }
 
     /**
+     * Employment profile.
+     *
+     * @param object Request $request
+     *
+     * @return Response
+     *
      * @Route("/employmentProfile", name="employment_profile")
      */
     public function employmentProfileAction(Request $request)
@@ -322,6 +346,12 @@ class StatisticsController extends Controller
     }
 
     /**
+     * Income profile.
+     *
+     * @param object Request $request
+     *
+     * @return Response
+     *
      * @Route("/incomeProfile", name="income_profile")
      */
     public function incomeProfileAction(Request $request)
@@ -353,68 +383,12 @@ class StatisticsController extends Controller
     }
 
     /**
-     * @Route("/foodstampYesNoProfile", name="foodstampYesNo_profile")
-     */
-    public function foodstampYesNoProfileAction(Request $request)
-    {
-        $form = $this->createForm(ReportCriteriaType::class);
-        $criteria = $request->request->get('report_criteria');
-        $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
-        $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $response = new Response();
-            $specs = $this->specs($criteria);
-            $reportSpecs = $specs['reportCriteria'];
-            $templateSpecs = $specs['templateCriteria'];
-            $reportData = $this->yesNo($reportSpecs);
-            $content = $this->profiler($reportData, $templateSpecs);
-            $response->setContent($content);
-
-            return $response;
-        }
-
-        return $this->render('Statistics/report_criteria.html.twig', array(
-                    'form' => $form->createView(),
-                    'criteriaTemplates' => $criteriaTemplates,
-                    'formPath' => 'foodstampYesNo_profile',
-                    'title' => 'Report criteria',
-                    'criteriaHeader' => 'Select SNAP/CalFresh benefits reporting criteria',
-        ));
-    }
-
-    /**
-     * @Route("/foodstampHowMuchProfile", name="foodstampHowMuch_profile")
-     */
-    public function foodstampHowMuchProfileAction(Request $request)
-    {
-        $form = $this->createForm(ReportCriteriaType::class);
-        $criteria = $request->request->get('report_criteria');
-        $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
-        $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $response = new Response();
-            $specs = $this->specs($criteria);
-            $reportSpecs = $specs['reportCriteria'];
-            $templateSpecs = $specs['templateCriteria'];
-            $reportData = $this->howMuch($reportSpecs);
-            $content = $this->profiler($reportData, $templateSpecs);
-            $response->setContent($content);
-
-            return $response;
-        }
-
-        return $this->render('Statistics/report_criteria.html.twig', array(
-                    'form' => $form->createView(),
-                    'criteriaTemplates' => $criteriaTemplates,
-                    'formPath' => 'foodstampHowMuch_profile',
-                    'title' => 'Report criteria',
-                    'criteriaHeader' => 'Select SNAP/CalFresh benefits reporting criteria',
-        ));
-    }
-
-    /**
+     * Insufficient food reason profile.
+     *
+     * @param object Request $request
+     *
+     * @return Response
+     *
      * @Route("/reasonProfile", name="reason_profile")
      */
     public function reasonProfileAction(Request $request)
@@ -446,37 +420,14 @@ class StatisticsController extends Controller
     }
 
     /**
-     * @Route("/notfoodstampProfile", name="notfoodstamp_profile")
-     */
-    public function notfoodstampProfileAction(Request $request)
-    {
-        $form = $this->createForm(ReportCriteriaType::class);
-        $criteria = $request->request->get('report_criteria');
-        $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
-        $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $response = new Response();
-            $specs = $this->specs($criteria);
-            $reportSpecs = $specs['reportCriteria'];
-            $templateSpecs = $specs['templateCriteria'];
-            $reportData = $this->not($reportSpecs);
-            $content = $this->profiler($reportData, $templateSpecs);
-            $response->setContent($content);
-
-            return $response;
-        }
-
-        return $this->render('Statistics/report_criteria.html.twig', array(
-                    'form' => $form->createView(),
-                    'criteriaTemplates' => $criteriaTemplates,
-                    'formPath' => 'notfoodstamp_profile',
-                    'title' => 'Report criteria',
-                    'criteriaHeader' => 'Select SNAP/CalFresh benefits reporting criteria',
-        ));
-    }
-
-    /**
+     * Set of three profiles.
+     *
+     * Contains profile of Yes/No receiving foodstamps, how much, and why not
+     *
+     * @param object Request $request
+     *
+     * @return Response
+     *
      * @Route("/snapProfile", name="snap_profile")
      */
     public function snapProfileAction(Request $request)
@@ -511,6 +462,14 @@ class StatisticsController extends Controller
         ));
     }
 
+    /**
+     * Arranges profile data in rows and columns
+     *
+     * @param array $reportData
+     * @param array $templateSpecs
+     *
+     * @return Response
+     */
     private function profiler($reportData, $templateSpecs)
     {
         $xp = $this->container->get('mana.crosstab');
@@ -527,6 +486,14 @@ class StatisticsController extends Controller
         ]);
     }
 
+    /**
+     * Arranges three SNAP profile reports
+     *
+     * @param array $reportData
+     * @param array $templateSpecs
+     *
+     * @return Response
+     */
     private function profilerPlain($reportData, $templateSpecs)
     {
         $xp = $this->container->get('mana.crosstab');
@@ -543,6 +510,13 @@ class StatisticsController extends Controller
         ]);
     }
 
+    /**
+     * Gather row & column data for employment profile
+     *
+     * @param array $criteria
+     *
+     * @return Response
+     */
     private function employment($criteria)
     {
         $em = $this->getDoctrine()->getManager();
@@ -567,6 +541,13 @@ class StatisticsController extends Controller
         return $reportData;
     }
 
+    /**
+     * Gather row & column data for SNAP how much profile
+     *
+     * @param array $criteria
+     *
+     * @return Response
+     */
     private function howMuch($criteria)
     {
         $em = $this->getDoctrine()->getManager();
@@ -590,6 +571,13 @@ class StatisticsController extends Controller
         return $reportData;
     }
 
+    /**
+     * Gather row & column data for income profile
+     *
+     * @param array $criteria
+     *
+     * @return Response
+     */
     private function income($criteria)
     {
         $em = $this->getDoctrine()->getManager();
@@ -613,11 +601,17 @@ class StatisticsController extends Controller
         return $reportData;
     }
 
+    /**
+     * Gather row & column data for SNAP why not profile
+     * 
+     * @param array $criteria
+     * 
+     * @return Response
+     */
     private function not($criteria)
     {
         $em = $this->getDoctrine()->getManager();
         $xp = $this->container->get('mana.crosstab');
-//        $dateCriteria = $xp->setDateCriteria($criteria);
         $columnType = $criteria['columnType'];
         $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Notfoodstamp')
             ->rowLabels(['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']]);
@@ -638,6 +632,13 @@ class StatisticsController extends Controller
         return $reportData;
     }
 
+    /**
+     * Gather row & column data for reason profile
+     *
+     * @param array $criteria
+     *
+     * @return Response
+     */
     private function reason($criteria)
     {
         $em = $this->getDoctrine()->getManager();
@@ -661,6 +662,13 @@ class StatisticsController extends Controller
         return $reportData;
     }
 
+    /**
+     * Gather row & column data for SNAP Yes/No profile
+     *
+     * @param array $criteria
+     *
+     * @return Response
+     */
     private function yesNo($criteria)
     {
         $em = $this->getDoctrine()->getManager();
@@ -683,6 +691,13 @@ class StatisticsController extends Controller
         return $reportData;
     }
 
+    /**
+     * Organize report header
+     *
+     * @param array $specs
+     *
+     * @return Response
+     */
     private function getReportHeader($specs)
     {
         $startDate = date_format($specs['startDate'], 'F, Y');

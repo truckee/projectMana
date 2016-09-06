@@ -19,11 +19,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * Controller for household members
+ *
  * @Route("/member")
  */
 class MemberController extends Controller
 {
     /**
+     * Edit household member.
+     *
+     * @param object Request $request
+     * @param int $id Member id
+     *
+     * @return JsonResponse
+     *
      * @Route("/edit/{id}", name="member_edit")
      */
     public function editAction(Request $request, $id)
@@ -86,6 +95,13 @@ class MemberController extends Controller
     }
 
     /**
+     * Add household member.
+     *
+     * @param object Request $request
+     * @param int $houseId Household id
+     *
+     * @return JsonResponse
+     *
      * @Route("/add/{houseId}", name="member_add")
      */
     public function addAction(Request $request, $houseId)
@@ -127,6 +143,12 @@ class MemberController extends Controller
     }
 
     /**
+     * Show household member.
+     *
+     * @param int $id Member id
+     *
+     * @return Response
+     *
      * @Route("/householdMember/{id}", name="house_member")
      */
     public function memberHeadShowAction($id)

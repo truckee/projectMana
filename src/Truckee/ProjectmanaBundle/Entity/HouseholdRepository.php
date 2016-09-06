@@ -18,11 +18,11 @@ class HouseholdRepository extends EntityRepository
     /**
      * Set initial values for household entity.
      * 
-     * @param type $household
-     * @param type $member
-     * @param type $session
+     * @param object $household
+     * @param object $member
+     * @param object $session
      *
-     * @return mixed
+     * @return int
      */
     public function initialize($household, $member, $session = null)
     {
@@ -54,6 +54,12 @@ class HouseholdRepository extends EntityRepository
         return $id;
     }
 
+    /**
+     * Add contact to set of households
+     *
+     * @param array $households
+     * @param array $contactData
+     */
     public function addContacts($households, $contactData)
     {
         $em = $this->getEntityManager();

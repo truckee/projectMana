@@ -30,9 +30,9 @@ use Truckee\ProjectmanaBundle\Entity\State;
 use Truckee\ProjectmanaBundle\Entity\Work;
 
 /**
- * Description of Constants.
+ * Set of Constants required by tests.
  *
- * @author George
+ * @author George Brooks
  */
 class Constants extends AbstractFixture implements OrderedFixtureInterface
 {

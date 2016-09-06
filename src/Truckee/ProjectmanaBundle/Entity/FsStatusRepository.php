@@ -19,6 +19,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class FsStatusRepository extends EntityRepository
 {
+    /**
+     * Get profile data
+     *
+     * @param array $dateCriteria
+     * @param array $profileType
+     * @return array
+     */
     public function crossTabData($dateCriteria, $profileType)
     {
         $entity = ucfirst($profileType);
@@ -37,18 +44,5 @@ class FsStatusRepository extends EntityRepository
             ->getResult();
 
         return $qb;
-//        $str = "SELECT r.__TYPE__ colLabel, if(fs.status='Yes', 'Yes', 'No') rowLabel, COUNT(DISTINCT h.id) N ".
-//                    'FROM household h '.
-//                    'JOIN contact c ON c.household_id = h.id '.
-//                    'LEFT JOIN __TYPE__ r ON r.id = c.__TYPE___id '.
-//                    'JOIN fs_status fs ON h.foodstamp_id = fs.id '.
-//                    'WHERE c.contact_date BETWEEN __DATE_CRITERIA__ '.
-//                    'GROUP BY colLabel, rowLabel';
-//        $sql1 = str_replace('__DATE_CRITERIA__', $dateCriteria, $str);
-//        $sql = str_replace('__TYPE__', $profileType, $sql1);
-//        $conn = $this->getEntityManager()->getConnection();
-//        $stmt = $conn->executeQuery($sql);
-//
-//        return $stmt->fetchAll();
     }
 }

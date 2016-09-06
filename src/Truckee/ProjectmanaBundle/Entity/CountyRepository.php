@@ -19,6 +19,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class CountyRepository extends EntityRepository
 {
+    /**
+     * Get column headers for profile by site reports
+     *
+     * @param array $dateCriteria
+     * @return array
+     */
     public function colLabels($dateCriteria)
     {
         $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT r.county FROM TruckeeProjectmanaBundle:County r '

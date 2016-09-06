@@ -21,7 +21,7 @@ use Doctrine\ORM\EntityRepository;
 /**
  * Description of AddressType.
  *
- * @author George
+ * @author George Brooks
  */
 class AddressType extends AbstractType
 {

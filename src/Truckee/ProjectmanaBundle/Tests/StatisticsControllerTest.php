@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-//src\Truckee\ProjectmanaBundle\Test\StatisticsControllerTest.php
+//src\Truckee\ProjectmanaBundle\Tests\StatisticsControllerTest.php
 
 namespace Truckee\ProjectmanaBundle\Tests;
 
 /**
  * Description of StatisticsControllerTest.
  *
- * @author George
+ * @author George Brooks
  */
 class StatisticsControllerTest extends TruckeeWebTestCase
 {

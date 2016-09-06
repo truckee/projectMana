@@ -15,6 +15,13 @@ namespace Truckee\ProjectmanaBundle\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 
+/**
+ * Converts age to estimate of DOB
+ *
+ * Transformer required because initial design of Project MANA
+ * database did not track date of birth.
+ * 
+ */
 class AgeToDOB implements DataTransformerInterface
 {
     public function reverseTransform($dob)

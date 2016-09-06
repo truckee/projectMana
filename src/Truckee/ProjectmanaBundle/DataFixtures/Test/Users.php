@@ -20,9 +20,9 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Description of AdminUser.
+ * Users.
  *
- * @author George
+ * @author George Brooks
  */
 class Users extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {

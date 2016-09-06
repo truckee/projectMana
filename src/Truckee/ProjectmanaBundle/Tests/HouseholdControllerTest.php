@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-//src\Truckee\ProjectmanaBundle\Test\HouseholdControllerTest.php
+//src\Truckee\ProjectmanaBundle\Tests\HouseholdControllerTest.php
 
 namespace Truckee\ProjectmanaBundle\Tests;
 
 /**
  * Description of HouseholdControllerTest.
  *
- * @author George
+ * @author George Brooks
  */
 class HouseholdControllerTest extends TruckeeWebTestCase
 {

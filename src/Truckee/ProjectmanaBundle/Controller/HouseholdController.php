@@ -35,9 +35,9 @@ class HouseholdController extends Controller
      * Finds and displays a Household entity.
      * 
      * @param object $request Request
-     * @param object $id Household id
+     * @param int $id Household id
      * 
-     * @return template
+     * @return Response
      *
      * @Route("/{id}/show", name="household_show")
      */
@@ -72,7 +72,7 @@ class HouseholdController extends Controller
      * 
      * @param object $request Request
      * 
-     * @return template
+     * @return Response
      *
      * @Route("/new", name="household_new")
      */
@@ -143,7 +143,9 @@ class HouseholdController extends Controller
      * Edit existing household.
      *
      * @param object $request Request
-     * @param object $id Household id
+     * @param int $id Household id
+     *
+     * @return Response
      * 
      * @Route("/{id}/edit", name="household_edit")
      */
@@ -188,7 +190,7 @@ class HouseholdController extends Controller
      *
      * @param Request $request
      *
-     * @return template
+     * @return Response
      * 
      * @Route("/_search", name = "_search")
      */
@@ -242,7 +244,9 @@ class HouseholdController extends Controller
      * Provides a json encoded string of household head data to be displayed 
      * when adding contacts.
      * 
-     * @param object $id Household id
+     * @param int $id Household id
+     *
+     * @return JsonResponse
      *
      * @Route("/contact/{id}", name="household_contact")
      */
