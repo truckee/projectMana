@@ -1,17 +1,18 @@
 imports:
     - { resource: parameters.yml }
-    - { resource: @ManaClientBundle/Resources/config/security.yml }
-    - { resource: @ManaClientBundle/Resources/config/services.yml }
+    - { resource: easyAdmin.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
 
 framework:
     #esi:             ~
-#    translator:      { fallback: "%locale%" }
+    translator:      { fallback: "%locale%" }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
         strict_requirements: "%kernel.debug%"
     form:            true
-    csrf_protection: true
+    csrf_protection: false
     validation:      { enable_annotations: true }
     templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
@@ -22,22 +23,6 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
-
-# Assetic Configuration
-assetic:
-    debug:          "%kernel.debug%"
-    use_controller: false
-    bundles:        [ ManaClientBundle ]
-    #java: /usr/bin/java
-    filters:
-        lessphp:
-             file: %kernel.root_dir%/../vendor/oyejorge/less.php/lessc.inc.php
-             apply_to: "\.less$"
-        cssrewrite: ~
-        #closure:
-        #    jar: "%kernel.root_dir%/Resources/java/compiler.jar"
-        #yui_css:
-        #    jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
 
 # Doctrine Configuration
 doctrine:
@@ -50,18 +35,17 @@ doctrine:
         user:     "%database_user%"
         password: "%database_password%"
         charset:  UTF8
-        mapping_types: 
-            enum:       string 
+        mapping_types:
+            enum:       string
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         entity_managers:
           default:
             auto_mapping: true
             dql:
-              string_functions:
-                Soundex: Mana\ClientBundle\DQL\Soundex
-              datetime_functions: 
-                Year: DoctrineExtensions\Query\Mysql\Year
+                numeric_functions:
+                    FY: Truckee\ProjectmanaBundle\DQL\FiscalYearFunction
+                    MONTHNAME: Truckee\ProjectmanaBundle\DQL\MonthNameFunction
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -72,3 +56,40 @@ swiftmailer:
 
 braincrafted_bootstrap:
      css_preprocessor: lessphp
+
+monolog:
+    handlers:
+        main:
+            type:         fingers_crossed
+            action_level: error
+            handler:      nested
+        nested:
+            type:  stream
+            path:  %kernel.logs_dir%/%kernel.environment%.log
+            level: debug
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: 'Truckee\ProjectmanaBundle\Entity\User'
+    from_email:
+        address:        Projectmana.app@gmail.com
+        sender_name:    Application Support
+    service:
+        mailer: fos_user.mailer.twig_swift
+    resetting:
+        email:
+            template: email/password_resetting.email.twig
+
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        lessphp:
+             file: %kernel.root_dir%/../vendor/oyejorge/less.php/lessc.inc.php
+             apply_to: '\.less$'
+        cssrewrite: ~
+
+knp_menu:
+    twig:  # use "twig: false" to disable the Twig extension and the TwigRenderer
+        template: BraincraftedBootstrapBundle:Menu:bootstrap.html.twig

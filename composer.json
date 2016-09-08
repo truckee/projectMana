@@ -1,8 +1,8 @@
 {
-    "name": "symfony/framework-standard-edition",
+    "name": "truckee/projectmana",
     "license": "MIT",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "description": "Project MANA administrative application",
     "autoload": {
         "psr-0": {
             "": "src/"
@@ -22,29 +22,29 @@
         }
     ],
     "require": {
-        "php": ">=5.3.9",
-        "symfony/symfony": "2.8.*",
-        "doctrine/orm": "^2.4.8",
+        "braincrafted/bootstrap-bundle": "~2.0",
         "doctrine/doctrine-bundle": "~1.4",
-        "twig/extensions": "1.0.*",
-        "symfony/assetic-bundle": "2.3.*",
-        "symfony/swiftmailer-bundle": "~2.3",
-        "symfony/monolog-bundle": "~2.4",
+        "doctrine/doctrine-fixtures-bundle": "^2.3",
+        "doctrine/orm": "^2.4.8",
+        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "incenteev/composer-parameter-handler": "~2.0",
+        "javiereguiluz/easyadmin-bundle": "~1.1",
+        "jms/security-extra-bundle": "~1.5",
+        "jquery/jquery": "1.11.*",
+        "knplabs/knp-menu-bundle": "~2.0",
+        "nelmio/alice": "^2.1",
+        "oyejorge/less.php": "~1.5",
+        "paragonie/random_compat": "^2.0",
+        "php": ">=5.3.9",
+        "psliwa/pdf-bundle": "dev-master",
         "sensio/distribution-bundle": "~4.0",
         "sensio/framework-extra-bundle": "^3.0.2",
-        "sensio/generator-bundle": "~2.3",
-        "incenteev/composer-parameter-handler": "~2.0",
-        "jms/security-extra-bundle": "~1.5",
-        "knplabs/knp-menu-bundle": "~2.0",
-        "psliwa/pdf-bundle": "dev-master",
-        "symfony/intl": "2.3.*@dev",
-        "braincrafted/bootstrap-bundle": "~2.0",
+        "symfony/assetic-bundle": "dev-master",
+        "symfony/monolog-bundle": "~2.4",
+        "symfony/swiftmailer-bundle": "~2.3",
+        "symfony/symfony": "2.8.*",
         "twbs/bootstrap": "3.0.*",
-        "jquery/jquery": "1.11.*",
-        "oyejorge/less.php": "~1.5",
-        "doctrine/doctrine-fixtures-bundle": "^2.3",
-        "nelmio/alice": "^2.1"
-
+        "twig/extensions": "1.0.*"
     },
     "scripts": {
         "post-install-cmd": [
@@ -89,6 +89,7 @@
         ]
     },
     "require-dev": {
-        "liip/functional-test-bundle": "^1.4"
+        "liip/functional-test-bundle": "^1.4",
+        "symfony/phpunit-bridge": "^3.0"
     }
 }
