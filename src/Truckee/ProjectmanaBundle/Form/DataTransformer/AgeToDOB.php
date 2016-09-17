@@ -34,7 +34,7 @@ class AgeToDOB implements DataTransformerInterface
 
             return $date;
         }
-        if (is_numeric($dob)) {
+        if (is_numeric($dob) && is_int(1 * $dob)) {
             $date = new \DateTime();
             $interval = 'P'.$dob.'Y';
             $date->sub(new \DateInterval($interval));

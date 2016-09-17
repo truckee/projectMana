@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="en">
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta Name="description"
@@ -17,13 +17,13 @@
     </head>
     <body>
         <div class="container">
-            <div><img src="/images/banner.jpg"><span style="font-size: 18pt;">Making Adequate Nutrition Accessible</div>
+            <div><img src="/images/banner.jpg" alt="Project MANA banner"><span style="font-size: 18pt;">Making Adequate Nutrition Accessible</span></div>
                 {% if app.user %}
                     {% set route = app.request.attributes.get('_route') %}
                 <div class="menu hidden-print">
                     {% block nav %}
                         {% spaceless %}
-                            <nav class="navbar navbar-default" role="navigation">
+                            <nav class="navbar navbar-default">
                                 <div class="navbar-header">
                                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                                         <span class="sr-only">Toggle navigation</span>
@@ -37,7 +37,7 @@
                                     {{ knp_menu_render('main', {'style': 'navbar'})  }}
                                     <form action="{{ path('_search') }}" id="household_search" class="navbar-form navbar-left" role="search">
                                         <div class="form-group">
-                                            <input type="text" name="qtext" method="get" class="form-control" placeholder="Full name or ID">
+                                            <input type="text" name="qtext" class="form-control" placeholder="Full name or ID">
                                         </div>
                                         <button type="submit" class="btn btn-default">
                                             <span id="search" class="glyphicon glyphicon-search"></span>
