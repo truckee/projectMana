@@ -223,4 +223,22 @@ class HouseholdControllerTest extends TruckeeWebTestCase
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Date may not be in future")')->count());
     }
+
+    public function testOneAddress()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('house1')->getId();
+        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
+        
+        $this->assertEquals(2, $crawler->filter('input[type=radio]')->count());
+    }
+
+    public function testNoAddress()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('house2')->getId();
+        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
+        
+        $this->assertEquals(4, $crawler->filter('input[type=radio]')->count());
+    }
 }

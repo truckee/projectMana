@@ -1,7 +1,4 @@
 $(document).ready(function () {
-    // for household addresses
-    var addressForm = $('#addressForm');
-    var addressWidget = $('#addressWidget').attr('data-prototype');
     var foodStampSelect = $("#household_foodstamp");
 
     foodStampShowHide($("#household_foodstamp option:selected").val());
@@ -61,11 +58,6 @@ $(document).ready(function () {
         } else {
             $("label[for='member_isHead']").hide();
         }
-    });
-
-    $('#add-address').click(function () {
-        addressForm.append($(addressWidget));
-        return false;
     });
 
     $(document).on("click", "#selectAll", function () {
@@ -201,10 +193,6 @@ $(document).ready(function () {
     });
 }
 );
-
-function removeAddress(me) {
-    $(me).parents().eq(2).remove();
-}
 
 function foodStampShowHide(option) {
     //Blank option === ""

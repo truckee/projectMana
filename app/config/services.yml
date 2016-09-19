@@ -36,3 +36,8 @@ services:
             - { name: knp_menu.menu_builder, method: profileMenu, alias: profileMenu }
             - { name: knp_menu.menu_builder, method: householdMenu, alias: household }
             - { name: knp_menu.menu_builder, method: returnFromContacts, alias: return }
+
+    mana.addresses:
+        class: Truckee\ProjectmanaBundle\Utilities\Addresses
+        arguments:
+          em: '@doctrine.orm.entity_manager'

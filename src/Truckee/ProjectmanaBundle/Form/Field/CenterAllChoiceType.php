@@ -30,7 +30,6 @@ class CenterAllChoiceType extends AbstractType
                     'class' => 'TruckeeProjectmanaBundle:Center',
                     'choice_label' => 'center',
                     'placeholder' => 'Select site',
-                    'attr' => array('class' => 'smallform'),
                     'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('c')
                                 ->orderBy('c.center', 'ASC')
