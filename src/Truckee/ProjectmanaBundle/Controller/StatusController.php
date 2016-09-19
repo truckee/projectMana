@@ -29,7 +29,7 @@ class StatusController extends Controller
      */
     public function showAction()
     {
-        $status = $this->get('status');
+        $status = $this->get('mana.status');
         $statusYears = $status->getYearStatus();
 
         return $this->render('Status/show.html.twig', array(
@@ -45,7 +45,7 @@ class StatusController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $request->get('status');
-        $status = $this->get('status');
+        $status = $this->get('mana.status');
         $status->setStatus($data);
         $flash = $this->get('braincrafted_bootstrap.flash');
         $flash->alert('Household status updated');

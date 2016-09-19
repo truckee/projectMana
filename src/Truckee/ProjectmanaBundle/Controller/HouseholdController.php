@@ -108,7 +108,7 @@ class HouseholdController extends Controller
                 'dob' => date_format($head->getDob(), 'Y-m-d'),
             );
             $searchFor = $head->getFname() . ' ' . $head->getSname();
-            $searches = $this->get('searches');
+            $searches = $this->get('mana.searches');
             $found = $searches->getMembers($searchFor);
             $session->set('household', $household);
             $em->detach($household);
@@ -240,7 +240,7 @@ class HouseholdController extends Controller
             return $this->redirectToRoute('household_show', array('id' => $qtext));
         } else {
             // search for head of household
-            $searches = $this->get('searches');
+            $searches = $this->get('mana.searches');
             $found = $searches->getMembers($qtext);
             if (count($found) == 0 || !$found) {
                 $flash->alert('Sorry, no households were found');
