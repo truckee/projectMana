@@ -196,7 +196,7 @@ class ContactController extends Controller
     public function mostRecentContactsAction($site, $source) {
         $em = $this->getDoctrine()->getManager();
         $center = $em->getRepository('TruckeeProjectmanaBundle:Center')->find($site);
-        $searches = $this->get('searches');
+        $searches = $this->get('mana.searches');
         if ('Most recent' === $source) {
             $contacts = $searches->getLatest($site);
         }
@@ -232,7 +232,7 @@ class ContactController extends Controller
         if ($form->isValid()) {
             //time limit extension required for multi-page rendering
             set_time_limit(0);
-            $searches = $this->get('searches');
+            $searches = $this->get('mana.searches');
             $id = $center->getCenter()->getId();
             $location = $center->getCenter()->getCenter();
             if ('Most recent' === $source) {

@@ -48,7 +48,7 @@ class DefaultController extends Controller
      * @return script
      */
     public function scriptAction() {
-        $reports = $this->get('reports');
+        $reports = $this->get('mana.reports');
         $chart = $reports->getDistsFYToDate();
 
         return $this->render('Default/script.js.twig', array(

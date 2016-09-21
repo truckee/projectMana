@@ -282,7 +282,7 @@ class Address
     /**
      * Set addresstype.
      *
-     * @param \Truckee\ProjectmanaBundle\Entity\OneSideEntity $addresstype
+     * @param \Truckee\ProjectmanaBundle\Entity\AddressType $addresstype
      *
      * @return Contact
      */
@@ -296,7 +296,7 @@ class Address
     /**
      * Get addresstype.
      *
-     * @return \Truckee\ProjectmanaBundle\Entity\OneSideEntity
+     * @return \Truckee\ProjectmanaBundle\Entity\AddressType
      */
     public function getAddresstype()
     {

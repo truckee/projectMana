@@ -1,7 +1,7 @@
 {% extends "layout.html.twig" %}
 {% block body %}
     <div class="panel panel-primary">
-            {% include 'Household/householdHeading.html.twig' %}
+        {% include 'Household/householdHeading.html.twig' %}
         <div class="panel-body">
             <form action="{{ path('household_edit', { 'id': household.id }) }}" method="post">
                 {% include 'Member/memberShowBlock.html.twig' %}
@@ -12,4 +12,8 @@
             </form>
         </div>
     </div>
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="{{ asset('js/addresses.js') }}"></script>
+    {% endblock %}
 {% endblock %}

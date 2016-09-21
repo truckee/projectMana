@@ -44,7 +44,7 @@ class StatisticsController extends Controller
             $em = $this->getDoctrine()->getManager();
             // get specs to pass to template
             $specs = $this->specs($criteria);
-            $reports = $this->get('reports');
+            $reports = $this->get('mana.reports');
             $reports->setStats($specs['reportCriteria']);
             $data = $reports->getStats();
             $statistics = $data['statistics'];
@@ -108,7 +108,7 @@ class StatisticsController extends Controller
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $reports = $this->get('reports');
+            $reports = $this->get('mana.reports');
             $session = $request->getSession();
             $specs = $this->specs($criteria);
             $reports->setDetails($specs['reportCriteria']);
@@ -155,7 +155,7 @@ class StatisticsController extends Controller
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $reports = $this->get('reports');
+            $reports = $this->get('mana.reports');
             $specs = $this->specs($criteria);
             $reportSpecs = $specs['reportCriteria'];
             $templateSpecs = $specs['templateCriteria'];
@@ -237,7 +237,7 @@ class StatisticsController extends Controller
             'center_id' => 0,
             'county_id' => 0,
         );
-        $reports = $this->get('reports');
+        $reports = $this->get('mana.reports');
         $specs = $this->specs($criteria);
         $reports->setStats($specs['reportCriteria']);
         $data = $reports->getStats();

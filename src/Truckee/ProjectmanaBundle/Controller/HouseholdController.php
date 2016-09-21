@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Truckee\Projectmana package.
  *
@@ -41,7 +40,8 @@ class HouseholdController extends Controller
      *
      * @Route("/{id}/show", name="household_show")
      */
-    public function showAction(Request $request, $id) {
+    public function showAction(Request $request, $id)
+    {
         $session = $request->getSession();
         $session->set('household', null);
         $em = $this->getDoctrine()->getManager();
@@ -54,11 +54,12 @@ class HouseholdController extends Controller
         $templates[] = 'Address/addressShowBlock.html.twig';
         $templates[] = 'Household/contactShowBlock.html.twig';
 
-        return $this->render('Household/show.html.twig', array(
-                    'household' => $household,
-                    'hohId' => $household->getHead()->getId(),
-                    'title' => 'Household View',
-                    'templates' => $templates,
+        return $this->render('Household/show.html.twig',
+                array(
+                'household' => $household,
+                'hohId' => $household->getHead()->getId(),
+                'title' => 'Household View',
+                'templates' => $templates,
         ));
     }
 
@@ -76,7 +77,8 @@ class HouseholdController extends Controller
      *
      * @Route("/new", name="household_new")
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request)
+    {
         $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $houseTest = $session->get('household');
@@ -106,7 +108,7 @@ class HouseholdController extends Controller
                 'dob' => date_format($head->getDob(), 'Y-m-d'),
             );
             $searchFor = $head->getFname() . ' ' . $head->getSname();
-            $searches = $this->get('searches');
+            $searches = $this->get('mana.searches');
             $found = $searches->getMembers($searchFor);
             $session->set('household', $household);
             $em->detach($household);
@@ -131,11 +133,12 @@ class HouseholdController extends Controller
             }
         }
 
-        return $this->render('Household/new.html.twig', array(
-                    'formType' => 'New Household',
-                    'form' => $form->createView(),
-                    'formHead' => $formHead->createView(),
-                    'title' => 'New Household',
+        return $this->render('Household/new.html.twig',
+                array(
+                'formType' => 'New Household',
+                'form' => $form->createView(),
+                'formHead' => $formHead->createView(),
+                'title' => 'New Household',
         ));
     }
 
@@ -149,7 +152,8 @@ class HouseholdController extends Controller
      * 
      * @Route("/{id}/edit", name="household_edit")
      */
-    public function editAction(Request $request, $id) {
+    public function editAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
         if (!$household) {
@@ -165,9 +169,26 @@ class HouseholdController extends Controller
             $phone = new Phone();
             $household->addPhone($phone);
         }
+        $addresses = $this->get('mana.addresses');
+        $addressTemplates = $addresses->addressTemplates($household);
+
         $form = $this->createForm(HouseholdType::class, $household, ['new' => $new]);
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $hasPhysical = $form->get('physicalAddress')->get('physical')->getData();
+            if ('1' === $hasPhysical) {
+                $address = $form->get('physicalAddress')->getData();
+                $type = $em->getRepository('TruckeeProjectmanaBundle:AddressType')->find(1);
+                $address->setAddressType($type);
+                $household->addAddress($address);
+            }
+            $hasMailing = $form->get('mailingAddress')->get('mailing')->getData();
+            if ('1' === $hasMailing) {
+                $address = $form->get('mailingAddress')->getData();
+                $type = $em->getRepository('TruckeeProjectmanaBundle:AddressType')->find(2);
+                $address->setAddressType($type);
+                $household->addAddress($address);
+            }
             $em->getRepository('TruckeeProjectmanaBundle:Member')->initialize($household);
             $em->persist($household);
             $em->flush();
@@ -177,11 +198,13 @@ class HouseholdController extends Controller
             return $this->redirectToRoute('household_show', array('id' => $household->getId()));
         }
 
-        return $this->render('Household/edit.html.twig', array(
-                    'form' => $form->createView(),
-                    'title' => 'Household Edit',
-                    'household' => $household,
-                    'hohId' => $household->getHead()->getId(),
+        return $this->render('Household/edit.html.twig',
+                array(
+                'form' => $form->createView(),
+                'title' => 'Household Edit',
+                'household' => $household,
+                'hohId' => $household->getHead()->getId(),
+                    'templates' => $addressTemplates,
         ));
     }
 
@@ -194,7 +217,8 @@ class HouseholdController extends Controller
      * 
      * @Route("/_search", name = "_search")
      */
-    public function searchAction(Request $request) {
+    public function searchAction(Request $request)
+    {
         $flash = $this->get('braincrafted_bootstrap.flash');
         $qtext = $request->query->get('qtext');
         if ($qtext == '') {
@@ -216,7 +240,7 @@ class HouseholdController extends Controller
             return $this->redirectToRoute('household_show', array('id' => $qtext));
         } else {
             // search for head of household
-            $searches = $this->get('searches');
+            $searches = $this->get('mana.searches');
             $found = $searches->getMembers($qtext);
             if (count($found) == 0 || !$found) {
                 $flash->alert('Sorry, no households were found');
@@ -229,10 +253,11 @@ class HouseholdController extends Controller
 
                 return $this->redirectToRoute('household_show', array('id' => $id));
             } else {
-                return $this->render('Household/search.html.twig', array(
-                            'searchedFor' => $qtext,
-                            'matched' => $found,
-                            'title' => 'Search results',
+                return $this->render('Household/search.html.twig',
+                        array(
+                        'searchedFor' => $qtext,
+                        'matched' => $found,
+                        'title' => 'Search results',
                 ));
             }
         }
@@ -250,14 +275,16 @@ class HouseholdController extends Controller
      *
      * @Route("/contact/{id}", name="household_contact")
      */
-    public function contactAction($id) {
+    public function contactAction($id)
+    {
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
         if (!$household) {
             $response = new Response('');
         } else {
-            $content = $this->renderView('Contact/addHouseholdContact.html.twig', [
+            $content = $this->renderView('Contact/addHouseholdContact.html.twig',
+                [
                 'household' => $household,
             ]);
             $response = new Response($content);
@@ -265,5 +292,4 @@ class HouseholdController extends Controller
 
         return $response;
     }
-
 }

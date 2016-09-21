@@ -1,0 +1,31 @@
+<div class="panel-body">
+    <div class="row">
+        <div class="col-md-2">
+            {{ form_row(form.mailingAddress.mailing) }}
+        </div>
+        <div class="col-md-10" id="mailing">
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.mailingAddress.address.line1) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.mailingAddress.address.line2) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    {{ form_row(form.mailingAddress.address.city) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(form.mailingAddress.address.county) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(form.mailingAddress.address.state) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(form.mailingAddress.address.zip) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

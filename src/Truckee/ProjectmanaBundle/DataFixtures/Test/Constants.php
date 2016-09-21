@@ -185,7 +185,7 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
         $addType2 = new AddressType();
         $addType2->setAddresstype('Physical');
         $addType2->setEnabled(true);
-        $this->setReference('mailing', $addType2);
+        $this->setReference('physical', $addType2);
         $manager->persist($addType2);
 
         $ca = new State();
