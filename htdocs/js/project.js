@@ -186,9 +186,10 @@ $(document).ready(function () {
                     ],
                 });
                 $('#memberEditDialog').html(data);
-
+                $("#memberOffenses").html('');
                 $('#memberEditDialog').dialog('open');
             });
+            $("#memberOffenses").hide();
         }
     });
 }
