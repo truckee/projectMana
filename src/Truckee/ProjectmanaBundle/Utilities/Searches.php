@@ -116,4 +116,37 @@ class Searches
 
         return $contacts;
     }
+
+    public function getDisbledOptions($object)
+    {
+        $methods = get_class_methods($object);
+        $values = [];
+        foreach ($methods as $method) {
+            if ('get' === substr($method, 0, 3) && is_object($object->$method()) && method_exists($object->$method(),
+                    'getEnabled') && false === $object->$method()->getEnabled()) {
+                $className = $this->get_class_name(get_class($object->$method()));
+                $getter = 'get' . $className;
+                $values[] = [$className => $object->$method()->$getter()];
+            }
+        }
+
+        return $values;
+    }
+
+    private function get_class_name($classname)
+    {
+        if ($pos = strrpos($classname, '\\')) return substr($classname, $pos + 1);
+        return $pos;
+    }
+
+    public function setDisabledOptions($object, $options)
+    {
+        foreach ($options as $option => $value) {
+            $setter = 'set' . $option;
+        dump($object);
+            $object->$setter($value);
+        }
+
+        return $object;
+    }
 }

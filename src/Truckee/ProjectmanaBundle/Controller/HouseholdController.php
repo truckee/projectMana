@@ -159,6 +159,8 @@ class HouseholdController extends Controller
         if (!$household) {
             throw $this->createNotFoundException('Unable to find Household.');
         }
+        $searches = $this->get('mana.searches');
+        $disabledOptions = $searches->getDisbledOptions($household);
         $session = $request->getSession();
         $new = false;
         if (null !== $session->get('household')) {
@@ -190,7 +192,12 @@ class HouseholdController extends Controller
                 $household->addAddress($address);
             }
             $em->getRepository('TruckeeProjectmanaBundle:Member')->initialize($household);
-            $em->persist($household);
+            if (!empty($disabledOptions)) {
+                
+                $em->persist($searches->setDisabledOptions($household, $disabledOptions));
+            } else {
+                $em->persist($household);
+            }
             $em->flush();
             $flash = $this->get('braincrafted_bootstrap.flash');
             $flash->alert('Household updated');
@@ -204,7 +211,7 @@ class HouseholdController extends Controller
                 'title' => 'Household Edit',
                 'household' => $household,
                 'hohId' => $household->getHead()->getId(),
-                    'templates' => $addressTemplates,
+                'templates' => $addressTemplates,
         ));
     }
 
