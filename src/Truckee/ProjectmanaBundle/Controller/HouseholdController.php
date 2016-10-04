@@ -173,8 +173,12 @@ class HouseholdController extends Controller
         }
         $addresses = $this->get('mana.addresses');
         $addressTemplates = $addresses->addressTemplates($household);
+        $formOptions = [
+            'new' => $new,
+            'disabledOptions' => $disabledOptions,
+            ];
 
-        $form = $this->createForm(HouseholdType::class, $household, ['new' => $new]);
+        $form = $this->createForm(HouseholdType::class, $household, $formOptions);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $hasPhysical = $form->get('physicalAddress')->get('physical')->getData();
@@ -192,12 +196,6 @@ class HouseholdController extends Controller
                 $household->addAddress($address);
             }
             $em->getRepository('TruckeeProjectmanaBundle:Member')->initialize($household);
-            if (!empty($disabledOptions)) {
-                
-                $em->persist($searches->setDisabledOptions($household, $disabledOptions));
-            } else {
-                $em->persist($household);
-            }
             $em->flush();
             $flash = $this->get('braincrafted_bootstrap.flash');
             $flash->alert('Household updated');

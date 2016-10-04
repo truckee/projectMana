@@ -11,8 +11,6 @@
 namespace Truckee\ProjectmanaBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
-use Truckee\ProjectmanaBundle\Form\Field\CenterAllChoiceType;
-use Truckee\ProjectmanaBundle\Form\Field\CenterEnabledChoiceType;
 use Truckee\ProjectmanaBundle\Form\Field\MonthType;
 use Truckee\ProjectmanaBundle\Form\Field\NoYesChoiceType;
 use Truckee\ProjectmanaBundle\Form\PhysicalAddressType;
@@ -24,16 +22,15 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class HouseholdType extends AbstractType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->new = $options['new'];
+        $this->options = $options;
         $builder
             ->add('active', YesNoChoiceType::class, array(
                 'label' => 'Active: ',
@@ -61,6 +58,24 @@ class HouseholdType extends AbstractType
                 array(
                 'placeholder' => false,
                 'label' => 'Arrival year: ',
+            ))
+            ->add('center', EntityType::class,
+                array(
+                'class' => 'TruckeeProjectmanaBundle:Center',
+                'choice_label' => 'center',
+                'placeholder' => 'Select site',
+                'attr' => (in_array('Center', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                if (false === in_array('Center', $options['disabledOptions'])) {
+                        return $er->createQueryBuilder('c')
+                            ->where('c.enabled = 1')
+                            ->orderBy('c.center', 'ASC');
+                    } else {
+                        return $er->createQueryBuilder('c')
+                            ->orderBy('c.center', 'ASC');
+                    }
+                },
+                'constraints' => array(new NotBlank(array('message' => 'Site must be selected'))),
             ))
             ->add('compliance', NoYesChoiceType::class,
                 array(
@@ -104,6 +119,7 @@ class HouseholdType extends AbstractType
                 'class' => 'TruckeeProjectmanaBundle:Housing',
                 'choice_label' => 'housing',
                 'placeholder' => '',
+                'attr' => (in_array('Housing', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
                 'label' => 'Housing: ',
                 'query_builder' => function (EntityRepository $er) use ($options) {
                     if (true === $options['new']) {
@@ -175,17 +191,6 @@ class HouseholdType extends AbstractType
                 'format' => 'M/d/y',
             ))
         ;
-
-        $builder->addEventListener(FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) {
-            $household = $event->getData();
-            $form = $event->getForm();
-            if (true === $this->new || empty($household->getCenter())) {
-                $form->add('center', CenterEnabledChoiceType::class);
-            } else {
-                $form->add('center', CenterAllChoiceType::class);
-            }
-        });
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -194,6 +199,7 @@ class HouseholdType extends AbstractType
             'data_class' => 'Truckee\ProjectmanaBundle\Entity\Household',
             'required' => false,
             'new' => null,
+            'disabledOptions' => [],
         ));
     }
 }

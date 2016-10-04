@@ -125,8 +125,7 @@ class Searches
             if ('get' === substr($method, 0, 3) && is_object($object->$method()) && method_exists($object->$method(),
                     'getEnabled') && false === $object->$method()->getEnabled()) {
                 $className = $this->get_class_name(get_class($object->$method()));
-                $getter = 'get' . $className;
-                $values[] = [$className => $object->$method()->$getter()];
+                $values[] = $className;
             }
         }
 
@@ -141,10 +140,9 @@ class Searches
 
     public function setDisabledOptions($object, $options)
     {
-        foreach ($options as $option => $value) {
-            $setter = 'set' . $option;
-        dump($object);
-            $object->$setter($value);
+        foreach ($options as $option) {
+            $setter = 'set' . $option['field'];
+            $object->$setter($option['value']);
         }
 
         return $object;

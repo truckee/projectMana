@@ -36,7 +36,7 @@ class Center
      * @var string
      *
      * @ORM\Column(name="center", type="string", length=20, nullable=true)
-     * @Assert\NotBlank(message="Site may not be blank", groups={"Options"})
+     * @Assert\NotBlank(message="Site must be selected", groups={"Options"})
      */
     protected $center;
 

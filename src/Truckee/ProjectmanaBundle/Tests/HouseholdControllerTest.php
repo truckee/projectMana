@@ -245,7 +245,7 @@ class HouseholdControllerTest extends TruckeeWebTestCase
     public function testAddressSubmit()
     {
         $crawler = $this->login();
-        $id = $this->fixtures->getReference('house2')->getId();
+        $id = $this->fixtures->getReference('house3')->getId();
         $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
         $form = $crawler->selectButton('Submit')->form();
         $form["household[physicalAddress][physical]"]->select(1);
@@ -256,5 +256,29 @@ class HouseholdControllerTest extends TruckeeWebTestCase
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Household updated")')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("12 NewLine")')->count());
+    }
+
+    public function testDisabledCenter()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('house2')->getId();
+        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
+        $form = $crawler->selectButton('Submit')->form();
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Kings Beach")')->count());
+
+    }
+
+    public function testDisabledHousing()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('house2')->getId();
+        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
+        $form = $crawler->selectButton('Submit')->form();
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Own")')->count());
+
     }
 }

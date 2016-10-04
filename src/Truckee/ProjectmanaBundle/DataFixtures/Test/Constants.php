@@ -116,7 +116,8 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
         $center1 = new Center();
         $center1->setCenter('Kings Beach');
         $center1->setCounty($placer);
-        $center1->setEnabled(1);
+        $center1->setEnabled(0);
+        $this->setReference('kb', $center1);
         $manager->persist($center1);
 
         $center2 = new Center();
@@ -220,13 +221,13 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
 
         $own = new Housing();
         $own->setHousing('Owner');
-        $own->setEnabled(true);
+        $own->setEnabled(FALSE);
         $this->setReference('own', $own);
         $manager->persist($own);
 
         $housing = new Reason();
         $housing->setReason('Housing/Utility Cost');
-        $housing->setEnabled(true);
+        $housing->setEnabled(false);
         $this->setReference('housing', $housing);
         $manager->persist($housing);
 

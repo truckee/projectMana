@@ -58,6 +58,17 @@ class HouseholdOptions extends AbstractFixture implements OrderedFixtureInterfac
         $house->addReason($reason);
         $manager->persist($house);
 
+        $house2 = $this->getReference('house2');
+        $fsNo = $this->getReference('fsNo');
+        $fsNo->addHousehold($house2);
+        $kb = $this->getReference('kb');
+        $own = $this->getReference('own');
+        $house2->setHousing($own);
+        $house2->setCenter($kb);
+
+
+        $manager->persist($house2);
+
         $manager->flush();
     }
 

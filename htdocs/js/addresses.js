@@ -14,7 +14,7 @@ $(document).ready(function () {
     $("#physical").hide();
     $("#mailing").hide();
 
-    physical.change(function() {
+    physical.change(function () {
         if ("1" === this.value) {
             $("#physical").show();
         } else {
@@ -22,14 +22,19 @@ $(document).ready(function () {
         }
     });
 
-    mailing.change(function() {
+    mailing.change(function () {
         if ("1" === this.value) {
             $("#mailing").show();
         } else {
             $("#mailing").hide();
         }
     });
-
+    
+    $("#household_submit").click(function () {
+        $("select").each(function () {
+            $(this).removeAttr('disabled');
+        });
+    });
 })
-;
+        ;
 
