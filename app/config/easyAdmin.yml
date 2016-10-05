@@ -19,6 +19,7 @@ easy_admin:
                     - { entity: 'Income', params: { sortField: 'id', sortDirection: 'ASC'}}
                     - { entity: 'InsufficientFood', label: 'Insufficient food', params: { sortField: 'reason', sortDirection: 'ASC'}}
                     - { entity: 'Notfoodstamp', params: { sortField: 'notfoodstamp', sortDirection: 'ASC'}}
+                    - { entity: 'Reason', params: { sortField: 'reason', sortDirection: 'ASC'}}
             - label: 'Members'
               children:
                     - { entity: 'Ethnicity', params: { sortField: 'ethnicity', sortDirection: 'ASC' } }
@@ -118,15 +119,6 @@ easy_admin:
                 fields:
                     - {property: 'income', label: 'Bracket'}
                     - enabled
-#        IncomeSource:
-#            class: Truckee\ProjectmanaBundle\Entity\IncomeSource
-#            label: Income sources
-#            list:
-#                title: '%%entity_label%%'
-#                fields: [incomeSource, enabled]
-#            form:
-#                title: '%%entity_label%%'
-#                fields: [incomeSource, enabled]
         Notfoodstamp:
             class: Truckee\ProjectmanaBundle\Entity\Notfoodstamp
             label: Why not foodstamps
@@ -171,6 +163,17 @@ easy_admin:
                 title: '%%entity_label%%'
                 fields:
                     - {property: relation, label: 'Relation to head'}
+                    - enabled
+        Reason:
+            class: Truckee\ProjectmanaBundle\Entity\Reason
+            label: Reason
+            list:
+                title: '%%entity_label%%'
+                fields: [reason, enabled]
+            form:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'reason', type_options: {by_reference: false}}
                     - enabled
         State:
             class: Truckee\ProjectmanaBundle\Entity\State
