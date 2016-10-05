@@ -137,14 +137,4 @@ class Searches
         if ($pos = strrpos($classname, '\\')) return substr($classname, $pos + 1);
         return $pos;
     }
-
-    public function setDisabledOptions($object, $options)
-    {
-        foreach ($options as $option) {
-            $setter = 'set' . $option['field'];
-            $object->$setter($option['value']);
-        }
-
-        return $object;
-    }
 }

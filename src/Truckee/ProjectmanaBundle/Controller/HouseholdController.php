@@ -174,10 +174,8 @@ class HouseholdController extends Controller
         $addresses = $this->get('mana.addresses');
         $addressTemplates = $addresses->addressTemplates($household);
         $formOptions = [
-            'new' => $new,
             'disabledOptions' => $disabledOptions,
             ];
-
         $form = $this->createForm(HouseholdType::class, $household, $formOptions);
         $form->handleRequest($request);
         if ($form->isValid()) {

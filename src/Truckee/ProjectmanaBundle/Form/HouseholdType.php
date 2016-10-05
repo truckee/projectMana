@@ -30,7 +30,7 @@ class HouseholdType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->options = $options;
+        dump($options);
         $builder
             ->add('active', YesNoChoiceType::class, array(
                 'label' => 'Active: ',
@@ -122,7 +122,7 @@ class HouseholdType extends AbstractType
                 'attr' => (in_array('Housing', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
                 'label' => 'Housing: ',
                 'query_builder' => function (EntityRepository $er) use ($options) {
-                    if (true === $options['new']) {
+                    if (false === in_array('Housing', $options['disabledOptions'])) {
                         return $er->createQueryBuilder('h')
                             ->orderBy('h.housing', 'ASC')
                             ->where('h.enabled=1');
@@ -198,7 +198,6 @@ class HouseholdType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'Truckee\ProjectmanaBundle\Entity\Household',
             'required' => false,
-            'new' => null,
             'disabledOptions' => [],
         ));
     }
