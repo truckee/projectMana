@@ -137,6 +137,9 @@ class MenuBuilder
         $menu->addChild('Employment', array(
             'route' => 'employment_profile',
         ));
+        $menu->addChild('Housing', array(
+            'route' => 'housing_profile',
+        ));
         $menu->addChild('Income', array(
             'route' => 'income_profile',
         ));
