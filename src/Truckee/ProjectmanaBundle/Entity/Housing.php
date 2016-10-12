@@ -34,8 +34,7 @@ class Housing
     /**
      * @var bool
      *
-     * @ORM\Column(name="housing", type="string", nullable=false)
-     * @Assert\NotBlank(message="Housing may not be blank")
+     * @ORM\Column(name="housing", type="string", nullable=true)
      */
     protected $housing;
 

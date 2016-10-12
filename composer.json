@@ -44,7 +44,8 @@
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/symfony": "2.8.*",
         "twbs/bootstrap": "3.0.*",
-        "twig/extensions": "1.0.*"
+        "twig/extensions": "1.0.*",
+        "phpdocumentor/reflection": "^3.0"
     },
     "scripts": {
         "post-install-cmd": [

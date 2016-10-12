@@ -117,24 +117,58 @@ class Searches
         return $contacts;
     }
 
-    public function getDisbledOptions($object)
-    {
-        $methods = get_class_methods($object);
+    public function getDisbledOptions($object) {
         $values = [];
-        foreach ($methods as $method) {
-            if ('get' === substr($method, 0, 3) && is_object($object->$method()) && method_exists($object->$method(),
-                    'getEnabled') && false === $object->$method()->getEnabled()) {
-                $className = $this->get_class_name(get_class($object->$method()));
-                $values[] = $className;
+        $className = get_class($object);
+        $metaData = $this->em->getClassMetadata($className);
+        foreach ($metaData->associationMappings as $field => $mapping) {
+            if (8 > $mapping['type']) {
+                $fieldName = ucfirst($field);
+                $method = 'get' . $fieldName;
+                if (method_exists($object->$method(), 'getEnabled') && false === $object->$method()->getEnabled()) {
+                    $values[] = $fieldName;
+                }
             }
+        }
+        $manyToMany = json_decode($this->getMetaData($object), true);
+        foreach(array_keys($manyToMany) as $key) {
+            $values[] = $key;
         }
 
         return $values;
     }
 
-    private function get_class_name($classname)
-    {
-        if ($pos = strrpos($classname, '\\')) return substr($classname, $pos + 1);
-        return $pos;
+    /**
+     * Get array of disabled ManyToMany options
+     *
+     * @param Object $object
+     * @return array
+     */
+    public function getMetaData($object) {
+        $data = array();
+        $className = get_class($object);
+        $metaData = $this->em->getClassMetadata($className);
+        foreach ($metaData->associationMappings as $field => $mapping) {
+            if (8 === $mapping['type']) {
+                $data[$field] = $this->extractOptions($object, $field);
+            }
+        }
+
+        return json_encode($data);
+    }
+
+    private function extractOptions($object, $field) {
+        $data = [];
+        $method = 'get' . ucfirst($field);
+        $itemName = substr($field, 0, -1);
+        $getter = 'get' . ucfirst($itemName);
+        $entity = $object->$method();
+        foreach ($entity as $item) {
+            if (method_exists($item, 'getEnabled') && false === $item->getEnabled()) {
+                $data[] = ['id' => $item->getId()];
+            }
+        }
+
+        return $data;
     }
 }

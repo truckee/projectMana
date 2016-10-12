@@ -161,6 +161,8 @@ class HouseholdController extends Controller
         }
         $searches = $this->get('mana.searches');
         $disabledOptions = $searches->getDisbledOptions($household);
+        $metadata = $searches->getMetadata($household);
+
         $session = $request->getSession();
         $new = false;
         if (null !== $session->get('household')) {
@@ -175,7 +177,7 @@ class HouseholdController extends Controller
         $addressTemplates = $addresses->addressTemplates($household);
         $formOptions = [
             'disabledOptions' => $disabledOptions,
-            ];
+        ];
         $form = $this->createForm(HouseholdType::class, $household, $formOptions);
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -208,6 +210,7 @@ class HouseholdController extends Controller
                 'household' => $household,
                 'hohId' => $household->getHead()->getId(),
                 'templates' => $addressTemplates,
+                'metadata' => $metadata,
         ));
     }
 

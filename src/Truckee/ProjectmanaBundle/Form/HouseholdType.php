@@ -22,6 +22,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -30,7 +32,7 @@ class HouseholdType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        dump($options);
+        $this->options = $options;
         $builder
             ->add('active', YesNoChoiceType::class, array(
                 'label' => 'Active: ',
@@ -67,14 +69,14 @@ class HouseholdType extends AbstractType
                 'attr' => (in_array('Center', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
                 'query_builder' => function (EntityRepository $er) use ($options) {
                 if (false === in_array('Center', $options['disabledOptions'])) {
-                        return $er->createQueryBuilder('c')
-                            ->where('c.enabled = 1')
-                            ->orderBy('c.center', 'ASC');
-                    } else {
-                        return $er->createQueryBuilder('c')
-                            ->orderBy('c.center', 'ASC');
-                    }
-                },
+                    return $er->createQueryBuilder('c')
+                        ->where('c.enabled = 1')
+                        ->orderBy('c.center', 'ASC');
+                } else {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.center', 'ASC');
+                }
+            },
                 'constraints' => array(new NotBlank(array('message' => 'Site must be selected'))),
             ))
             ->add('compliance', NoYesChoiceType::class,
@@ -122,15 +124,15 @@ class HouseholdType extends AbstractType
                 'attr' => (in_array('Housing', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
                 'label' => 'Housing: ',
                 'query_builder' => function (EntityRepository $er) use ($options) {
-                    if (false === in_array('Housing', $options['disabledOptions'])) {
-                        return $er->createQueryBuilder('h')
-                            ->orderBy('h.housing', 'ASC')
-                            ->where('h.enabled=1');
-                    } else {
-                        return $er->createQueryBuilder('h')
-                            ->orderBy('h.housing', 'ASC');
-                    }
-                },
+                if (false === in_array('Housing', $options['disabledOptions'])) {
+                    return $er->createQueryBuilder('h')
+                        ->orderBy('h.housing', 'ASC')
+                        ->where('h.enabled=1');
+                } else {
+                    return $er->createQueryBuilder('h')
+                        ->orderBy('h.housing', 'ASC');
+                }
+            },
             ))
             ->add('income', EntityType::class,
                 array(
@@ -173,10 +175,15 @@ class HouseholdType extends AbstractType
                 'attr' => [
                     'class' => 'form-inline',
                 ],
-                'query_builder' => function (EntityRepository $er) {
+                'query_builder' => function (EntityRepository $er ) use($options) {
+                if (false === in_array('reasons', $options['disabledOptions'])) {
                 return $er->createQueryBuilder('r')
                     ->orderBy('r.reason', 'ASC')
                     ->where('r.enabled=1');
+                } else {
+                    return $er->createQueryBuilder('r')
+                        ->orderBy('r.reason', 'ASC');
+                }
             },
             ))
             ->add('shared', NoYesChoiceType::class, array(
@@ -191,6 +198,7 @@ class HouseholdType extends AbstractType
                 'format' => 'M/d/y',
             ))
         ;
+
     }
 
     public function configureOptions(OptionsResolver $resolver)
