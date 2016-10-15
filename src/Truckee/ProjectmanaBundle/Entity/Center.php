@@ -64,6 +64,7 @@ class Center
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
+        $this->households = new ArrayCollection();
     }
 
     /**
@@ -208,7 +209,6 @@ class Center
     public function addHousehold(\Truckee\ProjectmanaBundle\Entity\Household $household)
     {
         $this->households[] = $household;
-        $household->setManySideSingular($this);
 
         return $this;
     }

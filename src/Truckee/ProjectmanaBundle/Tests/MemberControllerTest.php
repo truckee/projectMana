@@ -109,6 +109,7 @@ class MemberControllerTest extends TruckeeWebTestCase
         $crawler = $this->login();
         $member2Id = $this->fixtures->getReference('member2')->getId();
         $crawler = $this->client->request('GET', '/member/edit/'.$member2Id);
+        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
         $form = $crawler->filter('form')->form();
         $form['member[include]'] = 0;
         $crawler = $this->client->submit($form);

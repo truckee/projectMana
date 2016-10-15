@@ -69,6 +69,10 @@ class DisabledConstants extends AbstractFixture implements OrderedFixtureInterfa
         $state->setEnabled(FALSE);
         $manager->persist($state);
 
+        $house = $this->getReference('house3');
+        $house->setCenter($site);
+        $manager->persist($house);
+
         $manager->flush();
     }
 

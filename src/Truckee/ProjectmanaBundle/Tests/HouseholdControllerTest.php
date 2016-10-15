@@ -228,7 +228,7 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $crawler = $this->login();
         $id = $this->fixtures->getReference('house1')->getId();
         $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
-        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
+        
         $this->assertEquals(2, $crawler->filter('input[type=radio]')->count());
     }
 
@@ -257,15 +257,14 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("12 NewLine")')->count());
     }
 
-    public function testDisabledHousing()
+    public function testHouse3FirstSite()
     {
         $crawler = $this->login();
-        $id = $this->fixtures->getReference('house2')->getId();
+        $id = $this->fixtures->getReference('house3')->getId();
         $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
-        $form = $crawler->selectButton('Submit')->form();
-        $crawler = $this->client->submit($form);
 
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Own")')->count());
-
+        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Kings Beach")')->count());
     }
+
 }

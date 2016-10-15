@@ -99,7 +99,7 @@ class DisabledOptionsTest extends TruckeeWebTestCase
 
         $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
-
+file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Owner")')->count());
     }
 
@@ -117,7 +117,7 @@ class DisabledOptionsTest extends TruckeeWebTestCase
         $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
 
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("0 - 5")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("0 - 5<")')->count());
     }
 
     public function testDisabledNotfoodstampHouseholdEdit()
@@ -135,5 +135,17 @@ class DisabledOptionsTest extends TruckeeWebTestCase
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Not applied")')->count());
+    }
+
+    public function testDisabledOptionsMissing()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('house2')->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
+
+        $this->assertEquals(0, $crawler->filter('html:contains("Kings Beach")')->count());
+        $this->assertEquals(0, $crawler->filter('html:contains("Unknown")')->count());
+        $this->assertEquals(0, $crawler->filter('html:contains("Owner")')->count());
+        $this->assertEquals(0, $crawler->filter('html:contains("0 - 5<")')->count());
     }
 }
