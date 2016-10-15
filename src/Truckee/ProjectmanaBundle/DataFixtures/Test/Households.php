@@ -12,11 +12,13 @@
 
 namespace Truckee\ProjectmanaBundle\DataFixtures\Test;
 
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\AbstractFixture;
+use Truckee\ProjectmanaBundle\Entity\Address;
 use Truckee\ProjectmanaBundle\Entity\Household;
 use Truckee\ProjectmanaBundle\Entity\Member;
+use Truckee\ProjectmanaBundle\Entity\Phone;
 
 /**
  * Households.
@@ -55,8 +57,8 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $household->addMember($member2);
         $household->setFoodstamp(1);
         $this->setReference('house1', $household);
-        $unk = $this->getReference('unk');
-        $household->setFoodstamp($unk);
+        $fsAppl = $this->getReference('fsApplied');
+        $household->setFoodstamp($fsAppl);
         $manager->persist($household);
 
         $member3 = new Member();
@@ -74,8 +76,7 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $household2->setHead($member3);
         $household2->addMember($member3);
         $this->setReference('house2', $household2);
-        $unk = $this->getReference('unk');
-        $household2->setFoodstamp($unk);
+        $household2->setFoodstamp($fsAppl);
         $manager->persist($household2);
 
         $member4 = new Member();
@@ -93,9 +94,64 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $household3->setHead($member4);
         $household3->addMember($member4);
         $this->setReference('house3', $household3);
+        //set household properties for disabled tests
         $unk = $this->getReference('unk');
         $household3->setFoodstamp($unk);
+        $site = $this->getReference('kb');
+        $household3->setCenter($site);
+        $housing = $this->getReference('own');
+        $household3->setHousing($housing);
+        $income = $this->getReference('noIncome');
+        $household3->setIncome($income);
+        $notA = $this->getReference('notA');
+        $household3->setNotfoodstamp($notA);
+        $reason = $this->getReference('cost');
+        $household3->addReason($reason);
         $manager->persist($household3);
+
+        $address = new Address();
+        $address->setAddresstype($this->getReference('mailing'));
+        $address->setLine1('123 Some St.');
+        $address->setCity('City');
+        $ca = $this->getReference('ca');
+        $address->setState($ca);
+        $address->setZip('88888');
+        $manager->persist($address);
+
+        $phone = new Phone();
+        $phone->setAreacode('123');
+        $phone->setPhoneNumber('123-4567');
+
+        $house = $this->getReference('house1');
+        $house->addAddress($address);
+        $house->addPhone($phone);
+        $fsNo = $this->getReference('fsNo');
+        $fsNo->addHousehold($house);
+        $fsa = $this->getReference('fsamount1');
+        $fsa->addHousehold($house);
+        $house->setFsamount($fsa);
+        $hse = $this->getReference('rent');
+        $hse->addHousehold($house);
+        $house->setHousing($hse);
+        $income = $this->getReference('lowIncome');
+        $income->addHousehold($house);
+        $house->setIncome($income);
+        $fs = $this->getReference('notQ');
+        $fs->addHousehold($house);
+        $reason = $this->getReference('cost');
+        $house->addReason($reason);
+        $manager->persist($house);
+
+        $house2 = $this->getReference('house2');
+        $fsNo = $this->getReference('fsNo');
+        $fsNo->addHousehold($house2);
+        $kb = $this->getReference('kb');
+        $own = $this->getReference('own');
+        $house2->setHousing($own);
+        $house2->setCenter($kb);
+
+
+        $manager->persist($house2);
 
         $manager->flush();
     }

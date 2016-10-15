@@ -27,7 +27,6 @@ class HouseholdControllerTest extends TruckeeWebTestCase
                     'Truckee\ProjectmanaBundle\DataFixtures\Test\Users',
                     'Truckee\ProjectmanaBundle\DataFixtures\Test\Constants',
                     'Truckee\ProjectmanaBundle\DataFixtures\Test\Households',
-                    'Truckee\ProjectmanaBundle\DataFixtures\Test\HouseholdOptions',
                 ])->getReferenceRepository();
 //        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
     }
@@ -178,7 +177,7 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $id = $this->fixtures->getReference('house1')->getId();
         $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
 
-        $foodstamp = $this->fixtures->getReference('fsNo')->getId();
+        $foodstamp = $this->fixtures->getReference('fsApplied')->getId();
         $income = $this->fixtures->getReference('medIncome')->getId();
         $truckee = $this->fixtures->getReference('truckee')->getId();
         $future = date_format(new \DateTime('next year'), 'm/d/Y');
@@ -229,7 +228,7 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $crawler = $this->login();
         $id = $this->fixtures->getReference('house1')->getId();
         $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
-        
+        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
         $this->assertEquals(2, $crawler->filter('input[type=radio]')->count());
     }
 
@@ -256,18 +255,6 @@ class HouseholdControllerTest extends TruckeeWebTestCase
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Household updated")')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("12 NewLine")')->count());
-    }
-
-    public function testDisabledCenter()
-    {
-        $crawler = $this->login();
-        $id = $this->fixtures->getReference('house2')->getId();
-        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
-        $form = $crawler->selectButton('Submit')->form();
-        $crawler = $this->client->submit($form);
-
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Kings Beach")')->count());
-
     }
 
     public function testDisabledHousing()

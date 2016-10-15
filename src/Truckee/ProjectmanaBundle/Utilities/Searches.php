@@ -117,7 +117,7 @@ class Searches
         return $contacts;
     }
 
-    public function getDisbledOptions($object) {
+    public function getDisabledOptions($object) {
         $values = [];
         $className = get_class($object);
         $metaData = $this->em->getClassMetadata($className);

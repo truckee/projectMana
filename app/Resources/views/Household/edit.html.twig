@@ -12,8 +12,8 @@
             </form>
         </div>
     </div>
-    {% block javascripts %}
-        {{ parent() }}
-        <script src="{{ asset('js/household.js') }}"></script>
-    {% endblock %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/household.js') }}"></script>
 {% endblock %}

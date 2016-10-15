@@ -42,6 +42,9 @@ class MemberController extends Controller
         if (!$member) {
             throw $this->createNotFoundException('Unable to find Member.');
         }
+        $searches = $this->get('mana.searches');
+        $disabledOptions = $searches->getDisabledOptions($member);
+        $metadata = $searches->getMetadata($member);
         $templates[] = 'Member/memberFormRows.html.twig';
         $include = $member->getInclude();
         if (true == $include) {
@@ -56,7 +59,7 @@ class MemberController extends Controller
             $template = 'Member/excludedShow.html.twig';
         }
 
-        $form = $this->createForm(MemberType::class, $member);
+        $form = $this->createForm(MemberType::class, $member, ['disabledOptions'  => $disabledOptions]);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $isHead = $form['isHead']->getData();
@@ -91,6 +94,7 @@ class MemberController extends Controller
             'templates' => $templates,
             'id' => $id,
             'headId' => $headId,
+            'metadata' => $metadata,
         ]);
     }
 
@@ -139,6 +143,7 @@ class MemberController extends Controller
             'form' => $form->createView(),
             'templates' => $templates,
             'houseId' => $houseId,
+            'metadata'  => null,
         ]);
     }
 

@@ -90,33 +90,33 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
         $county = new County();
         $county->setCounty('Placer');
         $this->setReference('placer', $county);
-        $county->setEnabled(1);
+        $county->setEnabled(true);
         $manager->persist($county);
 
         $county1 = new County();
         $county1->setCounty('Nevada');
         $this->setReference('nevada', $county1);
-        $county1->setEnabled(1);
+        $county1->setEnabled(true);
         $manager->persist($county1);
 
         $county2 = new County();
         $county2->setCounty('Washoe');
         $this->setReference('washoe', $county2);
-        $county2->setEnabled(1);
+        $county2->setEnabled(true);
         $manager->persist($county2);
 
         $center = new Center();
         $center->setCenter('Tahoe City');
         $placer = $this->getReference('placer');
         $center->setCounty($placer);
-        $center->setEnabled(1);
+        $center->setEnabled(true);
         $this->setReference('tahoe', $center);
         $manager->persist($center);
 
         $center1 = new Center();
         $center1->setCenter('Kings Beach');
         $center1->setCounty($placer);
-        $center1->setEnabled(0);
+        $center1->setEnabled(true);
         $this->setReference('kb', $center1);
         $manager->persist($center1);
 
@@ -124,7 +124,7 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
         $center2->setCenter('Truckee');
         $nevada = $this->getReference('nevada');
         $center2->setCounty($nevada);
-        $center2->setEnabled(1);
+        $center2->setEnabled(true);
         $this->setReference('truckee', $center2);
         $manager->persist($center2);
 
@@ -132,24 +132,29 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
         $center3->setCenter('Incline Village');
         $washoe = $this->getReference('washoe');
         $center3->setCounty($washoe);
-        $center3->setEnabled(1);
+        $center3->setEnabled(true);
         $manager->persist($center3);
 
         $foodstamp = new FsStatus();
         $foodstamp->setStatus('No');
+        $foodstamp->setEnabled(true);
         $this->setReference('fsNo', $foodstamp);
         $manager->persist($foodstamp);
 
         $foodstamp1 = new FsStatus();
         $foodstamp1->setStatus('Yes');
+        $foodstamp1->setEnabled(true);
         $manager->persist($foodstamp1);
 
         $foodstamp2 = new FsStatus();
         $foodstamp2->setStatus('Appl');
+        $foodstamp2->setEnabled(true);
+        $this->setReference('fsApplied', $foodstamp2);
         $manager->persist($foodstamp2);
 
         $fsStatus = new FsStatus();
         $fsStatus->setStatus('Unknown');
+        $foodstamp->setEnabled(true);
         $this->setReference('unk', $fsStatus);
         $manager->persist($fsStatus);
 
@@ -221,15 +226,15 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
 
         $own = new Housing();
         $own->setHousing('Owner');
-        $own->setEnabled(FALSE);
+        $own->setEnabled(true);
         $this->setReference('own', $own);
         $manager->persist($own);
 
-        $housing = new Reason();
-        $housing->setReason('Housing/Utility Cost');
-        $housing->setEnabled(false);
-        $this->setReference('housing', $housing);
-        $manager->persist($housing);
+        $cost = new Reason();
+        $cost->setReason('Housing/Utility Cost');
+        $cost->setEnabled(true);
+        $this->setReference('cost', $cost);
+        $manager->persist($cost);
 
         $unemployed = new Reason();
         $unemployed->setReason('Unemployed');
@@ -248,6 +253,12 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
         $income2->setEnabled(true);
         $this->setReference('medIncome', $income2);
         $manager->persist($income2);
+
+        $income3 = new Income();
+        $income3->setIncome('0 - 5');
+        $income3->setEnabled(true);
+        $this->setReference('noIncome', $income3);
+        $manager->persist($income3);
 
         $relation = new Relationship();
         $relation->setRelation('related');

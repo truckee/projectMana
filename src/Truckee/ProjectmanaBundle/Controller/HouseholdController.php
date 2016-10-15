@@ -160,7 +160,7 @@ class HouseholdController extends Controller
             throw $this->createNotFoundException('Unable to find Household.');
         }
         $searches = $this->get('mana.searches');
-        $disabledOptions = $searches->getDisbledOptions($household);
+        $disabledOptions = $searches->getDisabledOptions($household);
         $metadata = $searches->getMetadata($household);
 
         $session = $request->getSession();
@@ -202,7 +202,7 @@ class HouseholdController extends Controller
 
             return $this->redirectToRoute('household_show', array('id' => $household->getId()));
         }
-
+        
         return $this->render('Household/edit.html.twig',
                 array(
                 'form' => $form->createView(),

@@ -84,7 +84,9 @@ class ContactController extends Controller
         if (!$contact) {
             throw $this->createNotFoundException('Unable to find Contact.');
         }
-        $form = $this->createForm(ContactType::class, $contact);
+        $searches = $this->get('mana.searches');
+        $disabledOptions = $searches->getDisabledOptions($contact);
+        $form = $this->createForm(ContactType::class, $contact, ['disabledOptions' => $disabledOptions]);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -118,7 +120,9 @@ class ContactController extends Controller
     public function deleteAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
         $contact = $em->getRepository('TruckeeProjectmanaBundle:Contact')->find($id);
-        $form = $this->createForm(ContactType::class, $contact);
+        $searches = $this->get('mana.searches');
+        $disabledOptions = $searches->getDisabledOptions($contact);
+        $form = $this->createForm(ContactType::class, $contact, ['disabledOptions' => $disabledOptions]);
         if ($request->isMethod('POST')) {
             $household = $contact->getHousehold();
             $hid = $household->getId();

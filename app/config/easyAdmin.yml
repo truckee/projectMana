@@ -1,6 +1,6 @@
 easy_admin:
     site_name: 'Manage options'
-    disabled_actions: ['delete']
+    disabled_actions: ['delete', 'edit']
     list:
         max_results: 10
     design:
@@ -19,16 +19,12 @@ easy_admin:
                     - { entity: 'Income', params: { sortField: 'id', sortDirection: 'ASC'}}
                     - { entity: 'InsufficientFood', label: 'Insufficient food', params: { sortField: 'reason', sortDirection: 'ASC'}}
                     - { entity: 'Notfoodstamp', params: { sortField: 'notfoodstamp', sortDirection: 'ASC'}}
-                    - { entity: 'Reason', params: { sortField: 'reason', sortDirection: 'ASC'}}
             - label: 'Members'
               children:
                     - { entity: 'Ethnicity', params: { sortField: 'ethnicity', sortDirection: 'ASC' } }
                     - { entity: 'Offense', params: { sortField: 'offence', sortDirection: 'ASC' } }
                     - { entity: 'Relationship', params: { sortField: 'relation', sortDirection: 'ASC' } }
-                    - { entity: 'State', params: { sortField: 'state', sortDirection: 'ASC' } }
                     - { entity: 'Work', params: { sortField: 'work', sortDirection: 'ASC' } }
-#            - label: 'Users'
-#              children:
             - { entity: 'User', params: { sortField: 'username', sortDirection: 'ASC' } }
             - { label: 'Home', route: 'home' }
     entities:
@@ -40,8 +36,8 @@ easy_admin:
                 fields:
                     - {property: 'center', label: 'Site'}
                     - enabled
-                    - county
-            form:
+                    - {property: 'county.county', label: 'County'}
+            new:
                 title: '%%entity_label%%'
                 fields:
                     - {property: 'center', label: 'Site'}
@@ -74,8 +70,10 @@ easy_admin:
             class: Truckee\ProjectmanaBundle\Entity\County
             label: Counties
             list:
-                fields: [county, enabled]
-            form:
+                fields:
+                    - county
+                    - {property: 'enabled', label: 'Enabled (info only)'}
+            new:
                 fields: [county, enabled]
                 form_options: { validation_groups: ['Options'] }
         FoodStampBracket:
@@ -163,17 +161,6 @@ easy_admin:
                 title: '%%entity_label%%'
                 fields:
                     - {property: relation, label: 'Relation to head'}
-                    - enabled
-        Reason:
-            class: Truckee\ProjectmanaBundle\Entity\Reason
-            label: Reason
-            list:
-                title: '%%entity_label%%'
-                fields: [reason, enabled]
-            form:
-                title: '%%entity_label%%'
-                fields:
-                    - {property: 'reason', type_options: {by_reference: false}}
                     - enabled
         State:
             class: Truckee\ProjectmanaBundle\Entity\State

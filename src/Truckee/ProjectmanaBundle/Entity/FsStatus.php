@@ -38,6 +38,13 @@ class FsStatus
     private $status;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="enabled", type="boolean", nullable=true)
+     */
+    protected $enabled;
+
+    /**
      * Get id.
      *
      * @return int
@@ -69,6 +76,30 @@ class FsStatus
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set enabled.
+     *
+     * @param int $enabled
+     *
+     * @return enabled
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Get enabled.
+     *
+     * @return int
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
     }
 
     /**

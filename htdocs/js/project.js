@@ -3,23 +3,31 @@ $(document).ready(function () {
 
     foodStampShowHide($("#household_foodstamp option:selected").val());
 
+    $("input[type=Submit]").click(function () {
+        $("input").removeAttr("disabled");
+        $("select").removeAttr("disabled");
+    });
+
+    if (0 < $("#household_options").length) {
+        var house_options = JSON.parse($("#household_options").text());
+        $.each(house_options, function (index, item) {
+            $.each(item, function (k, v) {
+                var formAttr = 'household_' + index + '_' + v.id;
+                $("#" + formAttr).attr('disabled', 'disabled');
+            });
+        });
+    }
+
     $("#dialog").dialog({
         autoOpen: false,
-        modal: true,
+        modal: true
     });
 
     $("#memberEditDialog").dialog({
         autoOpen: false,
         resizable: true,
         modal: true,
-        width: '80%',
-        open: function () {
-            if ($("#member_isHead").prop("checked") === false) {
-                $("#memberOffenses").hide();
-            } else {
-                $("#memberOffenses").show();
-            }
-        },
+        width: '80%'
     });
 
     $('.js-datepicker').datepicker({
@@ -91,6 +99,8 @@ $(document).ready(function () {
                             class: "btn-xs btn-primary",
                             type: "submit",
                             click: function () {
+                                $("input").removeAttr("disabled");
+                                $("select").removeAttr("disabled");
                                 var formData = $("form").serialize();
                                 $.post(url, formData, function (response) {
                                     //display form if validation errors
@@ -110,7 +120,7 @@ $(document).ready(function () {
                                             $("#row" + memberId).css({"background-color": "lightyellow"});
                                             $('#household_heading').text(member.fname + ' ' + member.sname);
                                             if (member.id !== member.headId) {
-                                                headHTML = '<span id="include' + member.headId + '"><b>Include: </b> Yes</span>'
+                                                headHTML = '<span id="include' + member.headId + '"><b>Include: </b> Yes</span>';
                                                 $("#include" + member.headId).html(headHTML);
                                                 $("#row" + member.headId).css({"background-color": ""});
                                             }
@@ -124,7 +134,7 @@ $(document).ready(function () {
                                     $("#dob" + memberId).text(member.dob);
                                     $('#memberEditDialog').html(update);
                                     $("#submit").hide();
-                                })
+                                });
                             }
                         },
                         {
@@ -135,11 +145,25 @@ $(document).ready(function () {
                                 $(this).dialog("close");
                             }
                         }
-                    ],
+                    ]
                 });
+
                 $('#memberEditDialog').html(data);
-                $('#memberEditDialog').dialog('open'
-                        );
+                if ($("#member_isHead").prop("checked") === false) {
+                    $("#memberOffenses").hide();
+                } else {
+                    $("#memberOffenses").show();
+                }
+                if (0 < $("#member_options").length) {
+                    var member_options = JSON.parse($("#member_options").text());
+                    $.each(member_options, function (index, item) {
+                        $.each(item, function (k, v) {
+                            var formAttr = 'member_' + index + '_' + v.id;
+                            $("#" + formAttr).attr('disabled', 'disabled');
+                        });
+                    });
+                }
+                $('#memberEditDialog').dialog('open');
             });
         }
 
@@ -172,7 +196,7 @@ $(document).ready(function () {
                                     $("#members").append(reply.view);
                                     $('#memberEditDialog').html(update);
                                     $("#submit").hide();
-                                })
+                                });
                             }
                         },
                         {
@@ -183,10 +207,10 @@ $(document).ready(function () {
                                 $(this).dialog("close");
                             }
                         }
-                    ],
+                    ]
                 });
                 $('#memberEditDialog').html(data);
-
+                $("#memberOffenses").hide();
                 $('#memberEditDialog').dialog('open');
             });
         }

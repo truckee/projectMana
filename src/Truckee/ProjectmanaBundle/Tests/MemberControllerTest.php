@@ -25,7 +25,6 @@ class MemberControllerTest extends TruckeeWebTestCase
                     'Truckee\ProjectmanaBundle\DataFixtures\Test\Users',
                     'Truckee\ProjectmanaBundle\DataFixtures\Test\Constants',
                     'Truckee\ProjectmanaBundle\DataFixtures\Test\Households',
-                    'Truckee\ProjectmanaBundle\DataFixtures\Test\HouseholdOptions',
                 ])->getReferenceRepository();
     }
 

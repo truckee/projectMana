@@ -30,17 +30,4 @@ $(document).ready(function () {
         }
     });
 
-    var options = JSON.parse($("#options").text());
-    $.each(options, function (index, item) {
-        $.each(item, function (k, v) {
-            var formAttr = 'household_' + index + '_' + v.id;
-            $("#" + formAttr).attr('disabled', 'disabled');
-        });
-    });
-    
-    $("input[type=Submit]").click(function() {
-        $("input").removeAttr("disabled");
-        $("select").removeAttr("disabled");
-    });
-
 })

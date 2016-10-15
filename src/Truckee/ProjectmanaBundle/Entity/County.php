@@ -237,4 +237,9 @@ class County
     {
         return $this->enabled;
     }
+
+    public function __toString()
+    {
+     return $this->getCounty();
+    }
 }
