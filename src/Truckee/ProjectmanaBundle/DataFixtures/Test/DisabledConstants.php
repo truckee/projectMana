@@ -22,11 +22,14 @@ use Doctrine\Common\Persistence\ObjectManager;
  */
 class DisabledConstants extends AbstractFixture implements OrderedFixtureInterface
 {
+
     public function load(ObjectManager $manager)
     {
         //Center
         $site = $this->getReference('kb');
         $site->setEnabled(FALSE);
+        $siteTahoe = $this->getReference('tahoe');
+        $siteTahoe->setEnabled(FALSE);
         $manager->persist($site);
 
         //ContactDesc
@@ -35,7 +38,7 @@ class DisabledConstants extends AbstractFixture implements OrderedFixtureInterfa
         $manager->persist($desc);
 
         //County
-        $county = $this->getReference('nevada');
+        $county = $this->getReference('placer');
         $county->setEnabled(FALSE);
         $manager->persist($county);
 
@@ -69,6 +72,8 @@ class DisabledConstants extends AbstractFixture implements OrderedFixtureInterfa
         $state->setEnabled(FALSE);
         $manager->persist($state);
 
+
+
         $house = $this->getReference('house3');
         $house->setCenter($site);
         $manager->persist($house);
@@ -80,5 +85,4 @@ class DisabledConstants extends AbstractFixture implements OrderedFixtureInterfa
     {
         return 5; // the order in which fixtures will be loaded
     }
-    
 }

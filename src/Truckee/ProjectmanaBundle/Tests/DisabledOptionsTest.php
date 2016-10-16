@@ -44,29 +44,17 @@ class DisabledOptionsTest extends TruckeeWebTestCase
         return $crawler;
     }
 
-    public function testDisabledFirstSiteHouseholdNew()
+    public function testHouse3OptionsSelected()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/household/new');
-
-        $this->assertEquals(0, $crawler->filter('html:contains("Kings Beach")')->count());
-    }
-
-    public function testDisabledFirstSiteHouseholdEdit()
-    {
-        $crawler = $this->login();
-        $id = $this->fixtures->getReference('house2')->getId();
+        $id = $this->fixtures->getReference('house3')->getId();
         $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
-        $field = $crawler->filter('#household_center');
-        $disabled = $field->attr('disabled');
-        $text = $field->filter('option[selected]')->text();
-        $this->assertEquals('disabled', $disabled);
-        $this->assertEquals('Kings Beach', $text);
 
-        $form = $crawler->selectButton('Submit')->form();
-        $crawler = $this->client->submit($form);
-
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Kings Beach")')->count());
+        $this->assertEquals('Kings Beach', $crawler->filter("#household_center option:selected")->text());
+        $this->assertEquals('Not applied', $crawler->filter("#household_notfoodstamp option:selected")->text());
+        $this->assertEquals('Owner', $crawler->filter("#household_housing option:selected")->text());
+        $this->assertEquals('0 - 0', $crawler->filter("#household_income option:selected")->text());
+        $this->assertEquals(0, $crawler->filter('html:contains("disabled")')->count());
     }
 
     public function testDisabledFsStatusHouseholdEdit()
@@ -99,7 +87,7 @@ class DisabledOptionsTest extends TruckeeWebTestCase
 
         $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
-file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
+
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Owner")')->count());
     }
 
@@ -112,12 +100,12 @@ file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->
         $disabled = $field->attr('disabled');
         $text = $field->filter('option[selected]')->text();
         $this->assertEquals('disabled', $disabled);
-        $this->assertEquals('0 - 5', $text);
+        $this->assertEquals('0 - 0', $text);
 
         $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
 
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("0 - 5<")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("0 - 0")')->count());
     }
 
     public function testDisabledNotfoodstampHouseholdEdit()
@@ -137,15 +125,74 @@ file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Not applied")')->count());
     }
 
-    public function testDisabledOptionsMissing()
+    public function testDisabledFirstSiteHouseholdEdit()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('house3')->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
+        $field = $crawler->filter('#household_center');
+        $disabled = $field->attr('disabled');
+        $text = $field->filter('option[selected]')->text();
+        $this->assertEquals('disabled', $disabled);
+        $this->assertEquals('Kings Beach', $text);
+
+        $form = $crawler->selectButton('Submit')->form();
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Kings Beach")')->count());
+    }
+    
+    public function testDisabledOptionsNotAvailable()
     {
         $crawler = $this->login();
         $id = $this->fixtures->getReference('house2')->getId();
         $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
 
         $this->assertEquals(0, $crawler->filter('html:contains("Kings Beach")')->count());
-        $this->assertEquals(0, $crawler->filter('html:contains("Unknown")')->count());
+        $this->assertEquals(0, $crawler->filter('html:contains("Not applied")')->count());
+        $this->assertEquals(0, $crawler->filter('html:contains("0 - 0")')->count());
         $this->assertEquals(0, $crawler->filter('html:contains("Owner")')->count());
-        $this->assertEquals(0, $crawler->filter('html:contains("0 - 5<")')->count());
+        $this->assertEquals(0, $crawler->filter('html:contains("Unknown")')->count());
+        $this->assertEquals(0, $crawler->filter('html:contains("Housing/Utility cost")')->count());       
+
+        $crawler = $this->client->request('GET', '/contact/' . $id . '/new');
+        $this->assertEquals(0, $crawler->filter('html:contains("Kings Beach")')->count());
+        $this->assertEquals(0, $crawler->filter('html:contains("General Dist")')->count());
+    }
+
+    public function testContactDisabledDescOption()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('contact1')->getId();
+        $crawler = $this->client->request('GET', '/contact/'.$id.'/edit');
+
+        $field = $crawler->filter('#contact_contactDesc');
+        $disabled = $field->attr('disabled');
+        $text = $field->filter('option[selected]')->text();
+        $this->assertEquals('disabled', $disabled);
+        $this->assertEquals('General Dist.', $text);
+
+        $form = $crawler->selectButton('Submit')->form();
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("General Dist")')->count());
+    }
+
+    public function testContactDisabledSiteOption()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('contact1')->getId();
+        $crawler = $this->client->request('GET', '/contact/'.$id.'/edit');
+
+        $field = $crawler->filter('#contact_center');
+        $disabled = $field->attr('disabled');
+        $text = $field->filter('option[selected]')->text();
+        $this->assertEquals('disabled', $disabled);
+        $this->assertEquals('Tahoe City', $text);
+
+        $form = $crawler->selectButton('Submit')->form();
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Tahoe City")')->count());
     }
 }

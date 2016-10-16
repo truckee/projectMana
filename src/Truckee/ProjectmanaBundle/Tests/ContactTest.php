@@ -40,10 +40,20 @@ class ContactTest extends TruckeeWebTestCase
         return $crawler;
     }
 
-    public function testContactExists()
+    public function testHouse1ContactExists()
     {
         $crawler = $this->login();
         $id = $this->fixtures->getReference('house1')->getId();
+        $crawler = $this->client->request('GET', '/household/'.$id.'/show');
+        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("General")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Placer")')->count());
+    }
+
+    public function testHouse3ContactExists()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('house3')->getId();
         $crawler = $this->client->request('GET', '/household/'.$id.'/show');
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Household View")')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("General")')->count());

@@ -257,14 +257,17 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("12 NewLine")')->count());
     }
 
-    public function testHouse3FirstSite()
+    public function testHouse3NoOptionsDisabled()
     {
         $crawler = $this->login();
         $id = $this->fixtures->getReference('house3')->getId();
         $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
 
-        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Kings Beach")')->count());
+        $this->assertEquals('Kings Beach', $crawler->filter("#household_center option:selected")->text());
+        $this->assertEquals('Not applied', $crawler->filter("#household_notfoodstamp option:selected")->text());
+        $this->assertEquals('Owner', $crawler->filter("#household_housing option:selected")->text());
+        $this->assertEquals('0 - 0', $crawler->filter("#household_income option:selected")->text());
+        $this->assertEquals(0, $crawler->filter('html:contains("disabled")')->count());
     }
 
 }

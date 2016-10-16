@@ -93,17 +93,17 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $site = $this->getReference('kb');
         $household3->setCenter($site);
         $site->addHousehold($household3);
-//        $housing = $this->getReference('own');
-//        $housing->addHousehold($household3);
-//        $household3->setHousing($housing);
-//        $income = $this->getReference('noIncome');
-//        $income->addHousehold($household3);
-//        $household3->setIncome($income);
-//        $notA = $this->getReference('notA');
-//        $notA->addHousehold($household3);
-//        $household3->setNotfoodstamp($notA);
-//        $reason = $this->getReference('cost');
-//        $household3->addReason($reason);
+        $housing = $this->getReference('own');
+        $housing->addHousehold($household3);
+        $household3->setHousing($housing);
+        $income = $this->getReference('noIncome');
+        $income->addHousehold($household3);
+        $household3->setIncome($income);
+        $notA = $this->getReference('notA');
+        $notA->addHousehold($household3);
+        $household3->setNotfoodstamp($notA);
+        $reason = $this->getReference('cost');
+        $household3->addReason($reason);
         $this->setReference('house3', $household3);
 
         $address = new Address();
@@ -156,6 +156,9 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($household3);
         $manager->persist($address);
         $manager->persist($site);
+        $manager->persist($housing);
+        $manager->persist($income);
+        $manager->persist($notA);
 
         $manager->flush();
     }

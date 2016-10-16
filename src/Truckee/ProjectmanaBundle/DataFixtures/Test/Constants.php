@@ -255,7 +255,7 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($income2);
 
         $income3 = new Income();
-        $income3->setIncome('0 - 5');
+        $income3->setIncome('0 - 0');
         $income3->setEnabled(true);
         $this->setReference('noIncome', $income3);
         $manager->persist($income3);

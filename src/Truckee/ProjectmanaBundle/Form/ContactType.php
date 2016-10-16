@@ -26,7 +26,24 @@ class ContactType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('center', CenterEnabledChoiceType::class)
+            ->add('center', EntityType::class,
+                array(
+                'class' => 'TruckeeProjectmanaBundle:Center',
+                    'label'  => 'Site:',
+                    'choice_label' => 'center',
+                'placeholder' => 'Select site',
+                'attr' => (in_array('Center', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                    if (false === in_array('Center', $options['disabledOptions'])) {
+                        return $er->createQueryBuilder('alias')
+                            ->where('alias.enabled = 1')
+                            ->orderBy('alias.center', 'ASC');
+                    } else {
+                        return $er->createQueryBuilder('alias')
+                            ->orderBy('alias.center', 'ASC');
+                    }
+                }
+            ))
             ->add('contactDesc', EntityType::class,
                 array(
                 'class' => 'TruckeeProjectmanaBundle:ContactDesc',
