@@ -1,6 +1,6 @@
 easy_admin:
     site_name: 'Manage options'
-    disabled_actions: ['delete', 'edit']
+    disabled_actions: ['delete']
     list:
         max_results: 10
     design:
@@ -44,15 +44,23 @@ easy_admin:
                     - enabled
                     - {property: 'county', type: 'entity', type_options: { class: Truckee\ProjectmanaBundle\Entity\County }}
                 form_options: { validation_groups: ['Options'] }
+            edit:
+                title: '%%entity_label%%'
+                fields:
+                    - enabled
+                form_options: { validation_groups: ['Options'] }
         Ethnicity:
             class: Truckee\ProjectmanaBundle\Entity\Ethnicity
             label: Ethnicities
             list:
                 title: '%%entity_label%%'
                 fields: [ethnicity, abbreviation, enabled]
-            form:
+            new:
                 title: '%%entity_label%%'
                 fields: [ethnicity, abbreviation, enabled]
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
         ContactType:
             class: Truckee\ProjectmanaBundle\Entity\ContactDesc
             label: Contact types
@@ -61,11 +69,14 @@ easy_admin:
                 fields:
                     - {property: 'contactDesc', label: 'Type'}
                     - enabled
-            form:
+            new:
                 title: '%%entity_label%%'
                 fields:
                     - {property: 'contactDesc', label: 'Type'}
                     - enabled
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
         County:
             class: Truckee\ProjectmanaBundle\Entity\County
             label: Counties
@@ -76,34 +87,45 @@ easy_admin:
             new:
                 fields: [county, enabled]
                 form_options: { validation_groups: ['Options'] }
+            edit:
+                fields: [enabled]
+                form_options: { validation_groups: ['Options'] }
         FoodStampBracket:
             class: Truckee\ProjectmanaBundle\Entity\FsAmount
             label: Foodstamp brackets
             list:
                 title: '%%entity_label%%'
                 fields: [bracket, enabled]
-            form:
+            new:
                 fields:
                     - {property: amount, label: Bracket}
                     - enabled
+            edit:
+                fields: [enabled]
         FoodstampStatus:
             class: Truckee\ProjectmanaBundle\Entity\FsStatus
             label: Foodstamp status
             list:
                 title: '%%entity_label%%'
-                fields: [status]
-            form:
+                fields: [status, enabled]
+            new:
                 title: '%%entity_label%%'
-                fields: [status]
+                fields: [status, enabled]
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
         Housing:
             class: Truckee\ProjectmanaBundle\Entity\Housing
             label: Housing
             list:
                 title: '%%entity_label%%'
                 fields: [housing, enabled]
-            form:
+            new:
                 title: '%%entity_label%%'
                 fields: [housing, enabled]
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
         Income:
             class: Truckee\ProjectmanaBundle\Entity\Income
             label: Income brackets
@@ -112,20 +134,26 @@ easy_admin:
                 fields:
                     - {property: 'income', label: 'Bracket'}
                     - enabled
-            form:
+            new:
                 title: '%%entity_label%%'
                 fields:
                     - {property: 'income', label: 'Bracket'}
                     - enabled
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
         Notfoodstamp:
             class: Truckee\ProjectmanaBundle\Entity\Notfoodstamp
             label: Why not foodstamps
             list:
                 title: '%%entity_label%%'
                 fields: [notfoodstamp, enabled]
-            form:
+            new:
                 title: '%%entity_label%%'
                 fields: [notfoodstamp, enabled]
+            edit:
+                title: '%%entity_label%%'
+                fields:  [enabled]
         Offense:
             class: Truckee\ProjectmanaBundle\Entity\Offence
             label: Offense
@@ -134,21 +162,26 @@ easy_admin:
                 fields:
                     - {property: 'offence', label: 'Offense'}
                     - enabled
-            form:
+            new:
                 title: '%%entity_label%%'
                 fields:
                     - {property: 'offence', label: 'Offense', type_options: {by_reference: false}}
                     - enabled
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
         InsufficientFood:
             class: Truckee\ProjectmanaBundle\Entity\Reason
             label: 'Insufficient food'
-            disabled_actions: ['edit']
             list:
                 title: '%%entity_label%%'
                 fields: [reason, enabled]
-            form:
+            new:
                 title: '%%entity_label%%'
                 fields: [reason, enabled]
+            edit:
+                title: '%%entity_label%%'
+                fields:  [enabled]
         Relationship:
             class: Truckee\ProjectmanaBundle\Entity\Relationship
             label: Relationship
@@ -157,31 +190,40 @@ easy_admin:
                 fields:
                     - {property: relation, label: 'Relation to head'}
                     - enabled
-            form:
+            new:
                 title: '%%entity_label%%'
                 fields:
                     - {property: relation, label: 'Relation to head'}
                     - enabled
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
         State:
             class: Truckee\ProjectmanaBundle\Entity\State
             label: State
             list:
                 title: '%%entity_label%%'
                 fields: [state, enabled]
-            form:
+            new:
                 title: '%%entity_label%%'
                 fields:
                     - {property: 'state', type_options: {by_reference: false}}
                     - enabled
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
         Work:
             class: Truckee\ProjectmanaBundle\Entity\Work
             label: 'Work'
             list:
                 title: '%%entity_label%%'
                 fields: [work, enabled]
-            form:
+            new:
                 title: '%%entity_label%%'
                 fields: [work, enabled]
+            edit:
+                title: '%%entity_label%%'
+                fields:  [enabled]
 
         User:
             class: Truckee\ProjectmanaBundle\Entity\User

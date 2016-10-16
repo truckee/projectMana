@@ -13,6 +13,7 @@ namespace Truckee\ProjectmanaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Notfoodstamp.
@@ -22,6 +23,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Notfoodstamp
 {
+    public function __construct()
+    {
+        $this->households = ArrayCollection();
+    }
     /**
      * @var int
      *
