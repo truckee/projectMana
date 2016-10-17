@@ -213,6 +213,7 @@ $(document).ready(function () {
                 $("#memberOffenses").hide();
                 $('#memberEditDialog').dialog('open');
             });
+            $("#memberOffenses").hide();
         }
     });
 }

@@ -346,6 +346,43 @@ class StatisticsController extends Controller
     }
 
     /**
+     * Employment profile.
+     *
+     * @param object Request $request
+     *
+     * @return Response
+     *
+     * @Route("/housingProfile", name="housing_profile")
+     */
+    public function housingProfileAction(Request $request)
+    {
+        $form = $this->createForm(ReportCriteriaType::class);
+        $criteria = $request->request->get('report_criteria');
+        $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $response = new Response();
+            $specs = $this->specs($criteria);
+            $reportSpecs = $specs['reportCriteria'];
+            $templateSpecs = $specs['templateCriteria'];
+            $reportData = $this->housing($reportSpecs);
+            $content = $this->profiler($reportData, $templateSpecs);
+            $response->setContent($content);
+
+            return $response;
+        }
+
+        return $this->render('Statistics/report_criteria.html.twig', array(
+                    'form' => $form->createView(),
+                    'criteriaTemplates' => $criteriaTemplates,
+                    'formPath' => 'housing_profile',
+                    'title' => 'Report criteria',
+                    'criteriaHeader' => 'Housing profile reporting criteria',
+        ));
+    }
+
+    /**
      * Income profile.
      *
      * @param object Request $request
@@ -533,6 +570,37 @@ class StatisticsController extends Controller
             'reportSubTitle' => 'For the period ',
             'criteria' => $criteria,
             'rowHeader' => 'Employment',
+            'rowLabels' => $rowLabels,
+            'colLabels' => $colLabels,
+            'data' => $data,
+        ];
+
+        return $reportData;
+    }
+
+    /**
+     * Gather row & column data for housing profile
+     *
+     * @param array $criteria
+     *
+     * @return Response
+     */
+    private function housing($criteria)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $xp = $this->container->get('mana.crosstab');
+        $dateCriteria = $xp->setDateCriteria($criteria);
+
+        $columnType = $criteria['columnType'];
+        $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Housing')->rowLabels($dateCriteria);
+        $colLabels = $em->getRepository('TruckeeProjectmanaBundle:'.$columnType)->colLabels($dateCriteria);
+        $data = $em->getRepository('TruckeeProjectmanaBundle:Housing')->crossTabData($dateCriteria, $columnType);
+
+        $reportData = [
+            'reportTitle' => 'Housing profile (household members)',
+            'reportSubTitle' => 'For the period ',
+            'criteria' => $criteria,
+            'rowHeader' => 'Housing',
             'rowLabels' => $rowLabels,
             'colLabels' => $colLabels,
             'data' => $data,
