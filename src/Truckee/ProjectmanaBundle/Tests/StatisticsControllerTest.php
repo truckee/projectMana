@@ -127,6 +127,16 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Employment profile")')->count());
     }
 
+    public function testHousingProfile()
+    {
+        $crawler = $this->login();
+        $crawler = $this->client->request('GET', '/reports/housingProfile');
+        $form = $crawler->filter('form')->form();
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Housing profile")')->count());
+    }
+
     public function testIncomeProfile()
     {
         $crawler = $this->login();
