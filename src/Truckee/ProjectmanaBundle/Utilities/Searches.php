@@ -117,6 +117,12 @@ class Searches
         return $contacts;
     }
 
+    /**
+     * Create array of disabled fields of an entity object
+     * 
+     * @param type $object
+     * @return array
+     */
     public function getDisabledOptions($object) {
         $values = [];
         $className = get_class($object);

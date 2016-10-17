@@ -83,7 +83,7 @@ easy_admin:
             list:
                 fields:
                     - county
-                    - {property: 'enabled', label: 'Enabled (info only)'}
+                    - {property: 'enabled', label: 'Enabled'}
             new:
                 fields: [county, enabled]
                 form_options: { validation_groups: ['Options'] }
