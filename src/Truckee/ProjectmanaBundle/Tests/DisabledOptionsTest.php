@@ -141,6 +141,21 @@ class DisabledOptionsTest extends TruckeeWebTestCase
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Kings Beach")')->count());
     }
+
+    public function testDisabledReasonHouseholdEdit()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('house3')->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
+        $idCost = $this->fixtures->getReference('cost')->getId();
+        $form = $crawler->selectButton('Submit')->form();
+        $crawler = $this->client->submit($form);
+        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
+        $field = $crawler->filter('#household_reasons_' . $idCost);
+        $checked = $field->attr('checked');
+
+        $this->assertEquals('checked', $checked);
+    }
     
     public function testDisabledOptionsNotAvailable()
     {
