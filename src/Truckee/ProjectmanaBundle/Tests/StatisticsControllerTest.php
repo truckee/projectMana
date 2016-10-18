@@ -131,7 +131,7 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     {
         $crawler = $this->login();
         $crawler = $this->client->request('GET', '/reports/housingProfile');
-        $form = $crawler->filter('form')->form();
+        $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Housing profile")')->count());
