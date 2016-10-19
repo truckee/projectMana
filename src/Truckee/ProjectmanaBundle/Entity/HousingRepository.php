@@ -32,7 +32,7 @@ class HousingRepository extends EntityRepository
             . 'JOIN TruckeeProjectmanaBundle:Household h WITH h.housing = hs '
             . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
             . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
-            . 'AND hs.enabled = TRUE ORDER BY hs.housing ASC')
+            . 'ORDER BY hs.housing ASC')
             ->setParameters($dateCriteria)
             ->getResult();
         $rowLabels = [];

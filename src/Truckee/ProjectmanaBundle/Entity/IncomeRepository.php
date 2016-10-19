@@ -31,7 +31,7 @@ class IncomeRepository extends EntityRepository
             . 'JOIN TruckeeProjectmanaBundle:Household h WITH h.income = i '
             . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
             . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
-            . 'AND i.enabled = TRUE ORDER BY i.id')
+            . 'ORDER BY i.id')
             ->setParameters($dateCriteria)
             ->getResult();
         $rowLabels = [];
