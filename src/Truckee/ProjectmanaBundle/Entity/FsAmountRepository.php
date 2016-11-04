@@ -31,7 +31,7 @@ class FsAmountRepository extends EntityRepository
             . 'JOIN TruckeeProjectmanaBundle:FsAmount f WITH h.fsamount = f '
             . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
             . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
-            . 'AND f.enabled = TRUE ORDER BY f.amount ASC')
+            . 'ORDER BY f.amount ASC')
             ->setParameters($dateCriteria)
             ->getResult();
         $rowLabels = [];

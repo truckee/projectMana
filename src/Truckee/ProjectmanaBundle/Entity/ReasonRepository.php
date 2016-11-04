@@ -30,7 +30,7 @@ class ReasonRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT r.reason FROM TruckeeProjectmanaBundle:Reason r '
             . 'INNER JOIN r.households h INNER JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
             . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
-            . 'AND r.enabled = TRUE ORDER BY r.id ASC')
+            . 'ORDER BY r.id ASC')
             ->setParameters($dateCriteria)
             ->getResult();
         $rowLabels = [];

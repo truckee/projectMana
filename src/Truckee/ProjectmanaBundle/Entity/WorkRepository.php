@@ -33,7 +33,7 @@ class WorkRepository extends EntityRepository
             . 'JOIN TruckeeProjectmanaBundle:Household h WITH h.head = m '
             . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = m.household '
             . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
-            . 'AND w.enabled = TRUE ORDER BY w.work')
+            . 'ORDER BY w.work')
             ->setParameters($dateCriteria)
             ->getResult();
         $rowLabels = [];

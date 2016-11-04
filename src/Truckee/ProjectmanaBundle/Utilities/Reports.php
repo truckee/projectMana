@@ -419,7 +419,7 @@ class Reports
 
     private function setEthDist()
     {
-        $qb = $this->em->createQuery('SELECT e FROM TruckeeProjectmanaBundle:Ethnicity e WHERE e.enabled = true')->getResult();
+        $qb = $this->em->createQuery('SELECT e FROM TruckeeProjectmanaBundle:Ethnicity e')->getResult();
         foreach ($qb as $row) {
             $queryEth = $this->em->createQuery('SELECT COUNT(m) N FROM TruckeeProjectmanaBundle:TempMember m '
                     . 'JOIN TruckeeProjectmanaBundle:TempHousehold h WITH m.household = h '
