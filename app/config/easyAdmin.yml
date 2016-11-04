@@ -47,7 +47,7 @@ easy_admin:
             edit:
                 title: '%%entity_label%%'
                 fields:
-                    - enabled
+                fields: [enabled]
                 form_options: { validation_groups: ['Options'] }
         Ethnicity:
             class: Truckee\ProjectmanaBundle\Entity\Ethnicity
