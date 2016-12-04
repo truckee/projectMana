@@ -192,12 +192,12 @@ class Reports
         $sqlMember = "INSERT INTO temp_member
             (id, household_id, sex, age, ethnicity_id)
             select distinct m.id, m.household_id, sex,
-            age(m.dob), ethnicity_id
+            age(m.dob, :start), ethnicity_id
             from member m
             join temp_contact ct on m.household_id = ct.household_id where
             (exclude_date > :start or exclude_date is null) and (dob < :start or dob is null)";
         $stmtMember = $db->prepare($sqlMember);
-        $start = ['start' => $parameters['startDate'], 'start' => $parameters['startDate']];
+        $start = ['start' => $parameters['startDate'], 'start' => $parameters['startDate'], 'start' => $parameters['startDate']];
         $stmtMember->execute($start);
 
         $this->em->createQuery('DELETE FROM TruckeeProjectmanaBundle:TempHousehold')->execute();
