@@ -119,7 +119,13 @@ class ContactController extends Controller
      */
     public function deleteAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
+        $flash = $this->get('braincrafted_bootstrap.flash');
         $contact = $em->getRepository('TruckeeProjectmanaBundle:Contact')->find($id);
+        if (null === $contact) {
+            $flash->alert('Contact does not exist');
+
+            return $this->redirectToRoute('home');
+        }
         $searches = $this->get('mana.searches');
         $disabledOptions = $searches->getDisabledOptions($contact);
         $form = $this->createForm(ContactType::class, $contact, ['disabledOptions' => $disabledOptions]);
@@ -129,7 +135,6 @@ class ContactController extends Controller
             $household->removeContact($contact);
             $em->persist($household);
             $em->flush();
-            $flash = $this->get('braincrafted_bootstrap.flash');
             $flash->alert('Contact has been deleted');
 
             return $this->redirectToRoute('contact_new', array('id' => $hid));
@@ -207,7 +212,7 @@ class ContactController extends Controller
         if ('FY to date' === $source) {
             $contacts['contacts'] = $searches->getHeadsFYToDate($site);
             $contacts['latestDate'] = new \DateTime();
-        }   
+        }
         $content = $this->renderView('Contact/mostRecentContacts.html.twig', [
             'contacts' => $contacts['contacts'],
             'latestDate' => $contacts['latestDate'],

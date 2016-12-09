@@ -122,6 +122,10 @@ class ContactTest extends TruckeeWebTestCase
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Contact has been deleted")')->count());
+        
+        $crawler = $this->client->request('GET', '/contact/4096/delete');
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Contact does not exist")')->count());
     }
 
     public function testMostRecentContacts()
