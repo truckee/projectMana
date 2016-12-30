@@ -1,0 +1,113 @@
+{% extends 'layout.html.twig' %}
+{% block body %}
+    <div class="panel panel-info">
+        <div class="panel-heading" style="font-size: 18pt;">Database documentation: Ad hoc reporting</div>
+        <div class="panel-body" style="font-size: 16pt;">
+            <p>There are two basic steps in creating an <i>ad hoc</i> report or chart. First, data 
+                on which the report will be based must be collected. This is most easily done
+                using MySQL Workbench. (Installation and setup instructions for MySQL Workbench are <a
+                    href="{{ path('db_workbench') }}" target="_blank"> here</a>.) In
+                it you write a SQL statement that returns the data required for the
+                report.  Getting the right statement, though, often takes several attempts. 
+                Once data are collected they need to be copied to an application like Word or
+                Excel to be formatted.</p>
+
+            <p>There are several good resources for learning how to create SQL statements online.  
+                The most basic is at  <a href="http://www.w3schools.com/sql/default.asp" target="_blank">w3schools.com/sql</a>. 
+                Data collection for report writing uses SQL SELECT statements. 
+                The Project MANA database uses MySQL for its database management. A
+                complete reference to MySQL SELECT statement syntax  can be found <a
+                    href="http://dev.mysql.com/doc/refman/5.7/en/select.html">here</a>.</p>
+
+            <p>Each table (e.g., household, member) contains a set of records. A record contains a
+                set of single elements of data for a single instance of that table. For
+                example, a household will have one and only one arrival month, one and only one
+                compliance date, etc. A household may also have more than one member. Rather
+                than store all members in the household table each is stored in the member
+                table.  Each household’s member record includes a link (household_id) to the
+                household record. Doing this prevents duplication of data and increases
+                database integrity.</p>
+            <hr>
+        </div>
+        <div class="panel-heading" style="font-size: 18pt;">SQL statement examples:</div>
+        <div class="panel-body" style="font-size: 16pt;">
+            <p>Get the members of a specific household:</p>
+            <pre>SELECT sname, fname FROM member WHERE household_id = 9968;</pre>
+            <p>Returns:</p>
+            <pre>
+Macias	Tina
+Macias	Wesley
+Macias	Kyle
+Marcias	Lee</pre>
+            <hr>
+            <p>Get the head of household for a specific household:</p>
+            <pre>
+SELECT sname, fname FROM member m
+JOIN household h ON h.hoh_id = m.id
+WHERE household_id = 9968;</pre>
+            <p>Returns:</p>
+            <pre>
+Macias	Tina</pre>
+            <p>Comments:</p>
+            <p>Note the use of JOIN to show
+                that we only want member records where the member id is the household’s hoh_id
+                (<u>h</u>ead <u>o</u>f <u>h</u>ousehold id).</p>
+            <hr>
+            <p>Get the head of household as a single field Name for a specific household:</p>
+            <pre>
+SELECT CONCAT(sname, ', ', fname) as Name FROM member m
+JOIN household h ON h.hoh_id = m.id
+WHERE household_id = 9968;</pre>
+            <p>Returns:</p>
+            <pre>Macias, Tina</pre>
+            <p>Comments:</p>
+            <p>Note the use of an alias for
+                table names: “…member m” and “…household h”. This allows shortcuts for long
+                table names. Also, the MySQL function CONCAT() is used to concatenate fields
+                into a single column.</p>
+            <hr>
+            <p>Get five unique heads of household with any contact in FY2016 :</p>
+
+            <pre>SELECT DISTINCT CONCAT(sname, ', ', fname) as Name FROM member m
+JOIN household h ON h.hoh_id = m.id
+JOIN contact c ON h.id = c.household_id
+WHERE fy(c.contact_date) = 2016
+ORDER BY Name LIMIT 5;</pre>
+            <p>Returns:</p>
+            <pre>Abduvalive, Ulubek
+Abundis, Veronica
+Abundiz, Yolanda
+Afanasii, Victoria
+Aguilar, Maria</pre>
+            <p>Comments:</p>
+
+            <p>The use of DISTINCT is needed
+                because households may have more than one contact in FY2016. DISTINCT avoids
+                repeating names. JOINing the contact table to the household table enables
+                selecting records with date criteria. The fy() function is a custom function
+                for the Project MANA database to make it easier to select records by fiscal
+                year. The list is sorted by Name by using the ORDER BY clause.  The LIMIT
+                clause limits the number of records retrieved.</p>
+            <hr>
+            <p>Make a housing report by site for FY2016 :</p>
+            <pre>SELECT DISTINCT c.household_id, hs.housing AS Housing, s.center AS Site
+FROM contact c
+JOIN center s ON s.id = c.center_id
+JOIN household h ON h.id = c.household_id
+JOIN housing hs ON hs.id = h.housing_id
+WHERE fy(c.contact_date) = 2016;</pre>
+            <p>Returns 1,153 records (first five of):</p>
+            <pre>3	Renting	Truckee
+64	Renting	Kings Beach
+107	Renting	Kings Beach
+249	Renting	Kings Beach
+300	Renting	Tahoe City</pre>
+            <p>Comments:</p>
+            <p>This data can easily be copied
+                into Excel.  In Excel it is reasonably straightforward to create a PivotTable
+                to summarize the data as shown below:</p>
+            <img src="/images/pivottable.png" alt="Housing PivotTable">
+            <p>Creating the PivotTable will be left as an exercise for the reader!</p>
+        </div>
+    </div>
+{% endblock body %}

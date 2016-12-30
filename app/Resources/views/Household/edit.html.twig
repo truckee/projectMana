@@ -1,0 +1,19 @@
+{% extends "layout.html.twig" %}
+{% block body %}
+    <div class="panel panel-primary">
+        {% include 'Household/householdHeading.html.twig' %}
+        <div class="panel-body">
+            <form id="hosuehold_edit" action="{{ path('household_edit', { 'id': household.id }) }}" method="post">
+                {% include 'Member/memberShowBlock.html.twig' %}
+                {% include 'Address/addressBlock.html.twig' %}
+                {% include 'Household/householdEditBlock.html.twig' %}
+                <div align="center"><input class="btn-sm btn-info" type="submit" value="Submit">
+                    <input class="btn-sm btn-info" type="reset"></div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/household.js') }}"></script>
+{% endblock %}

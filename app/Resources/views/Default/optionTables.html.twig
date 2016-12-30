@@ -1,0 +1,113 @@
+{% extends 'layout.html.twig' %}
+{% block body %}
+    <h2 class="text-center">{{ label_info('Database documentation') }}</h2>
+    <h3 class="text-center">{{ label_info('Option tables') }}</h3>
+    <div class="row">
+        <div class="col-sm-3">
+            <table>
+                <tr><th>Addresstype</th></tr>
+                        {% for item in addressType %}
+                    <tr><td>{{ item.addressType }}
+                        {% endfor %}
+            </table>
+            <br>
+            <table>
+                <tr><th>Center</th></tr>
+                        {% for item in center %}
+                    <tr><td>{{ item.center }}
+                        {% endfor %}
+            </table>
+            <br>
+            <table>
+                <tr><th>Contact_type</th></tr>
+                        {% for item in desc %}
+                    <tr><td>{{ item.contactDesc }}
+                        {% endfor %}
+            </table>
+            <br>
+        </div>
+        <div class="col-sm-3">
+            <table>
+                <tr><th>County</th></tr>
+                        {% for item in county %}
+                    <tr><td>{{ item.county }}
+                        {% endfor %}
+            </table>
+            <br>
+            <table>
+                <tr><th>Ethnicity</th></tr>
+                        {% for item in eth %}
+                    <tr><td>{{ item.ethnicity }}
+                        {% endfor %}
+            </table>
+            <br>
+            <table>
+                <tr><th>FsAmount</th></tr>
+                        {% for item in fsa %}
+                    <tr><td>{{ item.amount }}
+                        {% endfor %}
+            </table>
+            <br>
+        </div>
+        <div class="col-sm-3">
+            <table>
+                <tr><th>FsStatus</th></tr>
+                        {% for item in status %}
+                    <tr><td>{{ item.status }}
+                        {% endfor %}
+            </table>
+            <br>
+            <table>
+                <tr><th>Housing</th></tr>
+                        {% for item in housing %}
+                    <tr><td>{{ item.housing }}
+                        {% endfor %}
+            </table>
+            <br>
+            <table>
+                <tr><th>Income</th></tr>
+                        {% for item in income %}
+                    <tr><td>{{ item.income }}
+                        {% endfor %}
+            </table>
+            <br>
+            <table>
+                <tr><th>Notfoodstamp</th></tr>
+                        {% for item in notFS %}
+                    <tr><td>{{ item.notfoodstamp }}
+                        {% endfor %}
+            </table>
+            <br>
+        </div>
+        <div class="col-sm-3">
+            <table>
+                <tr><th>Offence</th></tr>
+                        {% for item in offense %}
+                    <tr><td>{{ item.offence }}
+                        {% endfor %}
+            </table>
+            <br>
+            <table>
+                <tr><th>Reason</th></tr>
+                        {% for item in reason %}
+                    <tr><td>{{ item.reason }}
+                        {% endfor %}
+            </table>
+            <br>
+            <table>
+                <tr><th>State (enabled only)</th></tr>
+                        {% for item in state %}
+                    <tr><td>{{ item.state }}
+                        {% endfor %}
+            </table>
+            <br>
+            <table>
+                <tr><th>Work</th></tr>
+                        {% for item in work %}
+                    <tr><td>{{ item.work }}
+                        {% endfor %}
+            </table>
+            <br>
+        </div>
+    </div>
+{% endblock body %}

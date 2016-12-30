@@ -1,0 +1,27 @@
+imports:
+    - { resource: config_dev.yml }
+
+framework:
+    test: ~
+    session:
+        storage_id: session.storage.mock_file
+
+web_profiler:
+    toolbar: false
+    intercept_redirects: false
+
+swiftmailer:
+    disable_delivery: true
+
+liip_functional_test: ~
+
+doctrine:
+    dbal:
+        driver:   pdo_mysql
+        host:     localhost
+        port:     3306
+        dbname:   Projectmana_test
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  UTF8
+        server_version: 5.7

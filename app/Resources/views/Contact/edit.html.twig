@@ -1,0 +1,63 @@
+{% extends "layout.html.twig" %}
+{% block body %}
+    <div class="panel panel-info">
+        <div class="panel-heading clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="panel-title">
+                        {{ title }} for Household<br>
+                        ID: {{household.id}}; Head: {{ household.head.fname }} {{ household.head.sname }}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    {{ knp_menu_render('return') }}
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            {% if title == 'Edit Contact' %}
+                <form action="{{ path("contact_edit", {'id': contact.id}) }}" method="post">
+                {% else %}
+                    <form action="{{ path("contact_new", {'id': household.id}) }}" method="post">
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-sm-3">
+                            {{ form_row(form.contactDate) }}
+                        </div>
+                        <div class="col-sm-3">
+                            {{ form_row(form.contactDesc) }}
+                        </div>
+                        <div class="col-sm-3">
+                            {{ form_row(form.center)}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <input class="btn-sm btn-info" type="submit" name="submit" value="Submit contact">
+                        </div>
+                        <div class="col-sm-3">
+                            {% if title == 'New Contact' %}<input class="btn-sm btn-info" type="reset">
+                            {% else %}<input class="btn-sm btn-info" type="reset" name="reset" value="Cancel" onclick="history.go(-1);
+                                        return false;">
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
+        </div>
+        {% if household.contacts|length > 0 and title != 'Edit Contact'%}
+            <div class="panel-heading">Contact History</div>
+            <div class="panel-body">
+                {% for contact in household.contacts %}
+                    <div class="row">
+                        <div class="col-sm-1"><a class="btn-sm btn-info" href="{{ path('contact_edit', { 'id': contact.id }) }}">Edit</a></div>
+                        <div class="col-sm-1"><a class="btn-sm btn-info" href="{{ path('contact_delete', { 'id': contact.id }) }}">Delete</a></div>
+                        <div class="col-sm-2"><b>Date:</b> {{ contact.contactDate|date('m/d/Y') }}</div>
+                        <div class="col-sm-3"><b>Date:</b> {{ contact.contactDesc.contactDesc }}</div>
+                        <div class="col-sm-3">{% if contact.center is not empty %}<b>Site: </b>{{ contact.center.center }}{% else %}
+                            {% if contact.center is not empty %}<b>County: </b>{{ contact.center.county.county }}{% endif %}{% endif %}</div>
+                        </div>
+                        {% endfor %}
+                        </div>
+                        {% endif %}
+                        </div>
+                        {% endblock %}

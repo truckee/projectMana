@@ -1,0 +1,112 @@
+{% block body %}
+<table>
+    <tr>
+	<td>Placer</td>
+	<td>{{ ctyStats['Placer']['UIS'] }}</td>
+    </tr>
+    <tr>
+	<td>Nevada</td>
+	<td>{{ ctyStats['Nevada']['UIS'] }}</td>
+    </tr>
+    <tr>
+	<td>Washoe</td>
+	<td>{{ ctyStats['Washoe']['UIS'] }}</td>
+    </tr>
+    <tr>
+	<td>&lt;6</td>
+	<td>{{ statistics['Under 6'] }}</td>
+    </tr>
+    <tr>
+	<td>6 to 18</td>
+	<td>{{ statistics['6 - 18'] }}</td>
+    </tr>
+    <tr>
+	<td>19 to 59</td>
+	<td>{{ statistics['19 - 59'] }}</td>
+    </tr>
+    <tr>
+	<td>60+</td>
+	<td>{{ statistics['60+'] }}</td>
+    </tr>
+    <tr>
+	<td>Female Children</td>
+	<td>{{ statistics['FC'] }}</td>
+    </tr>
+    <tr>
+	<td>Male Children</td>
+	<td>{{ statistics['MC'] }}</td>
+    </tr>
+    <tr>
+	<td>Female Adults</td>
+	<td>{{ statistics['FA'] }}</td>
+    </tr>
+    <tr>
+	<td>Male Adults</td>
+	<td>{{ statistics['MA'] }}</td>
+    </tr>
+    <tr>
+	<td>Caucasian</td>
+	<td>{{ statistics['Caucasian'] }}</td>
+    </tr>
+    <tr>
+	<td>African-American</td>
+	<td>{{ statistics['African-American'] }}</td>
+    </tr>
+    <tr>
+	<td>Asian</td>
+	<td>{{ statistics['Asian'] }}</td>
+    </tr>
+    <tr>
+	<td>Hispanic</td>
+	<td>{{ statistics['Hispanic'] }}</td>
+    </tr>
+    <tr>
+	<td>Native American</td>
+	<td>{{ statistics['Native American'] }}</td>
+    </tr>
+    <tr>
+	<td>Hawaiian/Pacific Islander</td>
+	<td>{{ statistics['Hawaiian/Pacific Islander'] }}</td>
+    </tr>
+    <tr>
+	<td>Other</td>
+	<td>{{ statistics['Other'] }}</td>
+    </tr>
+    <tr>
+	<td>&lt;1</td>
+	<td>{{ statistics['< 1 month'] }}</td>
+    </tr>
+    <tr>
+	<td>1 to 24</td>
+	<td>{{ statistics['1 mo - 2 yrs'] }}</td>
+    </tr>
+    <tr>
+	<td>24+</td>
+	<td>{{ statistics['>=2 yrs'] }}</td>
+    </tr>
+    <tr>
+	<td>1</td>
+	<td>{{ statistics['1x'] }}</td>
+    </tr>
+    <tr>
+	<td>2</td>
+	<td>{{ statistics['2x'] }}</td>
+    </tr>
+    <tr>
+	<td>3</td>
+	<td>{{ statistics['3x'] }}</td>
+    </tr>
+    <tr>
+	<td>4+</td>
+	<td>{{ statistics['4x'] }}</td>
+    </tr>
+    <tr>
+	<td>new</td>
+	<td>{{ statistics['Unique New Individuals'] }}</td>
+    </tr>
+    <tr>
+	<td>all</td>
+	<td>{{ statistics['UHS'] }}</td>
+    </tr>
+</table>
+{% endblock %}

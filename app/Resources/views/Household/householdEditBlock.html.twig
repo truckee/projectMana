@@ -1,0 +1,70 @@
+<div class="panel panel-info">
+    <div class="panel-heading">Household<br>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-2">
+                {{ form_row(form.active) }}
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    {% for phone in form.phones %}
+                        <div class="col-md-2">
+                            {{ form_row(phone.areacode) }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form_row(phone.phoneNumber) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                {{ form_row(form.income) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.foodstamp) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_row(form.fsamount) }}
+                {{ form_row(form.notfoodstamp) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.housing) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{ form_row(form.reasons) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                {{ form_row(form.arrivalmonth) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.arrivalyear) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.center) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                {{ form_row(form.compliance) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.complianceDate) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.shared) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.sharedDate) }}
+            </div>
+        </div>
+    </div>
+    <div id="household_options" style="display:none;">{{ metadata }}</div>
+</div>
