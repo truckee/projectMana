@@ -10,7 +10,7 @@
 
 //src\Truckee\ProjectmanaBundle\Tests\DisabledOptionsTest.php
 
-namespace Truckee\ProjectmanaBundle\Tests;
+use Truckee\ProjectmanaBundle\Tests\TruckeeWebTestCase;
 
 /**
  * DisabledOptionsTest

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Truckee\ProjectmanaBundle\Tests;
+use Truckee\ProjectmanaBundle\Tests\TruckeeWebTestCase;
 
 /**
  * Description of StatusTest.

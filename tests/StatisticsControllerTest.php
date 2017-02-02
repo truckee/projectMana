@@ -10,7 +10,7 @@
 
 //src\Truckee\ProjectmanaBundle\Tests\StatisticsControllerTest.php
 
-namespace Truckee\ProjectmanaBundle\Tests;
+use Truckee\ProjectmanaBundle\Tests\TruckeeWebTestCase;
 
 /**
  * Description of StatisticsControllerTest.
