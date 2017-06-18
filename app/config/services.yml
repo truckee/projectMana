@@ -6,18 +6,15 @@ services:
 
     mana.searches:
       class: Truckee\ProjectmanaBundle\Utilities\Searches
-      arguments:
-        em: '@doctrine.orm.entity_manager'
+      arguments: ['@doctrine.orm.entity_manager']
 
     mana.reports:
       class: Truckee\ProjectmanaBundle\Utilities\Reports
-      arguments:
-        em: '@doctrine.orm.entity_manager'
+      arguments: ['@doctrine.orm.entity_manager']
 
     mana.status:
       class: Truckee\ProjectmanaBundle\Utilities\Status
-      arguments:
-        conn: '@doctrine.dbal.default_connection'
+      arguments: ['@doctrine.dbal.default_connection']
 
     mana.crosstab:
       class: Truckee\ProjectmanaBundle\Utilities\Crosstab
@@ -40,5 +37,4 @@ services:
 
     mana.addresses:
         class: Truckee\ProjectmanaBundle\Utilities\Addresses
-        arguments:
-          em: '@doctrine.orm.entity_manager'
+        arguments: ['@doctrine.orm.entity_manager']
