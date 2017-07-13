@@ -8,7 +8,7 @@
             {{ reportHeader|raw }}
         </div>
         {% for template in templates %}
-            {% include template %}
+            {{ include( template) }}
         {% endfor %}
     </div>
     <div class="text-center hidden-print"><a href="{{ path('stats_excel') }}"><button>Save as Excel file</button></a></div>
