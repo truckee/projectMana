@@ -7,9 +7,7 @@
         <div class="panel-heading text-center">
             {{ reportHeader|raw }}
         </div>
-        {% for template in templates %}
-            {{ include( template) }}
-        {% endfor %}
+        {{ include('Default/templates.html.twig') }}
     </div>
     <div class="text-center hidden-print"><a href="{{ path('stats_excel') }}"><button>Save as Excel file</button></a></div>
 {% endblock %}
