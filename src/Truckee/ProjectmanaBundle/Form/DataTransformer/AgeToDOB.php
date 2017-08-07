@@ -20,7 +20,7 @@ use Symfony\Component\Form\DataTransformerInterface;
  *
  * Transformer required because initial design of Project MANA
  * database did not track date of birth.
- * 
+ *
  */
 class AgeToDOB implements DataTransformerInterface
 {

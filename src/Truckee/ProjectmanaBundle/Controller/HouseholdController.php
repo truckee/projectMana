@@ -32,10 +32,10 @@ class HouseholdController extends Controller
 
     /**
      * Finds and displays a Household entity.
-     * 
+     *
      * @param object $request Request
      * @param int $id Household id
-     * 
+     *
      * @return Response
      *
      * @Route("/{id}/show", name="household_show")
@@ -54,25 +54,27 @@ class HouseholdController extends Controller
         $templates[] = 'Address/addressShowBlock.html.twig';
         $templates[] = 'Household/contactShowBlock.html.twig';
 
-        return $this->render('Household/show.html.twig',
+        return $this->render(
+            'Household/show.html.twig',
                 array(
                 'household' => $household,
                 'hohId' => $household->getHead()->getId(),
                 'title' => 'Household View',
                 'templates' => $templates,
-        ));
+        )
+        );
     }
 
     /**
      * Create a new Household entity.
-     * 
+     *
      * First, validate a new member to be head of household. If member name
-     * closely matches an existing member name, a list of those matches is 
-     * provided. Users can then either select the existing household containing 
+     * closely matches an existing member name, a list of those matches is
+     * provided. Users can then either select the existing household containing
      * that name or continue to create a new household.
-     * 
+     *
      * @param object $request Request
-     * 
+     *
      * @return Response
      *
      * @Route("/new", name="household_new")
@@ -133,13 +135,15 @@ class HouseholdController extends Controller
             }
         }
 
-        return $this->render('Household/new.html.twig',
+        return $this->render(
+            'Household/new.html.twig',
                 array(
                 'formType' => 'New Household',
                 'form' => $form->createView(),
                 'formHead' => $formHead->createView(),
                 'title' => 'New Household',
-        ));
+        )
+        );
     }
 
     /**
@@ -149,7 +153,7 @@ class HouseholdController extends Controller
      * @param int $id Household id
      *
      * @return Response
-     * 
+     *
      * @Route("/{id}/edit", name="household_edit")
      */
     public function editAction(Request $request, $id)
@@ -203,7 +207,9 @@ class HouseholdController extends Controller
             return $this->redirectToRoute('household_show', array('id' => $household->getId()));
         }
         
-        return $this->render('Household/edit.html.twig',
+        return $this->render(
+        
+            'Household/edit.html.twig',
                 array(
                 'form' => $form->createView(),
                 'title' => 'Household Edit',
@@ -211,7 +217,9 @@ class HouseholdController extends Controller
                 'hohId' => $household->getHead()->getId(),
                 'templates' => $addressTemplates,
                 'metadata' => $metadata,
-        ));
+        )
+        
+        );
     }
 
     /**
@@ -220,7 +228,7 @@ class HouseholdController extends Controller
      * @param Request $request
      *
      * @return Response
-     * 
+     *
      * @Route("/_search", name = "_search")
      */
     public function searchAction(Request $request)
@@ -260,22 +268,24 @@ class HouseholdController extends Controller
                 return $this->redirectToRoute('household_show', array('id' => $id));
             } else {
                 $flash->success($nFound . ' households found');
-                return $this->render('Household/search.html.twig',
+                return $this->render(
+                    'Household/search.html.twig',
                         array(
                         'searchedFor' => $qtext,
                         'matched' => $found,
                         'title' => 'Search results',
-                ));
+                )
+                );
             }
         }
     }
 
     /**
      * Get household data by id.
-     * 
-     * Provides a json encoded string of household head data to be displayed 
+     *
+     * Provides a json encoded string of household head data to be displayed
      * when adding contacts.
-     * 
+     *
      * @param int $id Household id
      *
      * @return JsonResponse
@@ -290,10 +300,12 @@ class HouseholdController extends Controller
         if (!$household) {
             $response = new Response('');
         } else {
-            $content = $this->renderView('Contact/addHouseholdContact.html.twig',
+            $content = $this->renderView(
+                'Contact/addHouseholdContact.html.twig',
                 [
                 'household' => $household,
-            ]);
+            ]
+            );
             $response = new Response($content);
         }
 

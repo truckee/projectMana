@@ -18,5 +18,4 @@ use Truckee\ProjectmanaBundle\DQL\SingleParameterFunction;
 class FiscalYearFunction extends SingleParameterFunction
 {
     public $functionName = 'FY';
-
 }

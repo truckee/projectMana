@@ -26,7 +26,6 @@ use Truckee\ProjectmanaBundle\Form\Field\YesNoChoiceType;
 
 class MemberType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -39,13 +38,18 @@ class MemberType extends AbstractType
             ->add('dob', DobAgeType::class, array(
                 'label' => 'DOB or age:',
             ))
-            ->add('sex', ChoiceType::class,
+            ->add(
+                'sex',
+                ChoiceType::class,
                 array(
                 'label' => 'Gender:',
                 'placeholder' => 'Select gender',
                 'choices' => array('Male' => 'Male', 'Female' => 'Female'),
-            ))
-            ->add('ethnicity', EntityType::class,
+            )
+            )
+            ->add(
+                'ethnicity',
+                EntityType::class,
                 array(
                 'label' => 'Ethnicity:',
                 'class' => 'TruckeeProjectmanaBundle:Ethnicity',
@@ -54,22 +58,25 @@ class MemberType extends AbstractType
                 'placeholder' => 'Select ethnicity',
                 'attr' => (in_array('Ethnicity', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
                 'query_builder' => function (EntityRepository $er) use ($options) {
-                if (false === in_array('Ethnicity', $options['disabledOptions'])) {
-                    return $er->createQueryBuilder('alias')
+                    if (false === in_array('Ethnicity', $options['disabledOptions'])) {
+                        return $er->createQueryBuilder('alias')
                         ->where('alias.enabled = 1')
                         ->orderBy('alias.abbreviation', 'ASC');
-                } else {
-                    return $er->createQueryBuilder('alias')
+                    } else {
+                        return $er->createQueryBuilder('alias')
                         ->orderBy('alias.abbreviation', 'ASC');
-                }
-            },
-            ))
+                    }
+                },
+            )
+            )
             ->add('include', YesNoChoiceType::class, array(
                 'label' => 'Include? ',
             ))
             ->add('excludeDate', DateType::class, array(
             ))
-            ->add('offences', EntityType::class,
+            ->add(
+                'offences',
+                EntityType::class,
                 array(
                 'class' => 'TruckeeProjectmanaBundle:Offence',
                 'label' => 'Offense:',
@@ -80,18 +87,21 @@ class MemberType extends AbstractType
                 'attr' => [
                     'class' => 'form-inline',
                 ],
-                'query_builder' => function (EntityRepository $er) use($options) {
-                if (false === in_array('offences', $options['disabledOptions'])) {
-                    return $er->createQueryBuilder('e')
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                    if (false === in_array('offences', $options['disabledOptions'])) {
+                        return $er->createQueryBuilder('e')
                         ->orderBy('e.offence', 'ASC')
                         ->where('e.enabled=1');
-                } else {
-                    return $er->createQueryBuilder('e')
+                    } else {
+                        return $er->createQueryBuilder('e')
                         ->orderBy('e.offence', 'ASC');
-                }
-            },
-            ))
-            ->add('relation', EntityType::class,
+                    }
+                },
+            )
+            )
+            ->add(
+                'relation',
+                EntityType::class,
                 array(
                 'label' => 'Relationship:',
                 'class' => 'TruckeeProjectmanaBundle:Relationship',
@@ -100,22 +110,28 @@ class MemberType extends AbstractType
                 'placeholder' => 'Select relation to head',
                 'attr' => (in_array('Relation', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
                 'query_builder' => function (EntityRepository $er) use ($options) {
-                if (false === in_array('Relation', $options['disabledOptions'])) {
-                    return $er->createQueryBuilder('alias')
+                    if (false === in_array('Relation', $options['disabledOptions'])) {
+                        return $er->createQueryBuilder('alias')
                         ->where('alias.enabled = 1')
                         ->orderBy('alias.relation', 'ASC');
-                } else {
-                    return $er->createQueryBuilder('alias')
+                    } else {
+                        return $er->createQueryBuilder('alias')
                         ->orderBy('alias.relation', 'ASC');
-                }
-            },
-            ))
-            ->add('isHead', CheckboxType::class,
+                    }
+                },
+            )
+            )
+            ->add(
+                'isHead',
+                CheckboxType::class,
                 array(
                 'mapped' => false,
                 'label' => 'Head? ',
-            ))
-            ->add('work', EntityType::class,
+            )
+            )
+            ->add(
+                'work',
+                EntityType::class,
                 array(
                 'class' => 'TruckeeProjectmanaBundle:Work',
                 'choice_label' => 'work',
@@ -123,16 +139,17 @@ class MemberType extends AbstractType
                 'label' => 'Work:',
                 'attr' => (in_array('Work', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
                 'query_builder' => function (EntityRepository $er) use ($options) {
-                if (false === in_array('Work', $options['disabledOptions'])) {
-                    return $er->createQueryBuilder('alias')
+                    if (false === in_array('Work', $options['disabledOptions'])) {
+                        return $er->createQueryBuilder('alias')
                         ->where('alias.enabled = 1')
                         ->orderBy('alias.work', 'ASC');
-                } else {
-                    return $er->createQueryBuilder('alias')
+                    } else {
+                        return $er->createQueryBuilder('alias')
                         ->orderBy('alias.work', 'ASC');
-                }
-            },
-            ))
+                    }
+                },
+            )
+            )
 
         ;
     }

@@ -1,9 +1,9 @@
 <?php
 /*
  * This file is part of the Truckee\Projectmana package.
- * 
+ *
  * (c) George W. Brooks
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -22,54 +22,53 @@ use Doctrine\Common\Persistence\ObjectManager;
  */
 class DisabledConstants extends AbstractFixture implements OrderedFixtureInterface
 {
-
     public function load(ObjectManager $manager)
     {
         //Center
         $site = $this->getReference('kb');
-        $site->setEnabled(FALSE);
+        $site->setEnabled(false);
         $siteTahoe = $this->getReference('tahoe');
-        $siteTahoe->setEnabled(FALSE);
+        $siteTahoe->setEnabled(false);
         $manager->persist($site);
 
         //ContactDesc
         $desc = $this->getReference('general');
-        $desc->setEnabled(FALSE);
+        $desc->setEnabled(false);
         $manager->persist($desc);
 
         //County
         $county = $this->getReference('placer');
-        $county->setEnabled(FALSE);
+        $county->setEnabled(false);
         $manager->persist($county);
 
         //FsStatus
         $fsStatus = $this->getReference('unk');
-        $fsStatus->setEnabled(FALSE);
+        $fsStatus->setEnabled(false);
         $manager->persist($fsStatus);
 
         //Housing
         $own = $this->getReference('own');
-        $own->setEnabled(FALSE);
+        $own->setEnabled(false);
         $manager->persist($own);
 
         //Income
         $income = $this->getReference('noIncome');
-        $income->setEnabled(FALSE);
+        $income->setEnabled(false);
         $manager->persist($income);
 
         //Notfoodstamp
         $notApplied = $this->getReference('notA');
-        $notApplied->setEnabled(FALSE);
+        $notApplied->setEnabled(false);
         $manager->persist($notApplied);
 
         //Reason
         $housing = $this->getReference('cost');
-        $housing->setEnabled(FALSE);
+        $housing->setEnabled(false);
         $manager->persist($housing);
 
         //State
         $state = $this->getReference('ca');
-        $state->setEnabled(FALSE);
+        $state->setEnabled(false);
         $manager->persist($state);
 
 

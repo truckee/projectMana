@@ -22,11 +22,12 @@ use Truckee\ProjectmanaBundle\Form\Field\CenterEnabledChoiceType;
 
 class ContactType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('center', EntityType::class,
+            ->add(
+                'center',
+                EntityType::class,
                 array(
                 'class' => 'TruckeeProjectmanaBundle:Center',
                     'label'  => 'Site:',
@@ -43,8 +44,11 @@ class ContactType extends AbstractType
                             ->orderBy('alias.center', 'ASC');
                     }
                 }
-            ))
-            ->add('contactDesc', EntityType::class,
+            )
+            )
+            ->add(
+                'contactDesc',
+                EntityType::class,
                 array(
                 'class' => 'TruckeeProjectmanaBundle:ContactDesc',
                 'label' => 'Contact type',
@@ -52,24 +56,28 @@ class ContactType extends AbstractType
                 'placeholder' => 'Select contact type',
                 'attr' => (in_array('ContactDesc', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
                 'query_builder' => function (EntityRepository $er) use ($options) {
-                if (false === in_array('ContactDesc', $options['disabledOptions'])) {
-                    return $er->createQueryBuilder('alias')
+                    if (false === in_array('ContactDesc', $options['disabledOptions'])) {
+                        return $er->createQueryBuilder('alias')
                         ->where('alias.enabled = 1')
                         ->orderBy('alias.contactDesc', 'ASC');
-                } else {
-                    return $er->createQueryBuilder('alias')
+                    } else {
+                        return $er->createQueryBuilder('alias')
                         ->orderBy('alias.contactDesc', 'ASC');
+                    }
                 }
-            }
-            ))
-            ->add('contactDate', DateType::class,
+            )
+            )
+            ->add(
+                'contactDate',
+                DateType::class,
                 array(
                 'widget' => 'single_text',
                 'html5' => false,
                 'attr' => ['class' => 'js-datepicker'],
                 'format' => 'M/d/y',
                 'years' => range(date('Y'), date('Y') - 5),
-            ))
+            )
+            )
             ->add('household', CheckboxType::class, array(
                 'mapped' => false,
             ))

@@ -19,31 +19,36 @@ use Truckee\ProjectmanaBundle\Form\Field\NoYesChoiceType;
 
 class HouseholdRequiredType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('center', CenterEnabledChoiceType::class)
             ->add('compliance', NoYesChoiceType::class, array(
             ))
-            ->add('complianceDate', DateType::class,
+            ->add(
+                'complianceDate',
+                DateType::class,
                 array(
                 'attr' => [
                     'placeholder' => 'mm/dd/yyyy',
                 ],
                 'widget' => 'single_text',
                 'format' => 'MM/dd/yyyy',
-            ))
+            )
+            )
             ->add('shared', NoYesChoiceType::class, array(
             ))
-            ->add('sharedDate', DateType::class,
+            ->add(
+                'sharedDate',
+                DateType::class,
                 array(
                 'attr' => [
                     'placeholder' => 'mm/dd/yyyy',
                 ],
                 'widget' => 'single_text',
                 'format' => 'MM/dd/yyyy',
-            ))
+            )
+            )
         ;
     }
 

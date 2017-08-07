@@ -46,17 +46,26 @@ class ReportCriteriaType extends AbstractType
                         new StartEndDate(),
                     ),
                 ))
-                ->add('endMonth', MonthType::class, array(
+                ->add(
+                    'endMonth',
+                    MonthType::class,
+                    array(
                     'data' => $this->month,
                     'placeholder' => false,
                         )
                 )
-                ->add('startYear', YearType::class, array(
+                ->add(
+                    'startYear',
+                    YearType::class,
+                    array(
                     'data' => $this->year,
                     'placeholder' => false,
                         )
                 )
-                ->add('endYear', YearType::class, array(
+                ->add(
+                    'endYear',
+                    YearType::class,
+                    array(
                     'data' => $this->year,
                     'placeholder' => false,
                     'constraints' => [

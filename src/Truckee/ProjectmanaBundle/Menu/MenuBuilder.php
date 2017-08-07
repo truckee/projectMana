@@ -26,14 +26,16 @@ class MenuBuilder
     private $requestStack;
 
     /**
-     * 
+     *
      * @param FactoryInterface $factory
      * @param AuthorizationCheckerInterface $checker
      * @param RequestStack $requestStack
      */
     public function __construct(
-    FactoryInterface $factory, AuthorizationCheckerInterface $checker, RequestStack $requestStack)
-    {
+    FactoryInterface $factory,
+        AuthorizationCheckerInterface $checker,
+        RequestStack $requestStack
+    ) {
         $this->factory = $factory;
         $this->checker = $checker;
         $this->requestStack = $requestStack;
@@ -93,11 +95,13 @@ class MenuBuilder
         $id = $request->get('id');
         $menu = $this->factory->createItem('root');
         $title = 'Household contacts';
-        $menu->addChild($title,
+        $menu->addChild(
+            $title,
             array(
             'route' => 'contact_new',
             'routeParameters' => array('id' => $id),
-        ));
+        )
+        );
         $menu[$title]->setLinkAttributes([
             'class' => 'btn btn-info btn-sm',
         ]);
@@ -182,7 +186,8 @@ class MenuBuilder
         return $menu;
     }
     
-    public function databaseMenu(array $options) {
+    public function databaseMenu(array $options)
+    {
         $menu = $this->factory->createItem('root');
 
         $menu->addChild('Tables & their relationships', array(

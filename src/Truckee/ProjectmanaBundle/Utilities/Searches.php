@@ -119,11 +119,12 @@ class Searches
 
     /**
      * Create array of disabled fields of an entity object
-     * 
+     *
      * @param type $object
      * @return array
      */
-    public function getDisabledOptions($object) {
+    public function getDisabledOptions($object)
+    {
         $values = [];
         $className = get_class($object);
         $metaData = $this->em->getClassMetadata($className);
@@ -137,7 +138,7 @@ class Searches
             }
         }
         $manyToMany = json_decode($this->getMetaData($object), true);
-        foreach(array_keys($manyToMany) as $key) {
+        foreach (array_keys($manyToMany) as $key) {
             $values[] = $key;
         }
 
@@ -150,7 +151,8 @@ class Searches
      * @param Object $object
      * @return array
      */
-    public function getMetaData($object) {
+    public function getMetaData($object)
+    {
         $data = array();
         $className = get_class($object);
         $metaData = $this->em->getClassMetadata($className);
@@ -163,7 +165,8 @@ class Searches
         return json_encode($data);
     }
 
-    private function extractOptions($object, $field) {
+    private function extractOptions($object, $field)
+    {
         $data = [];
         $method = 'get' . ucfirst($field);
         $itemName = substr($field, 0, -1);

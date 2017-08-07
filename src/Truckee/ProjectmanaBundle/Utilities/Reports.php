@@ -550,23 +550,31 @@ class Reports
         $data = [];
         foreach ($UISData as $array) {
             $data[$array['county']]['UIS'] = $array['UIS'];
-            $data[$array['county']]['UISPCT'] = (0 < $totals['UISTotal']) ? sprintf('%01.1f',
-                    100 * ($array['UIS'] / $totals['UISTotal'])) . '%' : 0;
+            $data[$array['county']]['UISPCT'] = (0 < $totals['UISTotal']) ? sprintf(
+                '%01.1f',
+                    100 * ($array['UIS'] / $totals['UISTotal'])
+            ) . '%' : 0;
         }
         foreach ($UHSData as $array) {
             $data[$array['county']]['UHS'] = $array['UHS'];
-            $data[$array['county']]['UHSPCT'] = (0 < $totals['UHSTotal']) ? sprintf('%01.1f',
-                    100 * ($array['UHS'] / $totals['UHSTotal'])) . '%' : 0;
+            $data[$array['county']]['UHSPCT'] = (0 < $totals['UHSTotal']) ? sprintf(
+                '%01.1f',
+                    100 * ($array['UHS'] / $totals['UHSTotal'])
+            ) . '%' : 0;
         }
         foreach ($TISData as $array) {
             $data[$array['county']]['TIS'] = $array['TIS'];
-            $data[$array['county']]['TISPCT'] = (0 < $totals['TISTotal']) ? sprintf('%01.1f',
-                    100 * ($array['TIS'] / $totals['TISTotal'])) . '%' : 0;
+            $data[$array['county']]['TISPCT'] = (0 < $totals['TISTotal']) ? sprintf(
+                '%01.1f',
+                    100 * ($array['TIS'] / $totals['TISTotal'])
+            ) . '%' : 0;
         }
         foreach ($THSData as $array) {
             $data[$array['county']]['THS'] = $array['THS'];
-            $data[$array['county']]['THSPCT'] = (0 < $totals['THSTotal']) ? sprintf('%01.1f',
-                    100 * ($array['THS'] / $totals['THSTotal'])) . '%' : 0;
+            $data[$array['county']]['THSPCT'] = (0 < $totals['THSTotal']) ? sprintf(
+                '%01.1f',
+                    100 * ($array['THS'] / $totals['THSTotal'])
+            ) . '%' : 0;
         }
 
         return $data;

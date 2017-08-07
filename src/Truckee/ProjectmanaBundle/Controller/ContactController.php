@@ -30,14 +30,15 @@ class ContactController extends Controller
 
     /**
      * Create a new Contact entity.
-     * 
+     *
      * @param int $id Household id
-     * 
+     *
      * @return Response
      *
      * @Route("/{id}/new", name="contact_new")
      */
-    public function newAction(Request $request, $id) {
+    public function newAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
         if (!$household) {
@@ -71,14 +72,15 @@ class ContactController extends Controller
 
     /**
      * Edit an existing Contact entity.
-     * 
+     *
      * @param int $id Contact id
-     * 
+     *
      * @return Response
      *
      * @Route("/{id}/edit", name="contact_edit")
      */
-    public function editAction(Request $request, $id) {
+    public function editAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
         $contact = $em->getRepository('TruckeeProjectmanaBundle:Contact')->find($id);
         if (!$contact) {
@@ -112,12 +114,13 @@ class ContactController extends Controller
      * Delete a Contact entity.
      *
      * @param int $id Contact id
-     * 
+     *
      * @return Response
-     * 
+     *
      * @Route("/{id}/delete", name="contact_delete")
      */
-    public function deleteAction(Request $request, $id) {
+    public function deleteAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
         $flash = $this->get('braincrafted_bootstrap.flash');
         $contact = $em->getRepository('TruckeeProjectmanaBundle:Contact')->find($id);
@@ -149,17 +152,18 @@ class ContactController extends Controller
 
     /**
      * Add contacts.
-     * 
+     *
      * Displays form to select site from which most recent contacts are
      * gathered.  Allows selecting and adding households. Includes setting
      * contact type.
-     * 
+     *
      * @param object $request Request
      * @param string $source Most recent/FY to date
-     * 
+     *
      * @Route("/addContacts/{source}", name="contacts_add")
      */
-    public function addContactsAction(Request $request, $source) {
+    public function addContactsAction(Request $request, $source)
+    {
         $contact = new Contact();
         $form = $this->createForm(ContactType::class, $contact);
         $form->handleRequest($request);
@@ -194,7 +198,7 @@ class ContactController extends Controller
 
     /**
      * Collect set of households
-     * 
+     *
      * @param string $site Site
      * @param string $source Most recent/FY to date
      *
@@ -202,7 +206,8 @@ class ContactController extends Controller
      *
      * @Route("/latest/{site}/{source}")
      */
-    public function mostRecentContactsAction($site, $source) {
+    public function mostRecentContactsAction($site, $source)
+    {
         $em = $this->getDoctrine()->getManager();
         $center = $em->getRepository('TruckeeProjectmanaBundle:Center')->find($site);
         $searches = $this->get('mana.searches');
@@ -226,15 +231,16 @@ class ContactController extends Controller
 
     /**
      * Generates PDF checklist of households at most recent distribution.
-     * 
+     *
      * @param object $request Request
      * @param string $source Most recent/FY to date
-     * 
+     *
      * @return file
-     * 
+     *
      * @Route("/latestReport/{source}", name="latest_contacts")
      */
-    public function latestReportAction(Request $request, $source) {
+    public function latestReportAction(Request $request, $source)
+    {
         $center = new Center();
         $form = $this->createForm(SelectCenterType::class, $center);
         $form->handleRequest($request);
@@ -282,5 +288,4 @@ class ContactController extends Controller
                     'source' => $source,
         ));
     }
-
 }

@@ -1,9 +1,9 @@
 <?php
 /*
  * This file is part of the Truckee\Projectmana package.
- * 
+ *
  * (c) George W. Brooks
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -41,6 +41,7 @@ class Addresses
             case 1:
                 $type = $addresses[0]->getAddressType()->getAddressType();
                 $templates[] = ('Physical' === $type) ? $mailing : $physical;
+                // no break
             default:
                 $templates[] = 'Address/existingAddressBlock.html.twig';
                 break;

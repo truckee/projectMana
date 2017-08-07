@@ -17,7 +17,7 @@ class HouseholdRepository extends EntityRepository
 {
     /**
      * Set initial values for household entity.
-     * 
+     *
      * @param object $household
      * @param object $member
      * @param object $session

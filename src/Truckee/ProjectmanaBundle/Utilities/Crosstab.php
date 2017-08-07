@@ -81,7 +81,7 @@ class Crosstab
 
     /**
      * Convert $criteria dates to array for Doctrine parameter array
-     * 
+     *
      * @param array $criteria Report critiera
      *
      * @return array

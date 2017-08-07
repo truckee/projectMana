@@ -24,7 +24,7 @@ class CenterRepository extends EntityRepository
 {
     /**
      * Get column headers for profile by site reports
-     * 
+     *
      * @param array $dateCriteria
      * @return array
      */

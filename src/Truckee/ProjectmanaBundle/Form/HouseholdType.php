@@ -26,7 +26,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class HouseholdType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -39,25 +38,36 @@ class HouseholdType extends AbstractType
             ->add('mailingAddress', MailingAddressType::class, [
                 'mapped' => false,
             ])
-            ->add('addresses', CollectionType::class,
+            ->add(
+                'addresses',
+                CollectionType::class,
                 array(
                 'entry_type' => AddressType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
                 'prototype' => true,
-            ))
-            ->add('arrivalmonth', MonthType::class,
+            )
+            )
+            ->add(
+                'arrivalmonth',
+                MonthType::class,
                 array(
                 'placeholder' => false,
                 'label' => 'Arrival month: ',
-            ))
-            ->add('arrivalyear', YearType::class,
+            )
+            )
+            ->add(
+                'arrivalyear',
+                YearType::class,
                 array(
                 'placeholder' => false,
                 'label' => 'Arrival year: ',
-            ))
-            ->add('center', EntityType::class,
+            )
+            )
+            ->add(
+                'center',
+                EntityType::class,
                 array(
                 'class' => 'TruckeeProjectmanaBundle:Center',
                     'label'  => 'Site:',
@@ -74,20 +84,29 @@ class HouseholdType extends AbstractType
                             ->orderBy('alias.center', 'ASC');
                     }
                 }
-            ))
-            ->add('compliance', NoYesChoiceType::class,
+            )
+            )
+            ->add(
+                'compliance',
+                NoYesChoiceType::class,
                 array(
                 'label' => 'Compliance: ',
-            ))
-            ->add('complianceDate', DateType::class,
+            )
+            )
+            ->add(
+                'complianceDate',
+                DateType::class,
                 array(
                 'label' => 'Compliance date: ',
                 'widget' => 'single_text',
                 'html5' => false,
                 'attr' => ['class' => 'js-datepicker'],
                 'format' => 'M/d/y',
-            ))
-            ->add('foodstamp', EntityType::class,
+            )
+            )
+            ->add(
+                'foodstamp',
+                EntityType::class,
                 array(
                 'class' => 'TruckeeProjectmanaBundle:FsStatus',
                 'choice_label' => 'status',
@@ -104,8 +123,11 @@ class HouseholdType extends AbstractType
                             ->orderBy('alias.status', 'ASC');
                     }
                 }
-            ))
-            ->add('fsamount', EntityType::class,
+            )
+            )
+            ->add(
+                'fsamount',
+                EntityType::class,
                 array(
                 'class' => 'TruckeeProjectmanaBundle:FsAmount',
                 'choice_label' => 'amount',
@@ -121,8 +143,11 @@ class HouseholdType extends AbstractType
                         return $er->createQueryBuilder('c')
                             ->orderBy('alias.amount', 'ASC');
                     }
-                }            ))
-            ->add('housing', EntityType::class,
+                }            )
+            )
+            ->add(
+                'housing',
+                EntityType::class,
                 array(
                 'class' => 'TruckeeProjectmanaBundle:Housing',
                 'choice_label' => 'housing',
@@ -130,17 +155,20 @@ class HouseholdType extends AbstractType
                 'attr' => (in_array('Housing', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
                 'label' => 'Housing: ',
                 'query_builder' => function (EntityRepository $er) use ($options) {
-                if (false === in_array('Housing', $options['disabledOptions'])) {
-                    return $er->createQueryBuilder('alias')
+                    if (false === in_array('Housing', $options['disabledOptions'])) {
+                        return $er->createQueryBuilder('alias')
                         ->orderBy('alias.housing', 'ASC')
                         ->where('alias.enabled=1');
-                } else {
-                    return $er->createQueryBuilder('alias')
+                    } else {
+                        return $er->createQueryBuilder('alias')
                         ->orderBy('alias.housing', 'ASC');
-                }
-            },
-            ))
-            ->add('income', EntityType::class,
+                    }
+                },
+            )
+            )
+            ->add(
+                'income',
+                EntityType::class,
                 array(
                 'class' => 'TruckeeProjectmanaBundle:Income',
                 'choice_label' => 'income',
@@ -157,8 +185,11 @@ class HouseholdType extends AbstractType
                             ->orderBy('alias.income', 'ASC');
                     }
                 }
-            ))
-            ->add('notfoodstamp', EntityType::class,
+            )
+            )
+            ->add(
+                'notfoodstamp',
+                EntityType::class,
                 array(
                 'class' => 'TruckeeProjectmanaBundle:Notfoodstamp',
                 'label' => 'If not food stamps, why not? ',
@@ -175,16 +206,22 @@ class HouseholdType extends AbstractType
                             ->orderBy('alias.notfoodstamp', 'ASC');
                     }
                 }
-            ))
-            ->add('phones', CollectionType::class,
+            )
+            )
+            ->add(
+                'phones',
+                CollectionType::class,
                 array(
                 'entry_type' => PhoneType::class,
                 'label' => 'Phone: ',
                 'allow_add' => true,
                 'allow_delete' => false,
                 'by_reference' => false,
-            ))
-            ->add('reasons', EntityType::class,
+            )
+            )
+            ->add(
+                'reasons',
+                EntityType::class,
                 array(
                 'class' => 'TruckeeProjectmanaBundle:Reason',
                 'choice_label' => 'reason',
@@ -194,28 +231,32 @@ class HouseholdType extends AbstractType
                 'attr' => [
                     'class' => 'form-inline',
                 ],
-                'query_builder' => function (EntityRepository $er ) use($options) {
-                if (false === in_array('reasons', $options['disabledOptions'])) {
-                    return $er->createQueryBuilder('alias')
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                    if (false === in_array('reasons', $options['disabledOptions'])) {
+                        return $er->createQueryBuilder('alias')
                         ->orderBy('alias.reason', 'ASC')
                         ->where('alias.enabled=1');
-                } else {
-                    return $er->createQueryBuilder('alias')
+                    } else {
+                        return $er->createQueryBuilder('alias')
                         ->orderBy('alias.reason', 'ASC');
-                }
-            },
-            ))
+                    }
+                },
+            )
+            )
             ->add('shared', NoYesChoiceType::class, array(
                 'label' => 'Shared: ',
             ))
-            ->add('sharedDate', DateType::class,
+            ->add(
+                'sharedDate',
+                DateType::class,
                 array(
                 'label' => 'Shared date: ',
                 'widget' => 'single_text',
                 'html5' => false,
                 'attr' => ['class' => 'js-datepicker'],
                 'format' => 'M/d/y',
-            ))
+            )
+            )
         ;
     }
 

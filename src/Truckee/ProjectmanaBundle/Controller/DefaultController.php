@@ -22,23 +22,25 @@ class DefaultController extends Controller
 
     /**
      * Home page for authorized users
-     * 
+     *
      * @return Response
-     * 
+     *
      * @Route("/", name="home")
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         return $this->render('Default/index.html.twig');
     }
 
     /**
      * Present menu of report options.
-     * 
+     *
      * @return Response
-     * 
+     *
      * @Route("/reportMenu", name="report_menu")
      */
-    public function reportMenuAction() {
+    public function reportMenuAction()
+    {
         return $this->render('Default/reportMenu.html.twig');
     }
 
@@ -47,7 +49,8 @@ class DefaultController extends Controller
      *
      * @return script
      */
-    public function scriptAction() {
+    public function scriptAction()
+    {
         $reports = $this->get('mana.reports');
         $chart = $reports->getDistsFYToDate();
 
@@ -58,11 +61,11 @@ class DefaultController extends Controller
 
     /**
      * Display database table documentation
-     * 
+     *
      * @Route("/reports/dbTables", name="db_tables")
      */
-    public function dbTablesAction() {
-        
+    public function dbTablesAction()
+    {
         return $this->render('Default/dbTables.html.twig', [
             'title' => 'Database tables',
         ]);
@@ -70,10 +73,11 @@ class DefaultController extends Controller
 
     /**
      * Display database option table documentation
-     * 
+     *
      * @Route("/reports/dbOptions", name="db_options")
      */
-    public function dbOptionTablesAction() {
+    public function dbOptionTablesAction()
+    {
         $em = $this->getDoctrine()->getManager();
         $addressType = $em->getRepository('TruckeeProjectmanaBundle:AddressType')->findBy([], ['addresstype' => 'ASC']);
         $center = $em->getRepository('TruckeeProjectmanaBundle:Center')->findBy([], ['center' => 'ASC']);
@@ -111,21 +115,21 @@ class DefaultController extends Controller
     
     /**
      * How to create db queries
-     * 
+     *
      * @Route("/reports/queries", name="db_queries")
      */
-    public function databaseQueriesAction() {
-        
+    public function databaseQueriesAction()
+    {
         return $this->render('Default/queries.html.twig');
-        
     }
     
     /**
      * How to install & configure MySQL Workbench
-     * 
+     *
      * @Route("/reports/workbench", name="db_workbench")
      */
-    public function workbenchAction() {
+    public function workbenchAction()
+    {
         return $this->render('Default/workbench.html.twig');
     }
 }

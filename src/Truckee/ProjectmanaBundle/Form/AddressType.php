@@ -36,10 +36,10 @@ class AddressType extends AbstractType
                     'expanded' => false,
                     'required' => false,
                     'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('a')
+                        return $er->createQueryBuilder('a')
                         ->orderBy('a.id', 'ASC')
                         ->where('a.enabled=1');
-            },
+                    },
                 ))
                 ->add('line1', TextType::class, array(
                     'label' => 'Address, line 1: ',

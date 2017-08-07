@@ -70,18 +70,22 @@ class Status
                 $households = $stmt->fetchAll();
                 foreach ($households as $household) {
                     $id = $household['id'];
-                    $this->conn->update('household',
+                    $this->conn->update(
+                        'household',
                             array('active' => 1),
-                            array('id' => $id));
+                            array('id' => $id)
+                    );
                 }
             } else {
                 $stmt = $this->conn->executeQuery($sql, array(1, $year));
                 $households = $stmt->fetchAll();
                 foreach ($households as $household) {
                     $id = $household['id'];
-                    $this->conn->update('household',
+                    $this->conn->update(
+                        'household',
                             array('active' => 0),
-                            array('id' => $id));
+                            array('id' => $id)
+                    );
                 }
             }
         }

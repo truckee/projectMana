@@ -260,7 +260,7 @@ class StatisticsController extends Controller
      * Output array consists of
      *  criteria for calculating data
      *  criteria to display in template
-     * 
+     *
      * @param array $criteria
      *
      * @return array
@@ -671,9 +671,9 @@ class StatisticsController extends Controller
 
     /**
      * Gather row & column data for SNAP why not profile
-     * 
+     *
      * @param array $criteria
-     * 
+     *
      * @return Response
      */
     private function not($criteria)
