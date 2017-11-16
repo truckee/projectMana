@@ -53,7 +53,6 @@ class ContactController extends Controller
             $nContacts = count($household->getContacts());
             $first = ($nContacts > 0) ? 0 : 1;
             $contact->setFirst($first);
-            $contact->setCounty($contact->getCenter()->getCounty());
             $household->addContact($contact);
             $em->persist($household);
             $em->flush();
@@ -92,7 +91,6 @@ class ContactController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $contact->setCounty($contact->getCenter()->getCounty());
             $em->persist($contact);
             $em->flush();
             $hid = $contact->getHousehold()->getId();

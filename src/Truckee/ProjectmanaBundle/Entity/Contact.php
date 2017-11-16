@@ -71,16 +71,6 @@ class Contact
     protected $contactDesc;
 
     /**
-     * @var \Truckee\ProjectmanaBundle\Entity\County
-     *
-     * @ORM\ManyToOne(targetEntity="Truckee\ProjectmanaBundle\Entity\County", inversedBy="contacts")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="county_id", referencedColumnName="id")
-     * })
-     */
-    protected $county;
-
-    /**
      * @var \Truckee\ProjectmanaBundle\Entity\Center
      *
      * @ORM\ManyToOne(targetEntity="Truckee\ProjectmanaBundle\Entity\Center", inversedBy="contacts")
@@ -219,29 +209,5 @@ class Contact
     public function getContactDesc()
     {
         return $this->contactDesc;
-    }
-
-    /**
-     * Set county.
-     *
-     * @param \Truckee\ProjectmanaBundle\Entity\County $county
-     *
-     * @return Contact
-     */
-    public function setCounty(\Truckee\ProjectmanaBundle\Entity\County $county = null)
-    {
-        $this->county = $county;
-
-        return $this;
-    }
-
-    /**
-     * Get county.
-     *
-     * @return \Truckee\ProjectmanaBundle\Entity\County
-     */
-    public function getCounty()
-    {
-        return $this->county;
     }
 }

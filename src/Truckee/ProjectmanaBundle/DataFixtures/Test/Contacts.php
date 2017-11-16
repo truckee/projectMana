@@ -36,7 +36,6 @@ class Contacts extends AbstractFixture implements OrderedFixtureInterface
         $date = new \DateTime('last month');
         $contact = new Contact();
         $contact->setCenter($siteTahoe);
-        $contact->setCounty($countyPlacer);
         $contact->setContactDate($date);
         $contact->setContactDesc($descGeneral);
         $contact->setHousehold($house1);
@@ -47,7 +46,6 @@ class Contacts extends AbstractFixture implements OrderedFixtureInterface
 
         $contact1 = new Contact();
         $contact1->setCenter($siteTahoe);
-        $contact1->setCounty($countyPlacer);
         $contact1->setContactDate($date);
         $contact1->setContactDesc($descGeneral);
         $contact1->setHousehold($house1);

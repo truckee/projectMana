@@ -1,9 +1,9 @@
 <?php
 /*
  * This file is part of the Truckee\Projectmana package.
- * 
+ *
  * (c) George W. Brooks
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -47,7 +47,6 @@ class ContactTest extends TruckeeWebTestCase
         $crawler = $this->login();
         $id = $this->fixtures->getReference('house1')->getId();
         $crawler = $this->client->request('GET', '/household/'.$id.'/show');
-        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("General")')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Placer")')->count());
     }

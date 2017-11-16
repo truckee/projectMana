@@ -179,8 +179,10 @@ class Reports
 
         $sqlContact = 'insert into temp_contact
             (contact_type_id, household_id, contact_date, first, center_id, county_id)
-            select contact_type_id, household_id, contact_date, first, center_id, county_id
-            from contact c '
+            select contact_type_id, household_id, contact_date, first, center_id, cty.id
+            from contact c
+            join center r on  r.id = c.center_id
+            join county cty on cty.id = r.county_id '
             . $whereClause;
         $stmtContact = $db->prepare($sqlContact);
         $stmtContact->execute($parameters);
@@ -551,30 +553,30 @@ class Reports
         foreach ($UISData as $array) {
             $data[$array['county']]['UIS'] = $array['UIS'];
             $data[$array['county']]['UISPCT'] = (0 < $totals['UISTotal']) ? sprintf(
-                '%01.1f',
-                    100 * ($array['UIS'] / $totals['UISTotal'])
-            ) . '%' : 0;
+                    '%01.1f',
+                100 * ($array['UIS'] / $totals['UISTotal'])
+                ) . '%' : 0;
         }
         foreach ($UHSData as $array) {
             $data[$array['county']]['UHS'] = $array['UHS'];
             $data[$array['county']]['UHSPCT'] = (0 < $totals['UHSTotal']) ? sprintf(
-                '%01.1f',
-                    100 * ($array['UHS'] / $totals['UHSTotal'])
-            ) . '%' : 0;
+                    '%01.1f',
+                100 * ($array['UHS'] / $totals['UHSTotal'])
+                ) . '%' : 0;
         }
         foreach ($TISData as $array) {
             $data[$array['county']]['TIS'] = $array['TIS'];
             $data[$array['county']]['TISPCT'] = (0 < $totals['TISTotal']) ? sprintf(
-                '%01.1f',
-                    100 * ($array['TIS'] / $totals['TISTotal'])
-            ) . '%' : 0;
+                    '%01.1f',
+                100 * ($array['TIS'] / $totals['TISTotal'])
+                ) . '%' : 0;
         }
         foreach ($THSData as $array) {
             $data[$array['county']]['THS'] = $array['THS'];
             $data[$array['county']]['THSPCT'] = (0 < $totals['THSTotal']) ? sprintf(
-                '%01.1f',
-                    100 * ($array['THS'] / $totals['THSTotal'])
-            ) . '%' : 0;
+                    '%01.1f',
+                100 * ($array['THS'] / $totals['THSTotal'])
+                ) . '%' : 0;
         }
 
         return $data;
@@ -660,15 +662,15 @@ class Reports
     {
         $this->setCriteria($criteria);
         $qb = $this->em->createQuery('SELECT DISTINCT IDENTITY(c1.household) id, m.fname, m.sname, '
-            . 'r.center, c1.contactDate, d.contactDesc FROM TruckeeProjectmanaBundle:Contact c1 '
-            . 'JOIN TruckeeProjectmanaBundle:Contact c2 WITH c1.household = c2.household '
-            . 'JOIN TruckeeProjectmanaBundle:Household h WITH c1.household = h '
-            . 'JOIN TruckeeProjectmanaBundle:Member m WITH m = h.head '
-            . 'JOIN TruckeeProjectmanaBundle:Center r WITH c1.center = r '
-            . 'JOIN TruckeeProjectmanaBundle:ContactDesc d WITH c1.contactDesc = d '
-            . 'WHERE c1.contactDate = c2.contactDate '
-            . 'AND c1 <> c2 '
-            . 'AND c1.contactDate >= :startDate AND c1.contactDate <= :endDate')
+                . 'r.center, c1.contactDate, d.contactDesc FROM TruckeeProjectmanaBundle:Contact c1 '
+                . 'JOIN TruckeeProjectmanaBundle:Contact c2 WITH c1.household = c2.household '
+                . 'JOIN TruckeeProjectmanaBundle:Household h WITH c1.household = h '
+                . 'JOIN TruckeeProjectmanaBundle:Member m WITH m = h.head '
+                . 'JOIN TruckeeProjectmanaBundle:Center r WITH c1.center = r '
+                . 'JOIN TruckeeProjectmanaBundle:ContactDesc d WITH c1.contactDesc = d '
+                . 'WHERE c1.contactDate = c2.contactDate '
+                . 'AND c1 <> c2 '
+                . 'AND c1.contactDate >= :startDate AND c1.contactDate <= :endDate')
             ->setParameters(['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']])
             ->getResult();
 
@@ -699,9 +701,9 @@ class Reports
             $site = $siteArray['center'];
             $seriesString = "{name:'$site', data:[";
             $qb = $this->em->createQuery('SELECT MONTHNAME(c.contactDate) Mo, COUNT(DISTINCT c.household) N FROM TruckeeProjectmanaBundle:Contact c '
-                . 'JOIN TruckeeProjectmanaBundle:Center r WITH c.center = r '
-                . 'WHERE r.center = :site AND FY(c.contactDate) = :fy '
-                . 'GROUP BY Mo ORDER BY c.contactDate')
+                    . 'JOIN TruckeeProjectmanaBundle:Center r WITH c.center = r '
+                    . 'WHERE r.center = :site AND FY(c.contactDate) = :fy '
+                    . 'GROUP BY Mo ORDER BY c.contactDate')
                 ->setParameters(['site' => $site, 'fy' => $fy])
                 ->getResult();
             foreach ($qb as $array) {
