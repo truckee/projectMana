@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Truckee\Projectmana package.
  *
@@ -11,6 +10,7 @@
 
 namespace Truckee\ProjectmanaBundle\Controller;
 
+use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,6 +19,7 @@ use Truckee\ProjectmanaBundle\Entity\Contact;
 use Truckee\ProjectmanaBundle\Entity\Center;
 use Truckee\ProjectmanaBundle\Form\ContactType;
 use Truckee\ProjectmanaBundle\Form\SelectCenterType;
+use Truckee\ProjectmanaBundle\Utilities\PdfService;
 
 /**
  * Contact controller.
@@ -62,7 +63,8 @@ class ContactController extends Controller
             return $this->redirectToRoute('contact_new', array('id' => $id));
         }
 
-        return $this->render('Contact/edit.html.twig', array(
+        return $this->render('Contact/edit.html.twig',
+                array(
                     'form' => $form->createView(),
                     'household' => $household,
                     'title' => 'New Contact',
@@ -100,7 +102,8 @@ class ContactController extends Controller
             return $this->redirectToRoute('contact_new', array('id' => $hid));
         }
 
-        return $this->render('Contact/edit.html.twig', array(
+        return $this->render('Contact/edit.html.twig',
+                array(
                     'household' => $contact->getHousehold(),
                     'form' => $form->createView(),
                     'contact' => $contact,
@@ -141,7 +144,8 @@ class ContactController extends Controller
             return $this->redirectToRoute('contact_new', array('id' => $hid));
         }
 
-        return $this->render('Contact/delete.html.twig', array(
+        return $this->render('Contact/delete.html.twig',
+                array(
                     'contact' => $contact,
                     'form' => $form->createView(),
                     'title' => 'Delete Contact',
@@ -187,7 +191,8 @@ class ContactController extends Controller
             }
         }
 
-        return $this->render('Contact/addContacts.html.twig', array(
+        return $this->render('Contact/addContacts.html.twig',
+                array(
                     'form' => $form->createView(),
                     'title' => 'Add contacts',
                     'source' => $source,
@@ -216,11 +221,12 @@ class ContactController extends Controller
             $contacts['contacts'] = $searches->getHeadsFYToDate($site);
             $contacts['latestDate'] = new \DateTime();
         }
-        $content = $this->renderView('Contact/mostRecentContacts.html.twig', [
-            'contacts' => $contacts['contacts'],
-            'latestDate' => $contacts['latestDate'],
-            'site' => $center,
-            'source' => $source,
+        $content = $this->renderView('Contact/mostRecentContacts.html.twig',
+            [
+                'contacts' => $contacts['contacts'],
+                'latestDate' => $contacts['latestDate'],
+                'site' => $center,
+                'source' => $source,
         ]);
         $response = new Response($content);
 
@@ -237,7 +243,7 @@ class ContactController extends Controller
      *
      * @Route("/latestReport/{source}", name="latest_contacts")
      */
-    public function latestReportAction(Request $request, $source)
+    public function latestReportAction(Request $request, PdfService $pdf, $source)
     {
         $center = new Center();
         $form = $this->createForm(SelectCenterType::class, $center);
@@ -261,26 +267,38 @@ class ContactController extends Controller
 
                 return $this->redirectToRoute('latest_contacts', ['source' => $source]);
             }
-            $facade = $this->get('ps_pdf.facade');
-            $response = new Response();
-            $this->render('Contact/roster.html.twig', array(
+            $date = new \DateTime($found['latestDate']);
+            $filename = str_replace(' ', '', $source . $location) . date_format($date, '_Ymd') . '.pdf';
+            $header = $this->renderView('Pdf/pdfRosterHeader.html.twig',
+                [
+                    'date' => $found['latestDate'],
+                    'center' => $location,
+                    'source' => $source,]
+            );
+            $html = $this->renderView('Pdf/pdfRosterContent.html.twig',
+                [
                 'date' => $found['latestDate'],
                 'center' => $location,
                 'source' => $source,
                 'contacts' => $found['contacts'],
-                    ), $response);
-            $date = new \DateTime($found['latestDate']);
-            $filename = str_replace(' ', '', $source . $location) . date_format($date, '_Ymd') . '.pdf';
-            $xml = $response->getContent();
-            $stylesheet = $this->renderView('Contact/contact.xml.twig', array());
-            $content = $facade->render($xml, $stylesheet);
+            ]);
 
-            return new Response($content, 200, array('content-type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename=' . $filename,
-            ));
+            $exec = $pdf->pdfExecutable();
+            $snappy = new Pdf($exec);
+            $snappy->setOption('header-html', $header);
+
+            $content = $snappy->getOutputFromHtml($html);
+            $response = new Response($content, 200,
+                [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename=' . urlencode($filename) . '.pdf',
+            ]);
+
+            return $response;
         }
 
-        return $this->render('Contact/latestReport.html.twig', array(
+        return $this->render('Contact/latestReport.html.twig',
+                array(
                     'title' => 'Select center',
                     'form' => $form->createView(),
                     'source' => $source,

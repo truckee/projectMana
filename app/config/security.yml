@@ -1,6 +1,6 @@
 security:
     encoders:
-      FOS\UserBundle\Model\UserInterface: 
+      FOS\UserBundle\Model\UserInterface:
         algorithm: md5
         ignore_case: true
         encode_as_base64: false
@@ -22,17 +22,21 @@ security:
         foodbank:
           pattern: ^/reports/foodbank/*
           anonymous: ~
+          logout_on_user_change: true
 
         login_firewall:
             pattern:    ^/login$
             anonymous:  ~
+            logout_on_user_change: true
 #
         reset_firewall:
             pattern:    ^/resetting
             anonymous:  ~
+            logout_on_user_change: true
 
         main:
             pattern:    ^/
+            logout_on_user_change: true
             form_login:
                 provider: fos_userbundle
                 default_target_path: /

@@ -12,7 +12,7 @@
 
 namespace Truckee\ProjectmanaBundle\Utilities;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Addresses
@@ -22,7 +22,7 @@ class Addresses
 {
     private $em;
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }

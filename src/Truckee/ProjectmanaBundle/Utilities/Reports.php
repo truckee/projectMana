@@ -10,7 +10,7 @@
 
 namespace Truckee\ProjectmanaBundle\Utilities;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Project MANA statistics.
@@ -37,7 +37,7 @@ class Reports
     private $uniqIndividuals;
     private $uniqNewIndividuals;
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
         $this->conn = $em->getConnection();
@@ -174,8 +174,22 @@ class Reports
         $whereClause = $criteria['tableWhereClause'];
         $parameters = $criteria['parameters'];
 
-        $this->em->createQuery('DELETE FROM TruckeeProjectmanaBundle:TempContact')->execute();
+        //truncate tables
+        $dbPlatform = $this->conn->getDatabasePlatform();
+        $contactMetaData = $this->em->getClassMetadata('TruckeeProjectmanaBundle:TempContact');
+        $memberMetaData = $this->em->getClassMetadata('TruckeeProjectmanaBundle:TempMember');
+        $householdMetaData = $this->em->getClassMetadata('TruckeeProjectmanaBundle:TempHousehold');
+
+        $qContact = $dbPlatform->getTruncateTableSql($contactMetaData->getTableName());
+        $qMember = $dbPlatform->getTruncateTableSql($memberMetaData->getTableName());
+        $qHousehold = $dbPlatform->getTruncateTableSql($householdMetaData->getTableName());
+        $this->conn->executeUpdate($qContact);
+        $this->conn->executeUpdate($qMember);
+        $this->conn->executeUpdate($qHousehold);
+
         $db->exec('ALTER TABLE temp_contact AUTO_INCREMENT = 0');
+        $db->exec('ALTER TABLE temp_member AUTO_INCREMENT = 0');
+        $db->exec('ALTER TABLE temp_household AUTO_INCREMENT = 0');
 
         $sqlContact = 'insert into temp_contact
             (contact_type_id, household_id, contact_date, first, center_id, county_id)
@@ -186,9 +200,6 @@ class Reports
             . $whereClause;
         $stmtContact = $db->prepare($sqlContact);
         $stmtContact->execute($parameters);
-
-        $this->em->createQuery('DELETE FROM TruckeeProjectmanaBundle:TempMember')->execute();
-        $db->exec('ALTER TABLE temp_member AUTO_INCREMENT = 0');
 
         //note use of custom MySQL age() function
         $sqlMember = "INSERT INTO temp_member
@@ -201,9 +212,6 @@ class Reports
         $stmtMember = $db->prepare($sqlMember);
         $start = ['start' => $parameters['startDate'], 'start' => $parameters['startDate'], 'start' => $parameters['startDate']];
         $stmtMember->execute($start);
-
-        $this->em->createQuery('DELETE FROM TruckeeProjectmanaBundle:TempHousehold')->execute();
-        $db->exec('ALTER TABLE temp_household AUTO_INCREMENT = 0');
 
         //note use of custom MySQL res(), size() functions
         $sqlHousehold = "INSERT INTO temp_household

@@ -17,3 +17,6 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    # Full path to the wkhtmltopdf executable, with options
+    os: '/usr/local/bin/wkhtmltopdf -T 25 -R 25 -B 25 -L 25'

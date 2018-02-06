@@ -12,7 +12,7 @@
 
 namespace Truckee\ProjectmanaBundle\Utilities;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Various searches requiring EntityManager.
@@ -21,7 +21,7 @@ class Searches
 {
     private $em;
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }

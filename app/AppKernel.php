@@ -13,7 +13,7 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new EasyCorp\Bundle\EasyAdminBundle\EasyAdminBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
-            new Ps\PdfBundle\PsPdfBundle(),
+            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),

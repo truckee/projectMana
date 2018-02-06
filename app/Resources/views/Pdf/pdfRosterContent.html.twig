@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{{ absolute_url(asset('css/bootstrap.css')) }}" rel="stylesheet">
+        <link href="{{ absolute_url(asset('css/pdf.css')) }}" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container" style="margin: 0 10%;">
+            {% for contact in contacts %}
+                <div class="row">
+                    <div class="col-xs-2 text-right">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-xs-5">
+                        {{ contact.sname }}, {{ contact.fname }}
+                    </div>
+                    <div class="col-xs-2 text-right">
+                        {{ contact.id }}
+                    </div>
+                    <div class="col-xs-3">
+                        {% if contact.dob is not empty %}{{ contact.dob|date('m/d/Y') }}{% else %}___________{% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{{ absolute_url(asset('css/bootstrap.css')) }}" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container" style="margin: 0 10%;">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>{{source}} Contacts for {{ center }} on {{ date|date('m/d/Y') }}</h3>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-5">
+                    Name
+                </div>
+                <div class="col-xs-2 text-right">
+                    ID
+                </div>
+                <div class="col-xs-3">
+                    DOB
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
