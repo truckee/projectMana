@@ -51,4 +51,10 @@ class AdminTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Project MANA")')->count());
         $this->assertEquals(0, $crawler->filter('html:contains("Options & users")')->count());
     }
+
+    public function tearDown()
+    {
+        unset($this->client);
+        unset($this->fixtures);
+    }
 }

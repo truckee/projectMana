@@ -64,4 +64,10 @@ class StatusTest extends TruckeeWebTestCase
 
         $this->assertEquals($activeBefore, $activeAfter);
     }
+
+    public function tearDown()
+    {
+        unset($this->client);
+        unset($this->fixtures);
+    }
 }

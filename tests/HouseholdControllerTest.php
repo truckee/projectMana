@@ -276,4 +276,9 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $this->assertEquals(0, $crawler->filter('html:contains("disabled")')->count());
     }
 
+    public function tearDown()
+    {
+        unset($this->client);
+        unset($this->fixtures);
+    }
 }

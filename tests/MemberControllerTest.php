@@ -143,4 +143,10 @@ class MemberControllerTest extends TruckeeWebTestCase
         $this->assertEquals($relation, $formRelation);
         $this->assertEquals($work, $formWork);
     }
+
+    public function tearDown()
+    {
+        unset($this->client);
+        unset($this->fixtures);
+    }
 }

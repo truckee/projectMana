@@ -19,7 +19,6 @@ use Truckee\ProjectmanaBundle\Tests\TruckeeWebTestCase;
  */
 class UserManagementTest extends TruckeeWebTestCase
 {
-    //optionsAdmin/?action=new&entity=User
     public function setup()
     {
         $this->client = static::createClient();
@@ -55,5 +54,11 @@ class UserManagementTest extends TruckeeWebTestCase
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Last login")')->count());
+    }
+
+    public function tearDown()
+    {
+        unset($this->client);
+        unset($this->fixtures);
     }
 }

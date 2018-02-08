@@ -170,4 +170,10 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("How much")')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Reason why not")')->count());
     }
+
+    public function tearDown()
+    {
+        unset($this->client);
+        unset($this->fixtures);
+    }
 }

@@ -170,4 +170,10 @@ class ContactTest extends TruckeeWebTestCase
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("FY to date contacts for Truckee")')->count());
     }
+
+    public function tearDown()
+    {
+        unset($this->client);
+        unset($this->fixtures);
+    }
 }

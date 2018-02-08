@@ -216,4 +216,10 @@ class DisabledOptionsTest extends TruckeeWebTestCase
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Tahoe City")')->count());
     }
+
+    public function tearDown()
+    {
+        unset($this->client);
+        unset($this->fixtures);
+    }
 }
