@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{{ absolute_url(asset('css/bootstrap.css')) }}" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+        {% for recipient in turkeys %}
+            <div class="row">
+                <div class="col-xs-4">
+                    {{ recipient.sname }}, {{ recipient.fname }}
+                </div>
+                <div class="col-xs-2">
+                    {{ recipient.center }}
+                </div>
+                <div class="col-xs-1 text-right">
+                    {{ recipient.id }}
+                </div>
+                <div class="col-xs-3">
+                    {{ recipient.dob|date('m/d/Y') }}
+                </div>
+                <div class="col-xs-2">
+                    {{ recipient.Form }}
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{{ absolute_url(asset('css/bootstrap.css')) }}" rel="stylesheet">
+        <link href="{{ absolute_url(asset('css/mana.css')) }}" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>Let's Talk Turkey, {{ null|date('Y') }}</h3>
+                </div>
+            </div>
+            <div class="row" >
+                <div class="col-xs-4 bordered">
+                    Head
+                </div>
+                <div class="col-xs-2 bordered">
+                    Center
+                </div>
+                <div class="col-xs-1 text-right bordered">
+                    ID
+                </div>
+                <div class="col-xs-3 bordered">
+                    DOB
+                </div>
+                <div class="col-xs-2 bordered">
+                    Form req'd
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

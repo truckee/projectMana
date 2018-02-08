@@ -11,16 +11,18 @@
 
 namespace Truckee\ProjectmanaBundle\Controller;
 
-use Truckee\ProjectmanaBundle\Entity\Household;
-use Truckee\ProjectmanaBundle\Entity\Member;
-use Truckee\ProjectmanaBundle\Entity\Phone;
+use Knp\Snappy\Pdf;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Truckee\ProjectmanaBundle\Form\HouseholdType;
+use Truckee\ProjectmanaBundle\Entity\Household;
+use Truckee\ProjectmanaBundle\Entity\Member;
+use Truckee\ProjectmanaBundle\Entity\Phone;
 use Truckee\ProjectmanaBundle\Form\HouseholdRequiredType;
+use Truckee\ProjectmanaBundle\Form\HouseholdType;
 use Truckee\ProjectmanaBundle\Form\MemberType;
+use Truckee\ProjectmanaBundle\Utilities\PdfService;
 
 /**
  * Client controller.
@@ -55,13 +57,13 @@ class HouseholdController extends Controller
         $templates[] = 'Household/contactShowBlock.html.twig';
 
         return $this->render(
-            'Household/show.html.twig',
+                'Household/show.html.twig',
                 array(
-                'household' => $household,
-                'hohId' => $household->getHead()->getId(),
-                'title' => 'Household View',
-                'templates' => $templates,
-        )
+                    'household' => $household,
+                    'hohId' => $household->getHead()->getId(),
+                    'title' => 'Household View',
+                    'templates' => $templates,
+                )
         );
     }
 
@@ -136,13 +138,13 @@ class HouseholdController extends Controller
         }
 
         return $this->render(
-            'Household/new.html.twig',
+                'Household/new.html.twig',
                 array(
-                'formType' => 'New Household',
-                'form' => $form->createView(),
-                'formHead' => $formHead->createView(),
-                'title' => 'New Household',
-        )
+                    'formType' => 'New Household',
+                    'form' => $form->createView(),
+                    'formHead' => $formHead->createView(),
+                    'title' => 'New Household',
+                )
         );
     }
 
@@ -206,19 +208,17 @@ class HouseholdController extends Controller
 
             return $this->redirectToRoute('household_show', array('id' => $household->getId()));
         }
-        
+
         return $this->render(
-        
-            'Household/edit.html.twig',
+                'Household/edit.html.twig',
                 array(
-                'form' => $form->createView(),
-                'title' => 'Household Edit',
-                'household' => $household,
-                'hohId' => $household->getHead()->getId(),
-                'templates' => $addressTemplates,
-                'metadata' => $metadata,
-        )
-        
+                    'form' => $form->createView(),
+                    'title' => 'Household Edit',
+                    'household' => $household,
+                    'hohId' => $household->getHead()->getId(),
+                    'templates' => $addressTemplates,
+                    'metadata' => $metadata,
+                )
         );
     }
 
@@ -269,12 +269,12 @@ class HouseholdController extends Controller
             } else {
                 $flash->success($nFound . ' households found');
                 return $this->render(
-                    'Household/search.html.twig',
+                        'Household/search.html.twig',
                         array(
-                        'searchedFor' => $qtext,
-                        'matched' => $found,
-                        'title' => 'Search results',
-                )
+                            'searchedFor' => $qtext,
+                            'matched' => $found,
+                            'title' => 'Search results',
+                        )
                 );
             }
         }
@@ -301,13 +301,41 @@ class HouseholdController extends Controller
             $response = new Response('');
         } else {
             $content = $this->renderView(
-                'Contact/addHouseholdContact.html.twig',
-                [
-                'household' => $household,
-            ]
+                'Contact/addHouseholdContact.html.twig', [
+                    'household' => $household,
+                ]
             );
             $response = new Response($content);
         }
+
+        return $response;
+    }
+
+    /**
+     * @Route("/turkey", name="annual_turkey")
+     */
+    public function annualTurkey(PdfService $pdf)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $turkeys = $em->getRepository('TruckeeProjectmanaBundle:Household')->annualTurkey();
+        $year = date('Y');
+        $filename = 'Let\'sTalkTurkey' . $year . '.pdf';
+        $html = $this->renderView('Pdf/Household/turkeyContent.html.twig',
+            [
+            'turkeys' => $turkeys,
+        ]);
+        $header = $this->renderView('Pdf/Household/turkeyHeader.html.twig');
+
+        $exec = $pdf->pdfExecutable();
+        $snappy = new Pdf($exec);
+        $snappy->setOption('header-html', $header);
+        $snappy->setOption('footer-center', 'Page [page]');
+        $content = $snappy->getOutputFromHtml($html);
+        $response = new Response($content, 200,
+            [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename=' . $filename . '.pdf',
+        ]);
 
         return $response;
     }

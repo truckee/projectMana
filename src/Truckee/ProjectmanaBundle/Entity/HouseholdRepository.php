@@ -79,4 +79,39 @@ class HouseholdRepository extends EntityRepository
         }
         $em->flush();
     }
+    
+//    select distinct r.center, concat(sname, ', ', fname) as Head, c.household_id ID, 
+//    date_format(dob, '%m/%d/%Y') as DOB, if(max(contact_date) < '2017-07-01', 'Yes', 'No') 'Form Req\'d' from household h
+//    join contact c on c.household_id = h.id
+//    join center r on r.id = c.center_id
+//    join member m on m.id = h.hoh_id
+//    where c.contact_date >= '2017-01-01'
+//    group by Head
+//    order by center, Head;
+
+    /**
+     * Annual turkey report
+     */
+    public function annualTurkey()
+    {
+        $jan1 = new \DateTime('first day of January');
+        $jul1 = new \DateTime('first day of July');
+
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('m.sname', 'm.fname', 'm.dob', 'm.id', 'r.center', 'CASE WHEN MAX(c.contactDate) <= :jul1 THEN \'Yes\' ELSE \'No\' END Form')
+            ->distinct(true)
+            ->from('TruckeeProjectmanaBundle:Household', 'h')
+            ->join('TruckeeProjectmanaBundle:Contact', 'c', 'WITH', 'c.household = h')
+            ->join('TruckeeProjectmanaBundle:Center', 'r', 'WITH', 'c.center = r')
+            ->join('TruckeeProjectmanaBundle:Member', 'm', 'WITH', 'h.head = m')
+            ->where('c.contactDate >= :jan1')
+            ->groupBy('m.sname')
+            ->addGroupBy('m.fname')
+            ->orderBy('m.sname')
+            ->addOrderBy('m.fname')
+            ->setParameter('jan1', $jan1)
+            ->setParameter('jul1', $jul1)
+            ->getQuery()
+            ->getResult();
+    }
 }

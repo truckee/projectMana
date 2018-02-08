@@ -269,13 +269,13 @@ class ContactController extends Controller
             }
             $date = new \DateTime($found['latestDate']);
             $filename = str_replace(' ', '', $source . $location) . date_format($date, '_Ymd') . '.pdf';
-            $header = $this->renderView('Pdf/pdfRosterHeader.html.twig',
+            $header = $this->renderView('Pdf/Contact/rosterHeader.html.twig',
                 [
                     'date' => $found['latestDate'],
                     'center' => $location,
                     'source' => $source,]
             );
-            $html = $this->renderView('Pdf/pdfRosterContent.html.twig',
+            $html = $this->renderView('Pdf/Contact/rosterContent.html.twig',
                 [
                 'date' => $found['latestDate'],
                 'center' => $location,
