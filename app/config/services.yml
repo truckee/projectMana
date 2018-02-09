@@ -11,15 +11,15 @@ services:
     # makes classes in src/AppBundle available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     Truckee\ProjectmanaBundle\:
-        resource: '../../src/Truckee\ProjectmanaBundle/*'
+        resource: '../../src/Truckee/ProjectmanaBundle/*'
         # you can exclude directories or files
         # but if a service is unused, it's removed anyway
-        exclude: '../../src/Truckee\ProjectmanaBundle/{Entity,Repository,Tests}'
+        exclude: '../../src/Truckee/ProjectmanaBundle/{Entity,Repository,Tests}'
 
     # controllers are imported separately to make sure they're public
     # and have a tag that allows actions to type-hint services
     Truckee\ProjectmanaBundle\Controller\:
-        resource: '../../src/Truckee\ProjectmanaBundle/Controller'
+        resource: '../../src/Truckee/ProjectmanaBundle/Controller'
         public: true
         tags: ['controller.service_arguments']
 
