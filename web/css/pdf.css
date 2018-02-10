@@ -13,6 +13,6 @@
 
 @media all {
     .new_page {
-        page-break-before: always;
+        page-break-after: always;
     }
 }
