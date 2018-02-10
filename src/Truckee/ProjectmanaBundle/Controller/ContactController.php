@@ -286,7 +286,7 @@ class ContactController extends Controller
             $exec = $pdf->pdfExecutable();
             $snappy = new Pdf($exec);
             $snappy->setOption('header-html', $header);
-
+            $snappy->setOption('footer-center', 'Page [page]');
             $content = $snappy->getOutputFromHtml($html);
             $response = new Response($content, 200,
                 [

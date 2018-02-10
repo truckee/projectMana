@@ -4,12 +4,14 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="{{ absolute_url(asset('css/bootstrap.css')) }}" rel="stylesheet">
+        <link href="{{ absolute_url(asset('css/mana.css')) }}" rel="stylesheet">
         <link href="{{ absolute_url(asset('css/pdf.css')) }}" rel="stylesheet">
     </head>
     <body>
         <div class="container" style="margin: 0 10%;">
             {% for contact in contacts %}
-                <div class="row">
+                <div class="{% if loop.index % 55 == 0 %}new_page{% endif %}">
+                <div class="row {% if loop.index % 5 == 0 %}bottomline{% endif %}">
                     <div class="col-xs-2 text-right">
                         <input type="checkbox">
                     </div>
@@ -22,7 +24,7 @@
                     <div class="col-xs-3">
                         {% if contact.dob is not empty %}{{ contact.dob|date('m/d/Y') }}{% else %}___________{% endif %}
                     </div>
-                </div>
+                </div></div>
             {% endfor %}
         </div>
     </body>
