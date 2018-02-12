@@ -16,3 +16,12 @@
         page-break-after: always;
     }
 }
+
+div.bordered {
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+}
+
+div.bottomline {
+  border-bottom: 1px solid;
+}
