@@ -72,7 +72,7 @@ class HouseholdRepository extends EntityRepository
             $contact->setContactDate($contactData['date']);
             $contact->setCenter($contactData['center']);
             $contact->setContactDesc($contactData['desc']);
-//            $contact->setCounty($contactData['center']->getCounty());
+            $contact->setCounty($contactData['center']->getCounty());
             $contact->setFirst($first);
             $household->addContact($contact);
             $em->persist($household);
