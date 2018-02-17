@@ -72,7 +72,6 @@ class HouseholdRepository extends EntityRepository
             $contact->setContactDate($contactData['date']);
             $contact->setCenter($contactData['center']);
             $contact->setContactDesc($contactData['desc']);
-            $contact->setCounty($contactData['center']->getCounty());
             $contact->setFirst($first);
             $household->addContact($contact);
             $em->persist($household);
@@ -80,15 +79,6 @@ class HouseholdRepository extends EntityRepository
         $em->flush();
     }
     
-//    select distinct r.center, concat(sname, ', ', fname) as Head, c.household_id ID, 
-//    date_format(dob, '%m/%d/%Y') as DOB, if(max(contact_date) < '2017-07-01', 'Yes', 'No') 'Form Req\'d' from household h
-//    join contact c on c.household_id = h.id
-//    join center r on r.id = c.center_id
-//    join member m on m.id = h.hoh_id
-//    where c.contact_date >= '2017-01-01'
-//    group by Head
-//    order by center, Head;
-
     /**
      * Annual turkey report
      */
