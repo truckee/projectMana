@@ -8,9 +8,12 @@
     </head>
     <body>
         <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h3>Let's Talk Turkey, {{ null|date('Y') }}</h3>
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="col-xs-2">
+                    <img src="{{ absolute_url(asset('images/banner.jpg')) }}">
+                </div>
+                <div class="col-xs-10" style="padding-top: 5px;">
+                    <h2>Let's Talk Turkey, {{ null|date('Y') }}</h2>
                 </div>
             </div>
             <div class="row bordered" >
