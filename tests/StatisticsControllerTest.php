@@ -119,7 +119,7 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Female Children")')->count());
     }
 
-    public function testEmploymentProfile()
+    public function testEmploymentSiteProfile()
     {
         $crawler = $this->login();
         $crawler = $this->client->request('GET', '/reports/employmentProfile');
@@ -129,7 +129,18 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Employment profile")')->count());
     }
 
-    public function testHousingProfile()
+    public function testEmploymentCountyProfile()
+    {
+        $crawler = $this->login();
+        $crawler = $this->client->request('GET', '/reports/employmentProfile');
+        $form = $crawler->selectButton('Submit')->form();
+        $form['report_criteria[columnType]']->select('county');
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Employment profile")')->count());
+    }
+
+    public function testHousingSiteProfile()
     {
         $crawler = $this->login();
         $crawler = $this->client->request('GET', '/reports/housingProfile');
@@ -139,7 +150,18 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Housing profile")')->count());
     }
 
-    public function testIncomeProfile()
+    public function testHousingCountyProfile()
+    {
+        $crawler = $this->login();
+        $crawler = $this->client->request('GET', '/reports/housingProfile');
+        $form = $crawler->selectButton('Submit')->form();
+        $form['report_criteria[columnType]']->select('county');
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Housing profile")')->count());
+    }
+
+    public function testIncomeSiteProfile()
     {
         $crawler = $this->login();
         $crawler = $this->client->request('GET', '/reports/incomeProfile');
@@ -149,7 +171,18 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Income bracket")')->count());
     }
 
-    public function testReasonProfile()
+    public function testIncomeCountyProfile()
+    {
+        $crawler = $this->login();
+        $crawler = $this->client->request('GET', '/reports/incomeProfile');
+        $form = $crawler->selectButton('Submit')->form();
+        $form['report_criteria[columnType]']->select('county');
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Income bracket")')->count());
+    }
+
+    public function testReasonSiteProfile()
     {
         $crawler = $this->login();
         $crawler = $this->client->request('GET', '/reports/reasonProfile');
@@ -159,11 +192,35 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("households not having enough food")')->count());
     }
 
-    public function testSNAPProfile()
+    public function testReasonCountyProfile()
+    {
+        $crawler = $this->login();
+        $crawler = $this->client->request('GET', '/reports/reasonProfile');
+        $form = $crawler->selectButton('Submit')->form();
+        $form['report_criteria[columnType]']->select('county');
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("households not having enough food")')->count());
+    }
+
+    public function testSNAPSiteProfile()
     {
         $crawler = $this->login();
         $crawler = $this->client->request('GET', '/reports/snapProfile');
         $form = $crawler->selectButton('Submit')->form();
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Receiving benefits")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("How much")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Reason why not")')->count());
+    }
+
+    public function testSNAPCountyProfile()
+    {
+        $crawler = $this->login();
+        $crawler = $this->client->request('GET', '/reports/snapProfile');
+        $form = $crawler->selectButton('Submit')->form();
+        $form['report_criteria[columnType]']->select('county');
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Receiving benefits")')->count());
