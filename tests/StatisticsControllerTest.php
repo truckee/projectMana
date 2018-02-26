@@ -88,6 +88,19 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Truckee")')->count());
     }
 
+    public function testCountyGeneralStatistics()
+    {
+        $crawler = $this->login();
+        $crawler = $this->client->request('GET', '/reports/general');
+        $form = $crawler->selectButton('Submit')->form();
+        $placer = $this->fixtures->getReference('placer')->getId();
+        $form['report_criteria[county]']->select($placer);
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("General Statistics for ' . $this->lastMonth . '")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Placer")')->count());
+    }
+
     public function testDetailsStatistics()
     {
         $crawler = $this->login();
