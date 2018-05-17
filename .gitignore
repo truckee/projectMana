@@ -16,3 +16,5 @@
 /vendor/
 /web/bundles/
 composer.phar
+/.env
+/.php_cs.cache
