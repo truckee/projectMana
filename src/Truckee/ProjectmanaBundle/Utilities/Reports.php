@@ -711,7 +711,7 @@ class Reports
             $qb = $this->em->createQuery('SELECT MONTHNAME(c.contactDate) Mo, COUNT(DISTINCT c.household) N FROM TruckeeProjectmanaBundle:Contact c '
                     . 'JOIN TruckeeProjectmanaBundle:Center r WITH c.center = r '
                     . 'WHERE r.center = :site AND FY(c.contactDate) = :fy '
-                    . 'GROUP BY Mo ORDER BY c.contactDate')
+                    . 'GROUP BY Mo ORDER BY Mo, N')
                 ->setParameters(['site' => $site, 'fy' => $fy])
                 ->getResult();
             foreach ($qb as $array) {
