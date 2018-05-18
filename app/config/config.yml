@@ -65,6 +65,8 @@ doctrine:
           default:
             auto_mapping: true
             dql:
+                string_functions:
+                    MONTH: DoctrineExtensions\Query\Mysql\Month
                 numeric_functions:
                     FY: Truckee\ProjectmanaBundle\DQL\FiscalYearFunction
                     MONTHNAME: Truckee\ProjectmanaBundle\DQL\MonthNameFunction

@@ -708,12 +708,17 @@ class Reports
         foreach ($siteQuery as $siteArray) {
             $site = $siteArray['center'];
             $seriesString = "{name:'$site', data:[";
-            $qb = $this->em->createQuery('SELECT MONTHNAME(c.contactDate) Mo, COUNT(DISTINCT c.household) N FROM TruckeeProjectmanaBundle:Contact c '
-                    . 'JOIN TruckeeProjectmanaBundle:Center r WITH c.center = r '
-                    . 'WHERE r.center = :site AND FY(c.contactDate) = :fy '
-                    . 'GROUP BY Mo ORDER BY Mo, N')
+            $qb = $this->em->createQueryBuilder()
+                ->select('(CASE WHEN MONTH(c.contactDate) >= 6 THEN MONTH(c.contactDate) - 6 ELSE MONTH(c.contactDate) + 6 END) Mo, COUNT(DISTINCT c.household) N')
+                ->from('TruckeeProjectmanaBundle:Contact', 'c')
+                ->join('TruckeeProjectmanaBundle:Center', 'r', 'WITH', 'c.center = r')
+                ->where('r.center = :site')
+                ->andWhere('FY(c.contactDate) = :fy')
                 ->setParameters(['site' => $site, 'fy' => $fy])
-                ->getResult();
+                ->groupBy('Mo')
+                ->orderBy('Mo')
+                ->getQuery()->getResult();
+          
             foreach ($qb as $array) {
                 $seriesString .= $array['N'] . ',';
             }
