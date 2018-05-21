@@ -16,6 +16,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Truckee\ProjectmanaBundle\Form\ReportCriteriaType;
+use Truckee\ProjectmanaBundle\Utilities\CriteriaBuilder;
+use Truckee\ProjectmanaBundle\Utilities\GeneralStatisticsReport as General;
+use Truckee\ProjectmanaBundle\Utilities\TempTables;
+use Truckee\ProjectmanaBundle\Utilities\CountyStatistics;
 
 /**
  * Present various Project MANA statistics.
@@ -24,6 +28,9 @@ use Truckee\ProjectmanaBundle\Form\ReportCriteriaType;
  */
 class StatisticsController extends Controller
 {
+//    private $criteria;
+
+
     /**
      * General statistics report.
      *
@@ -33,26 +40,29 @@ class StatisticsController extends Controller
      *
      * @Route("/general", name="stats_general")
      */
-    public function generalAction(Request $request)
+    public function generalAction(Request $request, CountyStatistics $countyStats, CriteriaBuilder $builder, General $general, TempTables $tables)
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
         $criteriaTemplates[] = 'Statistics/typeLocationCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $criteria = $request->request->get('report_criteria');
-            $em = $this->getDoctrine()->getManager();
-            // get specs to pass to template
-            $specs = $this->specs($criteria);
-            $reports = $this->get('mana.reports');
-            $reports->setStats($specs['reportCriteria']);
-            $data = $reports->getStats();
-            $statistics = $data['statistics'];
-            $templateSpecs = $specs['templateCriteria'];
-            $templateSpecs['reportType'] = 'General Statistics';
+            $formCriteria = $request->request->get('report_criteria');
+            $criteria = $builder->setCriteria($formCriteria);
+            $tableCriteria = $builder->getTableCriteria();
+            $reportCriteria = $builder->getReportCriteria();
+
+            $tables->makeTempTables($tableCriteria);
+
+            $general->setGeneralStats($tableCriteria, $reportCriteria);
+
+            $statistics = $general->getGeneralStats();
+
+            $templateCriteria = $builder->getTemplateCriteria($formCriteria);
+            $templateCriteria['reportType'] = 'General Statistics';
             $templates[] = 'Statistics/individualsServed.html.twig';
             $templates[] = 'Statistics/householdsServed.html.twig';
-            if ('' === $specs['reportCriteria']['contact_type']) {
+            if ('' === $reportCriteria['contact_type']) {
                 $templates[] = 'Statistics/newWithoutType.html.twig';
             } else {
                 $templates[] = 'Statistics/newWithType.html.twig';
@@ -60,21 +70,20 @@ class StatisticsController extends Controller
             $templates[] = 'Statistics/ethnicityDistribution.html.twig';
             $templates[] = 'Statistics/ageGenderDistribution.html.twig';
             $templates[] = 'Statistics/residencyDistribution.html.twig';
-            if ('' === $templateSpecs['county'].$templateSpecs['center']) {
-                $statistics['countyStats'] = $reports->getCountyStats();
+            if ('' === $templateCriteria['county'].$templateCriteria['center']) {
+                $statistics['countyStats'] = $countyStats->getCountyStats();
                 $templates[] = 'Statistics/countyDistribution.html.twig';
             }
             $templates[] = 'Statistics/familySizeDistribution.html.twig';
-            if ($criteria['startMonth'] . $criteria['startYear'] === $criteria['endMonth'] . $criteria['endYear']) {
+            if ($formCriteria['startMonth'] . $formCriteria['startYear'] === $formCriteria['endMonth'] . $formCriteria['endYear']) {
                 $templates[] = 'Statistics/frequencyDistributionForMonth.html.twig';
             }
-
             $report = array(
                 'excel' => 'General',
-                'specs' => $templateSpecs,
+                'specs' => $templateCriteria,
                 'statistics' => $statistics,
                 'title' => 'General statistics',
-                'reportHeader' => $this->getReportHeader($templateSpecs),
+                'reportHeader' => $this->getReportHeader($templateCriteria),
                 'templates' => $templates,
             );
             $session = $request->getSession();
@@ -239,9 +248,7 @@ class StatisticsController extends Controller
         );
         $reports = $this->get('mana.reports');
         $specs = $this->specs($criteria);
-        $reports->setStats($specs['reportCriteria']);
-        $data = $reports->getStats();
-        $statistics = $data['statistics'];
+        $statistics = $reports->getGeneralStats($specs['reportCriteria']);
         $ctyStats = $reports->getCountyStats();
         $report = array(
             'statistics' => $statistics,
@@ -271,16 +278,12 @@ class StatisticsController extends Controller
         $endDay = cal_days_in_month(CAL_GREGORIAN, $criteria['endMonth'], $criteria['endYear']);
         $templateCriteria['startDate'] = new \DateTime($criteria['startMonth'].'/01/'.$criteria['startYear']);
         $templateCriteria['endDate'] = new \DateTime($criteria['endMonth'].'/'.$endDay.'/'.$criteria['endYear']);
-        $em = $this->getDoctrine()->getManager();
-
-        $reportCriteria['contact_type'] = (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '';
-        $reportCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
-        $reportCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
-        $reportCriteria['columnType'] = (!empty($criteria['columnType'])) ? $criteria['columnType'] : '';
+        
         $templateCriteria['contact_type'] = (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '';
         $templateCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
         $templateCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
 
+        $em = $this->getDoctrine()->getManager();
         if (!empty($templateCriteria['contact_type'])) {
             $typeObj = $em->getRepository('TruckeeProjectmanaBundle:ContactDesc')->find($templateCriteria['contact_type']);
             $templateCriteria['contact_type'] = $typeObj->getContactDesc();
@@ -296,17 +299,68 @@ class StatisticsController extends Controller
             $templateCriteria['county'] = $countyObj->getCounty();
         }
 
-        $reportCriteria['startDate'] = date_format($templateCriteria['startDate'], 'Y-m-d');
-        $reportCriteria['endDate'] = date_format($templateCriteria['endDate'], 'Y-m-d');
-        $reportCriteria['contact_type'] = (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '';
-        $reportCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
-        $reportCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
-
         return [
             'templateCriteria' => $templateCriteria,
-            'reportCriteria' => $reportCriteria,
+//            'reportCriteria' => $reportCriteria,
             ];
     }
+    
+//    protected function getReportCriteria()
+//    {
+//        return $this->setReportCriteria($criteria);
+//    }
+//
+//    private function setReportCriteria($criteria)
+//    {
+//        $endDay = cal_days_in_month(CAL_GREGORIAN, $criteria['endMonth'], $criteria['endYear']);
+//        $reportCriteria['startDate'] = $templateCriteria['startDate'] = new \DateTime($criteria['startMonth'].'/01/'.$criteria['startYear']);
+//        $reportCriteria['endDate'] = $templateCriteria['endDate'] = new \DateTime($criteria['endMonth'].'/'.$endDay.'/'.$criteria['endYear']);
+//
+//        $reportCriteria['contact_type'] = (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '';
+//        $reportCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
+//        $reportCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
+//        $reportCriteria['columnType'] = (!empty($criteria['columnType'])) ? $criteria['columnType'] : '';
+//        $reportCriteria['contact_type'] = (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '';
+//        $reportCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
+//        $reportCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
+//
+//        return $reportCriteria;
+//    }
+
+    protected function getTemplateCriteria($criteria)
+    {
+        return $this->setTemplateCriteria($criteria);
+    }
+//
+//    private function setTemplateCriteria($criteria)
+//    {
+//        // get specs to pass to template
+//        $endDay = cal_days_in_month(CAL_GREGORIAN, $criteria['endMonth'], $criteria['endYear']);
+//        $templateCriteria['startDate'] = new \DateTime($criteria['startMonth'].'/01/'.$criteria['startYear']);
+//        $templateCriteria['endDate'] = new \DateTime($criteria['endMonth'].'/'.$endDay.'/'.$criteria['endYear']);
+//
+//        $templateCriteria['contact_type'] = (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '';
+//        $templateCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
+//        $templateCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
+//
+//        $em = $this->getDoctrine()->getManager();
+//        if (!empty($templateCriteria['contact_type'])) {
+//            $typeObj = $em->getRepository('TruckeeProjectmanaBundle:ContactDesc')->find($templateCriteria['contact_type']);
+//            $templateCriteria['contact_type'] = $typeObj->getContactDesc();
+//        }
+//
+//        if (!empty($templateCriteria['center'])) {
+//            $centerObj = $em->getRepository('TruckeeProjectmanaBundle:Center')->find($templateCriteria['center']);
+//            $templateCriteria['center'] = $centerObj->getCenter();
+//        }
+//
+//        if (!empty($templateCriteria['county'])) {
+//            $countyObj = $em->getRepository('TruckeeProjectmanaBundle:County')->find($templateCriteria['county']);
+//            $templateCriteria['county'] = $countyObj->getCounty();
+//        }
+//
+//        return $templateCriteria;
+//    }
 
     /**
      * Employment profile.
@@ -346,7 +400,7 @@ class StatisticsController extends Controller
     }
 
     /**
-     * Employment profile.
+     * Housing profile.
      *
      * @param object Request $request
      *
@@ -457,7 +511,7 @@ class StatisticsController extends Controller
     }
 
     /**
-     * Set of three profiles.
+     * Set of three SNAP related profiles.
      *
      * Contains profile of Yes/No receiving foodstamps, how much, and why not
      *
@@ -768,6 +822,7 @@ class StatisticsController extends Controller
      */
     private function getReportHeader($specs)
     {
+//        $specs = $this->getTemplateCriteria($criteria);
         $startDate = date_format($specs['startDate'], 'F, Y');
         $endDate = date_format($specs['endDate'], 'F, Y');
         $line1 = $specs['reportType'].' for '.$startDate;
