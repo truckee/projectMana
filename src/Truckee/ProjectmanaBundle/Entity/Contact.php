@@ -19,6 +19,7 @@ use Truckee\ProjectmanaBundle\Validator\Constraints as ManaAssert;
  * Contact.
  *
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Truckee\ProjectmanaBundle\Entity\ContactRepository")
  * @ORM\Table(name="contact", indexes={@ORM\Index(name="idx_contact_household_idx", columns={"household_id"}), @ORM\Index(name="idx_contact_type_idx", columns={"contact_type_id"}), @ORM\Index(name="idx_contact_center_idx", columns={"center_id"})})
  */
 class Contact
