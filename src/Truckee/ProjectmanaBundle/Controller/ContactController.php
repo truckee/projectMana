@@ -51,6 +51,10 @@ class ContactController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $formCriteria = $request->request->get('contact');
+            $center = $em->getRepository('TruckeeProjectmanaBundle:Center')->find($formCriteria['center']);
+            $county = $em->getRepository('TruckeeProjectmanaBundle:County')->find($center->getCounty());
+            $contact->setCounty($county);
             $nContacts = count($household->getContacts());
             $first = ($nContacts > 0) ? 0 : 1;
             $contact->setFirst($first);

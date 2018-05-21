@@ -71,6 +71,9 @@ class HouseholdRepository extends EntityRepository
             $contact = new Contact();
             $contact->setContactDate($contactData['date']);
             $contact->setCenter($contactData['center']);
+            $center = $em->getRepository('TruckeeProjectmanaBundle:Center')->find($contactData['center']);
+            $county = $em->getRepository('TruckeeProjectmanaBundle:County')->find($center->getCounty());
+            $contact->setCounty($county);
             $contact->setContactDesc($contactData['desc']);
             $contact->setFirst($first);
             $household->addContact($contact);
