@@ -28,8 +28,6 @@ use Truckee\ProjectmanaBundle\Utilities\CountyStatistics;
  */
 class StatisticsController extends Controller
 {
-//    private $criteria;
-
     /**
      * General statistics report.
      *
@@ -50,15 +48,14 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formCriteria = $request->request->get('report_criteria');
-            $builder->setCriteria($formCriteria);
-            $tableCriteria = $builder->getTableCriteria();
-            $reportCriteria = $builder->getReportCriteria();
+            $criteria = $builder->getCriteria($formCriteria);
+            $tableCriteria = $criteria['table'];
+            $reportCriteria = $criteria['report'];
 
             $tables->makeTempTables($tableCriteria);
-            $general->setGeneralStats($tableCriteria, $reportCriteria);
-            $statistics = $general->getGeneralStats();
+            $statistics = $general->getGeneralStats($tableCriteria, $reportCriteria);
 
-            $templateCriteria = $builder->getTemplateCriteria($formCriteria);
+            $templateCriteria = $criteria['template'];
             $templateCriteria['reportType'] = 'General Statistics';
             $templates[] = 'Statistics/individualsServed.html.twig';
             $templates[] = 'Statistics/householdsServed.html.twig';
@@ -119,14 +116,13 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formCriteria = $request->request->get('report_criteria');
-            $builder->setCriteria($formCriteria);
-            $tableCriteria = $builder->getTableCriteria();
+            $criteria = $builder->getCriteria($formCriteria);
+            $tableCriteria = $criteria['table'];
             $tables->makeTempTables($tableCriteria);
-            $detail->setDetailStatistics();
             $data = $detail->getDetailStatistics();
 
             $session = $request->getSession();
-            $templateCriteria = $builder->getTemplateCriteria();
+            $templateCriteria = $criteria['template'];
             $templateCriteria['reportType'] = 'Distribution Details';
             $templates[] = 'Statistics/details.html.twig';
 
@@ -169,9 +165,9 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formCriteria = $request->request->get('report_criteria');
-            $builder->setCriteria($formCriteria);
-            $reportCriteria = $builder->getReportCriteria();
-            $templateCriteria = $builder->getTemplateCriteria($formCriteria);
+            $criteria = $builder->getCriteria($formCriteria);
+            $reportCriteria = $criteria['report'];
+            $templateCriteria = $criteria['template'];
             $templateCriteria['reportType'] = 'Multiple Same Date Contacts';
             $em = $this->getDoctrine()->getManager();
             $multi = $em->getRepository('TruckeeProjectmanaBundle:Contact')->getMultiContacts($reportCriteria);
@@ -249,7 +245,7 @@ class StatisticsController extends Controller
                                    General $general,
                                    CountyStatistics $countyStats)
     {
-        $criteria = array(
+        $foodbankCriteria = array(
             'startMonth' => $month,
             'startYear' => $year,
             'endMonth' => $month,
@@ -258,11 +254,10 @@ class StatisticsController extends Controller
             'center_id' => 0,
             'county_id' => 0,
         );
-        $builder->setCriteria($criteria);
-        $tableCriteria = $builder->getTableCriteria();
-        $reportCriteria = $builder->getReportCriteria();
-        $statistics = $general->setGeneralStats($tableCriteria, $reportCriteria);
-        $statistics = $general->getGeneralStats();
+        $criteria = $builder->getCriteria($foodbankCriteria);
+        $tableCriteria = $criteria['table'];
+        $reportCriteria = $criteria['report'];
+        $statistics = $general->getGeneralStats($tableCriteria, $reportCriteria);
         $ctyStats = $countyStats->getCountyStats();
         $report = array(
             'statistics' => $statistics,
@@ -289,9 +284,9 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formCriteria = $request->request->get('report_criteria');
-            $builder->setCriteria($formCriteria);
-            $reportCriteria = $builder->getReportCriteria();
-            $templateCriteria = $builder->getTemplateCriteria($formCriteria);
+            $criteria = $builder->getCriteria($formCriteria);
+            $reportCriteria = $criteria['report'];
+            $templateCriteria = $criteria['template'];
 
             $response = new Response();
             $reportData = $this->employment($reportCriteria);
@@ -328,9 +323,9 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formCriteria = $request->request->get('report_criteria');
-            $builder->setCriteria($formCriteria);
-            $reportCriteria = $builder->getReportCriteria();
-            $templateCriteria = $builder->getTemplateCriteria($formCriteria);
+            $criteria = $builder->getCriteria($formCriteria);
+            $reportCriteria = $criteria['report'];
+            $templateCriteria = $criteria['template'];
 
             $response = new Response();
            $reportData = $this->housing($reportCriteria);
@@ -367,9 +362,9 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formCriteria = $request->request->get('report_criteria');
-            $builder->setCriteria($formCriteria);
-            $reportCriteria = $builder->getReportCriteria();
-            $templateCriteria = $builder->getTemplateCriteria($formCriteria);
+            $criteria = $builder->getCriteria($formCriteria);
+            $reportCriteria = $criteria['report'];
+            $templateCriteria = $criteria['template'];
 
             $response = new Response();
             $reportData = $this->income($reportCriteria);
@@ -406,9 +401,9 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formCriteria = $request->request->get('report_criteria');
-            $builder->setCriteria($formCriteria);
-            $reportCriteria = $builder->getReportCriteria();
-            $templateCriteria = $builder->getTemplateCriteria($formCriteria);
+            $criteria = $builder->getCriteria($formCriteria);
+            $reportCriteria = $criteria['report'];
+            $templateCriteria = $criteria['template'];
 
             $response = new Response();
             $reportData = $this->reason($reportCriteria);
@@ -447,9 +442,9 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formCriteria = $request->request->get('report_criteria');
-            $builder->setCriteria($formCriteria);
-            $reportCriteria = $builder->getReportCriteria();
-            $templateCriteria = $builder->getTemplateCriteria($formCriteria);
+            $criteria = $builder->getCriteria($formCriteria);
+            $reportCriteria = $criteria['report'];
+            $templateCriteria = $criteria['template'];
 
             $reportData = $this->yesNo($reportCriteria);
             $content = $this->profilerPlain($reportData, $templateCriteria);

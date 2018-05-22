@@ -22,35 +22,23 @@ use Doctrine\ORM\EntityManagerInterface;
 class CriteriaBuilder
 {
     private $em;
-    private $reportCriteria;
-    private $tableCriteria;
-    private $templateCriteria;
 
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
 
-    public function setCriteria($criteria)
+    public function getCriteria($criteria)
     {
-        $this->reportCriteria = $this->setReportCriteria($criteria);
-        $this->tableCriteria = $this->setTableCriteria($criteria);
-        $this->templateCriteria = $this->setTemplateCriteria($criteria);
-    }
+        $report = $this->setReportCriteria($criteria);
+        $table = $this->setTableCriteria($report);
+        $template = $this->setTemplateCriteria($criteria);
 
-    public function getReportCriteria()
-    {
-        return $this->reportCriteria;
-    }
-
-    public function getTableCriteria()
-    {
-        return $this->tableCriteria;
-    }
-
-    public function getTemplateCriteria()
-    {
-        return $this->templateCriteria;
+        return [
+            'report' => $report,
+            'table' => $table,
+            'template' => $template,
+        ];
     }
 
     private function setReportCriteria($criteria)
@@ -69,9 +57,8 @@ class CriteriaBuilder
         return $reportCriteria;
     }
 
-    private function setTableCriteria()
+    private function setTableCriteria($criteria)
     {
-        $criteria = $this->getReportCriteria();
         //string dates required
         $parameters = [
             'startDate' => date_format($criteria['startDate'], 'Y-m-d'),
@@ -99,7 +86,7 @@ class CriteriaBuilder
             $tableWhere .= ' and c.contact_type_id  = :contactType';
             $parameters['contactType'] = $criteria['contact_type'];
         }
-        //set criteria for common statistics
+        
         return [
             'newWhereClause' => $newWhere,
             'tableWhereClause' => $tableWhere,

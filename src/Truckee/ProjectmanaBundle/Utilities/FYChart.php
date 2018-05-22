@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+//src\Truckee\ProjectmanaBundle\Utilities\FYChart
+
 namespace Truckee\ProjectmanaBundle\Utilities;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,7 +17,7 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * Project MANA statistics.
  */
-class Reports
+class FYChart
 {
     private $em;
 

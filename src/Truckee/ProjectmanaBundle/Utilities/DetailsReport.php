@@ -31,10 +31,12 @@ class DetailsReport
 
     public function getDetailStatistics()
     {
-        return $this->detailStatistics;
+        $stats = $this->setDetailStatistics();
+
+        return $stats;
     }
 
-    public function setDetailStatistics()
+    private function setDetailStatistics()
     {
         $countyDescQuery = $this->em->createQuery('SELECT DISTINCT cty.county, d.contactDesc FROM TruckeeProjectmanaBundle:TempContact c '
                 . 'JOIN TruckeeProjectmanaBundle:County cty WITH c.county = cty '
@@ -81,6 +83,6 @@ class DetailsReport
             'details' => $countystats,
         );
 
-        $this->detailStatistics = $details;
+        return $details;
     }
 }

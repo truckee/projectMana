@@ -13,6 +13,7 @@ namespace Truckee\ProjectmanaBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Truckee\ProjectmanaBundle\Utilities\FYChart;
 
 /**
  * Default controller.
@@ -49,10 +50,10 @@ class DefaultController extends Controller
      *
      * @return script
      */
-    public function scriptAction()
+    public function scriptAction(FYChart $fiscalYearChart)
     {
-        $reports = $this->get('mana.reports');
-        $chart = $reports->getDistsFYToDate();
+//        $reports = $this->get('mana.reports');
+        $chart = $fiscalYearChart->getDistsFYToDate();
 
         return $this->render('Default/script.js.twig', array(
                     'chart' => $chart,

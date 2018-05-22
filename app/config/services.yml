@@ -33,11 +33,6 @@ services:
       arguments: ['@doctrine.orm.entity_manager']
       public: true
 
-    mana.reports:
-      class: Truckee\ProjectmanaBundle\Utilities\Reports
-      arguments: ['@doctrine.orm.entity_manager']
-      public: true
-
     mana.status:
       class: Truckee\ProjectmanaBundle\Utilities\Status
       arguments: ['@doctrine.dbal.default_connection']
@@ -46,11 +41,6 @@ services:
     mana.crosstab:
       class: Truckee\ProjectmanaBundle\Utilities\Crosstab
       public: true
-
-    mana.user_manipulator:
-        class:      Truckee\ProjectmanaBundle\Utilities\UserManipulator
-        arguments:  ['@fos_user.user_manager']
-        public: true
 
     mana.menu_builder:
         class: Truckee\ProjectmanaBundle\Menu\MenuBuilder

@@ -22,7 +22,6 @@ use Doctrine\ORM\EntityManagerInterface;
 class GeneralStatisticsReport
 {
     private $em;
-    private $generalStatistics;
     private $reportCriteria;
     private $tableCriteria;
 
@@ -32,17 +31,17 @@ class GeneralStatisticsReport
         $this->em = $em;
     }
 
-    public function getGeneralStats()
+    public function getGeneralStats($tableCriteria, $reportCriteria)
     {
-        return $this->generalStatistics;
+        $stats = $this->setGeneralStats($tableCriteria, $reportCriteria);
+
+        return $stats;
     }
 
     /**
      * Set individual statistics
-     *
-     * @param array $criteria
      */
-    public function setGeneralStats($tableCriteria, $reportCriteria)
+    private function setGeneralStats($tableCriteria, $reportCriteria)
     {
         $this->tableCriteria = $tableCriteria;
         $this->reportCriteria = $reportCriteria;
@@ -118,7 +117,7 @@ class GeneralStatisticsReport
             ->getSingleScalarResult();
         $statistics['NewByType'] = (!empty($nbt)) ? $nbt : 0;
 
-        $this->generalStatistics = $statistics;
+        return $statistics;
     }
 
     private function setAgeGenderDist()
