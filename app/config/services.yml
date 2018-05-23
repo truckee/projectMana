@@ -38,10 +38,6 @@ services:
       arguments: ['@doctrine.dbal.default_connection']
       public: true
 
-    mana.crosstab:
-      class: Truckee\ProjectmanaBundle\Utilities\Crosstab
-      public: true
-
     mana.menu_builder:
         class: Truckee\ProjectmanaBundle\Menu\MenuBuilder
         arguments: ['@knp_menu.factory', '@security.authorization_checker', '@request_stack']

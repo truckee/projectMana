@@ -10,16 +10,17 @@
 
 namespace Truckee\ProjectmanaBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Truckee\ProjectmanaBundle\Form\ReportCriteriaType;
-use Truckee\ProjectmanaBundle\Utilities\CriteriaBuilder;
-use Truckee\ProjectmanaBundle\Utilities\GeneralStatisticsReport as General;
-use Truckee\ProjectmanaBundle\Utilities\DetailsReport as Detail;
-use Truckee\ProjectmanaBundle\Utilities\TempTables;
 use Truckee\ProjectmanaBundle\Utilities\CountyStatistics;
+use Truckee\ProjectmanaBundle\Utilities\CriteriaBuilder;
+use Truckee\ProjectmanaBundle\Utilities\Crosstab;
+use Truckee\ProjectmanaBundle\Utilities\DetailsReport as Detail;
+use Truckee\ProjectmanaBundle\Utilities\GeneralStatisticsReport as General;
+use Truckee\ProjectmanaBundle\Utilities\TempTables;
 
 /**
  * Present various Project MANA statistics.
@@ -276,7 +277,7 @@ class StatisticsController extends Controller
      *
      * @Route("/employmentProfile", name="employment_profile")
      */
-    public function employmentProfileAction(Request $request, CriteriaBuilder $builder)
+    public function employmentProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab)
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
@@ -289,8 +290,8 @@ class StatisticsController extends Controller
             $templateCriteria = $criteria['template'];
 
             $response = new Response();
-            $reportData = $this->employment($reportCriteria);
-            $content = $this->profiler($reportData, $templateCriteria);
+            $reportData = $this->employment($reportCriteria, $crosstab);
+            $content = $this->profiler($reportData, $templateCriteria, $crosstab);
             $response->setContent($content);
 
             return $response;
@@ -315,7 +316,7 @@ class StatisticsController extends Controller
      *
      * @Route("/housingProfile", name="housing_profile")
      */
-    public function housingProfileAction(Request $request, CriteriaBuilder $builder)
+    public function housingProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab)
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
@@ -328,8 +329,8 @@ class StatisticsController extends Controller
             $templateCriteria = $criteria['template'];
 
             $response = new Response();
-           $reportData = $this->housing($reportCriteria);
-            $content = $this->profiler($reportData, $templateCriteria);
+           $reportData = $this->housing($reportCriteria, $crosstab);
+            $content = $this->profiler($reportData, $templateCriteria, $crosstab);
             $response->setContent($content);
 
             return $response;
@@ -354,7 +355,7 @@ class StatisticsController extends Controller
      *
      * @Route("/incomeProfile", name="income_profile")
      */
-    public function incomeProfileAction(Request $request, CriteriaBuilder $builder)
+    public function incomeProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab)
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
@@ -367,8 +368,8 @@ class StatisticsController extends Controller
             $templateCriteria = $criteria['template'];
 
             $response = new Response();
-            $reportData = $this->income($reportCriteria);
-            $content = $this->profiler($reportData, $templateCriteria);
+            $reportData = $this->income($reportCriteria, $crosstab);
+            $content = $this->profiler($reportData, $templateCriteria, $crosstab);
             $response->setContent($content);
 
             return $response;
@@ -393,7 +394,7 @@ class StatisticsController extends Controller
      *
      * @Route("/reasonProfile", name="reason_profile")
      */
-    public function reasonProfileAction(Request $request, CriteriaBuilder $builder)
+    public function reasonProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab)
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
@@ -406,8 +407,8 @@ class StatisticsController extends Controller
             $templateCriteria = $criteria['template'];
 
             $response = new Response();
-            $reportData = $this->reason($reportCriteria);
-            $content = $this->profiler($reportData, $templateCriteria);
+            $reportData = $this->reason($reportCriteria, $crosstab);
+            $content = $this->profiler($reportData, $templateCriteria, $crosstab);
             $response->setContent($content);
 
             return $response;
@@ -434,7 +435,7 @@ class StatisticsController extends Controller
      *
      * @Route("/snapProfile", name="snap_profile")
      */
-    public function snapProfileAction(Request $request, CriteriaBuilder $builder)
+    public function snapProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab)
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
@@ -446,12 +447,12 @@ class StatisticsController extends Controller
             $reportCriteria = $criteria['report'];
             $templateCriteria = $criteria['template'];
 
-            $reportData = $this->yesNo($reportCriteria);
-            $content = $this->profilerPlain($reportData, $templateCriteria);
-            $reportData = $this->howMuch($reportCriteria);
-            $content .= $this->profilerPlain($reportData, $templateCriteria);
+            $reportData = $this->yesNo($reportCriteria, $crosstab);
+            $content = $this->profiler($reportData, $templateCriteria, $crosstab);
+            $reportData = $this->howMuch($reportCriteria, $crosstab);
+            $content .= $this->profiler($reportData, $templateCriteria, $crosstab);
             $reportData = $this->not($reportCriteria);
-            $content .= $this->profilerPlain($reportData, $templateCriteria);
+            $content .= $this->profiler($reportData, $templateCriteria, $crosstab);
 
             return $this->render('Statistics/snapProfile.html.twig',
                     [
@@ -477,10 +478,9 @@ class StatisticsController extends Controller
      *
      * @return Response
      */
-    private function profiler($reportData, $templateSpecs)
+    private function profiler($reportData, $templateSpecs, $crosstab)
     {
-        $xp = $this->container->get('mana.crosstab');
-        $profile = $xp->crosstabQuery($reportData['data'],
+        $profile = $crosstab->crosstabQuery($reportData['data'],
             $reportData['rowLabels'], $reportData['colLabels']);
 
         return $this->renderView('Statistics/profile.html.twig',
@@ -503,10 +503,9 @@ class StatisticsController extends Controller
      *
      * @return Response
      */
-    private function profilerPlain($reportData, $templateSpecs)
+    private function profilerPlain($reportData, $templateSpecs, $crosstab)
     {
-        $xp = $this->container->get('mana.crosstab');
-        $profile = $xp->crosstabQuery($reportData['data'],
+        $profile = $crosstab->crosstabQuery($reportData['data'],
             $reportData['rowLabels'], $reportData['colLabels']);
 
         return $this->renderView('Statistics/profile_content.html.twig',
@@ -528,11 +527,10 @@ class StatisticsController extends Controller
      *
      * @return Response
      */
-    private function employment($criteria)
+    private function employment($criteria, $crosstab)
     {
         $em = $this->getDoctrine()->getManager();
-        $xp = $this->container->get('mana.crosstab');
-        $dateCriteria = $xp->setDateCriteria($criteria);
+        $dateCriteria = $crosstab->setDateCriteria($criteria);
 
         $columnType = $criteria['columnType'];
         $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Work')->rowLabels($dateCriteria);
@@ -560,11 +558,10 @@ class StatisticsController extends Controller
      *
      * @return Response
      */
-    private function housing($criteria)
+    private function housing($criteria, $crosstab)
     {
         $em = $this->getDoctrine()->getManager();
-        $xp = $this->container->get('mana.crosstab');
-        $dateCriteria = $xp->setDateCriteria($criteria);
+        $dateCriteria = $crosstab->setDateCriteria($criteria);
 
         $columnType = $criteria['columnType'];
         $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Housing')->rowLabels($dateCriteria);
@@ -592,11 +589,10 @@ class StatisticsController extends Controller
      *
      * @return Response
      */
-    private function howMuch($criteria)
+    private function howMuch($criteria, $crosstab)
     {
         $em = $this->getDoctrine()->getManager();
-        $xp = $this->container->get('mana.crosstab');
-        $dateCriteria = $xp->setDateCriteria($criteria);
+        $dateCriteria = $crosstab->setDateCriteria($criteria);
         $columnType = $criteria['columnType'];
         $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:FsAmount')->rowLabels($dateCriteria);
         $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . $columnType)->colLabels($dateCriteria);
@@ -623,11 +619,10 @@ class StatisticsController extends Controller
      *
      * @return Response
      */
-    private function income($criteria)
+    private function income($criteria, $crosstab)
     {
         $em = $this->getDoctrine()->getManager();
-        $xp = $this->container->get('mana.crosstab');
-        $dateCriteria = $xp->setDateCriteria($criteria);
+        $dateCriteria = $crosstab->setDateCriteria($criteria);
         $columnType = $criteria['columnType'];
         $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Income')->rowLabels($dateCriteria);
         $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . $columnType)->colLabels($dateCriteria);
@@ -657,7 +652,6 @@ class StatisticsController extends Controller
     private function not($criteria)
     {
         $em = $this->getDoctrine()->getManager();
-        $xp = $this->container->get('mana.crosstab');
         $columnType = $criteria['columnType'];
         $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Notfoodstamp')
             ->rowLabels(['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']]);
@@ -686,11 +680,10 @@ class StatisticsController extends Controller
      *
      * @return Response
      */
-    private function reason($criteria)
+    private function reason($criteria, $crosstab)
     {
         $em = $this->getDoctrine()->getManager();
-        $xp = $this->container->get('mana.crosstab');
-        $dateCriteria = $xp->setDateCriteria($criteria);
+        $dateCriteria = $crosstab->setDateCriteria($criteria);
         $columnType = $criteria['columnType'];
         $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Reason')->rowLabels($dateCriteria);
         $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . $columnType)->colLabels($dateCriteria);
@@ -717,11 +710,10 @@ class StatisticsController extends Controller
      *
      * @return Response
      */
-    private function yesNo($criteria)
+    private function yesNo($criteria, $crosstab)
     {
         $em = $this->getDoctrine()->getManager();
-        $xp = $this->container->get('mana.crosstab');
-        $dateCriteria = $xp->setDateCriteria($criteria);
+        $dateCriteria = $crosstab->setDateCriteria($criteria);
         $columnType = $criteria['columnType'];
         $rowLabels = ['Yes', 'No'];
         $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . $columnType)->colLabels($dateCriteria);
