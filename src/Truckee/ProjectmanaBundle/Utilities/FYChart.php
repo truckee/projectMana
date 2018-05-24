@@ -19,6 +19,8 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class FYChart
 {
+    use \Truckee\ProjectmanaBundle\Utilities\FYFunction;
+
     private $em;
 
     public function __construct(EntityManagerInterface $em)
@@ -33,7 +35,8 @@ class FYChart
      */
     public function getDistsFYToDate()
     {
-        $fy = $this->getFY();
+//        $fiscalYear = new FYFunction();
+        $fy = $this->fy();
         $month = date_format(new \DateTime(), 'n');
         $chart['fy'] = $fy;
         $fy_months = array_merge(range(7, 12), range(1, 6));
@@ -60,7 +63,7 @@ class FYChart
                 ->from('TruckeeProjectmanaBundle:Contact', 'c')
                 ->join('TruckeeProjectmanaBundle:Center', 'r', 'WITH', 'c.center = r')
                 ->where('r.center = :site')
-                ->andWhere('FY(c.contactDate) = :fy')
+                ->andWhere('(CASE WHEN MONTH(c.contactDate)<7 THEN YEAR(c.contactDate) ELSE YEAR(c.contactDate) + 1 END) = :fy')
                 ->setParameters(['site' => $site, 'fy' => $fy])
                 ->groupBy('Mo')
                 ->orderBy('Mo')

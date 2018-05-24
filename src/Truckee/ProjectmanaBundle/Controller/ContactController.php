@@ -29,6 +29,8 @@ use Truckee\ProjectmanaBundle\Utilities\PdfService;
 class ContactController extends Controller
 {
 
+    use \Truckee\ProjectmanaBundle\Utilities\FYFunction;
+
     /**
      * Create a new Contact entity.
      *
@@ -93,7 +95,8 @@ class ContactController extends Controller
         }
         $searches = $this->get('mana.searches');
         $disabledOptions = $searches->getDisabledOptions($contact);
-        $form = $this->createForm(ContactType::class, $contact, ['disabledOptions' => $disabledOptions]);
+        $form = $this->createForm(ContactType::class, $contact,
+            ['disabledOptions' => $disabledOptions]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -136,7 +139,8 @@ class ContactController extends Controller
         }
         $searches = $this->get('mana.searches');
         $disabledOptions = $searches->getDisabledOptions($contact);
-        $form = $this->createForm(ContactType::class, $contact, ['disabledOptions' => $disabledOptions]);
+        $form = $this->createForm(ContactType::class, $contact,
+            ['disabledOptions' => $disabledOptions]);
         if ($request->isMethod('POST')) {
             $household = $contact->getHousehold();
             $hid = $household->getId();
@@ -186,12 +190,14 @@ class ContactController extends Controller
             $n = count($households);
             $flash = $this->get('braincrafted_bootstrap.flash');
             if ($n !== 0) {
-                $em->getRepository('TruckeeProjectmanaBundle:Household')->addContacts($households, $contactData);
+                $em->getRepository('TruckeeProjectmanaBundle:Household')->addContacts($households,
+                    $contactData);
                 $flash->alert("$n $desc contacts added for $centerName");
             } else {
                 $flash->alert('No contacts were added');
 
-                return $this->redirectToRoute('contacts_add', ['source' => $source]);
+                return $this->redirectToRoute('contacts_add',
+                        ['source' => $source]);
             }
         }
 
@@ -222,7 +228,8 @@ class ContactController extends Controller
             $contacts = $searches->getLatest($site);
         }
         if ('FY to date' === $source) {
-            $contacts['contacts'] = $searches->getHeadsFYToDate($site);
+            $fy = $this->fy();
+            $contacts['contacts'] = $searches->getHeadsFYToDate($site, $fy);
             $contacts['latestDate'] = new \DateTime();
         }
         $content = $this->renderView('Contact/mostRecentContacts.html.twig',
@@ -247,7 +254,8 @@ class ContactController extends Controller
      *
      * @Route("/latestReport/{source}", name="latest_contacts")
      */
-    public function latestReportAction(Request $request, PdfService $pdf, $source)
+    public function latestReportAction(Request $request, PdfService $pdf,
+                                       $source)
     {
         $center = new Center();
         $form = $this->createForm(SelectCenterType::class, $center);
@@ -262,17 +270,20 @@ class ContactController extends Controller
                 $found = $searches->getLatest($id);
             }
             if ('FY to date' === $source) {
-                $found['contacts'] = $searches->getHeadsFYToDate($id);
+                $fy = $this->fy();
+                $found['contacts'] = $searches->getHeadsFYToDate($id, $fy);
                 $found['latestDate'] = date_format(new \DateTime(), 'm/d/Y');
             }
             if (count($found['contacts']) == 0 || empty($found)) {
                 $flash = $this->get('braincrafted_bootstrap.flash');
                 $flash->alert("No contacts found for $location");
 
-                return $this->redirectToRoute('latest_contacts', ['source' => $source]);
+                return $this->redirectToRoute('latest_contacts',
+                        ['source' => $source]);
             }
             $date = new \DateTime($found['latestDate']);
-            $filename = str_replace(' ', '', $source . $location) . date_format($date, '_Ymd') . '.pdf';
+            $filename = str_replace(' ', '', $source . $location) . date_format($date,
+                    '_Ymd') . '.pdf';
             $header = $this->renderView('Pdf/Contact/rosterHeader.html.twig',
                 [
                     'date' => $found['latestDate'],
@@ -281,10 +292,10 @@ class ContactController extends Controller
             );
             $html = $this->renderView('Pdf/Contact/rosterContent.html.twig',
                 [
-                'date' => $found['latestDate'],
-                'center' => $location,
-                'source' => $source,
-                'contacts' => $found['contacts'],
+                    'date' => $found['latestDate'],
+                    'center' => $location,
+                    'source' => $source,
+                    'contacts' => $found['contacts'],
             ]);
 
             $exec = $pdf->pdfExecutable();

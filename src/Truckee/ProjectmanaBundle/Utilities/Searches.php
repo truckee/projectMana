@@ -90,12 +90,8 @@ class Searches
      *
      * @return array
      */
-    public function getHeadsFYToDate($site)
+    public function getHeadsFYToDate($site, $fy)
     {
-        $date = new \DateTime();
-        $year = date_format($date, 'Y');
-        $month = date_format($date, 'n');
-        $fy = ($month < 7) ? $year : $year + 1;
         $startDate = $fy - 1 . '-07-01';
         $endDate = $fy . '-06-30';
 

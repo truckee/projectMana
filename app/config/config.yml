@@ -66,10 +66,10 @@ doctrine:
             auto_mapping: true
             dql:
                 string_functions:
+                    DATE: DoctrineExtensions\Query\Mysql\Date
+                    DAYOFYEAR: DoctrineExtensions\Query\Mysql\DayOfYear
                     MONTH: DoctrineExtensions\Query\Mysql\Month
-                numeric_functions:
-                    FY: Truckee\ProjectmanaBundle\DQL\FiscalYearFunction
-                    MONTHNAME: Truckee\ProjectmanaBundle\DQL\MonthNameFunction
+                    YEAR: DoctrineExtensions\Query\Mysql\Year
 
 # Swiftmailer Configuration
 swiftmailer:

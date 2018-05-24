@@ -16,6 +16,7 @@ namespace Truckee\ProjectmanaBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Truckee\ProjectmanaBundle\Form\Field\CenterEnabledChoiceType;
 
 class SelectCenterType extends AbstractType
@@ -23,7 +24,10 @@ class SelectCenterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('center', CenterEnabledChoiceType::class);
+            ->add('center', CenterEnabledChoiceType::class,[
+                'constraints' => array(new NotBlank(array('message' => 'No site elected')))
+                ]
+                );
     }
 
     public function configureOptions(OptionsResolver $resolver)
