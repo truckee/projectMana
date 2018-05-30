@@ -37,7 +37,7 @@ class Contacts extends AbstractFixture implements OrderedFixtureInterface
         $contact = new Contact();
         $contact->setCenter($siteTahoe);
         $contact->setContactDate($date);
-        $contact->setContactDesc($descGeneral);
+        $contact->setContactdesc($descGeneral);
         $contact->setHousehold($house1);
         $house1->addContact($contact);
         $this->setReference('contact', $contact);
@@ -47,7 +47,7 @@ class Contacts extends AbstractFixture implements OrderedFixtureInterface
         $contact1 = new Contact();
         $contact1->setCenter($siteTahoe);
         $contact1->setContactDate($date);
-        $contact1->setContactDesc($descGeneral);
+        $contact1->setContactdesc($descGeneral);
         $contact1->setHousehold($house1);
         $this->setReference('contact1', $contact1);
         $house3->addContact($contact1);

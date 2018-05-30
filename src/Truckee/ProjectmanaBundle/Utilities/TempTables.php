@@ -63,8 +63,8 @@ class TempTables
         $db->exec('ALTER TABLE temp_household AUTO_INCREMENT = 0');
 
         $sqlContact = 'insert into temp_contact
-            (contact_type_id, household_id, contact_date, first, center_id, county_id)
-            select contact_type_id, household_id, contact_date, first, center_id, cty.id
+            (contactdesc_id, household_id, contact_date, first, center_id, county_id)
+            select contactdesc_id, household_id, contact_date, first, center_id, cty.id
             from contact c
             join center r on  r.id = c.center_id
             join county cty on cty.id = r.county_id '

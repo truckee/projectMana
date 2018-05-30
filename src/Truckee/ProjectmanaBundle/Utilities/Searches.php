@@ -41,10 +41,10 @@ class Searches
                 . 'TruckeeProjectmanaBundle:Contact c WHERE c.center = :site')
             ->setParameter('site', $site)
             ->getSingleScalarResult();
-        $contacts = $em->createQuery('SELECT m.sname, m.fname, m.dob, h.id, d.contactDesc FROM TruckeeProjectmanaBundle:Member m '
+        $contacts = $em->createQuery('SELECT m.sname, m.fname, m.dob, h.id, d.contactdesc FROM TruckeeProjectmanaBundle:Member m '
                 . 'JOIN TruckeeProjectmanaBundle:Household h WITH m = h.head '
                 . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
-                . 'JOIN TruckeeProjectmanaBundle:ContactDesc d WITH c.contactDesc = d '
+                . 'JOIN TruckeeProjectmanaBundle:Contactdesc d WITH c.contactdesc = d '
                 . 'WHERE c.center = :site AND c.contactDate = :date '
                 . 'ORDER BY m.sname, m.fname')
             ->setParameters(['site' => $site, 'date' => $maxDate])

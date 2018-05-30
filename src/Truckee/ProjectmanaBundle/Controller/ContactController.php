@@ -184,8 +184,8 @@ class ContactController extends Controller
             $contactData['date'] = $data->getContactDate();
             $center = $data->getCenter();
             $contactData['center'] = $center;
-            $contactData['desc'] = $data->getContactDesc();
-            $desc = $contactData['desc']->getContactDesc();
+            $contactData['desc'] = $data->getContactdesc();
+            $desc = $contactData['desc']->getContactdesc();
             $centerName = $center->getCenter();
             $n = count($households);
             $flash = $this->get('braincrafted_bootstrap.flash');

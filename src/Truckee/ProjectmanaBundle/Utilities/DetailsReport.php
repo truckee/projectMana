@@ -38,15 +38,15 @@ class DetailsReport
 
     private function setDetailStatistics()
     {
-        $countyDescQuery = $this->em->createQuery('SELECT DISTINCT cty.county, d.contactDesc FROM TruckeeProjectmanaBundle:TempContact c '
+        $countyDescQuery = $this->em->createQuery('SELECT DISTINCT cty.county, d.contactdesc FROM TruckeeProjectmanaBundle:TempContact c '
                 . 'JOIN TruckeeProjectmanaBundle:County cty WITH c.county = cty '
-                . 'JOIN TruckeeProjectmanaBundle:ContactDesc d WITH c.contactType = d '
-                . 'ORDER BY cty.county, d.contactDesc')->getResult();
+                . 'JOIN TruckeeProjectmanaBundle:Contactdesc d WITH c.contactdesc = d '
+                . 'ORDER BY cty.county, d.contactdesc')->getResult();
 
         $countystats = [];
         foreach ($countyDescQuery as $countyDesc) {
             $county = $countyDesc['county'];
-            $desc = $countyDesc['contactDesc'];
+            $desc = $countyDesc['contactdesc'];
             $countystats[$county][$desc]['uniqInd'] = 0;
             $countystats[$county][$desc]['uniqHouse'] = 0;
             $countystats[$county][$desc]['totalInd'] = 0;
@@ -57,17 +57,17 @@ class DetailsReport
         foreach ($householdSizeQuery as $row) {
             $householdSizeArray[$row['id']] = $row['size'];
         }
-        $distinctCountyDescIndividualQuery = $this->em->createQuery('SELECT DISTINCT cty.county, d.contactDesc, c.household FROM TruckeeProjectmanaBundle:TempContact c '
+        $distinctCountyDescIndividualQuery = $this->em->createQuery('SELECT DISTINCT cty.county, d.contactdesc, c.household FROM TruckeeProjectmanaBundle:TempContact c '
                 . 'JOIN TruckeeProjectmanaBundle:County cty WITH c.county = cty '
-                . 'JOIN TruckeeProjectmanaBundle:ContactDesc d WITH c.contactType = d')->getResult();
-        $countyDescIndividualQuery = $this->em->createQuery('SELECT cty.county, d.contactDesc, c.household FROM TruckeeProjectmanaBundle:TempContact c '
+                . 'JOIN TruckeeProjectmanaBundle:Contactdesc d WITH c.contactdesc = d')->getResult();
+        $countyDescIndividualQuery = $this->em->createQuery('SELECT cty.county, d.contactdesc, c.household FROM TruckeeProjectmanaBundle:TempContact c '
                 . 'JOIN TruckeeProjectmanaBundle:County cty WITH c.county = cty '
-                . 'JOIN TruckeeProjectmanaBundle:ContactDesc d WITH c.contactType = d')->getResult();
+                . 'JOIN TruckeeProjectmanaBundle:Contactdesc d WITH c.contactdesc = d')->getResult();
         foreach ($distinctCountyDescIndividualQuery as $distinctCountyDescIndividual) {
             $houshold = $distinctCountyDescIndividual['household'];
             $size = $householdSizeArray[$houshold];
             $cty = $distinctCountyDescIndividual['county'];
-            $cDesc = $distinctCountyDescIndividual['contactDesc'];
+            $cDesc = $distinctCountyDescIndividual['contactdesc'];
             $countystats[$cty][$cDesc]['uniqInd'] += $size;
             $countystats[$cty][$cDesc]['uniqHouse'] ++;
         }
@@ -75,7 +75,7 @@ class DetailsReport
             $houshold = $countyDescIndividual['household'];
             $size = $householdSizeArray[$houshold];
             $cty = $countyDescIndividual['county'];
-            $cDesc = $countyDescIndividual['contactDesc'];
+            $cDesc = $countyDescIndividual['contactdesc'];
             $countystats[$cty][$cDesc]['totalInd'] += $size;
             $countystats[$cty][$cDesc]['totalHouse'] ++;
         }

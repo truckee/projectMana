@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TempContact
  * @ORM\Entity
- * @ORM\Table(name="temp_contact", indexes={@ORM\Index(name="idx_cid", columns={"household_id"}), @ORM\Index(name="idx_vid", columns={"contact_type_id"}), @ORM\Index(name="idx_date", columns={"contact_date"})})
+ * @ORM\Table(name="temp_contact", indexes={@ORM\Index(name="idx_cid", columns={"household_id"}), @ORM\Index(name="idx_vid", columns={"contactdesc_id"}), @ORM\Index(name="idx_date", columns={"contact_date"})})
  */
 class TempContact
 {
@@ -33,9 +33,9 @@ class TempContact
     /**
      * @var int
      *
-     * @ORM\Column(name="contact_type_id", type="integer", nullable=true)
+     * @ORM\Column(name="contactdesc_id", type="integer", nullable=true)
      */
-    protected $contactType;
+    protected $contactdesc;
 
     /**
      * @var int
@@ -77,9 +77,9 @@ class TempContact
         return $this->id;
     }
 
-    public function getContactType()
+    public function getcontactdesc()
     {
-        return $this->contactType;
+        return $this->contactdesc;
     }
 
     public function getHousehold()

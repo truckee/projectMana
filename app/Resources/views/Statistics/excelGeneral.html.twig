@@ -2,7 +2,7 @@
 {% set end = specs.endDate|date('F, Y') %}
 <div class="title">Statistics for {{ start }}{% if (start != end) %} through {{ end }}{% endif %}
     <br>
-{% if specs.contact_type != '' %}Type = {{ specs.contact_type }}{% if  specs.county != '' or specs.center != '' %}; {% endif %}{% endif %}
+{% if specs.contactdesc != '' %}Type = {{ specs.contactdesc }}{% if  specs.county != '' or specs.center != '' %}; {% endif %}{% endif %}
 {% if  specs.county != '' %}Location = {{ specs.county }} county{% endif %}{% if specs.center != '' %}Site = {{ specs.center }}{% endif %}
 
     <br>Note: Some inconsistencies may exist due to households with missing data<br>
@@ -38,13 +38,13 @@
 <table class="stats">
     <tr>
         <td>&nbsp;</td>
-        <td>{% if specs.contact_type != ''%}<b>New {{ specs.contact_type }}</b>{% else %}&nbsp;{% endif %}</td>
+        <td>{% if specs.contactdesc != ''%}<b>New {{ specs.contactdesc }}</b>{% else %}&nbsp;{% endif %}</td>
         <td><b>New Households<br>(all types)</b></td>
         <td><b>Unique New Individuals<br>(all types)</b></td>
 
     <tr>
         <td>&nbsp;</td>
-        <td>{% if specs.contact_type != ''%}{{ statistics['NewByType']|number_format }}{% else %}&nbsp;{% endif %}</td>
+        <td>{% if specs.contactdesc != ''%}{{ statistics['NewByType']|number_format }}{% else %}&nbsp;{% endif %}</td>
         <td>{{ statistics['NewHouseholds'] }}</td>
         <td>{{ statistics['Unique New Individuals']|number_format }}</td>
 </table>

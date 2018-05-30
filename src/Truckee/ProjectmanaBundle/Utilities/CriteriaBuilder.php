@@ -44,17 +44,94 @@ class CriteriaBuilder
     private function setReportCriteria($criteria)
     {
         $endDay = cal_days_in_month(CAL_GREGORIAN, $criteria['endMonth'], $criteria['endYear']);
-        $reportCriteria['startDate'] = new \DateTime($criteria['startMonth'].'/01/'.$criteria['startYear']);
-        $reportCriteria['endDate'] = new \DateTime($criteria['endMonth'].'/'.$endDay.'/'.$criteria['endYear']);
-        $reportCriteria['contact_type'] = (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '';
+        $reportCriteria['startDate'] = new \DateTime($criteria['startMonth'] . '/01/' . $criteria['startYear']);
+        $reportCriteria['endDate'] = new \DateTime($criteria['endMonth'] . '/' . $endDay . '/' . $criteria['endYear']);
+        $reportCriteria['contactdesc'] = (!empty($criteria['contactdesc'])) ? $criteria['contactdesc'] : '';
         $reportCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
         $reportCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
         $reportCriteria['columnType'] = (!empty($criteria['columnType'])) ? $criteria['columnType'] : '';
-        $reportCriteria['contact_type'] = (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '';
+        $reportCriteria['contactdesc'] = (!empty($criteria['contactdesc'])) ? $criteria['contactdesc'] : '';
         $reportCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
         $reportCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
 
         return $reportCriteria;
+    }
+
+    public function getPermanentTableCriteria($criteria)
+    {
+        return $this->setPermanentTableCriteria($criteria);
+    }
+
+    private function setPermanentTableCriteria($criteria)
+    {
+        $betweenWhereClause = 'c.contactDate BETWEEN :startDate AND :endDate';
+        $endDay = cal_days_in_month(CAL_GREGORIAN, $criteria['endMonth'], $criteria['endYear']);
+        $betweenParameters = ['startDate' => new \DateTime($criteria['startMonth'] . '/01/' . $criteria['startYear']),
+            'endDate' => new \DateTime($criteria['endMonth'] . '/' . $endDay . '/' . $criteria['endYear']),
+        ];
+        $startWhereClause = 'c.contactDate >= :startDate ';
+        $startParameters = ['startDate' => new \DateTime($criteria['startMonth'] . '/01/' . $criteria['startYear'])];
+
+        $siteWhereClause = $contactWhereClause = '';
+        $siteParameters = $contactParameters = [];
+
+        $formSiteCriteria = ['center' => $criteria['center'], 'county' => $criteria['county'],];
+        $siteCriteria = $this->setSiteCriteria($formSiteCriteria);
+
+        $formContactCriteria = ['contactdesc' => $criteria['contactdesc']];
+        $contactCriteria = $this->setContactCriteria($formContactCriteria);
+
+        return [
+            'betweenWhereClause' => $betweenWhereClause,
+            'betweenParameters' => $betweenParameters,
+            'startWhereClause' => $startWhereClause,
+            'startParameters' => $startParameters,
+            'siteWhereClause' => $siteCriteria['siteWhereClause'],
+            'siteParameters' => $siteCriteria['siteParameters'],
+            'contactWhereClause' => $contactCriteria['contactWhereClause'],
+            'contactParameters' => $contactCriteria['contactParameters'],
+        ];
+    }
+
+    private function setSiteCriteria($formSiteCriteria)
+    {
+        if ('' !== $formSiteCriteria['center']) {
+            $id = $formSiteCriteria['center'];
+            $center = $this->em->getRepository('TruckeeProjectmanaBundle:Center')->find($id);
+            $siteWhereClause = 'c.center = :center';
+            $siteParameters = ['center' => $center];
+        } elseif ('' !== $formSiteCriteria['county']) {
+            $id = $formSiteCriteria['county'];
+            $county = $this->em->getRepository('TruckeeProjectmanaBundle:County')->find($id);
+            $siteWhereClause = 'c.county = :county';
+            $siteParameters = ['county' => $county];
+        } else {
+            $siteWhereClause = '1 = 1';
+            $siteParameters = [];
+        }
+
+        return [
+            'siteWhereClause' => $siteWhereClause,
+            'siteParameters' => $siteParameters,
+        ];
+    }
+
+    private function setContactCriteria($formSiteCriteria)
+    {
+        if ('' !== $formSiteCriteria['contactdesc']) {
+            $id = $formSiteCriteria['contactdesc'];
+            $contactdesc = $this->em->getRepository('TruckeeProjectmanaBundle:Contactdesc')->find($id);
+            $contactWhereClause = 'c.contactdesc = :contactdesc';
+            $contactParameters = ['contactdesc' => $contactdesc];
+        } else {
+            $contactWhereClause = '1 = 1';
+            $contactParameters = [];
+        }
+
+        return [
+            'contactWhereClause' => $contactWhereClause,
+            'contactParameters' => $contactParameters,
+        ];
     }
 
     private function setTableCriteria($criteria)
@@ -63,7 +140,7 @@ class CriteriaBuilder
         $parameters = [
             'startDate' => date_format($criteria['startDate'], 'Y-m-d'),
             'endDate' => date_format($criteria['endDate'], 'Y-m-d'),
-            ];
+        ];
         $incoming = array(
             'county' => (!empty($criteria['county'])) ? $criteria['county'] : '',
             'center' => (!empty($criteria['center'])) ? $criteria['center'] : '',
@@ -81,12 +158,12 @@ class CriteriaBuilder
                 $parameters[$opt] = $incoming[$opt];
             }
         }
-        if (!empty($criteria['contact_type'])) {
-            $newWhere .= ' and c.contactType = :contactType';
-            $tableWhere .= ' and c.contact_type_id  = :contactType';
-            $parameters['contactType'] = $criteria['contact_type'];
+        if (!empty($criteria['contactdesc'])) {
+            $newWhere .= ' and c.contactdesc = :contactdesc';
+            $tableWhere .= ' and c.contactdesc_id  = :contactdesc';
+            $parameters['contactdesc'] = $criteria['contactdesc'];
         }
-        
+
         return [
             'newWhereClause' => $newWhere,
             'tableWhereClause' => $tableWhere,
@@ -98,17 +175,17 @@ class CriteriaBuilder
     {
         // get specs to pass to template
         $endDay = cal_days_in_month(CAL_GREGORIAN, $criteria['endMonth'], $criteria['endYear']);
-        $templateCriteria['startDate'] = new \DateTime($criteria['startMonth'].'/01/'.$criteria['startYear']);
-        $templateCriteria['endDate'] = new \DateTime($criteria['endMonth'].'/'.$endDay.'/'.$criteria['endYear']);
+        $templateCriteria['startDate'] = new \DateTime($criteria['startMonth'] . '/01/' . $criteria['startYear']);
+        $templateCriteria['endDate'] = new \DateTime($criteria['endMonth'] . '/' . $endDay . '/' . $criteria['endYear']);
 
-        $templateCriteria['contact_type'] = (!empty($criteria['contact_type'])) ? $criteria['contact_type'] : '';
+        $templateCriteria['contactdesc'] = (!empty($criteria['contactdesc'])) ? $criteria['contactdesc'] : '';
         $templateCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
         $templateCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
 
         $em = $this->em;
-        if (!empty($templateCriteria['contact_type'])) {
-            $typeObj = $em->getRepository('TruckeeProjectmanaBundle:ContactDesc')->find($templateCriteria['contact_type']);
-            $templateCriteria['contact_type'] = $typeObj->getContactDesc();
+        if (!empty($templateCriteria['contactdesc'])) {
+            $typeObj = $em->getRepository('TruckeeProjectmanaBundle:Contactdesc')->find($templateCriteria['contactdesc']);
+            $templateCriteria['contactdesc'] = $typeObj->getContactdesc();
         }
 
         if (!empty($templateCriteria['center'])) {

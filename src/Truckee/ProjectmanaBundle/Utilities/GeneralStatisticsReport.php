@@ -25,10 +25,16 @@ class GeneralStatisticsReport
     private $reportCriteria;
     private $tableCriteria;
 
-
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
+    }
+
+    public function getPermanentGeneralStats($criteria)
+    {
+        $stats = $this->setPermanentTableGeneralStats($criteria);
+
+        return $stats;
     }
 
     public function getGeneralStats($tableCriteria, $reportCriteria)
@@ -38,20 +44,17 @@ class GeneralStatisticsReport
         return $stats;
     }
 
-    /**
-     * Set individual statistics
-     */
-    private function setGeneralStats($tableCriteria, $reportCriteria)
+    private function setPermanentTableGeneralStats($criteria)
     {
-        $this->tableCriteria = $tableCriteria;
-        $this->reportCriteria = $reportCriteria;
-        $statistics = array();
-
-        $ageGenderDist = $this->setAgeGenderDist();
-        $residency = $this->setResidency();
-        $familyDist = $this->setFamilyDist();
-        $freqDist = $this->setFreqDist();
-        $ethDist = $this->setEthDist();
+        $statistics = [];
+        $ageGenderData = $this->em->getRepository('TruckeeProjectmanaBundle:Member')->ageEthnicityDistribution($criteria);
+        $ageGenderDist = $this->setPermanentAgeGenderDist($ageGenderData);
+        $ethDist = $this->setPermanentEthDist($ageGenderData);
+        $sresData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->res($criteria);
+        $residency = $this->setPermanentResidency($sresData);
+        $sizeData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->size($criteria);
+        $familyDist = $this->setPermanentSizeDist($sizeData);
+        $freqDist = $this->setFreqDist($criteria);
 
         $data = [
             $ageGenderDist['ageDist'],
@@ -61,7 +64,6 @@ class GeneralStatisticsReport
             $freqDist,
             $ethDist,
         ];
-
         foreach ($data as $statArray) {
             foreach ($statArray as $key => $value) {
                 $statistics[$key] = $value;
@@ -69,32 +71,31 @@ class GeneralStatisticsReport
         }
 
         //unique new individuals
-        $uniqNewInd = $this->em->createQuery('SELECT COUNT(m) UNI FROM TruckeeProjectmanaBundle:TempMember m '
-                . 'JOIN TruckeeProjectmanaBundle:TempContact c WITH m.household = c.household '
-                . 'WHERE c.first = true')
-            ->getSingleScalarResult();
-        $statistics['Unique New Individuals'] = (!empty($uniqNewInd)) ? $uniqNewInd
-                : 0;
+        $statistics['Unique New Individuals'] = $this->em->getRepository('TruckeeProjectmanaBundle:Member')->uniqueNewMembers($criteria);
 
         //total individuals
-        $ti = $this->em->createQuery("SELECT SUM(h.size) TIS FROM TruckeeProjectmanaBundle:TempHousehold h "
-                . 'JOIN TruckeeProjectmanaBundle:TempContact c WITH c.household = h')->getSingleScalarResult();
-        $statistics['TIS'] = (!empty($ti)) ? $ti : 0;
-
-        //unique individuals
-        $uis = $this->em->createQuery('SELECT SUM(h.size) UIS FROM TruckeeProjectmanaBundle:TempHousehold h')->getSingleScalarResult();
-        $statistics['UIS'] = (!empty($uis)) ? $uis : 0;
+        $tiData = $this->em->getRepository('TruckeeProjectmanaBundle:Member')->reportMembers($criteria);
+        $statistics['TIS'] = count($tiData);
 
         //total households
-        $th = $this->em->createQuery('SELECT COUNT(c.household) THS FROM TruckeeProjectmanaBundle:TempContact c ')
-            ->getSingleScalarResult();
-        $statistics['THS'] = (!empty($th)) ? $th : 0;
+        $th = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->reportHousehold($criteria);
+        $statistics['THS'] = count($th);
+
+        //unique individuals & households
+        $statistics['UIS'] = $statistics['UHS'] = 0;
+        foreach ($sizeData as $hse) {
+            $statistics['UIS'] += $hse['size'];
+            $statistics['UHS'] ++;
+        }
 
         //unique households
-        $uhs = $this->em->createQuery('SELECT COUNT(h) UHS FROM TruckeeProjectmanaBundle:TempHousehold h')
-            ->getSingleScalarResult();
-        $statistics['UHS'] = (!empty($uhs)) ? $uhs : 0;
+    }
 
+    /**
+     * Set individual statistics
+     */
+    private function setGeneralStats($tableCriteria, $reportCriteria)
+    {
         //new members
         $newMembers = $this->em->createQuery('SELECT COUNT(m) NewMembers FROM TruckeeProjectmanaBundle:TempMember m '
                 . 'JOIN TruckeeProjectmanaBundle:TempContact c WITH m.household = c.household '
@@ -120,12 +121,72 @@ class GeneralStatisticsReport
         return $statistics;
     }
 
-    private function setAgeGenderDist()
+    private function setPermanentResidency($data)
+    {
+        $resArray['< 1 month'] = $resArray['1 mo - 2 yrs'] = $resArray['>=2 yrs']
+            = 0;
+        foreach ($data as $household) {
+            if ($household['Mos'] <= 1) {
+                $resArray['< 1 month'] ++;
+            }
+            if (24 >= $household['Mos']) {
+                $resArray['>=2 yrs'] ++;
+            }
+            if (1 < $household['Mos'] && $household['Mos'] < 24) {
+                $resArray['1 mo - 2 yrs'] ++;
+            }
+        }
+
+        return $resArray;
+    }
+
+    private function setPermanentSizeDist($data)
+    {
+        $familyArray = ['Single' => 0, 'Two' => 0, 'Three' => 0, 'Four' => 0, 'Five' => 0, 'Six or more' => 0];
+        foreach ($data as $family) {
+            switch ($family['size']) {
+                case 1:
+                    $familyArray['Single'] ++;
+                    break;
+                case 2:
+                    $familyArray['Two'] ++;
+                    break;
+                case 3:
+                    $familyArray['Three'] ++;
+                    break;
+                case 4:
+                    $familyArray['Four'] ++;
+                    break;
+                case 5:
+                    $familyArray['Five'] ++;
+                    break;
+                default:
+                    $familyArray['Six or more'] ++;
+                    break;
+            }
+        }
+
+        return $familyArray;
+    }
+
+    private function setPermanentEthDist($data)
+    {
+        $eth = [];
+        foreach ($data as $key => $value) {
+            if (!array_key_exists($value['ethnicity'], $eth)) {
+                $eth[$value['ethnicity']] = 0;
+            }
+            $eth[$value['ethnicity']] ++;
+        }
+
+        return $eth;
+    }
+
+    private function setPermanentAgeGenderDist($data)
     {
         $ageDist = ['Under 6' => 0, '6 - 18' => 0, '19 - 59' => 0, '60+' => 0];
         $ageGenderDist = ['FC' => 0, 'MC' => 0, 'FA' => 0, 'MA' => 0];
-        $qb = $this->em->createQuery('SELECT m.age, m.sex FROM TruckeeProjectmanaBundle:TempMember m')->getResult();
-        foreach ($qb as $row) {
+        foreach ($data as $row) {
             switch (true) {
                 case $row['age'] < 6 && $row['sex'] == 'Female':
                     $ageDist['Under 6'] ++;
@@ -171,45 +232,16 @@ class GeneralStatisticsReport
         ];
     }
 
-    private function setEthDist()
-    {
-        $qb = $this->em->createQuery('SELECT e FROM TruckeeProjectmanaBundle:Ethnicity e')->getResult();
-        foreach ($qb as $row) {
-            $queryEth = $this->em->createQuery('SELECT COUNT(m) N FROM TruckeeProjectmanaBundle:TempMember m '
-                    . 'JOIN TruckeeProjectmanaBundle:TempHousehold h WITH m.household = h '
-                    . 'WHERE (m <> h.head OR (m = h.head AND m.age IS NOT NULL)) AND m.ethnicity = :eth')
-                ->setParameter('eth', $row)
-                ->getSingleResult();
-            $ethDist[$row->getEthnicity()] = $queryEth['N'];
-        }
-
-        return $ethDist;
-    }
-
-    private function setFamilyDist()
-    {
-        $familyArray = ['Single', 'Two', 'Three', 'Four', 'Five', 'Six or more'];
-        $qb = $this->em->createQuery('SELECT COUNT(h.size) FROM TruckeeProjectmanaBundle:TempHousehold h '
-            . 'WHERE h.sizeText = :size');
-        foreach ($familyArray as $size) {
-            $n = $qb->setParameter('size', $size)->getSingleScalarResult();
-            $familyDist[$size] = (null === $n) ? 0 : $n;
-        }
-
-        return $familyDist;
-    }
-
-    private function setFreqDist()
+    private function setFreqDist($criteria)
     {
         $frequency = ['1x' => 0, '2x' => 0, '3x' => 0, '4x' => 0];
-        $qbSizes = $this->em->createQuery('SELECT h.id, h.size S FROM TruckeeProjectmanaBundle:TempHousehold h')->getResult();
+        $qbSizes = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->size($criteria);
         foreach ($qbSizes as $row) {
-            $sizes[$row['id']] = $row['S'];
+            $sizes[$row['id']] = $row['size'];
         }
-        $qbFreqs = $this->em->createQuery('SELECT c.household, COUNT(c) N FROM TruckeeProjectmanaBundle:TempContact c '
-                . 'GROUP BY c.household')->getResult();
+        $qbFreqs = $this->em->getRepository('TruckeeProjectmanaBundle:Contact')->getHouseholdCount($criteria);
         foreach ($qbFreqs as $freq) {
-            $household = $freq['household'];
+            $household = $freq['id'];
             $size = $sizes[$household];
             switch ($freq['N']) {
                 case 1:
@@ -228,19 +260,5 @@ class GeneralStatisticsReport
         }
 
         return $frequency;
-    }
-
-    private function setResidency()
-    {
-        $residency = [];
-        $resArray = ['< 1 month', '1 mo - 2 yrs', '>=2 yrs'];
-        $qb = $this->em->createQuery('SELECT SUM(h.size) FROM TruckeeProjectmanaBundle:TempHousehold h '
-            . 'WHERE h.res = :res');
-        foreach ($resArray as $res) {
-            $n = $qb->setParameter('res', $res)->getSingleScalarResult();
-            $residency[$res] = (null === $n) ? 0 : $n;
-        }
-
-        return $residency;
     }
 }

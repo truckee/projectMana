@@ -20,7 +20,7 @@ use Truckee\ProjectmanaBundle\Validator\Constraints as ManaAssert;
  *
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="Truckee\ProjectmanaBundle\Entity\ContactRepository")
- * @ORM\Table(name="contact", indexes={@ORM\Index(name="idx_contact_household_idx", columns={"household_id"}), @ORM\Index(name="idx_contact_type_idx", columns={"contact_type_id"}), @ORM\Index(name="idx_contact_center_idx", columns={"center_id"})})
+ * @ORM\Table(name="contact", indexes={@ORM\Index(name="idx_contact_household_idx", columns={"household_id"}), @ORM\Index(name="idx_contactdesc_idx", columns={"contactdesc_id"}), @ORM\Index(name="idx_contact_center_idx", columns={"center_id"})})
  */
 class Contact
 {
@@ -63,13 +63,13 @@ class Contact
     protected $household;
 
     /**
-     * @var \Truckee\ProjectmanaBundle\Entity\ContactDesc
+     * @var \Truckee\ProjectmanaBundle\Entity\Contactdesc
      *
-     * @ORM\ManyToOne(targetEntity="Truckee\ProjectmanaBundle\Entity\ContactDesc", inversedBy="contacts")
-     * @ORM\JoinColumn(name="contact_type_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Truckee\ProjectmanaBundle\Entity\Contactdesc", inversedBy="contacts")
+     * @ORM\JoinColumn(name="contactdesc_id", referencedColumnName="id")
      * @Assert\NotBlank(message="Type must be selected")
      */
-    protected $contactDesc;
+    protected $contactdesc;
 
     /**
      * @var \Truckee\ProjectmanaBundle\Entity\County
@@ -199,27 +199,27 @@ class Contact
     }
 
     /**
-     * Set contactDesc.
+     * Set contactdesc.
      *
-     * @param \Truckee\ProjectmanaBundle\Entity\ContactDesc $contactDesc
+     * @param \Truckee\ProjectmanaBundle\Entity\Contactdesc $contactdesc
      *
      * @return Contact
      */
-    public function setContactDesc(\Truckee\ProjectmanaBundle\Entity\ContactDesc $contactDesc = null)
+    public function setContactdesc(\Truckee\ProjectmanaBundle\Entity\Contactdesc $contactdesc = null)
     {
-        $this->contactDesc = $contactDesc;
+        $this->contactdesc = $contactdesc;
 
         return $this;
     }
 
     /**
-     * Get contactDesc.
+     * Get contactdesc.
      *
-     * @return \Truckee\ProjectmanaBundle\Entity\ContactDesc
+     * @return \Truckee\ProjectmanaBundle\Entity\Contactdesc
      */
-    public function getContactDesc()
+    public function getContactdesc()
     {
-        return $this->contactDesc;
+        return $this->contactdesc;
     }
 
     /**

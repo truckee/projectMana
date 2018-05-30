@@ -16,7 +16,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Truckee\ProjectmanaBundle\Entity\AddressType;
 use Truckee\ProjectmanaBundle\Entity\Center;
-use Truckee\ProjectmanaBundle\Entity\ContactDesc;
+use Truckee\ProjectmanaBundle\Entity\Contactdesc;
 use Truckee\ProjectmanaBundle\Entity\County;
 use Truckee\ProjectmanaBundle\Entity\Ethnicity;
 use Truckee\ProjectmanaBundle\Entity\FsAmount;
@@ -158,14 +158,14 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
         $this->setReference('unk', $foodstamp3);
         $manager->persist($foodstamp3);
 
-        $desc = new ContactDesc();
-        $desc->setContactDesc('FACE');
+        $desc = new Contactdesc();
+        $desc->setContactdesc('FACE');
         $desc->setEnabled(true);
         $this->setReference('face', $desc);
         $manager->persist($desc);
 
-        $desc1 = new ContactDesc();
-        $desc1->setContactDesc('General Dist.');
+        $desc1 = new Contactdesc();
+        $desc1->setContactdesc('General Dist.');
         $desc1->setEnabled(true);
         $this->setReference('general', $desc1);
         $manager->persist($desc1);

@@ -49,6 +49,10 @@ class StatisticsController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formCriteria = $request->request->get('report_criteria');
+            $criteria = $builder->getPermanentTableCriteria($formCriteria);
+//            dump($criteria);die;
+            $statistics = $general->getPermanentGeneralStats($criteria);
+
             $criteria = $builder->getCriteria($formCriteria);
             $tableCriteria = $criteria['table'];
             $reportCriteria = $criteria['report'];
@@ -60,7 +64,7 @@ class StatisticsController extends Controller
             $templateCriteria['reportType'] = 'General Statistics';
             $templates[] = 'Statistics/individualsServed.html.twig';
             $templates[] = 'Statistics/householdsServed.html.twig';
-            if ('' === $reportCriteria['contact_type']) {
+            if ('' === $reportCriteria['contactdesc']) {
                 $templates[] = 'Statistics/newWithoutType.html.twig';
             } else {
                 $templates[] = 'Statistics/newWithType.html.twig';
@@ -251,7 +255,7 @@ class StatisticsController extends Controller
             'startYear' => $year,
             'endMonth' => $month,
             'endYear' => $year,
-            'contact_type_id' => 0,
+            'contactdesc_id' => 0,
             'center_id' => 0,
             'county_id' => 0,
         );
@@ -748,8 +752,8 @@ class StatisticsController extends Controller
         $line1 .= ($startDate !== $endDate) ? ' through ' . $endDate : '';
         $line1 .= '<br>';
         $line2 = '';
-        if ('' !== $specs['contact_type']) {
-            $line2 .= 'Type: ' . $specs['contact_type'] . '<br>';
+        if ('' !== $specs['contactdesc']) {
+            $line2 .= 'Type: ' . $specs['contactdesc'] . '<br>';
         }
         $line3 = '';
         if ('' !== $specs['county']) {

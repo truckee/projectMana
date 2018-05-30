@@ -25,7 +25,7 @@
                             {{ form_row(form.contactDate) }}
                         </div>
                         <div class="col-sm-3">
-                            {{ form_row(form.contactDesc) }}
+                            {{ form_row(form.contactdesc) }}
                         </div>
                         <div class="col-sm-3">
                             {{ form_row(form.center)}}
@@ -52,7 +52,7 @@
                         <div class="col-sm-1"><a class="btn-sm btn-info" href="{{ path('contact_edit', { 'id': contact.id }) }}">Edit</a></div>
                         <div class="col-sm-1"><a class="btn-sm btn-info" href="{{ path('contact_delete', { 'id': contact.id }) }}">Delete</a></div>
                         <div class="col-sm-2"><b>Date:</b> {{ contact.contactDate|date('m/d/Y') }}</div>
-                        <div class="col-sm-3"><b>Date:</b> {{ contact.contactDesc.contactDesc }}</div>
+                        <div class="col-sm-3"><b>Date:</b> {{ contact.contactdesc.contactdesc }}</div>
                         <div class="col-sm-3">{% if contact.center is not empty %}<b>Site: </b>{{ contact.center.center }}{% else %}
                             {% if contact.center is not empty %}<b>County: </b>{{ contact.center.county.county }}{% endif %}{% endif %}</div>
                         </div>

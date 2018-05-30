@@ -82,7 +82,7 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $addressType = $em->getRepository('TruckeeProjectmanaBundle:AddressType')->findBy([], ['addresstype' => 'ASC']);
         $center = $em->getRepository('TruckeeProjectmanaBundle:Center')->findBy([], ['center' => 'ASC']);
-        $desc = $em->getRepository('TruckeeProjectmanaBundle:ContactDesc')->findBy([], ['contactDesc' => 'ASC']);
+        $desc = $em->getRepository('TruckeeProjectmanaBundle:Contactdesc')->findBy([], ['contactdesc' => 'ASC']);
         $county = $em->getRepository('TruckeeProjectmanaBundle:County')->findBy([], ['county' => 'ASC']);
         $eth = $em->getRepository('TruckeeProjectmanaBundle:Ethnicity')->findBy([], ['ethnicity' => 'ASC']);
         $fsa = $em->getRepository('TruckeeProjectmanaBundle:FsAmount')->findBy([], ['id' => 'ASC']);
