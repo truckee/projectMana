@@ -23,6 +23,7 @@ use Truckee\ProjectmanaBundle\Validator\Constraints as ManaAssert;
  *      @ORM\Index(name="idx_client_ethnicity_idx", columns={"ethnicity_id"}),
  *      @ORM\Index(columns={"fname", "sname"}, flags={"fulltext"})})
  * @ORM\Entity(repositoryClass="Truckee\ProjectmanaBundle\Entity\MemberRepository")
+ * @ManaAssert\DOB
  */
 class Member
 {
