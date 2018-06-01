@@ -110,18 +110,18 @@ class MemberController extends Controller
      */
     public function addAction(Request $request, $houseId)
     {
-        $member = new Member();
-        $form = $this->createForm(MemberType::class, $member);
-        $templates[] = 'Member/memberFormRows.html.twig';
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($houseId);
             if (!$household) {
                 throw $this->createNotFoundException('Unable to find Household.');
             }
-            $member->setInclude(true);
+        $member = new Member();
             $household->addMember($member);
+        $form = $this->createForm(MemberType::class, $member);
+        $templates[] = 'Member/memberFormRows.html.twig';
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $member->setInclude(true);
             $em->persist($member);
             $em->persist($household);
             $em->flush();
