@@ -40,4 +40,15 @@ class CountyRepository extends EntityRepository
 
         return $colLabels;
     }
+
+    public function countiesForStats($criteria)
+    {
+        return $this->createQueryBuilder('cty')
+            ->distinct()
+            ->join('TruckeeProjectmanaBundle:Contact', 'c', 'WITH', 'c.county = cty')
+            ->where($criteria['betweenWhereClause'])
+            ->setParameters($criteria['betweenParameters'])
+            ->orderBy('cty.county')
+            ->getQuery()->getResult();
+    }
 }

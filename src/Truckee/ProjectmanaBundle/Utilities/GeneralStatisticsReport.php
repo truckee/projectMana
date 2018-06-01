@@ -22,8 +22,6 @@ use Doctrine\ORM\EntityManagerInterface;
 class GeneralStatisticsReport
 {
     private $em;
-    private $reportCriteria;
-    private $tableCriteria;
 
     public function __construct(EntityManagerInterface $em)
     {
@@ -37,21 +35,12 @@ class GeneralStatisticsReport
         return $stats;
     }
 
-    public function getGeneralStats($tableCriteria, $reportCriteria)
-    {
-        $stats = $this->setGeneralStats($tableCriteria, $reportCriteria);
-
-        return $stats;
-    }
-
     private function setPermanentTableGeneralStats($criteria)
     {
         $statistics = [];
         $ageGenderData = $this->em->getRepository('TruckeeProjectmanaBundle:Member')->ageEthnicityDistribution($criteria);
         $ageGenderDist = $this->setPermanentAgeGenderDist($ageGenderData);
         $ethDist = $this->setPermanentEthDist($ageGenderData);
-        $sresData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->res($criteria);
-        $residency = $this->setPermanentResidency($sresData);
         $sizeData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->size($criteria);
         $familyDist = $this->setPermanentSizeDist($sizeData);
         $freqDist = $this->setFreqDist($criteria);
@@ -59,7 +48,6 @@ class GeneralStatisticsReport
         $data = [
             $ageGenderDist['ageDist'],
             $ageGenderDist['ageGenderDist'],
-            $residency,
             $familyDist,
             $freqDist,
             $ethDist,
@@ -88,7 +76,8 @@ class GeneralStatisticsReport
             $statistics['UHS'] ++;
         }
 
-        //unique households
+        //new by type
+        $statistics['NewByType'] = $this->em->getRepository('TruckeeProjectmanaBundle:Contact')->getNewByType($criteria);
     }
 
     /**
@@ -119,25 +108,6 @@ class GeneralStatisticsReport
         $statistics['NewByType'] = (!empty($nbt)) ? $nbt : 0;
 
         return $statistics;
-    }
-
-    private function setPermanentResidency($data)
-    {
-        $resArray['< 1 month'] = $resArray['1 mo - 2 yrs'] = $resArray['>=2 yrs']
-            = 0;
-        foreach ($data as $household) {
-            if ($household['Mos'] <= 1) {
-                $resArray['< 1 month'] ++;
-            }
-            if (24 >= $household['Mos']) {
-                $resArray['>=2 yrs'] ++;
-            }
-            if (1 < $household['Mos'] && $household['Mos'] < 24) {
-                $resArray['1 mo - 2 yrs'] ++;
-            }
-        }
-
-        return $resArray;
     }
 
     private function setPermanentSizeDist($data)

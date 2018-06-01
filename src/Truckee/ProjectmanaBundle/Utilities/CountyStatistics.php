@@ -21,16 +21,45 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class CountyStatistics
 {
-    private $conn;
     private $em;
 
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
-        $this->conn = $em->getConnection();
     }
 
-    public function getCountyStats()
+    public function getCountyStats($criteria)
+    {
+        $counties = $this->em->getRepository('TruckeeProjectmanaBundle:County')->countiesForStats($criteria);
+        $statistics['UIS_Total'] = 0;
+        $statistics['UHS_Total'] = 0;
+        $statistics['TIS_Total'] = 0;
+        $statistics['THS_Total'] = 0;
+        $criteria['siteWhereClause'] = 'c.county = :county';
+        foreach ($counties as $site) {
+            $criteria['siteParameters'] = ['county' => $site];
+            $statistics[$site->getCounty()]['UIS'] = 0;
+            $statistics[$site->getCounty()]['UHS'] = 0;
+            //household data
+            $sizeData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->size($criteria);
+            foreach ($sizeData as $hse) {
+                $statistics[$site->getCounty()]['UIS'] += $hse['size'];
+                $statistics['UIS_Total'] += $hse['size'];
+                $statistics[$site->getCounty()]['UHS'] ++;
+                $statistics['UHS_Total'] ++;
+            }
+            $tiData = $this->em->getRepository('TruckeeProjectmanaBundle:Member')->reportMembers($criteria);
+            $statistics[$site->getCounty()]['TIS'] = count($tiData);
+            $statistics['TIS_Total'] += count($tiData);
+            $thData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->reportHousehold($criteria);
+            $statistics[$site->getCounty()]['THS'] = count($thData);
+            $statistics['THS_Total'] += count($thData);
+        }
+
+        return $statistics;
+    }
+
+    public function OldgetCountyStats()
     {
         $joinPhrase = 'JOIN TruckeeProjectmanaBundle:County cty WITH c.county = cty GROUP BY cty.county';
         $db = $this->conn;
@@ -86,29 +115,25 @@ class CountyStatistics
         foreach ($UISData as $array) {
             $data[$array['county']]['UIS'] = $array['UIS'];
             $data[$array['county']]['UISPCT'] = (0 < $totals['UISTotal']) ? sprintf(
-                    '%01.1f',
-                100 * ($array['UIS'] / $totals['UISTotal'])
+                    '%01.1f', 100 * ($array['UIS'] / $totals['UISTotal'])
                 ) . '%' : 0;
         }
         foreach ($UHSData as $array) {
             $data[$array['county']]['UHS'] = $array['UHS'];
             $data[$array['county']]['UHSPCT'] = (0 < $totals['UHSTotal']) ? sprintf(
-                    '%01.1f',
-                100 * ($array['UHS'] / $totals['UHSTotal'])
+                    '%01.1f', 100 * ($array['UHS'] / $totals['UHSTotal'])
                 ) . '%' : 0;
         }
         foreach ($TISData as $array) {
             $data[$array['county']]['TIS'] = $array['TIS'];
             $data[$array['county']]['TISPCT'] = (0 < $totals['TISTotal']) ? sprintf(
-                    '%01.1f',
-                100 * ($array['TIS'] / $totals['TISTotal'])
+                    '%01.1f', 100 * ($array['TIS'] / $totals['TISTotal'])
                 ) . '%' : 0;
         }
         foreach ($THSData as $array) {
             $data[$array['county']]['THS'] = $array['THS'];
             $data[$array['county']]['THSPCT'] = (0 < $totals['THSTotal']) ? sprintf(
-                    '%01.1f',
-                100 * ($array['THS'] / $totals['THSTotal'])
+                    '%01.1f', 100 * ($array['THS'] / $totals['THSTotal'])
                 ) . '%' : 0;
         }
 

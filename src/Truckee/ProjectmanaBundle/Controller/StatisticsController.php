@@ -50,29 +50,33 @@ class StatisticsController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $formCriteria = $request->request->get('report_criteria');
             $criteria = $builder->getPermanentTableCriteria($formCriteria);
-//            dump($criteria);die;
             $statistics = $general->getPermanentGeneralStats($criteria);
+//            $statistics['countyStats'] = $countyStats->getCountyStats($criteria);
+//            die('We need to stop here!');
 
-            $criteria = $builder->getCriteria($formCriteria);
-            $tableCriteria = $criteria['table'];
-            $reportCriteria = $criteria['report'];
+//            $criteria = $builder->getCriteria($formCriteria);
+//            $tableCriteria = $criteria['table'];
+//            $reportCriteria = $criteria['report'];
 
-            $tables->makeTempTables($tableCriteria);
-            $statistics = $general->getGeneralStats($tableCriteria, $reportCriteria);
+//            $tables->makeTempTables($tableCriteria);
+//            $statistics = $general->getGeneralStats($tableCriteria, $reportCriteria);
 
-            $templateCriteria = $criteria['template'];
+//            $templateCriteria = $criteria['template'];
             $templateCriteria['reportType'] = 'General Statistics';
             $templates[] = 'Statistics/individualsServed.html.twig';
             $templates[] = 'Statistics/householdsServed.html.twig';
-            if ('' === $reportCriteria['contactdesc']) {
+            if ([] !== $criteria['contactParameters']) {
+//            if ('' === $reportCriteria['contactdesc']) {
                 $templates[] = 'Statistics/newWithoutType.html.twig';
             } else {
                 $templates[] = 'Statistics/newWithType.html.twig';
             }
             $templates[] = 'Statistics/ethnicityDistribution.html.twig';
             $templates[] = 'Statistics/ageGenderDistribution.html.twig';
-            $templates[] = 'Statistics/residencyDistribution.html.twig';
-            if ('' === $templateCriteria['county'] . $templateCriteria['center']) {
+            //removed 2018-05-31
+//            $templates[] = 'Statistics/residencyDistribution.html.twig';
+            if ([] !== $criteria['siteParameters']) {
+//            if ('' === $templateCriteria['county'] . $templateCriteria['center']) {
                 $statistics['countyStats'] = $countyStats->getCountyStats();
                 $templates[] = 'Statistics/countyDistribution.html.twig';
             }
@@ -85,7 +89,7 @@ class StatisticsController extends Controller
                 'specs' => $templateCriteria,
                 'statistics' => $statistics,
                 'title' => 'General statistics',
-                'reportHeader' => $this->getReportHeader($templateCriteria),
+                'reportHeader' => $this->getReportHeader($criteria),
                 'templates' => $templates,
             );
             $session = $request->getSession();
@@ -743,24 +747,28 @@ class StatisticsController extends Controller
      *
      * @return Response
      */
-    private function getReportHeader($specs)
+    private function getReportHeader($criteria)
     {
 //        $specs = $this->getTemplateCriteria($criteria);
-        $startDate = date_format($specs['startDate'], 'F, Y');
-        $endDate = date_format($specs['endDate'], 'F, Y');
+        $startDate = date_format($criteria['betweenParameters']['startDate'], 'F, Y');
+//        $startDate = date_format($specs['startDate'], 'F, Y');
+        $endDate = date_format($criteria['betweenParameters']['endDate'], 'F, Y');
+//        $endDate = date_format($specs['endDate'], 'F, Y');
         $line1 = $specs['reportType'] . ' for ' . $startDate;
         $line1 .= ($startDate !== $endDate) ? ' through ' . $endDate : '';
         $line1 .= '<br>';
         $line2 = '';
-        if ('' !== $specs['contactdesc']) {
-            $line2 .= 'Type: ' . $specs['contactdesc'] . '<br>';
+        if ([] !== $criteria['contactParameters']) {
+//        if ('' !== $specs['contactdesc']) {
+            $line2 .= 'Type: ' . $criteria['contactParameters']['contactdesc']->getContactdesc() . '<br>';
+//            $line2 .= 'Type: ' . $specs['contactdesc'] . '<br>';
         }
         $line3 = '';
-        if ('' !== $specs['county']) {
-            $line3 .= 'County: ' . $specs['county'] . '<br>';
-        } elseif ('' !== $specs['center']) {
-            $line3 .= 'Site: ' . $specs['center'] . '<br>';
-        }
+//        if ('' !== $specs['county']) {
+//            $line3 .= 'County: ' . $specs['county'] . '<br>';
+//        } elseif ('' !== $specs['center']) {
+//            $line3 .= 'Site: ' . $specs['center'] . '<br>';
+//        }
 
         return $line1 . $line2 . $line3;
     }

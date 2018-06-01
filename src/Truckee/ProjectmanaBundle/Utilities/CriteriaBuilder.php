@@ -40,22 +40,22 @@ class CriteriaBuilder
             'template' => $template,
         ];
     }
-
-    private function setReportCriteria($criteria)
-    {
-        $endDay = cal_days_in_month(CAL_GREGORIAN, $criteria['endMonth'], $criteria['endYear']);
-        $reportCriteria['startDate'] = new \DateTime($criteria['startMonth'] . '/01/' . $criteria['startYear']);
-        $reportCriteria['endDate'] = new \DateTime($criteria['endMonth'] . '/' . $endDay . '/' . $criteria['endYear']);
-        $reportCriteria['contactdesc'] = (!empty($criteria['contactdesc'])) ? $criteria['contactdesc'] : '';
-        $reportCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
-        $reportCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
-        $reportCriteria['columnType'] = (!empty($criteria['columnType'])) ? $criteria['columnType'] : '';
-        $reportCriteria['contactdesc'] = (!empty($criteria['contactdesc'])) ? $criteria['contactdesc'] : '';
-        $reportCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
-        $reportCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
-
-        return $reportCriteria;
-    }
+//
+//    private function setReportCriteria($criteria)
+//    {
+//        $endDay = cal_days_in_month(CAL_GREGORIAN, $criteria['endMonth'], $criteria['endYear']);
+//        $reportCriteria['startDate'] = new \DateTime($criteria['startMonth'] . '/01/' . $criteria['startYear']);
+//        $reportCriteria['endDate'] = new \DateTime($criteria['endMonth'] . '/' . $endDay . '/' . $criteria['endYear']);
+//        $reportCriteria['contactdesc'] = (!empty($criteria['contactdesc'])) ? $criteria['contactdesc'] : '';
+//        $reportCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
+//        $reportCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
+//        $reportCriteria['columnType'] = (!empty($criteria['columnType'])) ? $criteria['columnType'] : '';
+//        $reportCriteria['contactdesc'] = (!empty($criteria['contactdesc'])) ? $criteria['contactdesc'] : '';
+//        $reportCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
+//        $reportCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
+//
+//        return $reportCriteria;
+//    }
 
     public function getPermanentTableCriteria($criteria)
     {

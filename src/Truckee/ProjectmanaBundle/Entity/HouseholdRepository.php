@@ -108,23 +108,6 @@ class HouseholdRepository extends EntityRepository
                 ->getResult();
     }
 
-    public function res($criteria)
-    {
-        $parameters = array_merge($criteria['startParameters'], $criteria['startParameters'], ['hArray' => $this->reportHousehold($criteria)]);
-        $qb = $this->getEntityManager()->createQueryBuilder();
-
-        return $this->getEntityManager()->createQueryBuilder()
-                ->select('h.id, 12*(YEAR(:startDate) - h.arrivalyear) + (MONTH(:startDate) - h.arrivalmonth) Mos')
-                ->from('TruckeeProjectmanaBundle:Household', 'h')
-                ->distinct()
-                ->where('h.id IN (:hArray)')
-                ->andWhere($qb->expr()->isNotNull('h.arrivalyear'))
-                ->andWhere($qb->expr()->isNotNull('h.arrivalmonth'))
-                ->setParameters($parameters)
-                ->getQuery()->getResult()
-        ;
-    }
-
     public function size($criteria)
     {
         $parameters = array_merge($criteria['startParameters'], $criteria['startParameters'], ['hArray' => $this->reportHousehold($criteria)]);
@@ -156,12 +139,4 @@ class HouseholdRepository extends EntityRepository
                 ->getQuery()->getResult()
         ;
     }
-//    private function uniqueHouseholds($criteria)
-//    {
-//        return $this->createQueryBuilder('i')
-//                ->join('TruckeeProjectmanaBundle:Contact', 'c', 'WITH', 'c.household = i')
-//                ->distinct()
-//                ->where($criteria['betweenWhereClause'])
-//                ->getDQL();
-//    }
 }

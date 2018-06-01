@@ -62,4 +62,19 @@ class ContactRepository extends EntityRepository
                 ->orderBy('id')
                 ->getQuery()->getResult();
     }
+
+    public function getNewByType($criteria)
+    {
+        $parameters = array_merge($criteria['betweenParameters'], $criteria['siteParameters'], $criteria['contactParameters']);
+
+        return $this->getEntityManager()->createQueryBuilder()
+                ->select('count(distinct IDENTITY(c.household))')
+                ->from('TruckeeProjectmanaBundle:Contact', 'c')
+                ->where($criteria['betweenWhereClause'])
+                ->andWhere($criteria['siteWhereClause'])
+                ->andWhere($criteria['contactWhereClause'])
+                ->andWhere('c.first = true')
+                ->setParameters($parameters)
+                ->getQuery()->getSingleScalarResult();
+    }
 }
