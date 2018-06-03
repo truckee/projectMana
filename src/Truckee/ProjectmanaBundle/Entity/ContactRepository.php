@@ -41,13 +41,13 @@ class ContactRepository extends EntityRepository
                 . 'WHERE c1.contactDate = c2.contactDate '
                 . 'AND c1 <> c2 '
                 . 'AND c1.contactDate >= :startDate AND c1.contactDate <= :endDate')
-            ->setParameters(['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']])
+            ->setParameters($criteria['betweenParameters'])
             ->getResult();
 
         return $qb;
     }
 
-    public function getHouseholdCount($criteria)
+    public function getHouseholdCount($criteria, $distinct = false)
     {
         $parameters = array_merge($criteria['betweenParameters'], $criteria['siteParameters'], $criteria['contactParameters']);
 
@@ -63,18 +63,68 @@ class ContactRepository extends EntityRepository
                 ->getQuery()->getResult();
     }
 
+    public function uniqueHouseholds($criteria)
+    {
+        $parameters = array_merge($criteria['betweenParameters'], $criteria['siteParameters']);
+
+        return $this->uniqueHouseholdsQuery($criteria)
+                ->andWhere('c.first = true')
+                ->setParameters($parameters)
+                ->getQuery()->getSingleScalarResult();
+    }
+
     public function getNewByType($criteria)
     {
         $parameters = array_merge($criteria['betweenParameters'], $criteria['siteParameters'], $criteria['contactParameters']);
 
+        return $this->uniqueHouseholdsQuery($criteria)
+                ->andWhere('c.first = true')
+                ->andWhere($criteria['contactWhereClause'])
+                ->setParameters($parameters)
+                ->getQuery()->getSingleScalarResult();
+    }
+
+    public function detailsHouseholds($criteria)
+    {
+        return $this->getEntityManager()->createQueryBuilder()
+                ->select('cty.county, cd.contactdesc, count(IDENTITY(c.household)) TH, count(distinct IDENTITY(c.household)) UH')
+                ->from('TruckeeProjectmanaBundle:Contact', 'c')
+                ->join('TruckeeProjectmanaBundle:County', 'cty', 'WITH', 'c.county = cty')
+                ->join('TruckeeProjectmanaBundle:Contactdesc', 'cd', 'WITH', 'c.contactdesc = cd')
+                ->where($criteria['betweenWhereClause'])
+                ->groupBy('cty.county, cd.contactdesc')
+                ->orderBy('cty.county, cd.contactdesc')
+                ->setParameters($criteria['betweenParameters'])
+                ->getQuery()->getResult();
+    }
+
+    public function detailsMembers($criteria)
+    {
+        $parameters = array_merge($criteria['betweenParameters'], $criteria['startParameters'], $criteria['startParameters']);
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        return $this->getEntityManager()->createQueryBuilder()
+                ->select('cty.county, cd.contactdesc, count(m.id) TI, count(distinct m.id) UI')
+                ->from('TruckeeProjectmanaBundle:Contact', 'c')
+                ->join('TruckeeProjectmanaBundle:Household', 'h', 'WITH', 'c.household = h')
+                ->join('TruckeeProjectmanaBundle:Member', 'm', 'WITH', 'm.household = h')
+                ->join('TruckeeProjectmanaBundle:County', 'cty', 'WITH', 'c.county = cty')
+                ->join('TruckeeProjectmanaBundle:Contactdesc', 'cd', 'WITH', 'c.contactdesc = cd')
+                ->where($criteria['betweenWhereClause'])
+                ->andWhere($qb->expr()->orX('m.excludeDate > :startDate', $qb->expr()->isNull('m.excludeDate')))
+                ->andWhere($qb->expr()->orX('m.dob < :startDate', $qb->expr()->isNull('m.dob')))
+                ->groupBy('cty.county, cd.contactdesc')
+                ->orderBy('cty.county, cd.contactdesc')
+                ->setParameters($parameters)
+                ->getQuery()->getResult();
+    }
+
+    private function uniqueHouseholdsQuery($criteria)
+    {
         return $this->getEntityManager()->createQueryBuilder()
                 ->select('count(distinct IDENTITY(c.household))')
                 ->from('TruckeeProjectmanaBundle:Contact', 'c')
                 ->where($criteria['betweenWhereClause'])
-                ->andWhere($criteria['siteWhereClause'])
-                ->andWhere($criteria['contactWhereClause'])
-                ->andWhere('c.first = true')
-                ->setParameters($parameters)
-                ->getQuery()->getSingleScalarResult();
+                ->andWhere($criteria['siteWhereClause']);
     }
 }

@@ -24,13 +24,13 @@ class NotfoodstampRepository extends EntityRepository
      * @param array $dateCriteria
      * @return array
      */
-    public function rowLabels($dateCriteria)
+    public function rowLabels($criteria)
     {
         $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT n.notfoodstamp FROM TruckeeProjectmanaBundle:Household h '
                 . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
                 . 'JOIN TruckeeProjectmanaBundle:Notfoodstamp n WITH h.notfoodstamp = n '
-                . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate ')
-            ->setParameters($dateCriteria)
+                . 'WHERE c.contactDate between :startDate AND :endDate ')
+            ->setParameters($criteria['betweenParameters'])
             ->getResult();
         $rowLabels = [];
         foreach ($qb as $row) {
@@ -48,7 +48,7 @@ class NotfoodstampRepository extends EntityRepository
      *
      * @return array
      */
-    public function crossTabData($dateCriteria, $profileType)
+    public function crossTabData($criteria, $profileType)
     {
         $entity = ucfirst($profileType);
         $dql = 'SELECT r.__TYPE__ colLabel, n.notfoodstamp rowLabel, COUNT(DISTINCT h.id) N '
@@ -56,12 +56,12 @@ class NotfoodstampRepository extends EntityRepository
             . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
             . 'JOIN TruckeeProjectmanaBundle:__ENTITY__ r WITH r = c.__TYPE__ '
             . 'JOIN TruckeeProjectmanaBundle:Notfoodstamp n WITH h.notfoodstamp = n '
-            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
+            . 'WHERE c.contactDate between :startDate AND :endDate '
             . 'AND n.enabled = TRUE  GROUP BY colLabel, rowLabel';
         $dql = str_replace('__TYPE__', $profileType, $dql);
         $dql = str_replace('__ENTITY__', $entity, $dql);
         $qb = $this->getEntityManager()->createQuery($dql)
-            ->setParameters($dateCriteria)
+            ->setParameters($criteria['betweenParameters'])
             ->getResult();
 
         return $qb;

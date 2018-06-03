@@ -28,56 +28,48 @@ class CriteriaBuilder
         $this->em = $em;
     }
 
-    public function getCriteria($criteria)
+    public function getTemplateCriteria($criteria)
     {
-        $report = $this->setReportCriteria($criteria);
-        $table = $this->setTableCriteria($report);
-        $template = $this->setTemplateCriteria($criteria);
-
-        return [
-            'report' => $report,
-            'table' => $table,
-            'template' => $template,
-        ];
-    }
-//
-//    private function setReportCriteria($criteria)
-//    {
-//        $endDay = cal_days_in_month(CAL_GREGORIAN, $criteria['endMonth'], $criteria['endYear']);
-//        $reportCriteria['startDate'] = new \DateTime($criteria['startMonth'] . '/01/' . $criteria['startYear']);
-//        $reportCriteria['endDate'] = new \DateTime($criteria['endMonth'] . '/' . $endDay . '/' . $criteria['endYear']);
-//        $reportCriteria['contactdesc'] = (!empty($criteria['contactdesc'])) ? $criteria['contactdesc'] : '';
-//        $reportCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
-//        $reportCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
-//        $reportCriteria['columnType'] = (!empty($criteria['columnType'])) ? $criteria['columnType'] : '';
-//        $reportCriteria['contactdesc'] = (!empty($criteria['contactdesc'])) ? $criteria['contactdesc'] : '';
-//        $reportCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
-//        $reportCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
-//
-//        return $reportCriteria;
-//    }
-
-    public function getPermanentTableCriteria($criteria)
-    {
-        return $this->setPermanentTableCriteria($criteria);
+        return $this->setTemplateCriteria($criteria);
     }
 
-    private function setPermanentTableCriteria($criteria)
+    public function getGeneralCriteria($criteria)
+    {
+        return $this->setGeneralCriteria($criteria);
+    }
+
+    public function getDetailsCriteria($criteria)
+    {
+        return $this->setDetailsCriteria($criteria);
+    }
+
+    private function setDetailsCriteria($criteria)
     {
         $betweenWhereClause = 'c.contactDate BETWEEN :startDate AND :endDate';
         $endDay = cal_days_in_month(CAL_GREGORIAN, $criteria['endMonth'], $criteria['endYear']);
         $betweenParameters = ['startDate' => new \DateTime($criteria['startMonth'] . '/01/' . $criteria['startYear']),
-            'endDate' => new \DateTime($criteria['endMonth'] . '/' . $endDay . '/' . $criteria['endYear']),
-        ];
+            'endDate' => new \DateTime($criteria['endMonth'] . '/' . $endDay . '/' . $criteria['endYear']),];
         $startWhereClause = 'c.contactDate >= :startDate ';
         $startParameters = ['startDate' => new \DateTime($criteria['startMonth'] . '/01/' . $criteria['startYear'])];
 
-        $siteWhereClause = $contactWhereClause = '';
-        $siteParameters = $contactParameters = [];
+        return [
+            'betweenWhereClause' => $betweenWhereClause,
+            'betweenParameters' => $betweenParameters,
+            'startWhereClause' => $startWhereClause,
+            'startParameters' => $startParameters,
+        ];
+    }
+
+    private function setGeneralCriteria($criteria)
+    {
+        $detailsCriteria = $this->setDetailsCriteria($criteria);
+        $betweenWhereClause = $detailsCriteria['betweenWhereClause'];
+        $betweenParameters = $detailsCriteria['betweenParameters'];
+        $startWhereClause = $detailsCriteria['startWhereClause'];
+        $startParameters = $detailsCriteria['startParameters'];
 
         $formSiteCriteria = ['center' => $criteria['center'], 'county' => $criteria['county'],];
         $siteCriteria = $this->setSiteCriteria($formSiteCriteria);
-
         $formContactCriteria = ['contactdesc' => $criteria['contactdesc']];
         $contactCriteria = $this->setContactCriteria($formContactCriteria);
 
@@ -134,68 +126,22 @@ class CriteriaBuilder
         ];
     }
 
-    private function setTableCriteria($criteria)
-    {
-        //string dates required
-        $parameters = [
-            'startDate' => date_format($criteria['startDate'], 'Y-m-d'),
-            'endDate' => date_format($criteria['endDate'], 'Y-m-d'),
-        ];
-        $incoming = array(
-            'county' => (!empty($criteria['county'])) ? $criteria['county'] : '',
-            'center' => (!empty($criteria['center'])) ? $criteria['center'] : '',
-        );
-        // doctrine queries
-        $newWhere = ' WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate';
-        // dbal queries
-        $tableWhere = ' WHERE c.contact_date >= :startDate AND c.contact_date <= :endDate';
-
-        $options = array('county', 'center');
-        foreach ($options as $opt) {
-            if ('' !== $incoming[$opt]) {
-                $newWhere .= " and c.$opt = :$opt";
-                $tableWhere .= ' and c.' . $opt . '_id = :' . $opt;
-                $parameters[$opt] = $incoming[$opt];
-            }
-        }
-        if (!empty($criteria['contactdesc'])) {
-            $newWhere .= ' and c.contactdesc = :contactdesc';
-            $tableWhere .= ' and c.contactdesc_id  = :contactdesc';
-            $parameters['contactdesc'] = $criteria['contactdesc'];
-        }
-
-        return [
-            'newWhereClause' => $newWhere,
-            'tableWhereClause' => $tableWhere,
-            'parameters' => $parameters,
-        ];
-    }
-
     private function setTemplateCriteria($criteria)
     {
-        // get specs to pass to template
-        $endDay = cal_days_in_month(CAL_GREGORIAN, $criteria['endMonth'], $criteria['endYear']);
-        $templateCriteria['startDate'] = new \DateTime($criteria['startMonth'] . '/01/' . $criteria['startYear']);
-        $templateCriteria['endDate'] = new \DateTime($criteria['endMonth'] . '/' . $endDay . '/' . $criteria['endYear']);
-
-        $templateCriteria['contactdesc'] = (!empty($criteria['contactdesc'])) ? $criteria['contactdesc'] : '';
-        $templateCriteria['center'] = (!empty($criteria['center'])) ? $criteria['center'] : '';
-        $templateCriteria['county'] = (!empty($criteria['county'])) ? $criteria['county'] : '';
-
-        $em = $this->em;
-        if (!empty($templateCriteria['contactdesc'])) {
-            $typeObj = $em->getRepository('TruckeeProjectmanaBundle:Contactdesc')->find($templateCriteria['contactdesc']);
-            $templateCriteria['contactdesc'] = $typeObj->getContactdesc();
+        $templateCriteria['startDate'] = $criteria['betweenParameters']['startDate'];
+        $templateCriteria['endDate'] = $criteria['betweenParameters']['endDate'];
+//        $templateCriteria['contactdesc'] = '';
+        //check if contactParameters, siteParameters are set to accommodate details report criteria
+        if (isset($criteria['contactParameters']) && [] !== $criteria['contactParameters']) {
+            $templateCriteria['contactdesc'] = $criteria['contactParameters']['contactdesc']->getContactdesc();
         }
-
-        if (!empty($templateCriteria['center'])) {
-            $centerObj = $em->getRepository('TruckeeProjectmanaBundle:Center')->find($templateCriteria['center']);
-            $templateCriteria['center'] = $centerObj->getCenter();
-        }
-
-        if (!empty($templateCriteria['county'])) {
-            $countyObj = $em->getRepository('TruckeeProjectmanaBundle:County')->find($templateCriteria['county']);
-            $templateCriteria['county'] = $countyObj->getCounty();
+//        $templateCriteria['site'] = '';
+        if (isset($criteria['siteParameters']) && [] !== $criteria['siteParameters']) {
+            if ('center' === key($criteria['siteParameters'])) {
+                $templateCriteria['site'] = $criteria['siteParameters']['center']->getCenter();
+            } else {
+                $templateCriteria['site'] = $criteria['siteParameters']['county']->getCounty();
+            }
         }
 
         return $templateCriteria;

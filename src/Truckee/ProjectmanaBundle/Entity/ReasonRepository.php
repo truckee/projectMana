@@ -25,13 +25,13 @@ class ReasonRepository extends EntityRepository
      * @param array $dateCriteria
      * @return array
      */
-    public function rowLabels($dateCriteria)
+    public function rowLabels($criteria)
     {
         $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT r.reason FROM TruckeeProjectmanaBundle:Reason r '
             . 'INNER JOIN r.households h INNER JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
-            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
+            . 'WHERE c.contactDate between :startDate AND :endDate '
             . 'ORDER BY r.id ASC')
-            ->setParameters($dateCriteria)
+            ->setParameters($criteria['betweenParameters'])
             ->getResult();
         $rowLabels = [];
         foreach ($qb as $row) {
@@ -49,7 +49,7 @@ class ReasonRepository extends EntityRepository
      *
      * @return array
      */
-    public function crossTabData($dateCriteria, $profileType)
+    public function crossTabData($criteria, $profileType)
     {
         $entity = ucfirst($profileType);
         $dql = 'SELECT ctr.__TYPE__ colLabel, r.reason rowLabel, COUNT(DISTINCT h.id) N '
@@ -57,12 +57,12 @@ class ReasonRepository extends EntityRepository
             . 'JOIN r.households h '
             . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
             . 'JOIN TruckeeProjectmanaBundle:__ENTITY__ ctr WITH ctr = c.__TYPE__ '
-            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
+            . 'WHERE c.contactDate between :startDate AND :endDate '
             . 'AND r.enabled = TRUE  GROUP BY colLabel, rowLabel';
         $dql = str_replace('__TYPE__', $profileType, $dql);
         $dql = str_replace('__ENTITY__', $entity, $dql);
         $qb = $this->getEntityManager()->createQuery($dql)
-            ->setParameters($dateCriteria)
+            ->setParameters($criteria['betweenParameters'])
             ->getResult();
 
         return $qb;

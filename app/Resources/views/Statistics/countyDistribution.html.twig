@@ -1,8 +1,4 @@
 <div class="panel-heading text-center">County Distribution</div>
-{% set UIS_Total = statistics.countyStats.UIS_Total %}
-{% set UHS_Total = statistics.countyStats.UHS_Total %}
-{% set TIS_Total = statistics.countyStats.TIS_Total %}
-{% set THS_Total = statistics.countyStats.THS_Total %}
 <div class="panel-body">
     <div class="row">
         <div class="col-sm-1">
@@ -29,25 +25,25 @@
             {{ value.UIS|number_format }}
         </div>
         <div id="{{ key }}UISPCT" class="col-sm-1 text-right">
-            {{ (100*value/UIS_Total)|number_format(1)~'%' }}
+            {{ value.UISPCT|number_format(1)~"%" }}
         </div>
         <div id="{{ key }}TIS" class="col-sm-1 text-right">
             {{ value.TIS|number_format }}
         </div>
         <div id="{{ key }}TISPCT" class="col-sm-1 text-right">
-            {{ (100*value/TIS_Total)|number_format(1)~'%' }}
+            {{ value.TISPCT|number_format(1)~"%" }}
         </div>
         <div id="{{ key }}UHS" class="col-sm-1 text-right">
             {{ value.UHS|number_format }}
         </div>
         <div id="{{ key }}UHSPCT" class="col-sm-1 text-right">
-            {{ (100*value/UHS_Total)|number_format(1)~'%' }}
+            {{ value.UHSPCT|number_format(1)~"%" }}
         </div>
         <div id="{{ key }}THS" class="col-sm-1 text-right">
             {{ value.THS|number_format }}
         </div>
         <div id="{{ key }}THSPCT" class="col-sm-1 text-right">
-            {{ v(100*value/THS_Total)|number_format(1)~'%' }}
+            {{ value.THSPCT|number_format(1)~"%" }}
         </div>
     </div>
 {% endfor %}

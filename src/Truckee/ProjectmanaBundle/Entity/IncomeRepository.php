@@ -25,14 +25,14 @@ class IncomeRepository extends EntityRepository
      * @param array $dateCriteria
      * @return array
      */
-    public function rowLabels($dateCriteria)
+    public function rowLabels($criteria)
     {
         $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT i.income FROM TruckeeProjectmanaBundle:Income i '
             . 'JOIN TruckeeProjectmanaBundle:Household h WITH h.income = i '
             . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
-            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
+            . 'WHERE c.contactDate between :startDate AND :endDate '
             . 'ORDER BY i.id')
-            ->setParameters($dateCriteria)
+            ->setParameters($criteria['betweenParameters'])
             ->getResult();
         $rowLabels = [];
         foreach ($qb as $row) {
@@ -51,7 +51,7 @@ class IncomeRepository extends EntityRepository
      *
      * @return array
      */
-    public function crossTabData($dateCriteria, $profileType)
+    public function crossTabData($criteria, $profileType)
     {
         $entity = ucfirst($profileType);
         $dql = 'SELECT r.__TYPE__ colLabel, i.income rowLabel, COUNT(DISTINCT h.id) N '
@@ -59,12 +59,12 @@ class IncomeRepository extends EntityRepository
             . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
             . 'JOIN TruckeeProjectmanaBundle:__ENTITY__ r WITH r = c.__TYPE__ '
             . 'JOIN TruckeeProjectmanaBundle:Income i WITH h.income = i '
-            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
+            . 'WHERE c.contactDate between :startDate AND :endDate '
             . 'AND i.enabled = TRUE  GROUP BY colLabel, rowLabel';
         $dql = str_replace('__TYPE__', $profileType, $dql);
         $dql = str_replace('__ENTITY__', $entity, $dql);
         $qb = $this->getEntityManager()->createQuery($dql)
-            ->setParameters($dateCriteria)
+            ->setParameters($criteria['betweenParameters'])
             ->getResult();
 
         return $qb;

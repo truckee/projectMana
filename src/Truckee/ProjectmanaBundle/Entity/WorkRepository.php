@@ -26,17 +26,16 @@ class WorkRepository extends EntityRepository
      * @param array $dateCriteria
      * @return array
      */
-    public function rowLabels($dateCriteria)
+    public function rowLabels($criteria)
     {
         $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT w.work FROM TruckeeProjectmanaBundle:Work w '
             . 'JOIN TruckeeProjectmanaBundle:Member m WITH m.work = w '
             . 'JOIN TruckeeProjectmanaBundle:Household h WITH h.head = m '
             . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = m.household '
-            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
+            . 'WHERE c.contactDate between :startDate AND :endDate '
             . 'ORDER BY w.work')
-            ->setParameters($dateCriteria)
+            ->setParameters($criteria['betweenParameters'])
             ->getResult();
-        $rowLabels = [];
         foreach ($qb as $row) {
             $rowLabels[] = $row['work'];
         }
@@ -52,7 +51,7 @@ class WorkRepository extends EntityRepository
      *
      * @return array
      */
-    public function crossTabData($dateCriteria, $profileType)
+    public function crossTabData($criteria, $profileType)
     {
         $entity = ucfirst($profileType);
         $dql = 'SELECT r.__TYPE__ colLabel, w.work rowLabel, COUNT(DISTINCT m.id) N '
@@ -60,12 +59,12 @@ class WorkRepository extends EntityRepository
             . 'JOIN TruckeeProjectmanaBundle:Member m WITH m.work = w '
             . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = m.household '
             . 'JOIN TruckeeProjectmanaBundle:__ENTITY__ r WITH r = c.__TYPE__ '
-            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
+            . 'WHERE c.contactDate between :startDate AND :endDate '
             . 'AND w.enabled = TRUE  GROUP BY colLabel, rowLabel';
         $dql = str_replace('__TYPE__', $profileType, $dql);
         $dql = str_replace('__ENTITY__', $entity, $dql);
         $qb = $this->getEntityManager()->createQuery($dql)
-            ->setParameters($dateCriteria)
+            ->setParameters($criteria['betweenParameters'])
             ->getResult();
 
         return $qb;

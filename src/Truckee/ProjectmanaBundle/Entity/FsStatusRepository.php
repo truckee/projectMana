@@ -26,7 +26,7 @@ class FsStatusRepository extends EntityRepository
      * @param array $profileType
      * @return array
      */
-    public function crossTabData($dateCriteria, $profileType)
+    public function crossTabData($criteria, $profileType)
     {
         $entity = ucfirst($profileType);
         $dql = 'SELECT r.__TYPE__ colLabel, '
@@ -35,12 +35,12 @@ class FsStatusRepository extends EntityRepository
             . 'JOIN TruckeeProjectmanaBundle:FsStatus fs  WITH h.foodstamp = fs '
             . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
             . 'JOIN TruckeeProjectmanaBundle:__ENTITY__ r WITH r = c.__TYPE__ '
-            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
+            . 'WHERE c.contactDate between :startDate AND :endDate '
             . 'GROUP BY colLabel, rowLabel';
         $dql = str_replace('__TYPE__', $profileType, $dql);
         $dql = str_replace('__ENTITY__', $entity, $dql);
         $qb = $this->getEntityManager()->createQuery($dql)
-            ->setParameters($dateCriteria)
+            ->setParameters($criteria['betweenParameters'])
             ->getResult();
 
         return $qb;

@@ -25,13 +25,13 @@ class CountyRepository extends EntityRepository
      * @param array $dateCriteria
      * @return array
      */
-    public function colLabels($dateCriteria)
+    public function colLabels($criteria)
     {
         $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT r.county FROM TruckeeProjectmanaBundle:County r '
             . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.county = r '
-            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
+            . 'WHERE c.contactDate between :startDate AND :endDate '
             . 'ORDER BY r.county')
-            ->setParameters($dateCriteria)
+            ->setParameters($criteria['betweenParameters'])
             ->getResult();
         $colLabels = [];
         foreach ($qb as $row) {

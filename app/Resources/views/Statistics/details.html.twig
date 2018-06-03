@@ -1,4 +1,4 @@
-{% for key,data in details.details %}
+{% for key,data in details %}
     <div class="panel-heading">{{ key }}</div>
     {#<table class="width60">#}
     <div class="panel-body">
@@ -24,16 +24,16 @@
                     {{ desc }}
                 </div>
                 <div id="{{ key|url_encode }}{{ desc|url_encode }}uniqInd" class="col-sm-2 text-right">
-                    {{ type.uniqInd }}
+                    {{ type.UI }}
                 </div>
                 <div id="{{ key|url_encode }}{{ desc|url_encode }}totalInd" class="col-sm-2 text-right">
-                    {{ type.totalInd }}
+                    {{ type.TI }}
                 </div>
                 <div id="{{ key|url_encode }}{{ desc|url_encode }}uniqHouse" class="col-sm-2 text-right">
-                    {{ type.uniqHouse }}
+                    {{ type.UH }}
                 </div>
                 <div id="{{ key|url_encode }}{{ desc|url_encode }}totalHouse" class="col-sm-2 text-right">
-                    {{ type.totalHouse }}
+                    {{ type.TH }}
                 </div>
             </div>
         {% endfor %}

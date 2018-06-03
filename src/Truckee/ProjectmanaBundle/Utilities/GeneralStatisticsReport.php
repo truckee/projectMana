@@ -28,21 +28,21 @@ class GeneralStatisticsReport
         $this->em = $em;
     }
 
-    public function getPermanentGeneralStats($criteria)
+    public function getGeneralStats($criteria)
     {
-        $stats = $this->setPermanentTableGeneralStats($criteria);
+        $stats = $this->setGeneralStats($criteria);
 
         return $stats;
     }
 
-    private function setPermanentTableGeneralStats($criteria)
+    private function setGeneralStats($criteria)
     {
         $statistics = [];
         $ageGenderData = $this->em->getRepository('TruckeeProjectmanaBundle:Member')->ageEthnicityDistribution($criteria);
-        $ageGenderDist = $this->setPermanentAgeGenderDist($ageGenderData);
-        $ethDist = $this->setPermanentEthDist($ageGenderData);
+        $ageGenderDist = $this->setAgeGenderDist($ageGenderData);
+        $ethDist = $this->setEthDist($ageGenderData);
         $sizeData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->size($criteria);
-        $familyDist = $this->setPermanentSizeDist($sizeData);
+        $familyDist = $this->setSizeDist($sizeData);
         $freqDist = $this->setFreqDist($criteria);
 
         $data = [
@@ -78,39 +78,14 @@ class GeneralStatisticsReport
 
         //new by type
         $statistics['NewByType'] = $this->em->getRepository('TruckeeProjectmanaBundle:Contact')->getNewByType($criteria);
-    }
 
-    /**
-     * Set individual statistics
-     */
-    private function setGeneralStats($tableCriteria, $reportCriteria)
-    {
-        //new members
-        $newMembers = $this->em->createQuery('SELECT COUNT(m) NewMembers FROM TruckeeProjectmanaBundle:TempMember m '
-                . 'JOIN TruckeeProjectmanaBundle:TempContact c WITH m.household = c.household '
-                . $this->tableCriteria['newWhereClause'] . " AND c.first = true")
-            ->setParameters($this->tableCriteria['parameters'])
-            ->getSingleScalarResult();
-        $statistics['NewMembers'] = (!empty($newMembers)) ? $newMembers : 0;
-
-        //new households
-        $newHouseholds = $this->em->createQuery('SELECT COUNT(DISTINCT c.household) NewHouseholds FROM TruckeeProjectmanaBundle:TempContact c '
-                . 'WHERE c.first = true')
-            ->getSingleScalarResult();
-        $statistics['NewHouseholds'] = (!empty($newHouseholds)) ? $newHouseholds
-                : 0;
-
-        //new by type
-        $nbt = $this->em->createQuery('SELECT COUNT(DISTINCT c.household) NewByType FROM TruckeeProjectmanaBundle:TempContact c '
-                . $this->tableCriteria['newWhereClause'] . " AND c.first = true")
-            ->setParameters($this->tableCriteria['parameters'])
-            ->getSingleScalarResult();
-        $statistics['NewByType'] = (!empty($nbt)) ? $nbt : 0;
+        //newHouseholds
+        $statistics['NewHouseholds'] = $this->em->getRepository('TruckeeProjectmanaBundle:Contact')->uniqueHouseholds($criteria);
 
         return $statistics;
     }
 
-    private function setPermanentSizeDist($data)
+    private function setSizeDist($data)
     {
         $familyArray = ['Single' => 0, 'Two' => 0, 'Three' => 0, 'Four' => 0, 'Five' => 0, 'Six or more' => 0];
         foreach ($data as $family) {
@@ -139,20 +114,20 @@ class GeneralStatisticsReport
         return $familyArray;
     }
 
-    private function setPermanentEthDist($data)
+    private function setEthDist($data)
     {
-        $eth = [];
+        $ethnicities = $this->em->getRepository('TruckeeProjectmanaBundle:Ethnicity')->findAll();
+        foreach ($ethnicities as $object) {
+            $eth[$object->getEthnicity()] = 0;
+        }
         foreach ($data as $key => $value) {
-            if (!array_key_exists($value['ethnicity'], $eth)) {
-                $eth[$value['ethnicity']] = 0;
-            }
             $eth[$value['ethnicity']] ++;
         }
-
+        
         return $eth;
     }
 
-    private function setPermanentAgeGenderDist($data)
+    private function setAgeGenderDist($data)
     {
         $ageDist = ['Under 6' => 0, '6 - 18' => 0, '19 - 59' => 0, '60+' => 0];
         $ageGenderDist = ['FC' => 0, 'MC' => 0, 'FA' => 0, 'MA' => 0];

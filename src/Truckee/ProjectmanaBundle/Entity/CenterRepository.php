@@ -28,13 +28,13 @@ class CenterRepository extends EntityRepository
      * @param array $dateCriteria
      * @return array
      */
-    public function colLabels($dateCriteria)
+    public function colLabels($criteria)
     {
         $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT r.center FROM TruckeeProjectmanaBundle:Center r '
             . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.center = r '
-            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
+            . 'WHERE c.contactDate between :startDate AND :endDate '
             . 'ORDER BY r.center')
-            ->setParameters($dateCriteria)
+            ->setParameters($criteria['betweenParameters'])
             ->getResult();
         $colLabels = [];
         foreach ($qb as $row) {

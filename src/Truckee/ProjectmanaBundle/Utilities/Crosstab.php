@@ -78,16 +78,16 @@ class Crosstab
 
         return $profile;
     }
-
-    /**
-     * Convert $criteria dates to array for Doctrine parameter array
-     *
-     * @param array $criteria Report critiera
-     *
-     * @return array
-     */
-    public function setDateCriteria($criteria)
-    {
-        return ['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']];
-    }
+//
+//    /**
+//     * Convert $criteria dates to array for Doctrine parameter array
+//     *
+//     * @param array $criteria Report critiera
+//     *
+//     * @return array
+//     */
+//    public function setDateCriteria($criteria)
+//    {
+//        return ['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']];
+//    }
 }
