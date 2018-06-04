@@ -39,10 +39,7 @@ class StatisticsController extends Controller
      *
      * @Route("/general", name="stats_general")
      */
-    public function generalAction(Request $request,
-                                  CountyStatistics $countyStats,
-                                  CriteriaBuilder $builder, General $general,
-                                  TempTables $tables)
+    public function generalAction(Request $request, CountyStatistics $countyStats, CriteriaBuilder $builder, General $general, TempTables $tables)
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
@@ -111,8 +108,7 @@ class StatisticsController extends Controller
      *
      * @Route("/details", name="stats_details")
      */
-    public function detailsAction(Request $request, CriteriaBuilder $builder,
-                                  Detail $detail, TempTables $tables)
+    public function detailsAction(Request $request, CriteriaBuilder $builder, Detail $detail, TempTables $tables)
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
@@ -177,6 +173,13 @@ class StatisticsController extends Controller
             $multi = $em->getRepository('TruckeeProjectmanaBundle:Contact')->getMultiContacts($reportCriteria);
             if (count($multi) == 0) {
                 $flash = $this->get('braincrafted_bootstrap.flash');
+                if (empty($request->headers->get('referer'))) {
+                    $flash->alert('Please try to run this report again');
+
+                    return $this->redirectToRoute('home');
+                }
+
+
                 $flash->alert('No instances of multiple same-date contacts found');
 
                 return $this->redirect($request->headers->get('referer'));
@@ -223,12 +226,9 @@ class StatisticsController extends Controller
         $filename .= ($startText == $endText) ? $startText : $startText . '-' . $endText;
         $filename .= $center . $county . $type . '.xls';
 
-        $response = $this->render('Statistics/excel' . $template . '.html.twig',
-            $report);
-        $response->headers->set('Content-Type',
-            'text/vnd.ms-excel; charset=utf-8');
-        $response->headers->set('Content-Disposition',
-            'attachment; filename=' . $filename);
+        $response = $this->render('Statistics/excel' . $template . '.html.twig', $report);
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment; filename=' . $filename);
         $response->headers->set('Pragma', 'public');
         $response->headers->set('Cache-Control', 'maxage=1');
 
@@ -245,9 +245,7 @@ class StatisticsController extends Controller
      *
      * @Route("/foodbank/{year}/{month}", name="foodbank")
      */
-    public function foodbankAction($month, $year, CriteriaBuilder $builder,
-                                   General $general,
-                                   CountyStatistics $countyStats)
+    public function foodbankAction($month, $year, CriteriaBuilder $builder, General $general, CountyStatistics $countyStats)
     {
         $criteria = array(
             'startMonth' => $month,
@@ -333,7 +331,7 @@ class StatisticsController extends Controller
             $templateCriteria = $builder->getTemplateCriteria($formCriteria);
 
             $response = new Response();
-           $reportData = $this->housing($reportCriteria);
+            $reportData = $this->housing($reportCriteria);
             $content = $this->profiler($reportData, $templateCriteria);
             $response->setContent($content);
 
@@ -458,8 +456,7 @@ class StatisticsController extends Controller
             $reportData = $this->not($reportCriteria);
             $content .= $this->profilerPlain($reportData, $templateCriteria);
 
-            return $this->render('Statistics/snapProfile.html.twig',
-                    [
+            return $this->render('Statistics/snapProfile.html.twig', [
                         'content' => $content,
             ]);
         }
@@ -485,8 +482,7 @@ class StatisticsController extends Controller
     private function profiler($reportData, $templateSpecs)
     {
         $xp = $this->container->get('mana.crosstab');
-        $profile = $xp->crosstabQuery($reportData['data'],
-            $reportData['rowLabels'], $reportData['colLabels']);
+        $profile = $xp->crosstabQuery($reportData['data'], $reportData['rowLabels'], $reportData['colLabels']);
 
         return $this->renderView('Statistics/profile.html.twig',
                 ['profile' => $profile,
@@ -511,8 +507,7 @@ class StatisticsController extends Controller
     private function profilerPlain($reportData, $templateSpecs)
     {
         $xp = $this->container->get('mana.crosstab');
-        $profile = $xp->crosstabQuery($reportData['data'],
-            $reportData['rowLabels'], $reportData['colLabels']);
+        $profile = $xp->crosstabQuery($reportData['data'], $reportData['rowLabels'], $reportData['colLabels']);
 
         return $this->renderView('Statistics/profile_content.html.twig',
                 ['profile' => $profile,
@@ -542,8 +537,7 @@ class StatisticsController extends Controller
         $columnType = $criteria['columnType'];
         $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Work')->rowLabels($dateCriteria);
         $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . $columnType)->colLabels($dateCriteria);
-        $data = $em->getRepository('TruckeeProjectmanaBundle:Work')->crossTabData($dateCriteria,
-            $columnType);
+        $data = $em->getRepository('TruckeeProjectmanaBundle:Work')->crossTabData($dateCriteria, $columnType);
 
         $reportData = [
             'reportTitle' => 'Employment profile (household members)',
@@ -574,8 +568,7 @@ class StatisticsController extends Controller
         $columnType = $criteria['columnType'];
         $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Housing')->rowLabels($dateCriteria);
         $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . $columnType)->colLabels($dateCriteria);
-        $data = $em->getRepository('TruckeeProjectmanaBundle:Housing')->crossTabData($dateCriteria,
-            $columnType);
+        $data = $em->getRepository('TruckeeProjectmanaBundle:Housing')->crossTabData($dateCriteria, $columnType);
 
         $reportData = [
             'reportTitle' => 'Housing profile (household members)',
@@ -605,8 +598,7 @@ class StatisticsController extends Controller
         $columnType = $criteria['columnType'];
         $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:FsAmount')->rowLabels($dateCriteria);
         $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . $columnType)->colLabels($dateCriteria);
-        $data = $em->getRepository('TruckeeProjectmanaBundle:FsAmount')->crossTabData($dateCriteria,
-            $columnType);
+        $data = $em->getRepository('TruckeeProjectmanaBundle:FsAmount')->crossTabData($dateCriteria, $columnType);
 
         $reportData = [
             'reportTitle' => 'Households receiving SNAP/CalFresh benefits',
@@ -636,8 +628,7 @@ class StatisticsController extends Controller
         $columnType = $criteria['columnType'];
         $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Income')->rowLabels($dateCriteria);
         $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . $columnType)->colLabels($dateCriteria);
-        $data = $em->getRepository('TruckeeProjectmanaBundle:Income')->crossTabData($dateCriteria,
-            $columnType);
+        $data = $em->getRepository('TruckeeProjectmanaBundle:Income')->crossTabData($dateCriteria, $columnType);
 
         $reportData = [
             'reportTitle' => 'Household Income',
@@ -669,8 +660,7 @@ class StatisticsController extends Controller
         $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . $columnType)
             ->colLabels(['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']]);
         $data = $em->getRepository('TruckeeProjectmanaBundle:Notfoodstamp')
-            ->crossTabData(['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']],
-            $columnType);
+            ->crossTabData(['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']], $columnType);
         $reportData = [
             'reportTitle' => 'Households not receiving SNAP/CalFresh benefits',
             'reportSubTitle' => 'For the period ',
@@ -699,8 +689,7 @@ class StatisticsController extends Controller
         $columnType = $criteria['columnType'];
         $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Reason')->rowLabels($dateCriteria);
         $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . $columnType)->colLabels($dateCriteria);
-        $data = $em->getRepository('TruckeeProjectmanaBundle:Reason')->crossTabData($dateCriteria,
-            $columnType);
+        $data = $em->getRepository('TruckeeProjectmanaBundle:Reason')->crossTabData($dateCriteria, $columnType);
 
         $reportData = [
             'reportTitle' => 'Factors contributing to households not having enough food',
@@ -730,8 +719,7 @@ class StatisticsController extends Controller
         $columnType = $criteria['columnType'];
         $rowLabels = ['Yes', 'No'];
         $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . $columnType)->colLabels($dateCriteria);
-        $data = $em->getRepository('TruckeeProjectmanaBundle:FsStatus')->crossTabData($dateCriteria,
-            $columnType);
+        $data = $em->getRepository('TruckeeProjectmanaBundle:FsStatus')->crossTabData($dateCriteria, $columnType);
         $reportData = [
             'reportTitle' => 'Households receiving SNAP/CalFresh benefits',
             'reportSubTitle' => 'For the period ',
