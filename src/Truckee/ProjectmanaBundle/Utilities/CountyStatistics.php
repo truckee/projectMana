@@ -31,10 +31,8 @@ class CountyStatistics
     public function getCountyStats($criteria)
     {
         $counties = $this->em->getRepository('TruckeeProjectmanaBundle:County')->countiesForStats($criteria);
-        $uisTotal = 0;
-        $uhsTotal = 0;
-        $tisTotal = 0;
-        $thsTotal = 0;
+        $uisTotal = $uhsTotal = $tisTotal = $thsTotal = 0;
+        $county = [];
         $criteria['siteWhereClause'] = 'c.county = :county';
         foreach ($counties as $site) {
             $criteria['siteParameters'] = ['county' => $site];
@@ -43,6 +41,9 @@ class CountyStatistics
             $county[$site->getCounty()]['UHS'] = 0;
             //household data
             $sizeData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->size($criteria);
+            $county[$site->getCounty()]['UIS'] = 0;
+            $county[$site->getCounty()]['UHS'] = 0;
+            //household data
             foreach ($sizeData as $hse) {
                 $county[$site->getCounty()]['UIS'] += $hse['size'];
                 $uisTotal += $hse['size'];
@@ -63,7 +64,6 @@ class CountyStatistics
             $county[$key]['THSPCT'] = (0 < $thsTotal) ? 100 * $county[$key]['THS'] / $thsTotal : 0;
         }
 
-        return $statistics['countyStats'] = $county;
-        ;
+        return $county;
     }
 }

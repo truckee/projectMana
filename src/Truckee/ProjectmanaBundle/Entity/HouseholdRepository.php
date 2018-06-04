@@ -113,7 +113,7 @@ class HouseholdRepository extends EntityRepository
         $parameters = array_merge($criteria['startParameters'], $criteria['startParameters'], ['hArray' => $this->reportHousehold($criteria)]);
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        return $this->getEntityManager()->createQueryBuilder()
+        $sizeData = $this->getEntityManager()->createQueryBuilder()
                 ->select('distinct h.id, count(m.id) size')
                 ->from('TruckeeProjectmanaBundle:Household', 'h')
                 ->join('TruckeeProjectmanaBundle:Member', 'm', 'WITH', 'm.household = h')
@@ -123,6 +123,8 @@ class HouseholdRepository extends EntityRepository
                 ->groupBy('h.id')
                 ->setParameters($parameters)
                 ->getQuery()->getResult();
+
+        return $sizeData;
     }
 
     public function reportHousehold($criteria)

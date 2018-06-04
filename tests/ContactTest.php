@@ -72,7 +72,7 @@ class ContactTest extends TruckeeWebTestCase
         $form = $crawler->selectButton('Submit contact')->form();
         $general = $this->fixtures->getReference('general')->getId();
         $truckee = $this->fixtures->getReference('truckee')->getId();
-        $form['contact[contactDesc]'] = $general;
+        $form['contact[contactdesc]'] = $general;
         $form['contact[center]'] = $truckee;
         $crawler = $this->client->submit($form);
 
@@ -89,7 +89,7 @@ class ContactTest extends TruckeeWebTestCase
 
         $form = $crawler->selectButton('Submit contact')->form();
         $general = $this->fixtures->getReference('general')->getId();
-        $form['contact[contactDesc]'] = $general;
+        $form['contact[contactdesc]'] = $general;
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Site must be selected")')->count());
@@ -105,7 +105,7 @@ class ContactTest extends TruckeeWebTestCase
 
         $form = $crawler->selectButton('Submit contact')->form();
         $face = $this->fixtures->getReference('face')->getId();
-        $form['contact[contactDesc]'] = $face;
+        $form['contact[contactdesc]'] = $face;
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Contact has been updated")')->count());
