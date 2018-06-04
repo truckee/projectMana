@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Truckee\Projectmana package.
  *
@@ -18,7 +19,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class CountyRepository extends EntityRepository
 {
-
     /**
      * Get column headers for profile by site reports
      *
@@ -28,9 +28,9 @@ class CountyRepository extends EntityRepository
     public function colLabels($criteria)
     {
         $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT r.county FROM TruckeeProjectmanaBundle:County r '
-                . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.county = r '
-                . 'WHERE c.contactDate between :startDate AND :endDate '
-                . 'ORDER BY r.county')
+            . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.county = r '
+            . 'WHERE c.contactDate between :startDate AND :endDate '
+            . 'ORDER BY r.county')
             ->setParameters($criteria['betweenParameters'])
             ->getResult();
         $colLabels = [];
@@ -43,14 +43,12 @@ class CountyRepository extends EntityRepository
 
     public function countiesForStats($criteria)
     {
-        return $this->getEntityManager()->createQueryBuilder()
-                ->select('cty')
-                ->distinct()
-                ->from('TruckeeProjectmanaBundle:County', 'cty')
-                ->join('TruckeeProjectmanaBundle:Contact', 'c', 'WITH', 'c.county = cty')
-                ->where($criteria['betweenWhereClause'])
-                ->setParameters($criteria['betweenParameters'])
-                ->orderBy('cty.county')
-                ->getQuery()->getResult();
+        return $this->createQueryBuilder('cty')
+            ->distinct()
+            ->join('TruckeeProjectmanaBundle:Contact', 'c', 'WITH', 'c.county = cty')
+            ->where($criteria['betweenWhereClause'])
+            ->setParameters($criteria['betweenParameters'])
+            ->orderBy('cty.county')
+            ->getQuery()->getResult();
     }
 }

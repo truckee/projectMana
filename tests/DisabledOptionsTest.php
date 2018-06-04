@@ -50,7 +50,6 @@ class DisabledOptionsTest extends TruckeeWebTestCase
     {
         $crawler = $this->login();
         $id = $this->fixtures->getReference('house3')->getId();
-        var_dump($id);
         $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
 
         $centerText = trim($crawler->filter("#household_center option:selected")->text());
@@ -61,7 +60,7 @@ class DisabledOptionsTest extends TruckeeWebTestCase
         $this->assertEquals('Owner', $housingText);
         $incomeText = trim($crawler->filter("#household_income option:selected")->text());
         $this->assertEquals('0 - 0', $incomeText);
-//        $this->assertEquals(0, $crawler->filter('html:contains("disabled")')->count());
+        $this->assertEquals(0, $crawler->filter('html:contains("disabled")')->count());
     }
 
     public function testDisabledFsStatusHouseholdEdit()
@@ -188,7 +187,7 @@ class DisabledOptionsTest extends TruckeeWebTestCase
         $id = $this->fixtures->getReference('contact1')->getId();
         $crawler = $this->client->request('GET', '/contact/'.$id.'/edit');
 
-        $field = $crawler->filter('#contact_contactdesc');
+        $field = $crawler->filter('#contact_contactDesc');
         $disabled = $field->attr('disabled');
         $text = trim($field->filter('option[selected]')->text());
         $this->assertEquals('disabled', $disabled);
