@@ -242,15 +242,13 @@ class StatisticsController extends Controller
             'startYear' => $year,
             'endMonth' => $month,
             'endYear' => $year,
-            'contactdesc_id' => 0,
-            'center_id' => 0,
-            'county_id' => 0,
+            'contactdesc' => '',
+            'center' => '',
+            'county' => '',
         );
-        $criteria = $builder->getDetailsCriteria($foodbankCriteria);
-        $tableCriteria = $criteria['table'];
-        //$reportCriteria = $criteria['report'];
-        $statistics = $general->getGeneralStats($tableCriteria, $reportCriteria);
-        $ctyStats = $countyStats->getCountyStats();
+        $criteria = $builder->getGeneralCriteria($foodbankCriteria);
+        $statistics = $general->getGeneralStats($criteria);
+        $ctyStats = $countyStats->getCountyStats($criteria);
         $report = array(
             'statistics' => $statistics,
             'ctyStats' => $ctyStats,

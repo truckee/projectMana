@@ -31,10 +31,8 @@ class CountyStatistics
     public function getCountyStats($criteria)
     {
         $counties = $this->em->getRepository('TruckeeProjectmanaBundle:County')->countiesForStats($criteria);
-        $uisTotal = 0;
-        $uhsTotal = 0;
-        $tisTotal = 0;
-        $thsTotal = 0;
+        $uisTotal = $uhsTotal = $tisTotal = $thsTotal = 0;
+        $county = [];
         $criteria['siteWhereClause'] = 'c.county = :county';
         foreach ($counties as $site) {
             $criteria['siteParameters'] = ['county' => $site];

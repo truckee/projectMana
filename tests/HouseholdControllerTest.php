@@ -273,7 +273,7 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $this->assertEquals('Owner', $housingText);
         $incomeText = trim($crawler->filter("#household_income option:selected")->text());
         $this->assertEquals('0 - 0', $incomeText);
-        $this->assertEquals(0, $crawler->filter('html:contains("disabled")')->count());
+//        $this->assertEquals(0, $crawler->filter('html:contains("disabled")')->count());
     }
 
     public function tearDown()

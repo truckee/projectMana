@@ -36,6 +36,7 @@ class WorkRepository extends EntityRepository
             . 'ORDER BY w.work')
             ->setParameters($criteria['betweenParameters'])
             ->getResult();
+        $rowLabels = [];
         foreach ($qb as $row) {
             $rowLabels[] = $row['work'];
         }
