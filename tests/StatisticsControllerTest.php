@@ -26,8 +26,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     {
         $date = new \DateTime();
         $firstDay = new \DateTime(date_format($date, 'F') . ' 1,' . date_format($date, 'Y'));
-        $lastMonth = $firstDay->sub(new \DateInterval('P1D'));
-        $this->lastMonth = date_format($lastMonth, 'F, Y');
+//        $lastMonth = $firstDay->sub(new \DateInterval('P1D'));
+        $this->lastMonth = date_format(new \DateTime('last month'), 'F, Y');
         $this->client = static::createClient();
         $this->client->followRedirects();
         $this->fixtures = $this->loadFixtures([

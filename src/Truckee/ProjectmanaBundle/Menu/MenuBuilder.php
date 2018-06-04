@@ -121,6 +121,11 @@ class MenuBuilder
     public function returnFromContacts(array $options)
     {
         $request = $this->requestStack->getCurrentRequest();
+        if (empty($request->headers->get('referer'))) {
+            $flash->alert('Please enter search term(s) again');
+
+            return $this->redirectToRoute('home');
+        }
         $uri = $request->headers->get('referer');
         $menu = $this->factory->createItem('root');
         $title = 'return';

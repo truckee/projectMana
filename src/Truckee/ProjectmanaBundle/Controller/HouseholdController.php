@@ -234,6 +234,13 @@ class HouseholdController extends Controller
     public function searchAction(Request $request)
     {
         $flash = $this->get('braincrafted_bootstrap.flash');
+
+        if (empty($request->headers->get('referer'))) {
+            $flash->alert('Please enter search term(s) again');
+
+            return $this->redirectToRoute('home');
+        }
+
         $qtext = $request->query->get('qtext');
         if ($qtext == '') {
             $flash->alert('No search criteria were entered');
@@ -302,7 +309,7 @@ class HouseholdController extends Controller
         } else {
             $content = $this->renderView(
                 'Contact/addHouseholdContact.html.twig', [
-                    'household' => $household,
+                'household' => $household,
                 ]
             );
             $response = new Response($content);
@@ -320,8 +327,7 @@ class HouseholdController extends Controller
         $turkeys = $em->getRepository('TruckeeProjectmanaBundle:Household')->annualTurkey();
         $year = date('Y');
         $filename = 'Let\'sTalkTurkey' . $year . '.pdf';
-        $html = $this->renderView('Pdf/Household/turkeyContent.html.twig',
-            [
+        $html = $this->renderView('Pdf/Household/turkeyContent.html.twig', [
             'turkeys' => $turkeys,
         ]);
         $header = $this->renderView('Pdf/Household/turkeyHeader.html.twig');
@@ -331,8 +337,7 @@ class HouseholdController extends Controller
         $snappy->setOption('header-html', $header);
         $snappy->setOption('footer-center', 'Page [page]');
         $content = $snappy->getOutputFromHtml($html);
-        $response = new Response($content, 200,
-            [
+        $response = new Response($content, 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'attachment; filename=' . $filename . '.pdf',
         ]);
