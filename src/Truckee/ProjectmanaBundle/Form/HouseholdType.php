@@ -11,11 +11,9 @@
 namespace Truckee\ProjectmanaBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
-use Truckee\ProjectmanaBundle\Form\Field\MonthType;
 use Truckee\ProjectmanaBundle\Form\Field\NoYesChoiceType;
 use Truckee\ProjectmanaBundle\Form\PhysicalAddressType;
 use Truckee\ProjectmanaBundle\Form\MailingAddressType;
-use Truckee\ProjectmanaBundle\Form\Field\YearType;
 use Truckee\ProjectmanaBundle\Form\Field\YesNoChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -47,22 +45,6 @@ class HouseholdType extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
                 'prototype' => true,
-            )
-            )
-            ->add(
-                'arrivalmonth',
-                MonthType::class,
-                array(
-                'placeholder' => false,
-                'label' => 'Arrival month: ',
-            )
-            )
-            ->add(
-                'arrivalyear',
-                YearType::class,
-                array(
-                'placeholder' => false,
-                'label' => 'Arrival year: ',
             )
             )
             ->add(
@@ -228,9 +210,9 @@ class HouseholdType extends AbstractType
                 'label' => 'Insufficient food: ',
                 'expanded' => true,
                 'multiple' => true,
-                'attr' => [
-                    'class' => 'form-inline',
-                ],
+//                'attr' => [
+//                    'class' => 'form-inline',
+//                ],
                 'query_builder' => function (EntityRepository $er) use ($options) {
                     if (false === in_array('reasons', $options['disabledOptions'])) {
                         return $er->createQueryBuilder('alias')
@@ -255,6 +237,52 @@ class HouseholdType extends AbstractType
                 'html5' => false,
                 'attr' => ['class' => 'js-datepicker'],
                 'format' => 'M/d/y',
+            )
+            )
+            ->add(
+                'assistances',
+                EntityType::class,
+                array(
+                'class' => 'TruckeeProjectmanaBundle:Assistance',
+                'choice_label' => 'assistance',
+                'placeholder' => '',
+                'label' => 'Seeking services: ',
+                'expanded' => true,
+                'multiple' => true,
+                'attr' => (in_array('Assistance', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                    if (false === in_array('Assistance', $options['disabledOptions'])) {
+                        return $er->createQueryBuilder('alias')
+                            ->where('alias.enabled = 1')
+                            ->orderBy('alias.assistance', 'ASC');
+                    } else {
+                        return $er->createQueryBuilder('alias')
+                            ->orderBy('alias.assistance', 'ASC');
+                    }
+                }
+            )
+            )
+            ->add(
+                'organizations',
+                EntityType::class,
+                array(
+                'class' => 'TruckeeProjectmanaBundle:Organization',
+                'choice_label' => 'organization',
+                'placeholder' => '',
+                'label' => 'Receiving services: ',
+                'expanded' => true,
+                'multiple' => true,
+                'attr' => (in_array('Organization', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                    if (false === in_array('Organization', $options['disabledOptions'])) {
+                        return $er->createQueryBuilder('alias')
+                            ->where('alias.enabled = 1')
+                            ->orderBy('alias.organization', 'ASC');
+                    } else {
+                        return $er->createQueryBuilder('alias')
+                            ->orderBy('alias.organization', 'ASC');
+                    }
+                }
             )
             )
         ;

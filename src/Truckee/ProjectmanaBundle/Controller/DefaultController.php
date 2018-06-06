@@ -90,7 +90,7 @@ class DefaultController extends Controller
         $housing = $em->getRepository('TruckeeProjectmanaBundle:Housing')->findBy([], ['housing' => 'ASC']);
         $income = $em->getRepository('TruckeeProjectmanaBundle:Income')->findBy([], ['income' => 'ASC']);
         $not = $em->getRepository('TruckeeProjectmanaBundle:Notfoodstamp')->findBy([], ['notfoodstamp' => 'ASC']);
-        $offense = $em->getRepository('TruckeeProjectmanaBundle:Offence')->findBy([], ['offence' => 'ASC']);
+//        $offense = $em->getRepository('TruckeeProjectmanaBundle:Offence')->findBy([], ['offence' => 'ASC']);
         $reason = $em->getRepository('TruckeeProjectmanaBundle:Reason')->findBy([], ['reason' => 'ASC']);
         $state = $em->getRepository('TruckeeProjectmanaBundle:State')->findBy(['enabled' => true], ['state' => 'ASC']);
         $work = $em->getRepository('TruckeeProjectmanaBundle:Work')->findBy([], ['work' => 'ASC']);
@@ -108,7 +108,7 @@ class DefaultController extends Controller
             'income' => $income,
             'notFS' => $not,
             'reason' => $reason,
-            'offense' => $offense,
+//            'offense' => $offense,
             'state' => $state,
             'work' => $work,
         ]);

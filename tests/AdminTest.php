@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-//tests\AdminControllerTest.php
+//tests\AdminTest.php
 
 namespace Tests;
 

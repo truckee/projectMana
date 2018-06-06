@@ -75,31 +75,6 @@ class MemberType extends AbstractType
             ->add('excludeDate', DateType::class, array(
             ))
             ->add(
-                'offences',
-                EntityType::class,
-                array(
-                'class' => 'TruckeeProjectmanaBundle:Offence',
-                'label' => 'Offense:',
-                'choice_label' => 'offence',
-                'label' => 'Offenses: ',
-                'expanded' => true,
-                'multiple' => true,
-                'attr' => [
-                    'class' => 'form-inline',
-                ],
-                'query_builder' => function (EntityRepository $er) use ($options) {
-                    if (false === in_array('offences', $options['disabledOptions'])) {
-                        return $er->createQueryBuilder('e')
-                        ->orderBy('e.offence', 'ASC')
-                        ->where('e.enabled=1');
-                    } else {
-                        return $er->createQueryBuilder('e')
-                        ->orderBy('e.offence', 'ASC');
-                    }
-                },
-            )
-            )
-            ->add(
                 'relation',
                 EntityType::class,
                 array(

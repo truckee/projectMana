@@ -1,29 +1,45 @@
 <div class="panel panel-info">
     <div class="panel-heading panel-info">Household</div>
-        <div class="panel-body">
+    <div class="panel-body">
+        <div class="row">
             <div class="col-md-10">
                 <b>ID:</b> {{ household.id }}
                 <b>Active?:</b> {% if household.active == 1 %}Yes{% else %}No{% endif %}
                 <b>Date added:</b> {% if household.dateAdded is not null %}{{ household.dateAdded|date('m/d/Y') }}<input type="hidden" name="household[dateAdded]" value="{{ household.dateAdded|date('m/d/Y') }}">{% endif %}
-                <b>Arrival: </b>{% if household.arrivalmonth > 0 %} {{ (household.arrivalmonth ~ '/1/2000')|date('F') }}, {{ household.arrivalyear }}{% endif %}
                 <b>First site: </b>{% if household.center is not null %}{{ household.center.center }}{% endif %}
                 <b>Phone: </b>{% for phone in household.phones %}({{ phone.areacode }}) {{phone.phoneNumber }}{% endfor %}
             </div>
+        </div>
+        <div class="row">
             <div class="col-md-10">
                 <b>Food stamps? </b>{{ household.foodstamp.status }}
                 {% if household.fsamount is not null %}<b>If yes, how much?</b>{{ household.fsamount.amount }}{% endif %}
                 {% if household.notfoodstamp is not null %}<b>If no, why not?</b>{{ household.notfoodstamp.notfoodstamp }}{% endif %}
                 <b>Insufficient food:</b> {% set n = household.reasons|length %}
-            {% for reason in household.reasons if n > 0 %}{{reason.reason}}{% if loop.index < n %}, {% endif %}{% endfor %}
+                {% for reason in household.reasons if n > 0 %}{{reason.reason}}{% if loop.index < n %}; {% endif %}{% endfor %}
+            </div>
         </div>
-        <div class="col-md-10">
-            <b>Income: </b>{% if household.income is not null %}{{ household.income.income }}{% endif %}
-            <b>Housing: </b>{% if household.housing is not null %}{{ household.housing.housing }}{% endif %}
-
-            <b>Compliance: </b>{% if household.compliance == 1 %}Yes{% else %}No{% endif %}
-            <b>Date: </b>{% if household.complianceDate is not null %}{{ household.complianceDate|date('m/d/Y') }}{% endif %}
-            <b>Shared: </b>{% if household.shared == 1 %}Yes{% else %}No{% endif %}
-            <b>Date: </b>{% if household.sharedDate is not null %}{{ household.sharedDate|date('m/d/Y') }}{% endif %}
+        <div class="row">
+            <div class="col-md-12">
+                <b>Seeking services:</b> {% set a = household.assistances|length %}
+                {% for assistance in household.assistances if a > 0 %}{{assistance.assistance}}{% if loop.index < a %}; {% endif %}{% endfor %}
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-md-12">
+                <b>Receiving services:</b> {% set n = household.organizations|length %}
+                {% for organization in household.organizations if n > 0 %}{{organization.organization}}{% if loop.index < n %}; {% endif %}{% endfor %}
+                </div>
+            </div>
+        <div class="row">
+            <div class="col-md-10">
+                <b>Income: </b>{% if household.income is not null %}{{ household.income.income }}{% endif %}
+                <b>Housing: </b>{% if household.housing is not null %}{{ household.housing.housing }}{% endif %}
+                <b>Compliance: </b>{% if household.compliance == 1 %}Yes{% else %}No{% endif %}
+                <b>Date: </b>{% if household.complianceDate is not null %}{{ household.complianceDate|date('m/d/Y') }}{% endif %}
+                <b>Shared: </b>{% if household.shared == 1 %}Yes{% else %}No{% endif %}
+                <b>Date: </b>{% if household.sharedDate is not null %}{{ household.sharedDate|date('m/d/Y') }}{% endif %}
+            </div>
         </div>
     </div>
 </div>

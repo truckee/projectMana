@@ -25,6 +25,20 @@ use Truckee\ProjectmanaBundle\Validator\Constraints as ManaAssert;
 class Household
 {
     /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->addresses = new ArrayCollection();
+        $this->assistances = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
+        $this->members = new ArrayCollection();
+        $this->organizations = new ArrayCollection();
+        $this->phones = new ArrayCollection();
+        $this->reasons = new ArrayCollection();
+    }
+    
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -34,62 +48,11 @@ class Household
     protected $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="hoh_id", type="integer", nullable=true)
-     */
-    protected $hohId;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=true)
      */
     protected $active;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_added", type="date", nullable=true)
-     */
-    protected $dateAdded;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="arrivalMonth", type="integer", nullable=true)
-     */
-    protected $arrivalmonth;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="arrivalYear", type="integer", nullable=true)
-     */
-    protected $arrivalyear;
-
-    /**
-     * @var object Member as head of household
-     * @ORM\OneToOne(targetEntity="Member")
-     * @ORM\JoinColumn(name="hoh_id", referencedColumnName="id")
-     *      */
-    protected $head;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\OneToMany(targetEntity="Member", mappedBy="household", cascade={"persist", "remove"}, orphanRemoval=true,  fetch="EAGER"  )
-     * @ORM\OrderBy({"dob" = "ASC"})
-     */
-    protected $members;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\OneToMany(targetEntity="Contact", mappedBy="household", cascade={"persist"}, orphanRemoval=true)
-     * @ORM\OrderBy({"contactDate" = "DESC"})
-     */
-    protected $contacts;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -102,22 +65,159 @@ class Household
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
+     * @ORM\ManyToMany(targetEntity="Assistance", inversedBy="households", cascade={"persist"})
+     * @ORM\JoinTable(name="household_assistance",
+     *      joinColumns={@ORM\JoinColumn(name="household_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="assistance_id", referencedColumnName="id")}
+     *      ))
+     */
+    protected $assistances;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="compliance", type="boolean", nullable=true)
+     */
+    protected $compliance;
+
+    /**
+     * @ORM\Column(name="compliance_date", type="date", nullable=true)
+     * @ManaAssert\ComplianceDate
+     * @ManaAssert\NotFutureDate
+     */
+    protected $complianceDate;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="Contact", mappedBy="household", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OrderBy({"contactDate" = "DESC"})
+     */
+    protected $contacts;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_added", type="date", nullable=true)
+     */
+    protected $dateAdded;
+
+    /**
+     * @var int
+     *
+     * @ORM\ManyToOne(targetEntity="FsStatus", inversedBy="households")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="foodstamp_id", referencedColumnName="id")
+     * })     */
+    protected $foodstamp;
+
+    /**
+     * @var \Truckee\ProjectmanaBundle\Entity\FsAmount
+     *
+     * @ORM\ManyToOne(targetEntity="FsAmount", inversedBy="households")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="fsamount_id", referencedColumnName="id")
+     * })
+     */
+    protected $fsamount;
+
+    /**
+     * @var object Member as head of household
+     * @ORM\OneToOne(targetEntity="Member")
+     * @ORM\JoinColumn(name="hoh_id", referencedColumnName="id")
+     *      */
+    protected $head;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="hoh_id", type="integer", nullable=true)
+     */
+    protected $hohId;
+
+    /**
+     * @var \Truckee\ProjectmanaBundle\Entity\Housing
+     *
+     * @ORM\ManyToOne(targetEntity="Housing", inversedBy="households")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="housing_id", referencedColumnName="id")
+     * })
+     */
+    protected $housing;
+
+    /**
+     * @var \Truckee\ProjectmanaBundle\Entity\Income
+     *
+     * @ORM\ManyToOne(targetEntity="Income", inversedBy="households")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="income_id", referencedColumnName="id")
+     * })
+     */
+    protected $income;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="Member", mappedBy="household", cascade={"persist", "remove"}, orphanRemoval=true,  fetch="EAGER"  )
+     * @ORM\OrderBy({"dob" = "ASC"})
+     */
+    protected $members;
+
+    /**
+     * @var \Truckee\ProjectmanaBundle\Entity\Notfoodstamp
+     *
+     * @ORM\ManyToOne(targetEntity="Notfoodstamp", inversedBy="households")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="notfoodstamp_id", referencedColumnName="id")
+     * })
+     */
+    protected $notfoodstamp;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Organization", inversedBy="households", cascade={"persist"})
+     * @ORM\JoinTable(name="household_organization",
+     *      joinColumns={@ORM\JoinColumn(name="household_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="organization_id", referencedColumnName="id")}
+     *      ))
+     */
+    protected $organizations;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
      * @ORM\OneToMany(targetEntity="Phone", mappedBy="household",cascade={"persist"})
      * @Assert\Valid
      */
     protected $phones;
 
     /**
-     * Constructor.
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Reason", inversedBy="households", cascade={"persist"})
+     * @ORM\JoinTable(name="household_reason",
+     *      joinColumns={@ORM\JoinColumn(name="household_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="reason_id", referencedColumnName="id")}
+     *      ))
      */
-    public function __construct()
-    {
-        $this->members = new ArrayCollection();
-        $this->contacts = new ArrayCollection();
-        $this->addresses = new ArrayCollection();
-        $this->phones = new ArrayCollection();
-        $this->reasons = new ArrayCollection();
-    }
+    protected $reasons;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="shared", type="boolean", nullable=true)
+     */
+    protected $shared;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="shared_date", type="date", nullable=true)
+     * @ManaAssert\SharedDate
+     * @ManaAssert\NotFutureDate
+     */
+    protected $sharedDate;
 
     /**
      * Get id.
@@ -154,134 +254,38 @@ class Household
     }
 
     /**
-     * Set dateAdded.
+     * Add address.
      *
-     * @param \DateTime $dateAdded
+     * @param \Truckee\ProjectmanaBundle\Entity\Address $address
      *
      * @return Household
      */
-    public function setDateAdded($dateAdded)
+    public function addAddress(Address $address)
     {
-        $this->dateAdded = $dateAdded;
+        $this->addresses[] = $address;
+        $address->setHousehold($this);
 
         return $this;
     }
 
     /**
-     * Get dateAdded.
+     * Remove addresses.
      *
-     * @return \DateTime
+     * @param \Truckee\ProjectmanaBundle\Entity\Address $address
      */
-    public function getDateAdded()
+    public function removeAddress(\Truckee\ProjectmanaBundle\Entity\Address $address)
     {
-        return $this->dateAdded;
+        $this->addresses->removeElement($address);
     }
 
     /**
-     * Set foodstamp.
-     *
-     * @param bool $foodstamp
-     *
-     * @return Household
-     */
-    public function setFoodstamp($foodstamp)
-    {
-        $this->foodstamp = $foodstamp;
-
-        return $this;
-    }
-
-    /**
-     * Get foodstamp.
-     *
-     * @return bool
-     */
-    public function getFoodstamp()
-    {
-        return $this->foodstamp;
-    }
-
-    /**
-     * Set arrivalmonth.
-     *
-     * @param int $arrivalmonth
-     *
-     * @return Household
-     */
-    public function setArrivalmonth($arrivalmonth)
-    {
-        $this->arrivalmonth = $arrivalmonth;
-
-        return $this;
-    }
-
-    /**
-     * Get arrivalmonth.
-     *
-     * @return int
-     */
-    public function getArrivalmonth()
-    {
-        return $this->arrivalmonth;
-    }
-
-    /**
-     * Set arrivalyear.
-     *
-     * @param int $arrivalyear
-     *
-     * @return Household
-     */
-    public function setArrivalyear($arrivalyear)
-    {
-        $this->arrivalyear = $arrivalyear;
-
-        return $this;
-    }
-
-    /**
-     * Get arrivalyear.
-     *
-     * @return int
-     */
-    public function getArrivalyear()
-    {
-        return $this->arrivalyear;
-    }
-
-    /**
-     * Add members.
-     *
-     * @param \Truckee\ProjectmanaBundle\Entity\Member $members
-     *
-     * @return Household
-     */
-    public function addMember(Member $member)
-    {
-        $this->members[] = $member;
-        $member->setHousehold($this);
-
-        return $this;
-    }
-
-    /**
-     * Remove members.
-     *
-     * @param \Truckee\ProjectmanaBundle\Entity\Member $members
-     */
-    public function removeMember(Member $member)
-    {
-        $this->members->removeElement($member);
-    }
-
-    /**
-     * Get members.
+     * Get addresses.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getMembers()
+    public function getAddresses()
     {
-        return $this->members;
+        return $this->addresses;
     }
 
     /**
@@ -320,38 +324,110 @@ class Household
     }
 
     /**
-     * Add address.
+     * Set dateAdded.
      *
-     * @param \Truckee\ProjectmanaBundle\Entity\Address $address
+     * @param \DateTime $dateAdded
      *
      * @return Household
      */
-    public function addAddress(Address $address)
+    public function setDateAdded($dateAdded)
     {
-        $this->addresses[] = $address;
-        $address->setHousehold($this);
+        $this->dateAdded = $dateAdded;
 
         return $this;
     }
 
     /**
-     * Remove addresses.
+     * Get dateAdded.
      *
-     * @param \Truckee\ProjectmanaBundle\Entity\Address $address
+     * @return \DateTime
      */
-    public function removeAddress(\Truckee\ProjectmanaBundle\Entity\Address $address)
+    public function getDateAdded()
     {
-        $this->addresses->removeElement($address);
+        return $this->dateAdded;
     }
 
     /**
-     * Get addresses.
+     * Set fsamount.
+     *
+     * @param \Truckee\ProjectmanaBundle\Entity\FsAmount $fsamount
+     *
+     * @return Contact
+     */
+    public function setFsamount(FsAmount $fsamount = null)
+    {
+        $this->fsamount = $fsamount;
+
+        return $this;
+    }
+
+    /**
+     * Get fsamount.
+     *
+     * @return \Truckee\ProjectmanaBundle\Entity\Fsamount
+     */
+    public function getFsamount()
+    {
+        return $this->fsamount;
+    }
+
+    /**
+     * Set foodstamp.
+     *
+     * @param bool $foodstamp
+     *
+     * @return Household
+     */
+    public function setFoodstamp($foodstamp)
+    {
+        $this->foodstamp = $foodstamp;
+
+        return $this;
+    }
+
+    /**
+     * Get foodstamp.
+     *
+     * @return bool
+     */
+    public function getFoodstamp()
+    {
+        return $this->foodstamp;
+    }
+
+    /**
+     * Add members.
+     *
+     * @param \Truckee\ProjectmanaBundle\Entity\Member $members
+     *
+     * @return Household
+     */
+    public function addMember(Member $member)
+    {
+        $this->members[] = $member;
+        $member->setHousehold($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove members.
+     *
+     * @param \Truckee\ProjectmanaBundle\Entity\Member $members
+     */
+    public function removeMember(Member $member)
+    {
+        $this->members->removeElement($member);
+    }
+
+    /**
+     * Get members.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getAddresses()
+    public function getMembers()
     {
-        return $this->addresses;
+        return $this->members;
     }
 
     /**
@@ -402,16 +478,6 @@ class Household
     }
 
     /**
-     * @var \Truckee\ProjectmanaBundle\Entity\Housing
-     *
-     * @ORM\ManyToOne(targetEntity="Housing", inversedBy="households")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="housing_id", referencedColumnName="id")
-     * })
-     */
-    protected $housing;
-
-    /**
      * Set housing.
      *
      * @param \Truckee\ProjectmanaBundle\Entity\Housing $housing
@@ -434,16 +500,6 @@ class Household
     {
         return $this->housing;
     }
-
-    /**
-     * @var \Truckee\ProjectmanaBundle\Entity\Notfoodstamp
-     *
-     * @ORM\ManyToOne(targetEntity="Notfoodstamp", inversedBy="households")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="notfoodstamp_id", referencedColumnName="id")
-     * })
-     */
-    protected $notfoodstamp;
 
     /**
      * Set notfoodstamp.
@@ -469,60 +525,6 @@ class Household
         return $this->notfoodstamp;
     }
 
-    /**
-     * @var int
-     *
-     * @ORM\ManyToOne(targetEntity="FsStatus", inversedBy="households")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="foodstamp_id", referencedColumnName="id")
-     * })     */
-    protected $foodstamp;
-
-    /**
-     * @var \Truckee\ProjectmanaBundle\Entity\FsAmount
-     *
-     * @ORM\ManyToOne(targetEntity="FsAmount", inversedBy="households")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="fsamount_id", referencedColumnName="id")
-     * })
-     */
-    protected $fsamount;
-
-    /**
-     * Set fsamount.
-     *
-     * @param \Truckee\ProjectmanaBundle\Entity\FsAmount $fsamount
-     *
-     * @return Contact
-     */
-    public function setFsamount(FsAmount $fsamount = null)
-    {
-        $this->fsamount = $fsamount;
-
-        return $this;
-    }
-
-    /**
-     * Get fsamount.
-     *
-     * @return \Truckee\ProjectmanaBundle\Entity\Fsamount
-     */
-    public function getFsamount()
-    {
-        return $this->fsamount;
-    }
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Reason", inversedBy="households", cascade={"persist"})
-     * @ORM\JoinTable(name="household_reason",
-     *      joinColumns={@ORM\JoinColumn(name="household_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="reason_id", referencedColumnName="id")}
-     *      ))
-     */
-    protected $reasons;
-
     public function addReason(Reason $reason)
     {
         $reason->addHousehold($this); // synchronously updating inverse side
@@ -534,12 +536,27 @@ class Household
         return $this->reasons;
     }
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="compliance", type="boolean", nullable=true)
-     */
-    protected $compliance;
+    public function addAssistance(Assistance $assistance)
+    {
+        $assistance->addHousehold($this); // synchronously updating inverse side
+        $this->assistances[] = $assistance;
+    }
+
+    public function getAssistances()
+    {
+        return $this->assistances;
+    }
+
+    public function addOrganization(Organization $organization)
+    {
+        $organization->addHousehold($this); // synchronously updating inverse side
+        $this->organizations[] = $organization;
+    }
+
+    public function getOrganizations()
+    {
+        return $this->organizations;
+    }
 
     /**
      * Set compliance.
@@ -566,13 +583,6 @@ class Household
     }
 
     /**
-     * @ORM\Column(name="compliance_date", type="date", nullable=true)
-     * @ManaAssert\ComplianceDate
-     * @ManaAssert\NotFutureDate
-     */
-    protected $complianceDate;
-
-    /**
      * Set complianceDate.
      *
      * @param bool $complianceDate
@@ -595,13 +605,6 @@ class Household
     {
         return $this->complianceDate;
     }
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="shared", type="boolean", nullable=true)
-     */
-    protected $shared;
 
     /**
      * Set shared.
@@ -628,15 +631,6 @@ class Household
     }
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="shared_date", type="date", nullable=true)
-     * @ManaAssert\SharedDate
-     * @ManaAssert\NotFutureDate
-     */
-    protected $sharedDate;
-
-    /**
      * Set shareddate.
      *
      * @param date $sharedDate
@@ -659,16 +653,6 @@ class Household
     {
         return $this->sharedDate;
     }
-
-    /**
-     * @var \Truckee\ProjectmanaBundle\Entity\Income
-     *
-     * @ORM\ManyToOne(targetEntity="Income", inversedBy="households")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="income_id", referencedColumnName="id")
-     * })
-     */
-    protected $income;
 
     /**
      * Set income.

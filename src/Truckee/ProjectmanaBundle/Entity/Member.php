@@ -354,38 +354,38 @@ class Member
         return $this->relation;
     }
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Offence", inversedBy="members", cascade={"persist"})
-     * @ORM\JoinTable(name="member_offence",
-     *      joinColumns={@ORM\JoinColumn(name="member_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="offence_id", referencedColumnName="id")}
-     *      ))
-     */
-    protected $offences;
-
-    public function addOffence(Offence $offence)
-    {
-        $offence->addMember($this); // synchronously updating inverse side
-        $this->offences[] = $offence;
-    }
-
-    /**
-     * Remove offences.
-     *
-     * @param \Truckee\ProjectmanaBundle\Entity\Offence $offences
-     */
-    public function removeOffence(Offence $offence)
-    {
-        $this->offences->removeElement($offence);
-        $offence->setMember(null);
-    }
-
-    public function getOffences()
-    {
-        return $this->offences;
-    }
+//    /**
+//     * @var \Doctrine\Common\Collections\Collection
+//     *
+//     * @ORM\ManyToMany(targetEntity="Offence", inversedBy="members", cascade={"persist"})
+//     * @ORM\JoinTable(name="member_offence",
+//     *      joinColumns={@ORM\JoinColumn(name="member_id", referencedColumnName="id")},
+//     *      inverseJoinColumns={@ORM\JoinColumn(name="offence_id", referencedColumnName="id")}
+//     *      ))
+//     */
+//    protected $offences;
+//
+//    public function addOffence(Offence $offence)
+//    {
+//        $offence->addMember($this); // synchronously updating inverse side
+//        $this->offences[] = $offence;
+//    }
+//
+//    /**
+//     * Remove offences.
+//     *
+//     * @param \Truckee\ProjectmanaBundle\Entity\Offence $offences
+//     */
+//    public function removeOffence(Offence $offence)
+//    {
+//        $this->offences->removeElement($offence);
+//        $offence->setMember(null);
+//    }
+//
+//    public function getOffences()
+//    {
+//        return $this->offences;
+//    }
 
     /**
      * @var \Truckee\ProjectmanaBundle\Entity\Work

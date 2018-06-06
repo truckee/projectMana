@@ -36,22 +36,23 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12"><strong>Check all that apply</strong></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
                 {{ form_row(form.reasons) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_row(form.assistances) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_row(form.organizations) }}
             </div>
         </div>
         <div class="row">
-            <div class="col-md-2">
-                {{ form_row(form.arrivalmonth) }}
-            </div>
-            <div class="col-md-2">
-                {{ form_row(form.arrivalyear) }}
-            </div>
             <div class="col-md-2">
                 {{ form_row(form.center) }}
             </div>
-        </div>
-        <div class="row">
             <div class="col-md-2">
                 {{ form_row(form.compliance) }}
             </div>

@@ -48,9 +48,11 @@ class HouseholdController extends Controller
         $session->set('household', null);
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
+
         if (!$household) {
             throw $this->createNotFoundException('Unable to find Household entity.');
         }
+
         $templates[] = 'Member/memberShowBlock.html.twig';
         $templates[] = 'Household/show_content.html.twig';
         $templates[] = 'Address/addressShowBlock.html.twig';
