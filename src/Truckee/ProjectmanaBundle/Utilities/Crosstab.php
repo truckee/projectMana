@@ -86,6 +86,24 @@ class Crosstab
         ;
     }
 
+    public function mtmAllTimeActiveHouseholdsCrosstabData($criteria, $profileParameters)
+    {
+        $profileType = $criteria['columnType'];
+        $entity = $profileParameters['entity'];
+        $entityField = $profileParameters['entityField'];
+
+        return $this->em->createQueryBuilder()
+                ->select('r.' . $profileType . ' colLabel, alias.' . $entityField . ' rowLabel, COUNT(DISTINCT h.id) N ')
+                ->from('TruckeeProjectmanaBundle:' . ucfirst($entity), 'alias')
+                ->join('alias.households', 'h')
+                ->join('TruckeeProjectmanaBundle:Contact', 'c', 'WITH', 'c.household = h')
+                ->join('TruckeeProjectmanaBundle:' . ucfirst($profileType), 'r', 'WITH', 'r = c.' . $profileType)
+                ->where('h.active = TRUE')
+                ->groupBy('colLabel, rowLabel')
+                ->getQuery()->getResult()
+        ;
+    }
+
     public function mtmCrosstabData($criteria, $profileParameters)
     {
         $profileType = $criteria['columnType'];
@@ -94,7 +112,7 @@ class Crosstab
         return $this->em->createQueryBuilder()
                 ->select('r.' . $profileType . ' colLabel, alias.' . $entityField . ' rowLabel, COUNT(DISTINCT h.id) N ')
                 ->from('TruckeeProjectmanaBundle:' . ucfirst($entity), 'alias')
-            ->join('alias.households', 'h')
+                ->join('alias.households', 'h')
                 ->join('TruckeeProjectmanaBundle:Contact', 'c', 'WITH', 'c.household = h')
                 ->join('TruckeeProjectmanaBundle:' . ucfirst($profileType), 'r', 'WITH', 'r = c.' . $profileType)
                 ->where($criteria['betweenWhereClause'])
