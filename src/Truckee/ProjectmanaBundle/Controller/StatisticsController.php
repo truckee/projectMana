@@ -83,14 +83,14 @@ class StatisticsController extends Controller
         }
 
         return $this->render(
-            'Statistics/report_criteria.html.twig',
+                'Statistics/report_criteria.html.twig',
                 array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'stats_general',
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Select general statistics reporting criteria',
-        )
+                )
         );
     }
 
@@ -132,14 +132,14 @@ class StatisticsController extends Controller
         }
 
         return $this->render(
-            'Statistics/report_criteria.html.twig',
+                'Statistics/report_criteria.html.twig',
                 array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Select distribution details reporting criteria',
                     'formPath' => 'stats_details',
-        )
+                )
         );
     }
 
@@ -172,23 +172,23 @@ class StatisticsController extends Controller
             }
 
             return $this->render(
-                'Statistics/multi.html.twig',
+                    'Statistics/multi.html.twig',
                     array('multi' => $multi,
                         'title' => 'Multiple contacts',
                         'reportHeader' => $this->getReportHeader($templateCriteria),
-            )
+                    )
             );
         }
 
         return $this->render(
-            'Statistics/report_criteria.html.twig',
+                'Statistics/report_criteria.html.twig',
                 array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Select multiple contacts report criteria',
                     'formPath' => 'multi_contacts',
-        )
+                )
         );
     }
 
@@ -277,23 +277,36 @@ class StatisticsController extends Controller
             $criteria = $builder->getDetailsCriteria($formCriteria);
             $criteria['columnType'] = $formCriteria['columnType'];
             $templateCriteria = $builder->getTemplateCriteria($criteria);
-            $response = new Response();
-            $reportData = $this->employment($criteria, $crosstab);
-            $content = $this->profiler($reportData, $templateCriteria, $crosstab);
-            $response->setContent($content);
+            $em = $this->getDoctrine()->getManager();
+            $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Work')->rowLabels($criteria);
+            $colLabels = $crosstab->colLabels($criteria);
+            $rawData = $em->getRepository('TruckeeProjectmanaBundle:Work')->crossTabData($criteria, $criteria['columnType']);
+            $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
-            return $response;
+            return $this->render(
+                    'Statistics/profile.html.twig',
+                    [
+                        'colLabels' => $colLabels,
+                        'date' => new \DateTime(),
+                        'profile' => $profile,
+                        'reportSubTitle' => 'For the period ',
+                        'reportTitle' => 'Employment profile (household members)',
+                        'rowHeader' => 'Employment',
+                        'rowLabels' => $rowLabels,
+                        'specs' => $templateCriteria,
+                    ]
+            );
         }
 
         return $this->render(
-            'Statistics/report_criteria.html.twig',
+                'Statistics/report_criteria.html.twig',
                 array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'employment_profile',
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Employment profile reporting criteria',
-        )
+                )
         );
     }
 
@@ -317,24 +330,40 @@ class StatisticsController extends Controller
             $criteria = $builder->getDetailsCriteria($formCriteria);
             $criteria['columnType'] = $formCriteria['columnType'];
             $templateCriteria = $builder->getTemplateCriteria($criteria);
+            $profileParameters = [
+                'entity' => 'housing',
+                'entityField' => 'housing',
+                'joinField' => 'housing',
+            ];
+            $rowLabels = $crosstab->rowLabels($criteria, $profileParameters);
+            $colLabels = $crosstab->colLabels($criteria);
+            $rawData = $crosstab->crosstabData($criteria, $profileParameters);
+            $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
-            $response = new Response();
-            $reportData = $this->housing($criteria, $crosstab);
-            $content = $this->profiler($reportData, $templateCriteria, $crosstab);
-            $response->setContent($content);
-
-            return $response;
+            return $this->render(
+                    'Statistics/profile.html.twig',
+                    [
+                        'colLabels' => $colLabels,
+                        'date' => new \DateTime(),
+                        'profile' => $profile,
+                        'reportSubTitle' => 'For the period ',
+                        'reportTitle' => 'Housing profile (household members)',
+                        'rowHeader' => 'Housing',
+                        'rowLabels' => $rowLabels,
+                        'specs' => $templateCriteria,
+                    ]
+            );
         }
 
         return $this->render(
-            'Statistics/report_criteria.html.twig',
+                'Statistics/report_criteria.html.twig',
                 array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'housing_profile',
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Housing profile reporting criteria',
-        )
+                )
         );
     }
 
@@ -358,24 +387,40 @@ class StatisticsController extends Controller
             $criteria = $builder->getDetailsCriteria($formCriteria);
             $criteria['columnType'] = $formCriteria['columnType'];
             $templateCriteria = $builder->getTemplateCriteria($criteria);
+            $profileParameters = [
+                'entity' => 'income',
+                'entityField' => 'income',
+                'joinField' => 'income',
+            ];
+            $rowLabels = $crosstab->rowLabels($criteria, $profileParameters);
+            $colLabels = $crosstab->colLabels($criteria);
+            $rawData = $crosstab->crosstabData($criteria, $profileParameters);
+            $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
-            $response = new Response();
-            $reportData = $this->income($criteria, $crosstab);
-            $content = $this->profiler($reportData, $templateCriteria, $crosstab);
-            $response->setContent($content);
-
-            return $response;
+            return $this->render(
+                    'Statistics/profile.html.twig',
+                    [
+                        'colLabels' => $colLabels,
+                        'date' => new \DateTime(),
+                        'profile' => $profile,
+                        'reportSubTitle' => 'For the period ',
+                        'reportTitle' => 'Household Income',
+                        'rowHeader' => 'Income bracket',
+                        'rowLabels' => $rowLabels,
+                        'specs' => $templateCriteria,
+                    ]
+            );
         }
 
         return $this->render(
-            'Statistics/report_criteria.html.twig',
+                'Statistics/report_criteria.html.twig',
                 array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'income_profile',
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Select income profile reporting criteria',
-        )
+                )
         );
     }
 
@@ -399,24 +444,40 @@ class StatisticsController extends Controller
             $criteria = $builder->getDetailsCriteria($formCriteria);
             $criteria['columnType'] = $formCriteria['columnType'];
             $templateCriteria = $builder->getTemplateCriteria($criteria);
+            $profileParameters = [
+                'entity' => 'housing',
+                'entityField' => 'housing',
+                'joinField' => 'housing',
+            ];
+            $rowLabels = $crosstab->rowLabels($criteria, $profileParameters);
+            $colLabels = $crosstab->colLabels($criteria);
+            $rawData = $crosstab->crosstabData($criteria, $profileParameters);
+            $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
-            $response = new Response();
-            $reportData = $this->reason($criteria, $crosstab);
-            $content = $this->profiler($reportData, $templateCriteria, $crosstab);
-            $response->setContent($content);
-
-            return $response;
+            return $this->render(
+                    'Statistics/profile.html.twig',
+                    [
+                        'colLabels' => $colLabels,
+                        'date' => new \DateTime(),
+                        'profile' => $profile,
+                        'reportSubTitle' => 'For the period ',
+                        'reportTitle' => 'Factors contributing to households not having enough food',
+                        'rowHeader' => 'Reason',
+                        'rowLabels' => $rowLabels,
+                        'specs' => $templateCriteria,
+                    ]
+            );
         }
 
         return $this->render(
-            'Statistics/report_criteria.html.twig',
+                'Statistics/report_criteria.html.twig',
                 array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'reason_profile',
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Insufficient Food Reporting Criteria',
-        )
+                )
         );
     }
 
@@ -443,53 +504,27 @@ class StatisticsController extends Controller
             $criteria['columnType'] = $formCriteria['columnType'];
             $templateCriteria = $builder->getTemplateCriteria($criteria);
 
-            $reportData = $this->yesNo($criteria, $crosstab);
-            $content = $this->profiler($reportData, $templateCriteria, $crosstab);
-            $reportData = $this->howMuch($criteria, $crosstab);
-            $content .= $this->profiler($reportData, $templateCriteria, $crosstab);
-            $reportData = $this->not($criteria, $crosstab);
-            $content .= $this->profiler($reportData, $templateCriteria, $crosstab);
+            $yesNo = $this->yesNo($criteria, $crosstab);
+            $content = $this->profilerPlain($yesNo, $templateCriteria, $crosstab);
+            $howMuch = $this->howMuch($criteria, $crosstab);
+            $content .= $this->profilerPlain($howMuch, $templateCriteria, $crosstab);
+            $not = $this->not($criteria, $crosstab);
+            $content .= $this->profilerPlain($not, $templateCriteria, $crosstab);
 
             return $this->render('Statistics/snapProfile.html.twig', [
-                        'content' => $content,
+                    'content' => $content,
             ]);
         }
 
         return $this->render(
-            'Statistics/report_criteria.html.twig',
+                'Statistics/report_criteria.html.twig',
                 array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'snap_profile',
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Select SNAP/CalFresh benefits reporting criteria',
-        )
-        );
-    }
-
-    /**
-     * Arranges profile data in rows and columns
-     *
-     * @param array $reportData
-     * @param array $templateSpecs
-     *
-     * @return Response
-     */
-    private function profiler($reportData, $templateSpecs, $crosstab)
-    {
-        $profile = $crosstab->crosstabQuery($reportData['data'], $reportData['rowLabels'], $reportData['colLabels']);
-
-        return $this->renderView(
-            'Statistics/profile.html.twig',
-                ['profile' => $profile,
-                    'rowHeader' => $reportData['rowHeader'],
-                    'rowLabels' => $reportData['rowLabels'],
-                    'colLabels' => $reportData['colLabels'],
-                    'reportTitle' => $reportData['reportTitle'],
-                    'reportSubTitle' => $reportData['reportSubTitle'],
-                    'date' => new \DateTime(),
-                    'specs' => $templateSpecs,
-        ]
+                )
         );
     }
 
@@ -506,7 +541,7 @@ class StatisticsController extends Controller
         $profile = $crosstab->crosstabQuery($reportData['data'], $reportData['rowLabels'], $reportData['colLabels']);
 
         return $this->renderView(
-            'Statistics/profile_content.html.twig',
+                'Statistics/profile_content.html.twig',
                 ['profile' => $profile,
                     'rowHeader' => $reportData['rowHeader'],
                     'rowLabels' => $reportData['rowLabels'],
@@ -515,58 +550,8 @@ class StatisticsController extends Controller
                     'reportSubTitle' => $reportData['reportSubTitle'],
                     'date' => new \DateTime(),
                     'specs' => $templateSpecs,
-        ]
+                ]
         );
-    }
-
-    /**
-     * Gather row & column data for employment profile
-     *
-     * @param array $criteria
-     *
-     * @return Response
-     */
-    private function employment($criteria, $crosstab)
-    {
-        $em = $this->getDoctrine()->getManager();
-        //crosstab rowLabels not used due to work being a member property
-        $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Work')->rowLabels($criteria);
-        $colLabels = $crosstab->colLabels($criteria);
-        $data = $em->getRepository('TruckeeProjectmanaBundle:Work')->crossTabData($criteria, $criteria['columnType']);
-
-        return [
-            'reportTitle' => 'Employment profile (household members)',
-            'reportSubTitle' => 'For the period ',
-            'criteria' => $criteria,
-            'rowHeader' => 'Employment',
-            'rowLabels' => $rowLabels,
-            'colLabels' => $colLabels,
-            'data' => $data,
-        ];
-    }
-
-    /**
-     * Gather row & column data for housing profile
-     *
-     * @param array $criteria
-     *
-     * @return Response
-     */
-    private function housing($criteria, $crosstab)
-    {
-        $rowLabels = $crosstab->rowLabels($criteria, 'housing', 'housing', 'housing');
-        $colLabels = $crosstab->colLabels($criteria);
-        $data = $crosstab->crosstabData($criteria, 'housing', 'housing', 'housing');
-
-        return [
-            'reportTitle' => 'Housing profile (household members)',
-            'reportSubTitle' => 'For the period ',
-            'criteria' => $criteria,
-            'rowHeader' => 'Housing',
-            'rowLabels' => $rowLabels,
-            'colLabels' => $colLabels,
-            'data' => $data,
-        ];
     }
 
     /**
@@ -578,41 +563,20 @@ class StatisticsController extends Controller
      */
     private function howMuch($criteria, $crosstab)
     {
-        $em = $this->getDoctrine()->getManager();
-        $rowLabels = $crosstab->rowLabels($criteria, 'FsAmount', 'amount', 'fsamount');
+        $profileParameters = [
+            'entity' => 'FsAmount',
+            'entityField' => 'amount',
+            'joinField' => 'fsamount',
+        ];
+        $rowLabels = $crosstab->rowLabels($criteria, $profileParameters);
         $colLabels = $crosstab->colLabels($criteria);
-        $data = $crosstab->crosstabData($criteria, 'FsAmount', 'amount', 'fsamount');
+        $data = $crosstab->crosstabData($criteria, $profileParameters);
 
         return [
             'reportTitle' => 'Households receiving SNAP/CalFresh benefits',
             'reportSubTitle' => 'For the period ',
             'criteria' => $criteria,
             'rowHeader' => 'How much',
-            'rowLabels' => $rowLabels,
-            'colLabels' => $colLabels,
-            'data' => $data,
-        ];
-    }
-
-    /**
-     * Gather row & column data for income profile
-     *
-     * @param array $criteria
-     *
-     * @return Response
-     */
-    private function income($criteria, $crosstab)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $rowLabels = $crosstab->rowLabels($criteria, 'income', 'income', 'income');;
-        $colLabels = $crosstab->colLabels($criteria);
-        $data = $crosstab->crosstabData($criteria, 'income', 'income', 'income');
-
-        return [
-            'reportTitle' => 'Household Income',
-            'reportSubTitle' => 'For the period ',
-            'criteria' => $criteria,
-            'rowHeader' => 'Income bracket',
             'rowLabels' => $rowLabels,
             'colLabels' => $colLabels,
             'data' => $data,
@@ -628,41 +592,20 @@ class StatisticsController extends Controller
      */
     private function not($criteria, $crosstab)
     {
-        $em = $this->getDoctrine()->getManager();
-        $rowLabels = $crosstab->rowLabels($criteria, 'notfoodstamp', 'notfoodstamp', 'notfoodstamp');
+        $profileParameters = [
+            'entity' => 'notfoodstamp',
+            'entityField' => 'notfoodstamp',
+            'joinField' => 'notfoodstamp',
+        ];
+        $rowLabels = $crosstab->rowLabels($criteria, $profileParameters);
         $colLabels = $crosstab->colLabels($criteria);
-        $data = $crosstab->crosstabData($criteria, 'notfoodstamp', 'notfoodstamp', 'notfoodstamp');
+        $data = $crosstab->crosstabData($criteria, $profileParameters);
 
         return [
             'reportTitle' => 'Households not receiving SNAP/CalFresh benefits',
             'reportSubTitle' => 'For the period ',
             'criteria' => $criteria,
             'rowHeader' => 'Reason why not',
-            'rowLabels' => $rowLabels,
-            'colLabels' => $colLabels,
-            'data' => $data,
-        ];
-    }
-
-    /**
-     * Gather row & column data for reason profile
-     *
-     * @param array $criteria
-     *
-     * @return Response
-     */
-    private function reason($criteria, $crosstab)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $rowLabels = $crosstab->mtmRowLabels($criteria, 'reason', 'reason');
-        $colLabels = $crosstab->colLabels($criteria);
-        $data = $crosstab->mtmCrosstabData($criteria, 'reason', 'reason');
-
-        return [
-            'reportTitle' => 'Factors contributing to households not having enough food',
-            'reportSubTitle' => 'For the period ',
-            'criteria' => $criteria,
-            'rowHeader' => 'Reason',
             'rowLabels' => $rowLabels,
             'colLabels' => $colLabels,
             'data' => $data,
@@ -683,7 +626,7 @@ class StatisticsController extends Controller
         $colLabels = $crosstab->colLabels($criteria);
         $data = $em->getRepository('TruckeeProjectmanaBundle:FsStatus')->crossTabData($criteria, $criteria['columnType']);
 
-        return  [
+        return [
             'reportTitle' => 'Households receiving SNAP/CalFresh benefits',
             'reportSubTitle' => 'For the period ',
             'criteria' => $criteria,

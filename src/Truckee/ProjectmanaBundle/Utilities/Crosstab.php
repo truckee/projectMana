@@ -65,9 +65,12 @@ class Crosstab
         return $profile;
     }
 
-    public function crosstabData($criteria, $entity, $entityField, $joinField)
+    public function crosstabData($criteria, $profileParameters)
     {
         $profileType = $criteria['columnType'];
+        $entity = $profileParameters['entity'];
+        $entityField = $profileParameters['entityField'];
+        $joinField = $profileParameters['joinField'];
 
         return $this->em->createQueryBuilder()
                 ->select('r.' . $profileType . ' colLabel, alias.' . $entityField . ' rowLabel, COUNT(DISTINCT h.id) N ')
@@ -101,8 +104,11 @@ class Crosstab
     }
 
     //for many to one relationships: household to entity
-    public function rowLabels($criteria, $entity, $entityField, $joinField)
+    public function rowLabels($criteria, $profileParameters)
     {
+        $entity = $profileParameters['entity'];
+        $entityField = $profileParameters['entityField'];
+        $joinField = $profileParameters['joinField'];
         $qb = $this->em->createQueryBuilder()
                 ->select('entity.' . $entityField)
                 ->distinct()
