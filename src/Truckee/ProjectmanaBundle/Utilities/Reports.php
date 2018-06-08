@@ -54,7 +54,7 @@ class Reports
             $site = $center['center'];
             $seriesString = "{name:'$site', data:[";
             $qb = $this->em->createQueryBuilder()
-                ->select('(CASE WHEN MONTH(c.contactDate) >= 6 THEN MONTH(c.contactDate) - 6 ELSE MONTH(c.contactDate) + 6 END) Mo, COUNT(DISTINCT c.household) N')
+                ->select('(CASE WHEN MONTH(c.contactDate) > 6 THEN MONTH(c.contactDate) - 7 ELSE MONTH(c.contactDate) + 6 END) Mo, COUNT(DISTINCT c.household) N')
                 ->from('TruckeeProjectmanaBundle:Contact', 'c')
                 ->join('TruckeeProjectmanaBundle:Center', 'r', 'WITH', 'c.center = r')
                 ->where('r.center = :site')
