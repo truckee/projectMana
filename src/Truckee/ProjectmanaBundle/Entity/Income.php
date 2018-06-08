@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Income.
  *
  * @ORM\Table(name="income")
- * @ORM\Entity(repositoryClass="Truckee\ProjectmanaBundle\Entity\IncomeRepository")
+ * @ORM\Entity()
  */
 class Income
 {

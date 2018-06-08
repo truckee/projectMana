@@ -447,7 +447,7 @@ class StatisticsController extends Controller
             $content = $this->profiler($reportData, $templateCriteria, $crosstab);
             $reportData = $this->howMuch($criteria, $crosstab);
             $content .= $this->profiler($reportData, $templateCriteria, $crosstab);
-            $reportData = $this->not($criteria);
+            $reportData = $this->not($criteria, $crosstab);
             $content .= $this->profiler($reportData, $templateCriteria, $crosstab);
 
             return $this->render('Statistics/snapProfile.html.twig', [
@@ -529,14 +529,12 @@ class StatisticsController extends Controller
     private function employment($criteria, $crosstab)
     {
         $em = $this->getDoctrine()->getManager();
-        //$dateCriteria = $crosstab->setDateCriteria($criteria);
-
-        //$columnType = $criteria['columnType'];
+        //crosstab rowLabels not used due to work being a member property
         $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Work')->rowLabels($criteria);
-        $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . ucfirst($criteria['columnType']))->colLabels($criteria);
+        $colLabels = $crosstab->colLabels($criteria);
         $data = $em->getRepository('TruckeeProjectmanaBundle:Work')->crossTabData($criteria, $criteria['columnType']);
 
-        $reportData = [
+        return [
             'reportTitle' => 'Employment profile (household members)',
             'reportSubTitle' => 'For the period ',
             'criteria' => $criteria,
@@ -545,8 +543,6 @@ class StatisticsController extends Controller
             'colLabels' => $colLabels,
             'data' => $data,
         ];
-
-        return $reportData;
     }
 
     /**
@@ -558,15 +554,11 @@ class StatisticsController extends Controller
      */
     private function housing($criteria, $crosstab)
     {
-        $em = $this->getDoctrine()->getManager();
-        //$dateCriteria = $crosstab->setDateCriteria($criteria);
+        $rowLabels = $crosstab->rowLabels($criteria, 'housing', 'housing', 'housing');
+        $colLabels = $crosstab->colLabels($criteria);
+        $data = $crosstab->crosstabData($criteria, 'housing', 'housing', 'housing');
 
-        //$columnType = $criteria['columnType'];
-        $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Housing')->rowLabels($criteria);
-        $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . ucfirst($criteria['columnType']))->colLabels($criteria);
-        $data = $em->getRepository('TruckeeProjectmanaBundle:Housing')->crossTabData($criteria, $criteria['columnType']);
-
-        $reportData = [
+        return [
             'reportTitle' => 'Housing profile (household members)',
             'reportSubTitle' => 'For the period ',
             'criteria' => $criteria,
@@ -575,8 +567,6 @@ class StatisticsController extends Controller
             'colLabels' => $colLabels,
             'data' => $data,
         ];
-
-        return $reportData;
     }
 
     /**
@@ -589,13 +579,11 @@ class StatisticsController extends Controller
     private function howMuch($criteria, $crosstab)
     {
         $em = $this->getDoctrine()->getManager();
-        //$dateCriteria = $crosstab->setDateCriteria($criteria);
-        //$columnType = $criteria['columnType'];
-        $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:FsAmount')->rowLabels($criteria);
-        $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . ucfirst($criteria['columnType']))->colLabels($criteria);
-        $data = $em->getRepository('TruckeeProjectmanaBundle:FsAmount')->crossTabData($criteria, $criteria['columnType']);
+        $rowLabels = $crosstab->rowLabels($criteria, 'FsAmount', 'amount', 'fsamount');
+        $colLabels = $crosstab->colLabels($criteria);
+        $data = $crosstab->crosstabData($criteria, 'FsAmount', 'amount', 'fsamount');
 
-        $reportData = [
+        return [
             'reportTitle' => 'Households receiving SNAP/CalFresh benefits',
             'reportSubTitle' => 'For the period ',
             'criteria' => $criteria,
@@ -604,8 +592,6 @@ class StatisticsController extends Controller
             'colLabels' => $colLabels,
             'data' => $data,
         ];
-
-        return $reportData;
     }
 
     /**
@@ -618,13 +604,11 @@ class StatisticsController extends Controller
     private function income($criteria, $crosstab)
     {
         $em = $this->getDoctrine()->getManager();
-        //$dateCriteria = $crosstab->setDateCriteria($criteria);
-        //$columnType = $criteria['columnType'];
-        $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Income')->rowLabels($criteria);
-        $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . ucfirst($criteria['columnType']))->colLabels($criteria);
-        $data = $em->getRepository('TruckeeProjectmanaBundle:Income')->crossTabData($criteria, $criteria['columnType']);
+        $rowLabels = $crosstab->rowLabels($criteria, 'income', 'income', 'income');;
+        $colLabels = $crosstab->colLabels($criteria);
+        $data = $crosstab->crosstabData($criteria, 'income', 'income', 'income');
 
-        $reportData = [
+        return [
             'reportTitle' => 'Household Income',
             'reportSubTitle' => 'For the period ',
             'criteria' => $criteria,
@@ -633,8 +617,6 @@ class StatisticsController extends Controller
             'colLabels' => $colLabels,
             'data' => $data,
         ];
-
-        return $reportData;
     }
 
     /**
@@ -644,16 +626,14 @@ class StatisticsController extends Controller
      *
      * @return Response
      */
-    private function not($criteria)
+    private function not($criteria, $crosstab)
     {
         $em = $this->getDoctrine()->getManager();
-        $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Notfoodstamp')
-            ->rowLabels($criteria);
-        $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . ucfirst($criteria['columnType']))
-            ->colLabels($criteria);
-        $data = $em->getRepository('TruckeeProjectmanaBundle:Notfoodstamp')
-            ->crossTabData($criteria, $criteria['columnType']);
-        $reportData = [
+        $rowLabels = $crosstab->rowLabels($criteria, 'notfoodstamp', 'notfoodstamp', 'notfoodstamp');
+        $colLabels = $crosstab->colLabels($criteria);
+        $data = $crosstab->crosstabData($criteria, 'notfoodstamp', 'notfoodstamp', 'notfoodstamp');
+
+        return [
             'reportTitle' => 'Households not receiving SNAP/CalFresh benefits',
             'reportSubTitle' => 'For the period ',
             'criteria' => $criteria,
@@ -662,8 +642,6 @@ class StatisticsController extends Controller
             'colLabels' => $colLabels,
             'data' => $data,
         ];
-
-        return $reportData;
     }
 
     /**
@@ -676,13 +654,11 @@ class StatisticsController extends Controller
     private function reason($criteria, $crosstab)
     {
         $em = $this->getDoctrine()->getManager();
-        //$dateCriteria = $crosstab->setDateCriteria($criteria);
-        //$columnType = $criteria['columnType'];
-        $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Reason')->rowLabels($criteria);
-        $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . ucfirst($criteria['columnType']))->colLabels($criteria);
-        $data = $em->getRepository('TruckeeProjectmanaBundle:Reason')->crossTabData($criteria, $criteria['columnType']);
+        $rowLabels = $crosstab->mtmRowLabels($criteria, 'reason', 'reason');
+        $colLabels = $crosstab->colLabels($criteria);
+        $data = $crosstab->mtmCrosstabData($criteria, 'reason', 'reason');
 
-        $reportData = [
+        return [
             'reportTitle' => 'Factors contributing to households not having enough food',
             'reportSubTitle' => 'For the period ',
             'criteria' => $criteria,
@@ -691,8 +667,6 @@ class StatisticsController extends Controller
             'colLabels' => $colLabels,
             'data' => $data,
         ];
-
-        return $reportData;
     }
 
     /**
@@ -705,12 +679,11 @@ class StatisticsController extends Controller
     private function yesNo($criteria, $crosstab)
     {
         $em = $this->getDoctrine()->getManager();
-        //$dateCriteria = $crosstab->setDateCriteria($criteria);
-        //$columnType = $criteria['columnType'];
         $rowLabels = ['Yes', 'No'];
-        $colLabels = $em->getRepository('TruckeeProjectmanaBundle:' . ucfirst($criteria['columnType']))->colLabels($criteria);
+        $colLabels = $crosstab->colLabels($criteria);
         $data = $em->getRepository('TruckeeProjectmanaBundle:FsStatus')->crossTabData($criteria, $criteria['columnType']);
-        $reportData = [
+
+        return  [
             'reportTitle' => 'Households receiving SNAP/CalFresh benefits',
             'reportSubTitle' => 'For the period ',
             'criteria' => $criteria,
@@ -719,8 +692,6 @@ class StatisticsController extends Controller
             'colLabels' => $colLabels,
             'data' => $data,
         ];
-
-        return $reportData;
     }
 
     /**

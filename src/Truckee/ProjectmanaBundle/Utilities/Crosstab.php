@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Truckee\Projectmana package.
  *
@@ -13,6 +12,8 @@
 
 namespace Truckee\ProjectmanaBundle\Utilities;
 
+use Doctrine\ORM\EntityManagerInterface;
+
 /**
  * Description of Crosstab.
  *
@@ -20,6 +21,13 @@ namespace Truckee\ProjectmanaBundle\Utilities;
  */
 class Crosstab
 {
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     /**
      * Organize row and column data for profile report
      *
@@ -57,6 +65,107 @@ class Crosstab
         return $profile;
     }
 
+    public function crosstabData($criteria, $entity, $entityField, $joinField)
+    {
+        $profileType = $criteria['columnType'];
+
+        return $this->em->createQueryBuilder()
+                ->select('r.' . $profileType . ' colLabel, alias.' . $entityField . ' rowLabel, COUNT(DISTINCT h.id) N ')
+                ->from('TruckeeProjectmanaBundle:Household', 'h')
+                ->join('TruckeeProjectmanaBundle:Contact', 'c', 'WITH', 'c.household = h')
+                ->join('TruckeeProjectmanaBundle:' . ucfirst($profileType), 'r', 'WITH', 'r = c.' . $profileType)
+                ->join('TruckeeProjectmanaBundle:' . ucfirst($entity), 'alias', 'WITH', 'h.' . $joinField . ' = alias')
+                ->andWhere('alias.enabled = TRUE')
+                ->groupBy('colLabel, rowLabel')
+                ->where($criteria['betweenWhereClause'])
+                ->setParameters($criteria['betweenParameters'])
+                ->getQuery()->getResult()
+        ;
+    }
+
+    public function mtmCrosstabData($criteria, $entity, $entityField)
+    {
+        $profileType = $criteria['columnType'];
+
+        return $this->em->createQueryBuilder()
+                ->select('r.' . $profileType . ' colLabel, alias.' . $entityField . ' rowLabel, COUNT(DISTINCT h.id) N ')
+                ->from('TruckeeProjectmanaBundle:' . ucfirst($entity), 'alias')
+            ->join('alias.households', 'h')
+                ->join('TruckeeProjectmanaBundle:Contact', 'c', 'WITH', 'c.household = h')
+                ->join('TruckeeProjectmanaBundle:' . ucfirst($profileType), 'r', 'WITH', 'r = c.' . $profileType)
+                ->where($criteria['betweenWhereClause'])
+                ->groupBy('colLabel, rowLabel')
+                ->setParameters($criteria['betweenParameters'])
+                ->getQuery()->getResult()
+        ;
+    }
+
+    //for many to one relationships: household to entity
+    public function rowLabels($criteria, $entity, $entityField, $joinField)
+    {
+        $qb = $this->em->createQueryBuilder()
+                ->select('entity.' . $entityField)
+                ->distinct()
+                ->from('TruckeeProjectmanaBundle:Household', 'h')
+                ->join('TruckeeProjectmanaBundle:' . ucfirst($entity), 'entity', 'WITH', 'h.' . $joinField . '= entity')
+                ->join('TruckeeProjectmanaBundle:Contact', 'c', 'WITH', 'c.household = h')
+                ->where($criteria['betweenWhereClause'])
+                ->orderBy('entity.' . $entityField)
+                ->setParameters($criteria['betweenParameters'])
+                ->getQuery()->getResult()
+        ;
+        $rowLabels = [];
+        foreach ($qb as $row) {
+            $rowLabels[] = $row[$entityField];
+        }
+
+        return $rowLabels;
+    }
+
+    public function colLabels($criteria)
+    {
+        $profileType = $criteria['columnType'];
+        $entity = ucfirst($profileType);
+        $query = $this->em->createQueryBuilder()
+                ->select('r.' . $profileType)
+                ->from('TruckeeProjectmanaBundle:' . $entity, 'r')
+                ->distinct()
+                ->join('TruckeeProjectmanaBundle:Contact', 'c', 'WITH', 'c.' . $profileType . ' = r')
+                ->where($criteria['betweenWhereClause'])
+                ->orderBy('r.' . $profileType)
+                ->setParameters($criteria['betweenParameters'])
+                ->getQuery()->getResult()
+        ;
+        $colLabels = [];
+        foreach ($query as $row) {
+            $colLabels[] = $row[$profileType];
+        }
+
+        return $colLabels;
+    }
+
+    //row label function for many-to-many relationship: household to entity
+    public function mtmRowLabels($criteria, $entity, $entityField)
+    {
+        $qb = $this->em->createQueryBuilder()
+                ->select('entity.' . $entityField)
+                ->distinct()
+                ->from('TruckeeProjectmanaBundle:' . ucfirst($entity), 'entity')
+                ->join('TruckeeProjectmanaBundle:Household', 'h')
+                ->join('TruckeeProjectmanaBundle:Contact', 'c', 'WITH', 'c.household = h')
+                ->where($criteria['betweenWhereClause'])
+                ->orderBy('entity.' . $entityField)
+                ->setParameters($criteria['betweenParameters'])
+                ->getQuery()->getResult()
+        ;
+        $rowLabels = [];
+        foreach ($qb as $row) {
+            $rowLabels[] = $row[$entityField];
+        }
+
+        return $rowLabels;
+    }
+
     /**
      * Initialize row, column entries to 0
      *
@@ -78,16 +187,4 @@ class Crosstab
 
         return $profile;
     }
-//
-//    /**
-//     * Convert $criteria dates to array for Doctrine parameter array
-//     *
-//     * @param array $criteria Report critiera
-//     *
-//     * @return array
-//     */
-//    public function setDateCriteria($criteria)
-//    {
-//        return ['startDate' => $criteria['startDate'], 'endDate' => $criteria['endDate']];
-//    }
 }

@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Reason.
  *
  * @ORM\Table(name="reason")
- * @ORM\Entity(repositoryClass="Truckee\ProjectmanaBundle\Entity\ReasonRepository")
+ * @ORM\Entity()
  */
 class Reason
 {

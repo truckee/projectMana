@@ -18,29 +18,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class CountyRepository extends EntityRepository
 {
-
-    /**
-     * Get column headers for profile by site reports
-     *
-     * @param array $dateCriteria
-     * @return array
-     */
-    public function colLabels($criteria)
-    {
-        $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT r.county FROM TruckeeProjectmanaBundle:County r '
-                . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.county = r '
-                . 'WHERE c.contactDate between :startDate AND :endDate '
-                . 'ORDER BY r.county')
-            ->setParameters($criteria['betweenParameters'])
-            ->getResult();
-        $colLabels = [];
-        foreach ($qb as $row) {
-            $colLabels[] = $row['county'];
-        }
-
-        return $colLabels;
-    }
-
     public function countiesForStats($criteria)
     {
         return $this->getEntityManager()->createQueryBuilder()

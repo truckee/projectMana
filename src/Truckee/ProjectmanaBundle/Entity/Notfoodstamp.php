@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Notfoodstamp.
  *
  * @ORM\Table(name="notfoodstamp")
- * @ORM\Entity(repositoryClass="Truckee\ProjectmanaBundle\Entity\NotfoodstampRepository")
+ * @ORM\Entity()
  */
 class Notfoodstamp
 {
