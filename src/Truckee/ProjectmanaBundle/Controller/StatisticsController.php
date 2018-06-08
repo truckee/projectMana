@@ -547,7 +547,7 @@ class StatisticsController extends Controller
             ];
             $rowLabels = $crosstab->mtmRowLabels($criteria, $profileParameters);
             $colLabels = $crosstab->colLabels($criteria);
-            $rawData = $crosstab->mtmCrosstabData($criteria, $profileParameters);
+            $rawData = $crosstab->mtmAllTimeActiveHouseholdsCrosstabData($criteria, $profileParameters);
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
@@ -556,7 +556,7 @@ class StatisticsController extends Controller
                         'colLabels' => $colLabels,
                         'date' => new \DateTime(),
                         'profile' => $profile,
-                        'reportSubTitle' => 'For the period ',
+                        'reportSubTitle' => 'For active households ',
                         'reportTitle' => 'Seeking services',
                         'rowHeader' => 'Service',
                         'rowLabels' => $rowLabels,
@@ -597,7 +597,7 @@ class StatisticsController extends Controller
             ];
             $rowLabels = $crosstab->mtmRowLabels($criteria, $profileParameters);
             $colLabels = $crosstab->colLabels($criteria);
-            $rawData = $crosstab->mtmCrosstabData($criteria, $profileParameters);
+            $rawData = $crosstab->mtmAllTimeActiveHouseholdsCrosstabData($criteria, $profileParameters);
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
@@ -606,7 +606,7 @@ class StatisticsController extends Controller
                         'colLabels' => $colLabels,
                         'date' => new \DateTime(),
                         'profile' => $profile,
-                        'reportSubTitle' => 'For the period ',
+                        'reportSubTitle' => 'For active households ',
                         'reportTitle' => 'Receiving services',
                         'rowHeader' => 'Organization',
                         'rowLabels' => $rowLabels,

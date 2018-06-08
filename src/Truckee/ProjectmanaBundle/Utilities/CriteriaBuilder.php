@@ -42,6 +42,22 @@ class CriteriaBuilder
     {
         return $this->setDetailsCriteria($criteria);
     }
+    
+    public function getAllTimeActiveHouseholds()
+    {
+        return $this->setAllTimeActiveHouseholds();
+    }
+
+    private function setAllTimeActiveHouseholds()
+    {
+        return [
+            'betweenWhereClause' => 'c.contactDate BETWEEN :startDate AND :endDate',
+            'betweenParameters' => ['startDate' => '1969-12-31', 'endDate' => new \DateTime()],
+            'endDate' => new \DateTime(),
+            'startWhereClause' => 'c.contactDate >= :startDate ',
+            'startParameters' => ['startDate' => '1969-12-31'],
+        ];
+    }
 
     private function setDetailsCriteria($criteria)
     {
