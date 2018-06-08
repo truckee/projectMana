@@ -153,7 +153,13 @@ class MenuBuilder
         $menu->addChild('SNAP', array(
             'route' => 'snap_profile',
         ));
-
+        $menu->addChild('Seeking services', array(
+            'route' => 'assistance_profile',
+        ));
+        $menu->addChild('Receiving services', array(
+            'route' => 'organization_profile',
+        ));
+        
         return $menu;
     }
 

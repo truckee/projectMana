@@ -86,10 +86,11 @@ class Crosstab
         ;
     }
 
-    public function mtmCrosstabData($criteria, $entity, $entityField)
+    public function mtmCrosstabData($criteria, $profileParameters)
     {
         $profileType = $criteria['columnType'];
-
+        $entity = $profileParameters['entity'];
+        $entityField = $profileParameters['entityField'];
         return $this->em->createQueryBuilder()
                 ->select('r.' . $profileType . ' colLabel, alias.' . $entityField . ' rowLabel, COUNT(DISTINCT h.id) N ')
                 ->from('TruckeeProjectmanaBundle:' . ucfirst($entity), 'alias')
@@ -151,8 +152,10 @@ class Crosstab
     }
 
     //row label function for many-to-many relationship: household to entity
-    public function mtmRowLabels($criteria, $entity, $entityField)
+    public function mtmRowLabels($criteria, $profileParameters)
     {
+        $entity = $profileParameters['entity'];
+        $entityField = $profileParameters['entityField'];
         $qb = $this->em->createQueryBuilder()
                 ->select('entity.' . $entityField)
                 ->distinct()

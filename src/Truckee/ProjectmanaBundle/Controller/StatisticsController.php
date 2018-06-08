@@ -445,13 +445,12 @@ class StatisticsController extends Controller
             $criteria['columnType'] = $formCriteria['columnType'];
             $templateCriteria = $builder->getTemplateCriteria($criteria);
             $profileParameters = [
-                'entity' => 'housing',
-                'entityField' => 'housing',
-                'joinField' => 'housing',
+                'entity' => 'reason',
+                'entityField' => 'reason',
             ];
-            $rowLabels = $crosstab->rowLabels($criteria, $profileParameters);
+            $rowLabels = $crosstab->mtmRowLabels($criteria, $profileParameters);
             $colLabels = $crosstab->colLabels($criteria);
-            $rawData = $crosstab->crosstabData($criteria, $profileParameters);
+            $rawData = $crosstab->mtmCrosstabData($criteria, $profileParameters);
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
@@ -524,6 +523,106 @@ class StatisticsController extends Controller
                     'formPath' => 'snap_profile',
                     'title' => 'Report criteria',
                     'criteriaHeader' => 'Select SNAP/CalFresh benefits reporting criteria',
+                )
+        );
+    }
+
+    /**
+     * @Route("/assistanceProfile", name="assistance_profile")
+     */
+    public function assistanceProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab)
+    {
+        $form = $this->createForm(ReportCriteriaType::class);
+        $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formCriteria = $request->request->get('report_criteria');
+            $criteria = $builder->getDetailsCriteria($formCriteria);
+            $criteria['columnType'] = $formCriteria['columnType'];
+            $templateCriteria = $builder->getTemplateCriteria($criteria);
+            $profileParameters = [
+                'entity' => 'assistance',
+                'entityField' => 'assistance',
+            ];
+            $rowLabels = $crosstab->mtmRowLabels($criteria, $profileParameters);
+            $colLabels = $crosstab->colLabels($criteria);
+            $rawData = $crosstab->mtmCrosstabData($criteria, $profileParameters);
+            $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
+
+            return $this->render(
+                    'Statistics/profile.html.twig',
+                    [
+                        'colLabels' => $colLabels,
+                        'date' => new \DateTime(),
+                        'profile' => $profile,
+                        'reportSubTitle' => 'For the period ',
+                        'reportTitle' => 'Seeking services',
+                        'rowHeader' => 'Service',
+                        'rowLabels' => $rowLabels,
+                        'specs' => $templateCriteria,
+                    ]
+            );
+        }
+
+        return $this->render(
+                'Statistics/report_criteria.html.twig',
+                array(
+                    'form' => $form->createView(),
+                    'criteriaTemplates' => $criteriaTemplates,
+                    'formPath' => 'assistance_profile',
+                    'title' => 'Report criteria',
+                    'criteriaHeader' => 'Seeking Services Reporting Criteria',
+                )
+        );
+    }
+
+    /**
+     * @Route("/organizationProfile", name="organization_profile")
+     */
+    public function organizationProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab)
+    {
+        $form = $this->createForm(ReportCriteriaType::class);
+        $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
+        $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formCriteria = $request->request->get('report_criteria');
+            $criteria = $builder->getDetailsCriteria($formCriteria);
+            $criteria['columnType'] = $formCriteria['columnType'];
+            $templateCriteria = $builder->getTemplateCriteria($criteria);
+            $profileParameters = [
+                'entity' => 'organization',
+                'entityField' => 'organization',
+            ];
+            $rowLabels = $crosstab->mtmRowLabels($criteria, $profileParameters);
+            $colLabels = $crosstab->colLabels($criteria);
+            $rawData = $crosstab->mtmCrosstabData($criteria, $profileParameters);
+            $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
+
+            return $this->render(
+                    'Statistics/profile.html.twig',
+                    [
+                        'colLabels' => $colLabels,
+                        'date' => new \DateTime(),
+                        'profile' => $profile,
+                        'reportSubTitle' => 'For the period ',
+                        'reportTitle' => 'Receiving services',
+                        'rowHeader' => 'Organization',
+                        'rowLabels' => $rowLabels,
+                        'specs' => $templateCriteria,
+                    ]
+            );
+        }
+
+        return $this->render(
+                'Statistics/report_criteria.html.twig',
+                array(
+                    'form' => $form->createView(),
+                    'criteriaTemplates' => $criteriaTemplates,
+                    'formPath' => 'organization_profile',
+                    'title' => 'Report criteria',
+                    'criteriaHeader' => 'Receiving Services Reporting Criteria',
                 )
         );
     }
