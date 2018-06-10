@@ -20,7 +20,7 @@ use Truckee\ProjectmanaBundle\Utilities\CriteriaBuilder;
 use Truckee\ProjectmanaBundle\Utilities\Crosstab;
 use Truckee\ProjectmanaBundle\Utilities\DetailsReport as Detail;
 use Truckee\ProjectmanaBundle\Utilities\GeneralStatisticsReport as General;
-use Truckee\ProjectmanaBundle\Utilities\TempTables;
+//use Truckee\ProjectmanaBundle\Utilities\TempTables;
 
 /**
  * Present various Project MANA statistics.
@@ -103,7 +103,7 @@ class StatisticsController extends Controller
      *
      * @Route("/details", name="stats_details")
      */
-    public function detailsAction(Request $request, CriteriaBuilder $builder, Detail $detail, TempTables $tables)
+    public function detailsAction(Request $request, CriteriaBuilder $builder, Detail $detail)
     {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';

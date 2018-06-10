@@ -115,8 +115,8 @@ class HouseholdRepository extends EntityRepository
 
         $sizeData = $this->getEntityManager()->createQueryBuilder()
                 ->select('distinct h.id, count(m.id) size')
-                ->from('TruckeeProjectmanaBundle:Household', 'h')
-                ->join('TruckeeProjectmanaBundle:Member', 'm', 'WITH', 'm.household = h')
+                ->from('TruckeeProjectmanaBundle:Member', 'm')
+                ->join('m.household', 'h')
                 ->where('h.id IN (:hArray)')
                 ->andWhere($qb->expr()->orX('m.excludeDate > :startDate', $qb->expr()->isNull('m.excludeDate')))
                 ->andWhere($qb->expr()->orX('m.dob < :startDate', $qb->expr()->isNull('m.dob')))

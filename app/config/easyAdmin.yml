@@ -13,18 +13,17 @@ easy_admin:
                     - { entity: 'Site', params: { sortField: 'center', sortDirection: 'ASC' }}
             - label: 'Households'
               children:
-                    - { entity: 'Assistance', params: { sortField: 'assistance', sortDirection: 'ASC'}}
                     - { entity: 'FoodStampBracket', params: { sortField: 'id', sortDirection: 'ASC'}}
                     - { entity: 'FoodstampStatus', params: { sortField: 'status', sortDirection: 'ASC'}}
                     - { entity: 'Housing', params: { sortField: 'housing', sortDirection: 'ASC'}}
                     - { entity: 'Income', params: { sortField: 'id', sortDirection: 'ASC'}}
                     - { entity: 'InsufficientFood', label: 'Insufficient food', params: { sortField: 'reason', sortDirection: 'ASC'}}
-                    - { entity: 'Notfoodstamp', params: { sortField: 'notfoodstamp', sortDirection: 'ASC'}}
+                    - { entity: 'Assistance', params: { sortField: 'assistance', sortDirection: 'ASC'}}
                     - { entity: 'Organization', params: { sortField: 'organization', sortDirection: 'ASC'}}
+                    - { entity: 'Notfoodstamp', params: { sortField: 'notfoodstamp', sortDirection: 'ASC'}}
             - label: 'Members'
               children:
                     - { entity: 'Ethnicity', params: { sortField: 'ethnicity', sortDirection: 'ASC' } }
-                    - { entity: 'Offense', params: { sortField: 'offence', sortDirection: 'ASC' } }
                     - { entity: 'Relationship', params: { sortField: 'relation', sortDirection: 'ASC' } }
                     - { entity: 'Work', params: { sortField: 'work', sortDirection: 'ASC' } }
             - { entity: 'User', params: { sortField: 'username', sortDirection: 'ASC' } }
@@ -32,7 +31,7 @@ easy_admin:
     entities:
         Assistance:
             class: Truckee\ProjectmanaBundle\Entity\Assistance
-            label: Assistance sought
+            label: Seeking services
             list:
                 title: '%%entity_label%%'
                 fields:
@@ -50,7 +49,7 @@ easy_admin:
                 form_options: { validation_groups: ['Options'] }
         Organization:
             class: Truckee\ProjectmanaBundle\Entity\Organization
-            label: Organization sought
+            label: Receiving services   
             list:
                 title: '%%entity_label%%'
                 fields:
@@ -192,22 +191,6 @@ easy_admin:
             edit:
                 title: '%%entity_label%%'
                 fields:  [enabled]
-        Offense:
-            class: Truckee\ProjectmanaBundle\Entity\Offence
-            label: Offense
-            list:
-                title: '%%entity_label%%'
-                fields:
-                    - {property: 'offence', label: 'Offense'}
-                    - enabled
-            new:
-                title: '%%entity_label%%'
-                fields:
-                    - {property: 'offence', label: 'Offense', type_options: {by_reference: false}}
-                    - enabled
-            edit:
-                title: '%%entity_label%%'
-                fields: [enabled]
         InsufficientFood:
             class: Truckee\ProjectmanaBundle\Entity\Reason
             label: 'Insufficient food'

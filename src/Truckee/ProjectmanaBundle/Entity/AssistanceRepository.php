@@ -27,12 +27,15 @@ class AssistanceRepository extends EntityRepository
      */
     public function rowLabels($criteria)
     {
-        $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT a.assistance FROM TruckeeProjectmanaBundle:Assistance a '
-            . 'INNER JOIN a.households h INNER JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
-            . 'WHERE c.contactDate between :startDate AND :endDate '
-            . 'ORDER BY a.id ASC')
+        $qb = $this->createQueryBuilder('a')
+            ->select('a.assistance')
+            ->distinct()
+            ->join('a.households', 'h')
+            ->join('h.contacts', 'c')
+            ->where($criteria['betweenWhereClause'])
+            ->orderBy('a.assistance')
             ->setParameters($criteria['betweenParameters'])
-            ->getResult();
+            ->getQuery()->getResult();
         $rowLabels = [];
         foreach ($qb as $row) {
             $rowLabels[] = $row['assistance'];

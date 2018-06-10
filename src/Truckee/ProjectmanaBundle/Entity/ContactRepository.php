@@ -47,7 +47,7 @@ class ContactRepository extends EntityRepository
         return $qb;
     }
 
-    public function getHouseholdCount($criteria, $distinct = false)
+    public function getHouseholdCount($criteria)
     {
         $parameters = array_merge($criteria['betweenParameters'], $criteria['siteParameters'], $criteria['contactParameters']);
 
@@ -89,8 +89,8 @@ class ContactRepository extends EntityRepository
         return $this->getEntityManager()->createQueryBuilder()
                 ->select('cty.county, cd.contactdesc, count(IDENTITY(c.household)) TH, count(distinct IDENTITY(c.household)) UH')
                 ->from('TruckeeProjectmanaBundle:Contact', 'c')
-                ->join('TruckeeProjectmanaBundle:County', 'cty', 'WITH', 'c.county = cty')
-                ->join('TruckeeProjectmanaBundle:Contactdesc', 'cd', 'WITH', 'c.contactdesc = cd')
+                ->join('c.county', 'cty')
+                ->join('c.contactdesc', 'cd')
                 ->where($criteria['betweenWhereClause'])
                 ->groupBy('cty.county, cd.contactdesc')
                 ->orderBy('cty.county, cd.contactdesc')
@@ -106,10 +106,10 @@ class ContactRepository extends EntityRepository
         return $this->getEntityManager()->createQueryBuilder()
                 ->select('cty.county, cd.contactdesc, count(m.id) TI, count(distinct m.id) UI')
                 ->from('TruckeeProjectmanaBundle:Contact', 'c')
-                ->join('TruckeeProjectmanaBundle:Household', 'h', 'WITH', 'c.household = h')
-                ->join('TruckeeProjectmanaBundle:Member', 'm', 'WITH', 'm.household = h')
-                ->join('TruckeeProjectmanaBundle:County', 'cty', 'WITH', 'c.county = cty')
-                ->join('TruckeeProjectmanaBundle:Contactdesc', 'cd', 'WITH', 'c.contactdesc = cd')
+                ->join('c.household', 'h')
+                ->join('h.members', 'm')
+                ->join('c.county', 'cty')
+                ->join('c.contactdesc', 'cd')
                 ->where($criteria['betweenWhereClause'])
                 ->andWhere($qb->expr()->orX('m.excludeDate > :startDate', $qb->expr()->isNull('m.excludeDate')))
                 ->andWhere($qb->expr()->orX('m.dob < :startDate', $qb->expr()->isNull('m.dob')))

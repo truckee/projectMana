@@ -24,7 +24,7 @@ class CountyRepository extends EntityRepository
                 ->select('cty')
                 ->distinct()
                 ->from('TruckeeProjectmanaBundle:County', 'cty')
-                ->join('TruckeeProjectmanaBundle:Contact', 'c', 'WITH', 'c.county = cty')
+                ->join('cty.contacts', 'c')
                 ->where($criteria['betweenWhereClause'])
                 ->setParameters($criteria['betweenParameters'])
                 ->orderBy('cty.county')
