@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Truckee\ProjectmanaBundle\Entity\Household;
 use Truckee\ProjectmanaBundle\Entity\Member;
 use Truckee\ProjectmanaBundle\Entity\Phone;
+use Truckee\ProjectmanaBundle\Entity\Seeking;
 use Truckee\ProjectmanaBundle\Form\HouseholdRequiredType;
 use Truckee\ProjectmanaBundle\Form\HouseholdType;
 use Truckee\ProjectmanaBundle\Form\MemberType;
@@ -98,7 +99,6 @@ class HouseholdController extends Controller
         }
         $household = new Household();
         $head = new Member();
-        $new = true;
         $form = $this->createForm(HouseholdRequiredType::class, $household);
         $formHead = $this->createForm(MemberType::class, $head);
         $form->handleRequest($request);
@@ -172,9 +172,7 @@ class HouseholdController extends Controller
         $metadata = $searches->getMetadata($household);
 
         $session = $request->getSession();
-        $new = false;
         if (null !== $session->get('household')) {
-            $new = true;
             $session->set('household', null);
         }
         if (count($household->getPhones()) == 0) {

@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Truckee\Projectmana package.
  *
@@ -24,6 +23,7 @@ use Truckee\ProjectmanaBundle\Validator\Constraints as ManaAssert;
  */
 class Household
 {
+
     /**
      * Constructor.
      */
@@ -37,7 +37,6 @@ class Household
         $this->phones = new ArrayCollection();
         $this->reasons = new ArrayCollection();
     }
-    
     /**
      * @var int
      *
@@ -202,6 +201,16 @@ class Household
      *      ))
      */
     protected $reasons;
+
+    /**
+     * @ORM\Column(name="seeking", type="string", nullable=true)
+     */
+    protected $seeking;
+
+    /**
+     * @ORM\Column(name="receiving", type="string", nullable=true)
+     */
+    protected $receiving;
 
     /**
      * @var bool
@@ -677,7 +686,6 @@ class Household
     {
         return $this->income;
     }
-
     /**
      * @var \Truckee\ProjectmanaBundle\Entity\OneSideEntity
      *
@@ -711,5 +719,27 @@ class Household
     public function getCenter()
     {
         return $this->center;
+    }
+
+    public function getSeeking()
+    {
+        return $this->seeking;
+    }
+
+    public function setSeeking($seeking)
+    {
+        $this->seeking = $seeking;
+        return $this;
+    }
+
+    public function getReceiving()
+    {
+        return $this->receiving;
+    }
+
+    public function setReceiving($receiving)
+    {
+        $this->receiving = $receiving;
+        return $this;
     }
 }

@@ -47,6 +47,11 @@ class Organization
     protected $enabled;
 
     /**
+     * @ORM\Column(name="position", type="string", nullable=true)
+     */
+    protected $position;
+
+    /**
      * Get id.
      *
      * @return int
@@ -102,6 +107,30 @@ class Organization
     public function getEnabled()
     {
         return $this->enabled;
+    }
+
+    /**
+     * Set position.
+     *
+     * @param int $position
+     *
+     * @return position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * Get position.
+     *
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
     }
 
     /**
