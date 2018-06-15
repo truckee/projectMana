@@ -25,7 +25,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class HouseholdType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -39,7 +38,8 @@ class HouseholdType extends AbstractType
                 'mapped' => false,
             ])
             ->add(
-                'addresses', CollectionType::class,
+                'addresses',
+                CollectionType::class,
                 array(
                     'entry_type' => AddressType::class,
                     'allow_add' => true,
@@ -49,7 +49,8 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'center', EntityType::class,
+                'center',
+                EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:Center',
                     'label' => 'Site:',
@@ -69,12 +70,15 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'compliance', NoYesChoiceType::class, array(
+                'compliance',
+                NoYesChoiceType::class,
+                array(
                     'label' => 'Compliance: ',
                 )
             )
             ->add(
-                'complianceDate', DateType::class,
+                'complianceDate',
+                DateType::class,
                 array(
                     'label' => 'Compliance date: ',
                     'widget' => 'single_text',
@@ -84,7 +88,8 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'foodstamp', EntityType::class,
+                'foodstamp',
+                EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:FsStatus',
                     'choice_label' => 'status',
@@ -104,7 +109,8 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'fsamount', EntityType::class,
+                'fsamount',
+                EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:FsAmount',
                     'choice_label' => 'amount',
@@ -123,7 +129,8 @@ class HouseholdType extends AbstractType
                     })
             )
             ->add(
-                'housing', EntityType::class,
+                'housing',
+                EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:Housing',
                     'choice_label' => 'housing',
@@ -143,7 +150,8 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'income', EntityType::class,
+                'income',
+                EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:Income',
                     'choice_label' => 'income',
@@ -163,7 +171,8 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'notfoodstamp', EntityType::class,
+                'notfoodstamp',
+                EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:Notfoodstamp',
                     'label' => 'If not food stamps, why not? ',
@@ -183,7 +192,8 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'phones', CollectionType::class,
+                'phones',
+                CollectionType::class,
                 array(
                     'entry_type' => PhoneType::class,
                     'label' => 'Phone: ',
@@ -193,7 +203,8 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'reasons', EntityType::class,
+                'reasons',
+                EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:Reason',
                     'choice_label' => 'reason',
@@ -219,7 +230,8 @@ class HouseholdType extends AbstractType
                 'label' => 'Shared: ',
             ))
             ->add(
-                'sharedDate', DateType::class,
+                'sharedDate',
+                DateType::class,
                 array(
                     'label' => 'Shared date: ',
                     'widget' => 'single_text',
@@ -229,7 +241,8 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'assistances', EntityType::class,
+                'assistances',
+                EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:Assistance',
                     'choice_label' => 'assistance',
@@ -251,7 +264,8 @@ class HouseholdType extends AbstractType
                 'label' => 'Seeking service:'
             ])
             ->add(
-                'organizations', EntityType::class,
+                'organizations',
+                EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:Organization',
                     'choice_label' => 'organization',

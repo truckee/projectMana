@@ -20,7 +20,6 @@ use Truckee\ProjectmanaBundle\Utilities\CriteriaBuilder;
 use Truckee\ProjectmanaBundle\Utilities\Crosstab;
 use Truckee\ProjectmanaBundle\Utilities\DetailsReport as Detail;
 use Truckee\ProjectmanaBundle\Utilities\GeneralStatisticsReport as General;
-//use Truckee\ProjectmanaBundle\Utilities\TempTables;
 
 /**
  * Present various Project MANA statistics.
@@ -275,8 +274,10 @@ class StatisticsController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $formCriteria = $request->request->get('report_criteria');
             $criteria = $builder->getDetailsCriteria($formCriteria);
-            $criteria['columnType'] = $formCriteria['columnType'];
             $templateCriteria = $builder->getTemplateCriteria($criteria);
+
+            $criteria['columnType'] = $formCriteria['columnType'];
+
             $em = $this->getDoctrine()->getManager();
             $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Work')->rowLabels($criteria);
             $colLabels = $crosstab->colLabels($criteria);
@@ -326,15 +327,17 @@ class StatisticsController extends Controller
         $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $formCriteria = $request->request->get('report_criteria');
-            $criteria = $builder->getDetailsCriteria($formCriteria);
-            $criteria['columnType'] = $formCriteria['columnType'];
-            $templateCriteria = $builder->getTemplateCriteria($criteria);
             $profileParameters = [
                 'entity' => 'housing',
                 'entityField' => 'housing',
                 'joinField' => 'housing',
             ];
+            $formCriteria = $request->request->get('report_criteria');
+            $criteria = $builder->getDetailsCriteria($formCriteria);
+            $templateCriteria = $builder->getTemplateCriteria($criteria);
+
+            $criteria['columnType'] = $formCriteria['columnType'];
+
             $rowLabels = $crosstab->rowLabels($criteria, $profileParameters);
             $colLabels = $crosstab->colLabels($criteria);
             $rawData = $crosstab->crosstabData($criteria, $profileParameters);
@@ -383,15 +386,17 @@ class StatisticsController extends Controller
         $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $formCriteria = $request->request->get('report_criteria');
-            $criteria = $builder->getDetailsCriteria($formCriteria);
-            $criteria['columnType'] = $formCriteria['columnType'];
-            $templateCriteria = $builder->getTemplateCriteria($criteria);
             $profileParameters = [
                 'entity' => 'income',
                 'entityField' => 'income',
                 'joinField' => 'income',
             ];
+            $formCriteria = $request->request->get('report_criteria');
+            $criteria = $builder->getDetailsCriteria($formCriteria);
+            $templateCriteria = $builder->getTemplateCriteria($criteria);
+
+            $criteria['columnType'] = $formCriteria['columnType'];
+
             $rowLabels = $crosstab->rowLabels($criteria, $profileParameters);
             $colLabels = $crosstab->colLabels($criteria);
             $rawData = $crosstab->crosstabData($criteria, $profileParameters);
@@ -440,14 +445,16 @@ class StatisticsController extends Controller
         $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $formCriteria = $request->request->get('report_criteria');
-            $criteria = $builder->getDetailsCriteria($formCriteria);
-            $criteria['columnType'] = $formCriteria['columnType'];
-            $templateCriteria = $builder->getTemplateCriteria($criteria);
             $profileParameters = [
                 'entity' => 'reason',
                 'entityField' => 'reason',
             ];
+            $formCriteria = $request->request->get('report_criteria');
+            $criteria = $builder->getDetailsCriteria($formCriteria);
+            $templateCriteria = $builder->getTemplateCriteria($criteria);
+            
+            $criteria['columnType'] = $formCriteria['columnType'];
+
             $rowLabels = $crosstab->mtmRowLabels($criteria, $profileParameters);
             $colLabels = $crosstab->colLabels($criteria);
             $rawData = $crosstab->mtmCrosstabData($criteria, $profileParameters);
@@ -500,8 +507,9 @@ class StatisticsController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $formCriteria = $request->request->get('report_criteria');
             $criteria = $builder->getDetailsCriteria($formCriteria);
-            $criteria['columnType'] = $formCriteria['columnType'];
             $templateCriteria = $builder->getTemplateCriteria($criteria);
+
+            $criteria['columnType'] = $formCriteria['columnType'];
 
             $yesNo = $this->yesNo($criteria, $crosstab);
             $content = $this->profilerPlain($yesNo, $templateCriteria, $crosstab);
@@ -537,17 +545,20 @@ class StatisticsController extends Controller
         $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $formCriteria = $request->request->get('report_criteria');
-            $criteria = $builder->getDetailsCriteria($formCriteria);
-            $criteria['columnType'] = $formCriteria['columnType'];
-            $templateCriteria = $builder->getTemplateCriteria($criteria);
             $profileParameters = [
                 'entity' => 'assistance',
                 'entityField' => 'assistance',
+                'joinField' => 'assistances',
             ];
+            $formCriteria = $request->request->get('report_criteria');
+            $criteria = $builder->getDetailsCriteria($formCriteria);
+            $templateCriteria = $builder->getTemplateCriteria($criteria);
+
+            $criteria['columnType'] = $formCriteria['columnType'];
+
             $rowLabels = $crosstab->mtmRowLabels($criteria, $profileParameters);
             $colLabels = $crosstab->colLabels($criteria);
-            $rawData = $crosstab->mtmAllTimeActiveHouseholdsCrosstabData($criteria, $profileParameters);
+            $rawData = $crosstab->mtmCrosstabData($criteria, $profileParameters);
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
@@ -556,7 +567,7 @@ class StatisticsController extends Controller
                         'colLabels' => $colLabels,
                         'date' => new \DateTime(),
                         'profile' => $profile,
-                        'reportSubTitle' => 'For active households ',
+                        'reportSubTitle' => 'For the period ',
                         'reportTitle' => 'Seeking services',
                         'rowHeader' => 'Service',
                         'rowLabels' => $rowLabels,
@@ -587,17 +598,20 @@ class StatisticsController extends Controller
         $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $formCriteria = $request->request->get('report_criteria');
-            $criteria = $builder->getDetailsCriteria($formCriteria);
-            $criteria['columnType'] = $formCriteria['columnType'];
-            $templateCriteria = $builder->getTemplateCriteria($criteria);
             $profileParameters = [
                 'entity' => 'organization',
                 'entityField' => 'organization',
+                'joinField' => 'organizations',
             ];
+            $formCriteria = $request->request->get('report_criteria');
+            $criteria = $builder->getDetailsCriteria($formCriteria);
+            $templateCriteria = $builder->getTemplateCriteria($criteria);
+
+            $criteria['columnType'] = $formCriteria['columnType'];
+
             $rowLabels = $crosstab->mtmRowLabels($criteria, $profileParameters);
             $colLabels = $crosstab->colLabels($criteria);
-            $rawData = $crosstab->mtmAllTimeActiveHouseholdsCrosstabData($criteria, $profileParameters);
+            $rawData = $crosstab->mtmCrosstabData($criteria, $profileParameters);
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
@@ -606,7 +620,7 @@ class StatisticsController extends Controller
                         'colLabels' => $colLabels,
                         'date' => new \DateTime(),
                         'profile' => $profile,
-                        'reportSubTitle' => 'For active households ',
+                        'reportSubTitle' => 'For the period ',
                         'reportTitle' => 'Receiving services',
                         'rowHeader' => 'Organization',
                         'rowLabels' => $rowLabels,

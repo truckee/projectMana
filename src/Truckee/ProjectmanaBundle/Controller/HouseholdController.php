@@ -301,7 +301,8 @@ class HouseholdController extends Controller
             $response = new Response('');
         } else {
             $content = $this->renderView(
-                'Contact/addHouseholdContact.html.twig', [
+                'Contact/addHouseholdContact.html.twig',
+                [
                     'household' => $household,
                 ]
             );
@@ -320,10 +321,12 @@ class HouseholdController extends Controller
         $turkeys = $em->getRepository('TruckeeProjectmanaBundle:Household')->annualTurkey();
         $year = date('Y');
         $filename = 'Let\'sTalkTurkey' . $year . '.pdf';
-        $html = $this->renderView('Pdf/Household/turkeyContent.html.twig',
+        $html = $this->renderView(
+            'Pdf/Household/turkeyContent.html.twig',
             [
             'turkeys' => $turkeys,
-        ]);
+        ]
+        );
         $header = $this->renderView('Pdf/Household/turkeyHeader.html.twig');
 
         $exec = $pdf->pdfExecutable();
@@ -331,11 +334,14 @@ class HouseholdController extends Controller
         $snappy->setOption('header-html', $header);
         $snappy->setOption('footer-center', 'Page [page]');
         $content = $snappy->getOutputFromHtml($html);
-        $response = new Response($content, 200,
+        $response = new Response(
+            $content,
+            200,
             [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'attachment; filename=' . $filename . '.pdf',
-        ]);
+        ]
+        );
 
         return $response;
     }

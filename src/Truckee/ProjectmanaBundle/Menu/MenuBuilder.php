@@ -185,7 +185,9 @@ class MenuBuilder
             'routeParameters' => ['source' => 'FY to date'],
         ]);
 
-        $menu->addChild('Annual Turkey (CY, PDF)',[
+        $menu->addChild(
+            'Annual Turkey (CY, PDF)',
+            [
             'route' => 'annual_turkey',]
             );
 

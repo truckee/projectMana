@@ -65,7 +65,7 @@ $(document).ready(function () {
         }
         if (~$(this).attr('for').indexOf('household_organizations')) {
             var cb = $(this).find('input:checkbox');
-            receivingValue = $('#household_seeking').val();
+            receivingValue = $('#household_receiving').val();
             if (cb.is(':checked')) {
                 $('#receiving').show();
                 $('#household_receiving').val(receivingValue);

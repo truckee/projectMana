@@ -24,7 +24,10 @@ class SelectCenterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('center', CenterEnabledChoiceType::class,[
+            ->add(
+                'center',
+                CenterEnabledChoiceType::class,
+                [
                 'constraints' => array(new NotBlank(array('message' => 'No site elected')))
                 ]
                 );

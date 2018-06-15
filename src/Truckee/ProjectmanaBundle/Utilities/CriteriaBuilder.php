@@ -1,9 +1,9 @@
 <?php
 /*
  * This file is part of the Truckee\Projectmana package.
- * 
+ *
  * (c) George W. Brooks
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -146,12 +146,10 @@ class CriteriaBuilder
     {
         $templateCriteria['startDate'] = $criteria['betweenParameters']['startDate'];
         $templateCriteria['endDate'] = $criteria['betweenParameters']['endDate'];
-//        $templateCriteria['contactdesc'] = '';
         //check if contactParameters, siteParameters are set to accommodate details report criteria
         if (isset($criteria['contactParameters']) && [] !== $criteria['contactParameters']) {
             $templateCriteria['contactdesc'] = $criteria['contactParameters']['contactdesc']->getContactdesc();
         }
-//        $templateCriteria['site'] = '';
         if (isset($criteria['siteParameters']) && [] !== $criteria['siteParameters']) {
             if ('center' === key($criteria['siteParameters'])) {
                 $templateCriteria['site'] = $criteria['siteParameters']['center']->getCenter();

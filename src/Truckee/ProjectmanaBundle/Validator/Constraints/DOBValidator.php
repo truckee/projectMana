@@ -1,9 +1,9 @@
 <?php
 /*
  * This file is part of the Truckee\Projectmana package.
- * 
+ *
  * (c) George W. Brooks
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -22,7 +22,6 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class DOBValidator extends ConstraintValidator
 {
-
     public function validate($member, Constraint $constraint)
     {
         $isNewHousehold = is_null($this->context->getValue()->getHousehold());

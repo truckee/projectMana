@@ -58,8 +58,15 @@ class MemberRepository extends EntityRepository
 
     public function uniqueNewMembers($criteria)
     {
-        $parameters = array_merge($criteria['betweenParameters'], $criteria['siteParameters'], $criteria['contactParameters'], $criteria['startParameters'], $criteria['startParameters'],
-            $criteria['startParameters'], $criteria['startParameters']);
+        $parameters = array_merge(
+            $criteria['betweenParameters'],
+            $criteria['siteParameters'],
+            $criteria['contactParameters'],
+            $criteria['startParameters'],
+            $criteria['startParameters'],
+            $criteria['startParameters'],
+            $criteria['startParameters']
+        );
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         return $this->uniqueMembersQuery($criteria)
