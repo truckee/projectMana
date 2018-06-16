@@ -45,7 +45,7 @@ easy_admin:
                 form_options: { validation_groups: ['Options'] }
             edit:
                 title: '%%entity_label%%'
-                fields: [position, enabled]
+                fields: [enabled]
                 form_options: { validation_groups: ['Options'] }
         Organization:
             class: Truckee\ProjectmanaBundle\Entity\Organization

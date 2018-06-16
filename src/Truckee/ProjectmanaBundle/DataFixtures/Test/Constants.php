@@ -15,6 +15,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Truckee\ProjectmanaBundle\Entity\AddressType;
+use Truckee\ProjectmanaBundle\Entity\Assistance;
 use Truckee\ProjectmanaBundle\Entity\Center;
 use Truckee\ProjectmanaBundle\Entity\Contactdesc;
 use Truckee\ProjectmanaBundle\Entity\County;
@@ -24,6 +25,7 @@ use Truckee\ProjectmanaBundle\Entity\FsStatus;
 use Truckee\ProjectmanaBundle\Entity\Housing;
 use Truckee\ProjectmanaBundle\Entity\Income;
 use Truckee\ProjectmanaBundle\Entity\Notfoodstamp;
+use Truckee\ProjectmanaBundle\Entity\Organization;
 use Truckee\ProjectmanaBundle\Entity\Reason;
 use Truckee\ProjectmanaBundle\Entity\Relationship;
 use Truckee\ProjectmanaBundle\Entity\State;
@@ -38,6 +40,16 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
+        $svc = new Assistance();
+        $svc->setAssistance('Other');
+        $svc->setEnabled(true);
+        $manager->persist($svc);
+
+        $org = new Organization();
+        $org->setOrganization('Other');
+        $org->setEnabled(true);
+        $manager->persist($org);
+
         $eth = new Ethnicity();
         $eth->setEthnicity('Caucasian');
         $this->setReference('cau', $eth);

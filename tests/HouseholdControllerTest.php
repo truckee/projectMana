@@ -276,6 +276,32 @@ class HouseholdControllerTest extends TruckeeWebTestCase
 //        $this->assertEquals(0, $crawler->filter('html:contains("disabled")')->count());
     }
 
+    public function testServiceRequested()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('house3')->getId();
+        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
+        $form = $crawler->selectButton('Submit')->form();
+        $form['household[assistances]'][0]->tick();
+        $form['household[seeking]'] = 'Demon chasing';
+        $crawler = $this->client->submit($form);
+        
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Other")')->count());
+    }
+
+    public function testServiceUsed()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('house3')->getId();
+        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
+        $form = $crawler->selectButton('Submit')->form();
+        $form['household[organizations]'][0]->tick();
+        $form['household[receiving]'] = 'Marmot fund';
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Other")')->count());
+    }
+
     public function tearDown()
     {
         unset($this->client);
