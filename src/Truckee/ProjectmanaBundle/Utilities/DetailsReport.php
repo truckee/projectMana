@@ -50,17 +50,17 @@ class DetailsReport
                     $collector[$array['county']][$array['contactdesc']] = [];
                 }
             }
-            if (array_key_exists('TH', $array)) {
-                $collector[$array['county']][$array['contactdesc']]['TH'] = $array['TH'];
+            if (array_key_exists('THS', $array)) {
+                $collector[$array['county']][$array['contactdesc']]['THS'] = $array['THS'];
             }
-            if (array_key_exists('UI', $array)) {
-                $collector[$array['county']][$array['contactdesc']]['UI'] = $array['UI'];
+            if (array_key_exists('UIS', $array)) {
+                $collector[$array['county']][$array['contactdesc']]['UIS'] = $array['UIS'];
             }
-            if (array_key_exists('UH', $array)) {
-                $collector[$array['county']][$array['contactdesc']]['UH'] = $array['UH'];
+            if (array_key_exists('UHS', $array)) {
+                $collector[$array['county']][$array['contactdesc']]['UHS'] = $array['UHS'];
             }
-            if (array_key_exists('TI', $array)) {
-                $collector[$array['county']][$array['contactdesc']]['TI'] = $array['TI'];
+            if (array_key_exists('TIS', $array)) {
+                $collector[$array['county']][$array['contactdesc']]['TIS'] = $array['TIS'];
             }
         }
 

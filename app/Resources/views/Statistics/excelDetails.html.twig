@@ -2,7 +2,7 @@
 {% set end = specs.endDate|date('F Y') %}
 <div class="title">Distribution Details for {{ start }}
     {% if (start != end) %} through {{ end }}{% endif %}</div>
-{% for key,data in details.details %}
+{% for key,data in details %}
 <div class="section70">{{ key }}</div>
 {#<table class="width60">#}
     <table class="stats">
@@ -17,10 +17,10 @@
     <table class="stats">
         <tr>
         <td>{{ desc }}</td>
-        <td>{{ type.uniqInd }}</td>
-        <td>{{ type.totalInd }}</td>
-        <td>{{ type.uniqHouse }}</td>
-        <td>{{ type.totalHouse }}</td>
+        <td>{{ type.UIS }}</td>
+        <td>{{ type.TIS }}</td>
+        <td>{{ type.UHS }}</td>
+        <td>{{ type.THS }}</td>
     </table>
 {% endfor %}
 {% endfor %}

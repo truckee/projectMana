@@ -87,7 +87,7 @@ class ContactRepository extends EntityRepository
     public function detailsHouseholds($criteria)
     {
         return $this->getEntityManager()->createQueryBuilder()
-                ->select('cty.county, cd.contactdesc, count(IDENTITY(c.household)) TH, count(distinct IDENTITY(c.household)) UH')
+                ->select('cty.county, cd.contactdesc, count(IDENTITY(c.household)) THS, count(distinct IDENTITY(c.household)) UHS')
                 ->from('TruckeeProjectmanaBundle:Contact', 'c')
                 ->join('c.county', 'cty')
                 ->join('c.contactdesc', 'cd')
@@ -104,7 +104,7 @@ class ContactRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         return $this->getEntityManager()->createQueryBuilder()
-                ->select('cty.county, cd.contactdesc, count(m.id) TI, count(distinct m.id) UI')
+                ->select('cty.county, cd.contactdesc, count(m.id) TIS, count(distinct m.id) UIS')
                 ->from('TruckeeProjectmanaBundle:Contact', 'c')
                 ->join('c.household', 'h')
                 ->join('h.members', 'm')

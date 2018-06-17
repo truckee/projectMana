@@ -111,7 +111,6 @@ class StatisticsController extends Controller
             $formCriteria = $request->request->get('report_criteria');
             $criteria = $builder->getDetailsCriteria($formCriteria);
             $data = $detail->getDetailStatistics($criteria);
-
             $session = $request->getSession();
             $templateCriteria = $builder->getTemplateCriteria($criteria);
             $templateCriteria['reportType'] = 'Distribution Details';

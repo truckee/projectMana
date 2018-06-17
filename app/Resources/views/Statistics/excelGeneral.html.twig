@@ -95,26 +95,26 @@
     <tr>
     <td>&nbsp;</td>
     <td>Unique Individuals Served</td>
-    {% if ctyPcts != 0 %}<td>&nbsp;</td>{% endif %}
+{#    {% if ctyPCTs != 0 %}<td>&nbsp;</td>{% endif %}#}
     <td>Total Individuals Served</td>
-    {% if ctyPcts != 0 %}<td>&nbsp;</td>{% endif %}
+{#    {% if ctyPCTs != 0 %}<td>&nbsp;</td>{% endif %}#}
     <td>Unique Households Served</td>
-    {% if ctyPcts != 0 %}<td>&nbsp;</td>{% endif %}
+{#    {% if ctyPCTs != 0 %}<td>&nbsp;</td>{% endif %}#}
     <td>Total Households Served</td>
-    {% if ctyPcts != 0 %}<td>&nbsp;</td>{% endif %}
+{#    {% if ctyPCTs != 0 %}<td>&nbsp;</td>{% endif %}#}
 </table>
-{% for key, value in ctyStats %}
+{% for key, value in statistics.countyStats %}
 <table class="stats">
     <td>{{ key }}</td>
     {% set cty = key %}
     <td>{{ value.UIS }}</td>
-    {% if ctyPcts != 0 %}<td>{{ value.UISPct|number_format(1) ~ '%' }}</td>{% endif %}
-    <td>{{ value.IS }}</td>
-    {% if ctyPcts != 0 %}<td>{{ value.ISPct|number_format(1) ~ '%' }}</td>{% endif %}
+    <td>{{ value.UISPCT|number_format(1) ~ '%' }}</td>
+    <td>{{ value.TIS }}</td>
+    <td>{{ value.TISPCT|number_format(1) ~ '%' }}</td>
     <td>{{ value.UHS }}</td>
-    {% if ctyPcts != 0 %}<td>{{ value.UHSPct|number_format(1) ~ '%' }}</td>{% endif %}
+    <td>{{ value.UHSPCT|number_format(1) ~ '%' }}</td>
     <td>{{ value.THS }}</td>
-    {% if ctyPcts != 0 %}<td>{{ value.THSPct|number_format(1) ~ '%' }}</td>{% endif %}
+    <td>{{ value.THSPCT|number_format(1) ~ '%' }}</td>
 </table>
 {% endfor %}
 {% endif %}
