@@ -43,8 +43,11 @@ class ContactController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
+        $flash = $this->get('braincrafted_bootstrap.flash');
         if (!$household) {
-            throw $this->createNotFoundException('Unable to find Household entity.');
+            $flash->error('Unable to find Household ' . $id);
+
+            return $this->redirectToRoute('home');
         }
         $contact = new Contact();
         $contact->setContactDate(date_create());
@@ -62,7 +65,6 @@ class ContactController extends Controller
             $household->addContact($contact);
             $em->persist($household);
             $em->flush();
-            $flash = $this->get('braincrafted_bootstrap.flash');
             $flash->alert("Contact added for household $id");
 
             return $this->redirectToRoute('contact_new', array('id' => $id));
@@ -91,8 +93,11 @@ class ContactController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $contact = $em->getRepository('TruckeeProjectmanaBundle:Contact')->find($id);
+        $flash = $this->get('braincrafted_bootstrap.flash');
         if (!$contact) {
-            throw $this->createNotFoundException('Unable to find Contact.');
+            $flash->error('Unable to find contact ');
+
+            return $this->redirectToRoute('home');
         }
         $searches = $this->get('mana.searches');
         $disabledOptions = $searches->getDisabledOptions($contact);
@@ -107,7 +112,6 @@ class ContactController extends Controller
             $em->persist($contact);
             $em->flush();
             $hid = $contact->getHousehold()->getId();
-            $flash = $this->get('braincrafted_bootstrap.flash');
             $flash->alert('Contact has been updated');
 
             return $this->redirectToRoute('contact_new', array('id' => $hid));

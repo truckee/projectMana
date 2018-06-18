@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Truckee\Projectmana package.
  *
@@ -25,6 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class MemberController extends Controller
 {
+
     /**
      * Edit household member.
      *
@@ -40,7 +40,10 @@ class MemberController extends Controller
         $em = $this->getDoctrine()->getManager();
         $member = $em->getRepository('TruckeeProjectmanaBundle:Member')->find($id);
         if (!$member) {
-            throw $this->createNotFoundException('Unable to find Member.');
+            $flash = $this->get('braincrafted_bootstrap.flash');
+            $flash->error('Unable to find member');
+
+            return $this->redirectToRoute('home');
         }
         $searches = $this->get('mana.searches');
         $disabledOptions = $searches->getDisabledOptions($member);
@@ -59,7 +62,7 @@ class MemberController extends Controller
             $template = 'Member/excludedShow.html.twig';
         }
 
-        $form = $this->createForm(MemberType::class, $member, ['disabledOptions'  => $disabledOptions]);
+        $form = $this->createForm(MemberType::class, $member, ['disabledOptions' => $disabledOptions]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $isHead = $form['isHead']->getData();
@@ -89,13 +92,16 @@ class MemberController extends Controller
             return $response;
         }
 
-        return $this->render('Member/edit.html.twig', [
-            'form' => $form->createView(),
-            'templates' => $templates,
-            'id' => $id,
-            'headId' => $headId,
-            'metadata' => $metadata,
-        ]);
+        return $this->render(
+            'Member/edit.html.twig',
+                [
+                'form' => $form->createView(),
+                'templates' => $templates,
+                'id' => $id,
+                'headId' => $headId,
+                'metadata' => $metadata,
+        ]
+        );
     }
 
     /**
@@ -113,7 +119,10 @@ class MemberController extends Controller
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($houseId);
         if (!$household) {
-            throw $this->createNotFoundException('Unable to find Household.');
+            $flash = $this->get('braincrafted_bootstrap.flash');
+            $flash->error('Unable to find Household ' . $id);
+
+            return $this->redirectToRoute('home');
         }
         $member = new Member();
         $household->addMember($member);
@@ -125,7 +134,7 @@ class MemberController extends Controller
             $em->persist($member);
             $em->persist($household);
             $em->flush();
-            $name = $member->getFname().' '.$member->getSname();
+            $name = $member->getFname() . ' ' . $member->getSname();
             $view = $this->renderView('Member/memberShowBlock_content.html.twig', [
                 'member' => $member,
                 'hohId' => $household->getHead()->getId(),
@@ -139,12 +148,15 @@ class MemberController extends Controller
             return $response;
         }
 
-        return $this->render('Member/add.html.twig', [
-            'form' => $form->createView(),
-            'templates' => $templates,
-            'houseId' => $houseId,
-            'metadata'  => null,
-        ]);
+        return $this->render(
+            'Member/add.html.twig',
+                [
+                'form' => $form->createView(),
+                'templates' => $templates,
+                'houseId' => $houseId,
+                'metadata' => null,
+        ]
+        );
     }
 
     /**

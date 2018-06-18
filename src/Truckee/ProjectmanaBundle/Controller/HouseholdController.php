@@ -51,7 +51,10 @@ class HouseholdController extends Controller
         $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
 
         if (!$household) {
-            throw $this->createNotFoundException('Unable to find Household entity.');
+            $flash = $this->get('braincrafted_bootstrap.flash');
+            $flash->error('Unable to find Household ' . $id);
+
+            return $this->redirectToRoute('home');
         }
 
         $templates[] = 'Member/memberShowBlock.html.twig';
@@ -165,7 +168,10 @@ class HouseholdController extends Controller
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
         if (!$household) {
-            throw $this->createNotFoundException('Unable to find Household.');
+            $flash = $this->get('braincrafted_bootstrap.flash');
+            $flash->error('Unable to find Household ' . $id);
+
+            return $this->redirectToRoute('home');
         }
         $searches = $this->get('mana.searches');
         $disabledOptions = $searches->getDisabledOptions($household);
