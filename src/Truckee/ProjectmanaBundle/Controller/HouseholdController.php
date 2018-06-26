@@ -18,8 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Truckee\ProjectmanaBundle\Entity\Household;
 use Truckee\ProjectmanaBundle\Entity\Member;
-use Truckee\ProjectmanaBundle\Entity\Phone;
-use Truckee\ProjectmanaBundle\Entity\Seeking;
 use Truckee\ProjectmanaBundle\Form\HouseholdRequiredType;
 use Truckee\ProjectmanaBundle\Form\HouseholdType;
 use Truckee\ProjectmanaBundle\Form\MemberType;
@@ -180,10 +178,6 @@ class HouseholdController extends Controller
         $session = $request->getSession();
         if (null !== $session->get('household')) {
             $session->set('household', null);
-        }
-        if (count($household->getPhones()) == 0) {
-            $phone = new Phone();
-            $household->addPhone($phone);
         }
         $addresses = $this->get('mana.addresses');
         $addressTemplates = $addresses->addressTemplates($household);

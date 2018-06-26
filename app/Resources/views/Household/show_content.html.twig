@@ -7,7 +7,7 @@
                 <b>Active?:</b> {% if household.active == 1 %}Yes{% else %}No{% endif %}
                 <b>Date added:</b> {% if household.dateAdded is not null %}{{ household.dateAdded|date('m/d/Y') }}<input type="hidden" name="household[dateAdded]" value="{{ household.dateAdded|date('m/d/Y') }}">{% endif %}
                 <b>First site: </b>{% if household.center is not null %}{{ household.center.center }}{% endif %}
-                <b>Phone: </b>{% for phone in household.phones %}({{ phone.areacode }}) {{phone.phoneNumber }}{% endfor %}
+                <b>Phone: </b>({{ household.areacode }}) {{household.phoneNumber }}
             </div>
         </div>
         <div class="row">

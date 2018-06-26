@@ -192,17 +192,6 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'phones',
-                CollectionType::class,
-                array(
-                    'entry_type' => PhoneType::class,
-                    'label' => 'Phone: ',
-                    'allow_add' => true,
-                    'allow_delete' => false,
-                    'by_reference' => false,
-                )
-            )
-            ->add(
                 'reasons',
                 EntityType::class,
                 array(
@@ -286,6 +275,12 @@ class HouseholdType extends AbstractType
             ->add('receiving', TextType::class, [
                 'label' => 'Receiving service from:'
             ])
+            ->add('areacode', TextType::class, array(
+                'attr' => array('size' => 2),
+            ))
+            ->add('phoneNumber', TextType::class, array(
+                'attr' => array('size' => 8),
+            ))
         ;
     }
 

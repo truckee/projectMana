@@ -27,11 +27,6 @@ class HouseholdRepository extends EntityRepository
     public function initialize($household, $member, $session = null)
     {
         $em = $this->getEntityManager();
-        //phone added here because it's configured for 1:n but used as 1:1
-        $phone = new Phone();
-        $household->addPhone($phone);
-        $household->setActive(1);
-        $household->setDateAdded(new \DateTime());
         $member->setInclude(1);
         $relation = $em->getRepository('TruckeeProjectmanaBundle:Relationship')->findOneBy(['relation' => 'Self']);
         $member->setRelation($relation);

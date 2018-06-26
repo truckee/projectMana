@@ -20,6 +20,7 @@ use Truckee\ProjectmanaBundle\Validator\Constraints as ManaAssert;
  *
  * @ORM\Table(name="household")
  * @ORM\Entity(repositoryClass="Truckee\ProjectmanaBundle\Entity\HouseholdRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Household
 {
@@ -34,7 +35,6 @@ class Household
         $this->contacts = new ArrayCollection();
         $this->members = new ArrayCollection();
         $this->organizations = new ArrayCollection();
-        $this->phones = new ArrayCollection();
         $this->reasons = new ArrayCollection();
     }
     /**
@@ -186,14 +186,6 @@ class Household
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Phone", mappedBy="household",cascade={"persist"})
-     * @Assert\Valid
-     */
-    protected $phones;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
      * @ORM\ManyToMany(targetEntity="Reason", inversedBy="households", cascade={"persist"})
      * @ORM\JoinTable(name="household_reason",
      *      joinColumns={@ORM\JoinColumn(name="household_id", referencedColumnName="id")},
@@ -333,15 +325,11 @@ class Household
     }
 
     /**
-     * Set dateAdded.
-     *
-     * @param \DateTime $dateAdded
-     *
-     * @return Household
+     * @ORM\PrePersist
      */
-    public function setDateAdded($dateAdded)
+    public function setDateAdded()
     {
-        $this->dateAdded = $dateAdded;
+        $this->dateAdded = new \DateTime();
 
         return $this;
     }
@@ -437,41 +425,6 @@ class Household
     public function getMembers()
     {
         return $this->members;
-    }
-
-    /**
-     * Add phone.
-     *
-     * @param \Truckee\ProjectmanaBundle\Entity\Phone $phone
-     *
-     * @return Household
-     */
-    public function addPhone(Phone $phone)
-    {
-        $this->phones[] = $phone;
-        $phone->setHousehold($this);
-
-        return $this;
-    }
-
-    /**
-     * Remove phones.
-     *
-     * @param \Truckee\ProjectmanaBundle\Entity\Phone $phone
-     */
-    public function removePhone(\Truckee\ProjectmanaBundle\Entity\Phone $phone)
-    {
-        $this->phones->removeElement($phone);
-    }
-
-    /**
-     * Get phones.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPhones()
-    {
-        return $this->phones;
     }
 
     public function setHead($member)
@@ -742,4 +695,77 @@ class Household
         $this->receiving = $receiving;
         return $this;
     }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setInitiallyActive()
+    {
+        $this->setActive(true);
+    }
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="areacode", type="string", length=45, nullable=true)
+     * @ManaAssert\AreaCode
+     */
+    protected $areacode;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone_number", type="string", length=8, nullable=true)
+     * @ManaAssert\PhoneNumber
+     */
+    protected $phoneNumber;
+
+    /**
+     * Set areacode.
+     *
+     * @param string $areacode
+     *
+     * @return Phone
+     */
+    public function setAreacode($areacode)
+    {
+        $this->areacode = $areacode;
+
+        return $this;
+    }
+
+    /**
+     * Get areacode.
+     *
+     * @return string
+     */
+    public function getAreacode()
+    {
+        return $this->areacode;
+    }
+
+    /**
+     * Set phoneNumber.
+     *
+     * @param string $phoneNumber
+     *
+     * @return Phone
+     */
+    public function setPhoneNumber($phoneNumber)
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get phoneNumber.
+     *
+     * @return string
+     */
+    public function getPhoneNumber()
+    {
+        return $this->phoneNumber;
+    }
+
 }

@@ -192,8 +192,8 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $form['household[complianceDate]'] = $future;
         $form['household[shared]'] = '1';
         $form['household[sharedDate]'] = $future;
-        $form['household[phones][0][phoneNumber]'] = '12367';
-        $form['household[phones][0][areacode]'] = '12';
+        $form['household[phoneNumber]'] = '12367';
+        $form['household[areacode]'] = '12';
 
         $crawler = $this->client->submit($form);
 
