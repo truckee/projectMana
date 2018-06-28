@@ -37,8 +37,8 @@ monolog:
             handler: swift
         swift:
             type:       swift_mailer
-            from_email: 'artisan@uufnn.org'
-            to_email:   'support@uufnn.org'
+            from_email: 'admin@Projectmana.org'
+            to_email:   projectmana.app@gmail.com
             subject:    'An Error Occurred! %%message%%'
 #            port: 587
 #            encryptions: ssl
