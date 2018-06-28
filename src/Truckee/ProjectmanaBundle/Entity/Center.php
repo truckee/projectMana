@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Center.
  *
  * @ORM\Table(name="center")
- * @ORM\Entity(repositoryClass="Truckee\ProjectmanaBundle\Entity\CenterRepository")
+ * @ORM\Entity()
  */
 class Center
 {

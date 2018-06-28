@@ -30,4 +30,49 @@ $(document).ready(function () {
         }
     });
 
+
+    others = $(document).find('label:contains("Other")')
+    $.each(others, function () {
+        if (~$(this).attr('for').indexOf('household_assistances')) {
+            var cb = $(this).find('input:checkbox');
+            if (cb.is(':checked')) {
+                $('#seeking').show();
+            } else {
+                $('#seeking').hide();
+            }
+        }
+        if (~$(this).attr('for').indexOf('household_organizations')) {
+            var cb = $(this).find('input:checkbox');
+            if (cb.is(':checked')) {
+                $('#receiving').show();
+            } else {
+                $('#receiving').hide();
+            }
+        }
+    });
+
+    $(document).on('change', 'label:contains("Other")', function () {
+        if (~$(this).attr('for').indexOf('household_assistances')) {
+            var cb = $(this).find('input:checkbox');
+            seekingValue = $('#household_seeking').val();
+            if (cb.is(':checked')) {
+                $('#seeking').show();
+                $('#household_seeking').val(seekingValue);
+            } else {
+                $('#seeking').hide();
+                $('#household_seeking').val('');
+            }
+        }
+        if (~$(this).attr('for').indexOf('household_organizations')) {
+            var cb = $(this).find('input:checkbox');
+            receivingValue = $('#household_receiving').val();
+            if (cb.is(':checked')) {
+                $('#receiving').show();
+                $('#household_receiving').val(receivingValue);
+            } else {
+                $('#receiving').hide();
+                $('#household_receiving').val('');
+            }
+        }
+    });
 })

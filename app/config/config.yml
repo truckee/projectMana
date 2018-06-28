@@ -70,9 +70,6 @@ doctrine:
                     DAYOFYEAR: DoctrineExtensions\Query\Mysql\DayOfYear
                     MONTH: DoctrineExtensions\Query\Mysql\Month
                     YEAR: DoctrineExtensions\Query\Mysql\Year
-                numeric_functions:
-                    FY: Truckee\ProjectmanaBundle\DQL\FiscalYearFunction
-                    MONTHNAME: Truckee\ProjectmanaBundle\DQL\MonthNameFunction
 
 # Swiftmailer Configuration
 swiftmailer:

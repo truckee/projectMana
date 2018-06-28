@@ -18,7 +18,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Truckee\ProjectmanaBundle\Entity\Address;
 use Truckee\ProjectmanaBundle\Entity\Household;
 use Truckee\ProjectmanaBundle\Entity\Member;
-use Truckee\ProjectmanaBundle\Entity\Phone;
 
 /**
  * Households.
@@ -114,13 +113,15 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $address->setState($ca);
         $address->setZip('88888');
 
-        $phone = new Phone();
-        $phone->setAreacode('123');
-        $phone->setPhoneNumber('123-4567');
+//        $phone = new Phone();
+//        $phone->setAreacode('123');
+//        $phone->setPhoneNumber('123-4567');
 
         $house = $this->getReference('house1');
         $house->addAddress($address);
-        $house->addPhone($phone);
+//        $house->addPhone($phone);
+        $house->setAreacode('123');
+        $house->setPhoneNumber('123-4567');
         $fsNo = $this->getReference('fsNo');
         $fsNo->addHousehold($house);
         $fsa = $this->getReference('fsamount1');

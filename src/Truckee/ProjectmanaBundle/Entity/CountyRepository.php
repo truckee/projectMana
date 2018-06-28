@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Truckee\Projectmana package.
  *
@@ -19,25 +18,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class CountyRepository extends EntityRepository
 {
-    /**
-     * Get column headers for profile by site reports
-     *
-     * @param array $dateCriteria
-     * @return array
-     */
-    public function colLabels($dateCriteria)
+    public function countiesForStats($criteria)
     {
-        $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT r.county FROM TruckeeProjectmanaBundle:County r '
-            . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.county = r '
-            . 'WHERE c.contactDate >= :startDate AND c.contactDate <= :endDate '
-            . 'ORDER BY r.county')
-            ->setParameters($dateCriteria)
-            ->getResult();
-        $colLabels = [];
-        foreach ($qb as $row) {
-            $colLabels[] = $row['county'];
-        }
-
-        return $colLabels;
+        return $this->getEntityManager()->createQueryBuilder()
+                ->select('cty')
+                ->distinct()
+                ->from('TruckeeProjectmanaBundle:County', 'cty')
+                ->join('cty.contacts', 'c')
+                ->where($criteria['betweenWhereClause'])
+                ->setParameters($criteria['betweenParameters'])
+                ->orderBy('cty.county')
+                ->getQuery()->getResult();
     }
 }

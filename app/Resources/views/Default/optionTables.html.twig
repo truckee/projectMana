@@ -19,9 +19,9 @@
             </table>
             <br>
             <table>
-                <tr><th>Contact_type</th></tr>
+                <tr><th>Contact desc</th></tr>
                         {% for item in desc %}
-                    <tr><td>{{ item.contactDesc }}
+                    <tr><td>{{ item.contactdesc }}
                         {% endfor %}
             </table>
             <br>
@@ -80,13 +80,6 @@
             <br>
         </div>
         <div class="col-sm-3">
-            <table>
-                <tr><th>Offence</th></tr>
-                        {% for item in offense %}
-                    <tr><td>{{ item.offence }}
-                        {% endfor %}
-            </table>
-            <br>
             <table>
                 <tr><th>Reason</th></tr>
                         {% for item in reason %}

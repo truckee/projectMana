@@ -16,12 +16,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * ContactDesc.
+ * Contactdesc.
  *
- * @ORM\Table(name="contact_type")
+ * @ORM\Table(name="contactdesc")
  * @ORM\Entity
  */
-class ContactDesc
+class Contactdesc
 {
     /**
      * @var int
@@ -35,15 +35,15 @@ class ContactDesc
     /**
      * @var string
      *
-     * @ORM\Column(name="contact_desc", type="string", length=45, nullable=true)
+     * @ORM\Column(name="contactdesc", type="string", length=45, nullable=true)
      * @Assert\NotBlank(message="Type may not be blank")
      */
-    protected $contactDesc;
+    protected $contactdesc;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Truckee\ProjectmanaBundle\Entity\Contact", mappedBy="contactDesc", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Truckee\ProjectmanaBundle\Entity\Contact", mappedBy="contactdesc", cascade={"persist"})
      */
     protected $contacts;
 
@@ -66,27 +66,27 @@ class ContactDesc
     }
 
     /**
-     * Set contactDesc.
+     * Set contactdesc.
      *
-     * @param string $contactDesc
+     * @param string $contactdesc
      *
-     * @return ContactDesc
+     * @return Contactdesc
      */
-    public function setContactDesc($contactDesc)
+    public function setContactdesc($contactdesc)
     {
-        $this->contactDesc = $contactDesc;
+        $this->contactdesc = $contactdesc;
 
         return $this;
     }
 
     /**
-     * Get contactDesc.
+     * Get contactdesc.
      *
      * @return string
      */
-    public function getContactDesc()
+    public function getContactdesc()
     {
-        return $this->contactDesc;
+        return $this->contactdesc;
     }
 
     /**
@@ -94,7 +94,7 @@ class ContactDesc
      *
      * @param \Truckee\ProjectmanaBundle\Entity\Contact $contacts
      *
-     * @return ContactDesc
+     * @return Contactdesc
      */
     public function addContact(\Truckee\ProjectmanaBundle\Entity\Contact $contacts)
     {

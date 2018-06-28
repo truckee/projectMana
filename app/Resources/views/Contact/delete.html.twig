@@ -7,7 +7,7 @@
             <form action="{{ path("contact_delete", {'id': contact.id }) }}" method="post">
                 <div class="row">
                     <div class="col-sm-2"><b>Date: </b>{{ contact.contactDate|date('m/d/Y') }}</div>
-                    <div class="col-sm-3"><b>Type: </b>{{contact.contactDesc.contactDesc }}</div>
+                    <div class="col-sm-3"><b>Type: </b>{{contact.contactdesc.contactdesc }}</div>
                     <div class="col-sm-2">{% if contact.center is not null %}<b>Site: </b>{{ contact.center.center }}
                         {% elseif contact.center is not empty %}<b>County</b>{{ contact.center.county.county }}{% endif %}</div>
                 </div>

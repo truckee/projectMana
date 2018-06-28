@@ -31,7 +31,7 @@ class DisabledConstants extends AbstractFixture implements OrderedFixtureInterfa
         $siteTahoe->setEnabled(false);
         $manager->persist($site);
 
-        //ContactDesc
+        //Contactdesc
         $desc = $this->getReference('general');
         $desc->setEnabled(false);
         $manager->persist($desc);

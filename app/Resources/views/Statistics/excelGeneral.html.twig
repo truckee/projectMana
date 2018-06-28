@@ -2,8 +2,8 @@
 {% set end = specs.endDate|date('F, Y') %}
 <div class="title">Statistics for {{ start }}{% if (start != end) %} through {{ end }}{% endif %}
     <br>
-{% if specs.contact_type != '' %}Type = {{ specs.contact_type }}{% if  specs.county != '' or specs.center != '' %}; {% endif %}{% endif %}
-{% if  specs.county != '' %}Location = {{ specs.county }} county{% endif %}{% if specs.center != '' %}Site = {{ specs.center }}{% endif %}
+    {% if specs.contactdesc is defined %}Type = {{ specs.contactdesc }}{% if  specs.county is defined or specs.center is defined %}; {% endif %}{% endif %}
+{% if  specs.county is defined %}Location = {{ specs.county }} county{% endif %}{% if specs.center is defined %}Site = {{ specs.center }}{% endif %}
 
     <br>Note: Some inconsistencies may exist due to households with missing data<br>
 </div>
@@ -38,13 +38,13 @@
 <table class="stats">
     <tr>
         <td>&nbsp;</td>
-        <td>{% if specs.contact_type != ''%}<b>New {{ specs.contact_type }}</b>{% else %}&nbsp;{% endif %}</td>
+        <td>{% if specs.contactdesc is defined %}<b>New {{ specs.contactdesc }}</b>{% else %}&nbsp;{% endif %}</td>
         <td><b>New Households<br>(all types)</b></td>
         <td><b>Unique New Individuals<br>(all types)</b></td>
 
     <tr>
         <td>&nbsp;</td>
-        <td>{% if specs.contact_type != ''%}{{ statistics['NewByType']|number_format }}{% else %}&nbsp;{% endif %}</td>
+        <td>{% if specs.contactdesc is defined %}{{ statistics['NewByType']|number_format }}{% else %}&nbsp;{% endif %}</td>
         <td>{{ statistics['NewHouseholds'] }}</td>
         <td>{{ statistics['Unique New Individuals']|number_format }}</td>
 </table>
@@ -88,41 +88,33 @@
     <td><b>Female Adults</b><br>{{ statistics['FA']|number_format }}</td>
     <td><b>Male Adults</b><br>{{ statistics['MA']|number_format }}</td>
 </table>
-<div class="section70">Residency distribution</div>
-<table class="stats">
-    <tr>
-    <td><b>&lt; 1 month</b><br>{{ statistics['< 1 month']|number_format }}</td>
-    <td><b>1 mo - 2 yrs</b><br>{{ statistics['1 mo - 2 yrs']|number_format }}</td>
-    <td><b>&gt;=2 yrs</b><br>{{ statistics['>=2 yrs']|number_format }}</td>
-    <td>&nbsp;</td>
-</table>
 
-{% if  specs.county is same as(0) and specs.center is same as(0) %}
+    {% if  specs.county is not defined and specs.center is not defined %}
 <div class="section70">County distribution</div>
 <table class="stats">
     <tr>
     <td>&nbsp;</td>
     <td>Unique Individuals Served</td>
-    {% if ctyPcts != 0 %}<td>&nbsp;</td>{% endif %}
+{#    {% if ctyPCTs != 0 %}<td>&nbsp;</td>{% endif %}#}
     <td>Total Individuals Served</td>
-    {% if ctyPcts != 0 %}<td>&nbsp;</td>{% endif %}
+{#    {% if ctyPCTs != 0 %}<td>&nbsp;</td>{% endif %}#}
     <td>Unique Households Served</td>
-    {% if ctyPcts != 0 %}<td>&nbsp;</td>{% endif %}
+{#    {% if ctyPCTs != 0 %}<td>&nbsp;</td>{% endif %}#}
     <td>Total Households Served</td>
-    {% if ctyPcts != 0 %}<td>&nbsp;</td>{% endif %}
+{#    {% if ctyPCTs != 0 %}<td>&nbsp;</td>{% endif %}#}
 </table>
-{% for key, value in ctyStats %}
+{% for key, value in statistics.countyStats %}
 <table class="stats">
     <td>{{ key }}</td>
     {% set cty = key %}
     <td>{{ value.UIS }}</td>
-    {% if ctyPcts != 0 %}<td>{{ value.UISPct|number_format(1) ~ '%' }}</td>{% endif %}
-    <td>{{ value.IS }}</td>
-    {% if ctyPcts != 0 %}<td>{{ value.ISPct|number_format(1) ~ '%' }}</td>{% endif %}
+    <td>{{ value.UISPCT|number_format(1) ~ '%' }}</td>
+    <td>{{ value.TIS }}</td>
+    <td>{{ value.TISPCT|number_format(1) ~ '%' }}</td>
     <td>{{ value.UHS }}</td>
-    {% if ctyPcts != 0 %}<td>{{ value.UHSPct|number_format(1) ~ '%' }}</td>{% endif %}
+    <td>{{ value.UHSPCT|number_format(1) ~ '%' }}</td>
     <td>{{ value.THS }}</td>
-    {% if ctyPcts != 0 %}<td>{{ value.THSPct|number_format(1) ~ '%' }}</td>{% endif %}
+    <td>{{ value.THSPCT|number_format(1) ~ '%' }}</td>
 </table>
 {% endfor %}
 {% endif %}

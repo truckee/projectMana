@@ -25,25 +25,25 @@
             {{ value.UIS|number_format }}
         </div>
         <div id="{{ key }}UISPCT" class="col-sm-1 text-right">
-            {{ value.UISPCT }}
+            {{ value.UISPCT|number_format(1)~"%" }}
         </div>
         <div id="{{ key }}TIS" class="col-sm-1 text-right">
             {{ value.TIS|number_format }}
         </div>
         <div id="{{ key }}TISPCT" class="col-sm-1 text-right">
-            {{ value.TISPCT }}
+            {{ value.TISPCT|number_format(1)~"%" }}
         </div>
         <div id="{{ key }}UHS" class="col-sm-1 text-right">
             {{ value.UHS|number_format }}
         </div>
         <div id="{{ key }}UHSPCT" class="col-sm-1 text-right">
-            {{ value.UHSPCT }}
+            {{ value.UHSPCT|number_format(1)~"%" }}
         </div>
         <div id="{{ key }}THS" class="col-sm-1 text-right">
             {{ value.THS|number_format }}
         </div>
         <div id="{{ key }}THSPCT" class="col-sm-1 text-right">
-            {{ value.THSPCT }}
+            {{ value.THSPCT|number_format(1)~"%" }}
         </div>
     </div>
 {% endfor %}

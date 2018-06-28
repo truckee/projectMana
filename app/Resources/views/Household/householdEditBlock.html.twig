@@ -8,18 +8,15 @@
             </div>
             <div class="col-md-6">
                 <div class="row">
-                    {% for phone in form.phones %}
                         <div class="col-md-2">
-                            {{ form_row(phone.areacode) }}
+                            {{ form_row(form.areacode) }}
                         </div>
                         <div class="col-md-4">
-                            {{ form_row(phone.phoneNumber) }}
+                            {{ form_row(form.phoneNumber) }}
                         </div>
-                    {% endfor %}
                 </div>
             </div>
         </div>
-
         <div class="row">
             <div class="col-md-2">
                 {{ form_row(form.income) }}
@@ -36,22 +33,29 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12"><strong>Check all that apply</strong></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
                 {{ form_row(form.reasons) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_row(form.assistances) }}
+                <div class="row" id="seeking">
+                    <div class="col-md-12">{{ form_row(form.seeking) }}</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                {{ form_row(form.organizations) }}
+                <div class="row" id="receiving">
+                    <div class="col-md-12">{{ form_row(form.receiving) }}</div>
+                </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-2">
-                {{ form_row(form.arrivalmonth) }}
-            </div>
-            <div class="col-md-2">
-                {{ form_row(form.arrivalyear) }}
-            </div>
             <div class="col-md-2">
                 {{ form_row(form.center) }}
             </div>
-        </div>
-        <div class="row">
             <div class="col-md-2">
                 {{ form_row(form.compliance) }}
             </div>

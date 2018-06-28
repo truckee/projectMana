@@ -12,17 +12,18 @@
 namespace Truckee\ProjectmanaBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
-use Truckee\ProjectmanaBundle\Form\Field\CenterEnabledChoiceType;
-use Truckee\ProjectmanaBundle\Form\Field\MonthType;
-use Truckee\ProjectmanaBundle\Form\Field\YearType;
-use Truckee\ProjectmanaBundle\Validator\Constraints\CenterOrCounty;
-use Truckee\ProjectmanaBundle\Validator\Constraints\StartEndDate;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Truckee\ProjectmanaBundle\Form\Field\CenterEnabledChoiceType;
+use Truckee\ProjectmanaBundle\Form\Field\MonthType;
+use Truckee\ProjectmanaBundle\Form\Field\YearType;
+use Truckee\ProjectmanaBundle\Entity\Contactdesc;
+use Truckee\ProjectmanaBundle\Validator\Constraints\CenterOrCounty;
+use Truckee\ProjectmanaBundle\Validator\Constraints\StartEndDate;
 
 class ReportCriteriaType extends AbstractType
 {
@@ -73,14 +74,14 @@ class ReportCriteriaType extends AbstractType
                     ],
                         )
                 )
-                ->add('contact_type', EntityType::class, array(
-                    'class' => 'TruckeeProjectmanaBundle:ContactDesc',
-                    'choice_label' => 'contactDesc',
+                ->add('contactdesc', EntityType::class, array(
+                    'class' => Contactdesc::class,
+                    'choice_label' => 'contactdesc',
                     'placeholder' => 'Select contact type',
                     'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('c')
                                 ->where('c.enabled = 1')
-                                ->orderBy('c.contactDesc', 'ASC');
+                                ->orderBy('c.contactdesc', 'ASC');
                     },
                     'constraints' => array(
                         new CenterOrCounty(),

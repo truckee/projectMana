@@ -15,12 +15,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Notfoodstamp.
+ * Assistance.
  *
- * @ORM\Table(name="notfoodstamp")
- * @ORM\Entity()
+ * @ORM\Table(name="assistance")
+ * @ORM\Entity(repositoryClass="Truckee\ProjectmanaBundle\Entity\AssistanceRepository")
  */
-class Notfoodstamp
+class Assistance
 {
     /**
      * @var int
@@ -32,12 +32,12 @@ class Notfoodstamp
     protected $id;
 
     /**
-     * @var bool
+     * @var string
      *
-     * @ORM\Column(name="notfoodstamp", type="string", nullable=false)
-     * @Assert\NotBlank(message="Reason may not be blank")
+     * @ORM\Column(name="assistance", type="string", nullable=false)
+     * @Assert\NotBlank(message="Assistance may not be blank")
      */
-    protected $notfoodstamp;
+    protected $assistance;
 
     /**
      * @var bool
@@ -45,6 +45,11 @@ class Notfoodstamp
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     protected $enabled;
+
+    /**
+     * @ORM\Column(name="position", type="string", nullable=true)
+     */
+    protected $position;
 
     /**
      * Get id.
@@ -57,27 +62,27 @@ class Notfoodstamp
     }
 
     /**
-     * Set notfoodstamp.
+     * Set assistance.
      *
-     * @param int $notfoodstamp
+     * @param int $assistance
      *
-     * @return notfoodstamp
+     * @return assistance
      */
-    public function setNotfoodstamp($notfoodstamp)
+    public function setAssistance($assistance)
     {
-        $this->notfoodstamp = $notfoodstamp;
+        $this->assistance = $assistance;
 
         return $this;
     }
 
     /**
-     * Get notfoodstamp.
+     * Get assistance.
      *
      * @return int
      */
-    public function getNotfoodstamp()
+    public function getAssistance()
     {
-        return $this->notfoodstamp;
+        return $this->assistance;
     }
 
     /**
@@ -105,9 +110,33 @@ class Notfoodstamp
     }
 
     /**
+     * Set position.
+     *
+     * @param int $position
+     *
+     * @return position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * Get position.
+     *
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Household", mappedBy="notfoodstamp")
+     * @ORM\ManyToMany(targetEntity="Household", mappedBy="assistances")
      */
     protected $households;
 

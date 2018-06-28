@@ -121,11 +121,6 @@ class MenuBuilder
     public function returnFromContacts(array $options)
     {
         $request = $this->requestStack->getCurrentRequest();
-        if (empty($request->headers->get('referer'))) {
-            $flash->alert('Please enter search term(s) again');
-
-            return $this->redirectToRoute('home');
-        }
         $uri = $request->headers->get('referer');
         $menu = $this->factory->createItem('root');
         $title = 'return';
@@ -158,7 +153,13 @@ class MenuBuilder
         $menu->addChild('SNAP', array(
             'route' => 'snap_profile',
         ));
-
+        $menu->addChild('Seeking services', array(
+            'route' => 'assistance_profile',
+        ));
+        $menu->addChild('Receiving services', array(
+            'route' => 'organization_profile',
+        ));
+        
         return $menu;
     }
 
@@ -184,7 +185,9 @@ class MenuBuilder
             'routeParameters' => ['source' => 'FY to date'],
         ]);
 
-        $menu->addChild('Annual Turkey (CY, PDF)',[
+        $menu->addChild(
+            'Annual Turkey (CY, PDF)',
+            [
             'route' => 'annual_turkey',]
             );
 

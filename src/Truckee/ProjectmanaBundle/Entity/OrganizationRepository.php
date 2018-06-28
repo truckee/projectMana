@@ -8,37 +8,33 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-//src\Truckee\ProjectmanaBundle\Entity\WorkRepository.php
+//src\Truckee\ProjectmanaBundle\Entity\OrganizationRepository.php
 
 namespace Truckee\ProjectmanaBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 
 /**
- * WorkRepository.
+ * OrganizationRepository.
  */
-class WorkRepository extends EntityRepository
+class OrganizationRepository extends EntityRepository
 {
     /**
      * Get row labels for profile report
      *
-     * @param array $dateCriteria
      * @return array
      */
     public function rowLabels($criteria)
     {
-        $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT w.work FROM TruckeeProjectmanaBundle:Work w '
-            . 'JOIN TruckeeProjectmanaBundle:Member m WITH m.work = w '
-            . 'JOIN TruckeeProjectmanaBundle:Household h WITH h.head = m '
-            . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = m.household '
+        $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT o.organization FROM TruckeeProjectmanaBundle:Organization o '
+            . 'INNER JOIN o.households h INNER JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
             . 'WHERE c.contactDate between :startDate AND :endDate '
-            . 'ORDER BY w.work')
+            . 'ORDER BY a.id ASC')
             ->setParameters($criteria['betweenParameters'])
             ->getResult();
         $rowLabels = [];
         foreach ($qb as $row) {
-            $rowLabels[] = $row['work'];
+            $rowLabels[] = $row['organization'];
         }
 
         return $rowLabels;
@@ -47,7 +43,6 @@ class WorkRepository extends EntityRepository
     /**
      * Get profile data
      *
-     * @param array $dateCriteria
      * @param array $profileType
      *
      * @return array
@@ -55,13 +50,13 @@ class WorkRepository extends EntityRepository
     public function crossTabData($criteria, $profileType)
     {
         $entity = ucfirst($profileType);
-        $dql = 'SELECT r.__TYPE__ colLabel, w.work rowLabel, COUNT(DISTINCT m.id) N '
-            . 'FROM TruckeeProjectmanaBundle:Work w '
-            . 'JOIN TruckeeProjectmanaBundle:Member m WITH m.work = w '
-            . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = m.household '
-            . 'JOIN TruckeeProjectmanaBundle:__ENTITY__ r WITH r = c.__TYPE__ '
+        $dql = 'SELECT ctr.__TYPE__ colLabel, r.organization rowLabel, COUNT(DISTINCT h.id) N '
+            . 'FROM TruckeeProjectmanaBundle:Organization o '
+            . 'JOIN r.households h '
+            . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
+            . 'JOIN TruckeeProjectmanaBundle:__ENTITY__ ctr WITH ctr = c.__TYPE__ '
             . 'WHERE c.contactDate between :startDate AND :endDate '
-            . 'AND w.enabled = TRUE  GROUP BY colLabel, rowLabel';
+            . 'AND o.enabled = TRUE  GROUP BY colLabel, rowLabel';
         $dql = str_replace('__TYPE__', $profileType, $dql);
         $dql = str_replace('__ENTITY__', $entity, $dql);
         $qb = $this->getEntityManager()->createQuery($dql)

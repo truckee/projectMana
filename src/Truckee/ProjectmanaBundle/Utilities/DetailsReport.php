@@ -1,9 +1,9 @@
 <?php
 /*
  * This file is part of the Truckee\Projectmana package.
- * 
+ *
  * (c) George W. Brooks
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -29,58 +29,41 @@ class DetailsReport
         $this->em = $em;
     }
 
-    public function getDetailStatistics()
+    public function getDetailStatistics($criteria)
     {
-        return $this->detailStatistics;
+        $stats = $this->setDetailStatistics($criteria);
+
+        return $stats;
     }
 
-    public function setDetailStatistics()
+    private function setDetailStatistics($criteria)
     {
-        $countyDescQuery = $this->em->createQuery('SELECT DISTINCT cty.county, d.contactDesc FROM TruckeeProjectmanaBundle:TempContact c '
-                . 'JOIN TruckeeProjectmanaBundle:County cty WITH c.county = cty '
-                . 'JOIN TruckeeProjectmanaBundle:ContactDesc d WITH c.contactType = d '
-                . 'ORDER BY cty.county, d.contactDesc')->getResult();
-
-        $countystats = [];
-        foreach ($countyDescQuery as $countyDesc) {
-            $county = $countyDesc['county'];
-            $desc = $countyDesc['contactDesc'];
-            $countystats[$county][$desc]['uniqInd'] = 0;
-            $countystats[$county][$desc]['uniqHouse'] = 0;
-            $countystats[$county][$desc]['totalInd'] = 0;
-            $countystats[$county][$desc]['totalHouse'] = 0;
+        $households = $this->em->getRepository('TruckeeProjectmanaBundle:Contact')->detailsHouseholds($criteria);
+        $members = $this->em->getRepository('TruckeeProjectmanaBundle:Contact')->detailsMembers($criteria);
+        $combined = array_merge($households, $members);
+        //deconstruct combined array
+        $collector = [];
+        foreach ($combined as $array) {
+            if (!array_key_exists($array['county'], $collector)) {
+                $collector[$array['county']] = [];
+                if (!array_key_exists($array['contactdesc'], $collector[$array['county']])) {
+                    $collector[$array['county']][$array['contactdesc']] = [];
+                }
+            }
+            if (array_key_exists('THS', $array)) {
+                $collector[$array['county']][$array['contactdesc']]['THS'] = $array['THS'];
+            }
+            if (array_key_exists('UIS', $array)) {
+                $collector[$array['county']][$array['contactdesc']]['UIS'] = $array['UIS'];
+            }
+            if (array_key_exists('UHS', $array)) {
+                $collector[$array['county']][$array['contactdesc']]['UHS'] = $array['UHS'];
+            }
+            if (array_key_exists('TIS', $array)) {
+                $collector[$array['county']][$array['contactdesc']]['TIS'] = $array['TIS'];
+            }
         }
 
-        $householdSizeQuery = $this->em->createQuery('SELECT h.id, h.size FROM TruckeeProjectmanaBundle:TempHousehold h')->getResult();
-        foreach ($householdSizeQuery as $row) {
-            $householdSizeArray[$row['id']] = $row['size'];
-        }
-        $distinctCountyDescIndividualQuery = $this->em->createQuery('SELECT DISTINCT cty.county, d.contactDesc, c.household FROM TruckeeProjectmanaBundle:TempContact c '
-                . 'JOIN TruckeeProjectmanaBundle:County cty WITH c.county = cty '
-                . 'JOIN TruckeeProjectmanaBundle:ContactDesc d WITH c.contactType = d')->getResult();
-        $countyDescIndividualQuery = $this->em->createQuery('SELECT cty.county, d.contactDesc, c.household FROM TruckeeProjectmanaBundle:TempContact c '
-                . 'JOIN TruckeeProjectmanaBundle:County cty WITH c.county = cty '
-                . 'JOIN TruckeeProjectmanaBundle:ContactDesc d WITH c.contactType = d')->getResult();
-        foreach ($distinctCountyDescIndividualQuery as $distinctCountyDescIndividual) {
-            $houshold = $distinctCountyDescIndividual['household'];
-            $size = $householdSizeArray[$houshold];
-            $cty = $distinctCountyDescIndividual['county'];
-            $cDesc = $distinctCountyDescIndividual['contactDesc'];
-            $countystats[$cty][$cDesc]['uniqInd'] += $size;
-            $countystats[$cty][$cDesc]['uniqHouse'] ++;
-        }
-        foreach ($countyDescIndividualQuery as $countyDescIndividual) {
-            $houshold = $countyDescIndividual['household'];
-            $size = $householdSizeArray[$houshold];
-            $cty = $countyDescIndividual['county'];
-            $cDesc = $countyDescIndividual['contactDesc'];
-            $countystats[$cty][$cDesc]['totalInd'] += $size;
-            $countystats[$cty][$cDesc]['totalHouse'] ++;
-        }
-        $details = array(
-            'details' => $countystats,
-        );
-
-        $this->detailStatistics = $details;
+        return $collector;
     }
 }

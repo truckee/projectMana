@@ -57,7 +57,7 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
 
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("General Statistics for ' . $this->lastMonth . '")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("General Statistics for ")')->count());
     }
 
     public function testDateValidator()
@@ -122,12 +122,13 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $reportDate = date_format($date, 'F, Y');
 
         $this->assertGreaterThan(0,
-            $crawler->filter('html:contains("No instances of multiple same-date contacts found")')->count());
+            $crawler->filter('html:contains("Some Person")')->count());
     }
 
     public function testFoodbank()
     {
-        $crawler = $this->client->request('GET', '/reports/foodbank/2016/6');
+        $date = date_format(new \DateTime('last month'), 'Y/m');
+        $crawler = $this->client->request('GET', '/reports/foodbank/' . $date);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Female Children")')->count());
     }

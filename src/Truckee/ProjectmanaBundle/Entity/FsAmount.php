@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * FsAmount.
  *
  * @ORM\Table(name="fs_amount")
- * @ORM\Entity(repositoryClass="Truckee\ProjectmanaBundle\Entity\FsAmountRepository")
+ * @ORM\Entity()
  */
 class FsAmount
 {

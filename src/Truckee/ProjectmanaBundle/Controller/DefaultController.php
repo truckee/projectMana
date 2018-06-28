@@ -13,6 +13,7 @@ namespace Truckee\ProjectmanaBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Truckee\ProjectmanaBundle\Utilities\FYChart;
 
 /**
  * Default controller.
@@ -49,10 +50,10 @@ class DefaultController extends Controller
      *
      * @return script
      */
-    public function scriptAction()
+    public function scriptAction(FYChart $fiscalYearChart)
     {
-        $reports = $this->get('mana.reports');
-        $chart = $reports->getDistsFYToDate();
+//        $reports = $this->get('mana.reports');
+        $chart = $fiscalYearChart->getDistsFYToDate();
 
         return $this->render('Default/script.js.twig', array(
                     'chart' => $chart,
@@ -81,7 +82,7 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $addressType = $em->getRepository('TruckeeProjectmanaBundle:AddressType')->findBy([], ['addresstype' => 'ASC']);
         $center = $em->getRepository('TruckeeProjectmanaBundle:Center')->findBy([], ['center' => 'ASC']);
-        $desc = $em->getRepository('TruckeeProjectmanaBundle:ContactDesc')->findBy([], ['contactDesc' => 'ASC']);
+        $desc = $em->getRepository('TruckeeProjectmanaBundle:Contactdesc')->findBy([], ['contactdesc' => 'ASC']);
         $county = $em->getRepository('TruckeeProjectmanaBundle:County')->findBy([], ['county' => 'ASC']);
         $eth = $em->getRepository('TruckeeProjectmanaBundle:Ethnicity')->findBy([], ['ethnicity' => 'ASC']);
         $fsa = $em->getRepository('TruckeeProjectmanaBundle:FsAmount')->findBy([], ['id' => 'ASC']);
@@ -89,7 +90,7 @@ class DefaultController extends Controller
         $housing = $em->getRepository('TruckeeProjectmanaBundle:Housing')->findBy([], ['housing' => 'ASC']);
         $income = $em->getRepository('TruckeeProjectmanaBundle:Income')->findBy([], ['income' => 'ASC']);
         $not = $em->getRepository('TruckeeProjectmanaBundle:Notfoodstamp')->findBy([], ['notfoodstamp' => 'ASC']);
-        $offense = $em->getRepository('TruckeeProjectmanaBundle:Offence')->findBy([], ['offence' => 'ASC']);
+//        $offense = $em->getRepository('TruckeeProjectmanaBundle:Offence')->findBy([], ['offence' => 'ASC']);
         $reason = $em->getRepository('TruckeeProjectmanaBundle:Reason')->findBy([], ['reason' => 'ASC']);
         $state = $em->getRepository('TruckeeProjectmanaBundle:State')->findBy(['enabled' => true], ['state' => 'ASC']);
         $work = $em->getRepository('TruckeeProjectmanaBundle:Work')->findBy([], ['work' => 'ASC']);
@@ -107,7 +108,7 @@ class DefaultController extends Controller
             'income' => $income,
             'notFS' => $not,
             'reason' => $reason,
-            'offense' => $offense,
+//            'offense' => $offense,
             'state' => $state,
             'work' => $work,
         ]);

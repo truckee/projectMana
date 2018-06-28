@@ -47,22 +47,22 @@ class ContactType extends AbstractType
             )
             )
             ->add(
-                'contactDesc',
+                'contactdesc',
                 EntityType::class,
                 array(
-                'class' => 'TruckeeProjectmanaBundle:ContactDesc',
+                'class' => 'TruckeeProjectmanaBundle:Contactdesc',
                 'label' => 'Contact type',
-                'choice_label' => 'contactDesc',
+                'choice_label' => 'contactdesc',
                 'placeholder' => 'Select contact type',
-                'attr' => (in_array('ContactDesc', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
+                'attr' => (in_array('Contactdesc', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
                 'query_builder' => function (EntityRepository $er) use ($options) {
-                    if (false === in_array('ContactDesc', $options['disabledOptions'])) {
+                    if (false === in_array('Contactdesc', $options['disabledOptions'])) {
                         return $er->createQueryBuilder('alias')
                         ->where('alias.enabled = 1')
-                        ->orderBy('alias.contactDesc', 'ASC');
+                        ->orderBy('alias.contactdesc', 'ASC');
                     } else {
                         return $er->createQueryBuilder('alias')
-                        ->orderBy('alias.contactDesc', 'ASC');
+                        ->orderBy('alias.contactdesc', 'ASC');
                     }
                 }
             )

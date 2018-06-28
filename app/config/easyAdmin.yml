@@ -8,7 +8,7 @@ easy_admin:
         menu:
             - label: 'Contacts'
               children:
-                    - { entity: 'ContactType', default: true, params: { sortField: 'contactDesc', sortDirection: 'ASC' }}
+                    - { entity: 'ContactType', default: true, params: { sortField: 'contactdesc', sortDirection: 'ASC' }}
                     - { entity: 'County', params: { sortField: 'county', sortDirection: 'ASC' }}
                     - { entity: 'Site', params: { sortField: 'center', sortDirection: 'ASC' }}
             - label: 'Households'
@@ -18,16 +18,53 @@ easy_admin:
                     - { entity: 'Housing', params: { sortField: 'housing', sortDirection: 'ASC'}}
                     - { entity: 'Income', params: { sortField: 'id', sortDirection: 'ASC'}}
                     - { entity: 'InsufficientFood', label: 'Insufficient food', params: { sortField: 'reason', sortDirection: 'ASC'}}
+                    - { entity: 'Assistance', params: { sortField: 'assistance', sortDirection: 'ASC'}}
+                    - { entity: 'Organization', params: { sortField: 'organization', sortDirection: 'ASC'}}
                     - { entity: 'Notfoodstamp', params: { sortField: 'notfoodstamp', sortDirection: 'ASC'}}
             - label: 'Members'
               children:
                     - { entity: 'Ethnicity', params: { sortField: 'ethnicity', sortDirection: 'ASC' } }
-                    - { entity: 'Offense', params: { sortField: 'offence', sortDirection: 'ASC' } }
                     - { entity: 'Relationship', params: { sortField: 'relation', sortDirection: 'ASC' } }
                     - { entity: 'Work', params: { sortField: 'work', sortDirection: 'ASC' } }
             - { entity: 'User', params: { sortField: 'username', sortDirection: 'ASC' } }
             - { label: 'Home', route: 'home' }
     entities:
+        Assistance:
+            class: Truckee\ProjectmanaBundle\Entity\Assistance
+            label: Seeking services
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'assistance', label: 'Assistance'}
+                    - enabled
+            new:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'assistance', label: 'Assistance'}
+                    - enabled
+                form_options: { validation_groups: ['Options'] }
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
+                form_options: { validation_groups: ['Options'] }
+        Organization:
+            class: Truckee\ProjectmanaBundle\Entity\Organization
+            label: Receiving services   
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'organization', label: 'Organization'}
+                    - enabled
+            new:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'organization', label: 'Organization'}
+                    - enabled
+                form_options: { validation_groups: ['Options'] }
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
+                form_options: { validation_groups: ['Options'] }
         Site:
             class: Truckee\ProjectmanaBundle\Entity\Center
             label: Sites
@@ -62,17 +99,17 @@ easy_admin:
                 title: '%%entity_label%%'
                 fields: [enabled]
         ContactType:
-            class: Truckee\ProjectmanaBundle\Entity\ContactDesc
+            class: Truckee\ProjectmanaBundle\Entity\Contactdesc
             label: Contact types
             list:
                 title: '%%entity_label%%'
                 fields:
-                    - {property: 'contactDesc', label: 'Type'}
+                    - {property: 'contactdesc', label: 'Type'}
                     - enabled
             new:
                 title: '%%entity_label%%'
                 fields:
-                    - {property: 'contactDesc', label: 'Type'}
+                    - {property: 'contactdesc', label: 'Type'}
                     - enabled
             edit:
                 title: '%%entity_label%%'
@@ -154,22 +191,6 @@ easy_admin:
             edit:
                 title: '%%entity_label%%'
                 fields:  [enabled]
-        Offense:
-            class: Truckee\ProjectmanaBundle\Entity\Offence
-            label: Offense
-            list:
-                title: '%%entity_label%%'
-                fields:
-                    - {property: 'offence', label: 'Offense'}
-                    - enabled
-            new:
-                title: '%%entity_label%%'
-                fields:
-                    - {property: 'offence', label: 'Offense', type_options: {by_reference: false}}
-                    - enabled
-            edit:
-                title: '%%entity_label%%'
-                fields: [enabled]
         InsufficientFood:
             class: Truckee\ProjectmanaBundle\Entity\Reason
             label: 'Insufficient food'

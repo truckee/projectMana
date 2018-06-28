@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+//src\Truckee\ProjectmanaBundle\Utilities\FYChart
+
 namespace Truckee\ProjectmanaBundle\Utilities;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,8 +17,10 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * Project MANA statistics.
  */
-class Reports
+class FYChart
 {
+    use \Truckee\ProjectmanaBundle\Utilities\FYFunction;
+
     private $em;
 
     public function __construct(EntityManagerInterface $em)
@@ -31,7 +35,8 @@ class Reports
      */
     public function getDistsFYToDate()
     {
-        $fy = $this->getFY();
+//        $fiscalYear = new FYFunction();
+        $fy = $this->fy();
         $month = date_format(new \DateTime(), 'n');
         $chart['fy'] = $fy;
         $fy_months = array_merge(range(7, 12), range(1, 6));

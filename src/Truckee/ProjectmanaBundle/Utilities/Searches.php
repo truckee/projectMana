@@ -41,10 +41,10 @@ class Searches
                 . 'TruckeeProjectmanaBundle:Contact c WHERE c.center = :site')
             ->setParameter('site', $site)
             ->getSingleScalarResult();
-        $contacts = $em->createQuery('SELECT m.sname, m.fname, m.dob, h.id, d.contactDesc FROM TruckeeProjectmanaBundle:Member m '
+        $contacts = $em->createQuery('SELECT m.sname, m.fname, m.dob, h.id, d.contactdesc FROM TruckeeProjectmanaBundle:Member m '
                 . 'JOIN TruckeeProjectmanaBundle:Household h WITH m = h.head '
                 . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = h '
-                . 'JOIN TruckeeProjectmanaBundle:ContactDesc d WITH c.contactDesc = d '
+                . 'JOIN TruckeeProjectmanaBundle:Contactdesc d WITH c.contactdesc = d '
                 . 'WHERE c.center = :site AND c.contactDate = :date '
                 . 'ORDER BY m.sname, m.fname')
             ->setParameters(['site' => $site, 'date' => $maxDate])
@@ -90,12 +90,8 @@ class Searches
      *
      * @return array
      */
-    public function getHeadsFYToDate($site)
+    public function getHeadsFYToDate($site, $fy)
     {
-        $date = new \DateTime();
-        $year = date_format($date, 'Y');
-        $month = date_format($date, 'n');
-        $fy = ($month < 7) ? $year : $year + 1;
         $startDate = $fy - 1 . '-07-01';
         $endDate = $fy . '-06-30';
 
