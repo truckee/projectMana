@@ -89,47 +89,39 @@ class HouseholdController extends Controller
     {
         $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
-        $houseTest = $session->get('household');
-        if (!empty($houseTest)) {
-            //household appears in session if new data selected in match_results
+        //restore original after search or create new entities
+        if (null !== $session->get('household')) {
             $household = $em->merge($session->get('household'));
             $head = $em->merge($session->get('head'));
-            $id = $em->getRepository('TruckeeProjectmanaBundle:Household')->initialize($household, $head, $session);
-
-            return $this->redirectToRoute('household_edit', array('id' => $id));
+        } else {
+            $household = new Household();
+            $head = new Member();
         }
-        $household = new Household();
-        $head = new Member();
         $form = $this->createForm(HouseholdRequiredType::class, $household);
         $formHead = $this->createForm(MemberType::class, $head);
+
         $form->handleRequest($request);
         $formHead->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid() && $formHead->isSubmitted() && $formHead->isValid()) {
-            // new head is not persisted until we know it's not a duplicate
-            $household->addMember($head);
-            $household->setHead($head);
-            $household = $form->getData();
-            $newHead = array(
-                'fname' => $head->getFname(),
-                'sname' => $head->getSname(),
-                'dob' => date_format($head->getDob(), 'Y-m-d'),
-            );
-            $searchFor = $head->getFname() . ' ' . $head->getSname();
-            $searches = $this->get('mana.searches');
-            $found = $searches->getMembers($searchFor);
-            $session->set('household', $household);
-            $em->detach($household);
-
-            if (count($found) === 0) {
-                //when there are no matches, create member as head with incoming data
-                $id = $em->getRepository('TruckeeProjectmanaBundle:Household')->initialize($household, $head, $session);
-
-                return $this->redirectToRoute('household_edit', array('id' => $id));
-            } else {
-                //send new data plus matches to match_results
+            $found = [];
+            // do only one search for duplicate household head names
+            if (null === $session->get('household')) {
+                //any matches for proposed head of household?
+                $searchFor = $head->getFname() . ' ' . $head->getSname();
+                $searches = $this->get('mana.searches');
+                $found = $searches->getMembers($searchFor);
+            }
+            //display possible matches
+            if (0 < count($found)) {
+                $session->set('household', $household);
+                $em->detach($household);
                 $session->set('head', $head);
                 $em->detach($head);
-
+                $newHead = array(
+                    'fname' => $head->getFname(),
+                    'sname' => $head->getSname(),
+                    'dob' => date_format($head->getDob(), 'Y-m-d'),
+                );
                 $match_results = array(
                     'newadd' => $newHead,
                     'matched' => $found,
@@ -138,6 +130,26 @@ class HouseholdController extends Controller
 
                 return $this->render('Member/match_results.html.twig', $match_results);
             }
+
+            //remove session variables no longer needed
+            if (null !== $session->get('household')) {
+                $session->remove('household');
+                $session->remove('member');
+            }
+
+            $relation = $em->getRepository('TruckeeProjectmanaBundle:Relationship')->findOneBy(['relation' => 'Self']);
+            $head->setRelation($relation);
+            $head->setInclude(true);
+            $em->persist($head);
+            $unk = $em->getRepository('TruckeeProjectmanaBundle:FsStatus')->findOneBy(['status' => 'Unknown']);
+            $household->setFoodstamp($unk);
+            $household->addMember($head);
+            $household->setHead($head);
+            $em->persist($household);
+            $em->flush();
+            $id = $household->getId();
+
+            return $this->redirectToRoute('household_edit', array('id' => $id));
         }
 
         return $this->render(
@@ -176,9 +188,6 @@ class HouseholdController extends Controller
         $metadata = $searches->getMetadata($household);
 
         $session = $request->getSession();
-        if (null !== $session->get('household')) {
-            $session->set('household', null);
-        }
         $addresses = $this->get('mana.addresses');
         $addressTemplates = $addresses->addressTemplates($household);
         $formOptions = [
@@ -301,9 +310,8 @@ class HouseholdController extends Controller
             $response = new Response('');
         } else {
             $content = $this->renderView(
-                'Contact/addHouseholdContact.html.twig',
-                [
-                    'household' => $household,
+                'Contact/addHouseholdContact.html.twig', [
+                'household' => $household,
                 ]
             );
             $response = new Response($content);
@@ -322,10 +330,9 @@ class HouseholdController extends Controller
         $year = date('Y');
         $filename = 'Let\'sTalkTurkey' . $year . '.pdf';
         $html = $this->renderView(
-            'Pdf/Household/turkeyContent.html.twig',
-            [
+            'Pdf/Household/turkeyContent.html.twig', [
             'turkeys' => $turkeys,
-        ]
+            ]
         );
         $header = $this->renderView('Pdf/Household/turkeyHeader.html.twig');
 
@@ -335,12 +342,10 @@ class HouseholdController extends Controller
         $snappy->setOption('footer-center', 'Page [page]');
         $content = $snappy->getOutputFromHtml($html);
         $response = new Response(
-            $content,
-            200,
-            [
+            $content, 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'attachment; filename=' . $filename . '.pdf',
-        ]
+            ]
         );
 
         return $response;

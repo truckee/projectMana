@@ -16,40 +16,6 @@ class HouseholdRepository extends EntityRepository
 {
 
     /**
-     * Set initial values for household entity.
-     *
-     * @param object $household
-     * @param object $member
-     * @param object $session
-     *
-     * @return int
-     */
-    public function initialize($household, $member, $session = null)
-    {
-        $em = $this->getEntityManager();
-        $member->setInclude(1);
-        $relation = $em->getRepository('TruckeeProjectmanaBundle:Relationship')->findOneBy(['relation' => 'Self']);
-        $member->setRelation($relation);
-        $foodstamp = $household->getFoodstamp();
-        if (empty($foodstamp)) {
-            $unk = $em->getRepository('TruckeeProjectmanaBundle:FsStatus')->findOneBy(['status' => 'Unknown']);
-            $household->setFoodstamp($unk);
-        }
-        //if from match results, add & set head of household
-        if (count($household->getMembers()) == 0) {
-            $household->addMember($member);
-            $household->setHead($member);
-            $session->set('household', '');
-            $session->set('member', '');
-        }
-        $em->persist($household);
-        $em->flush();
-        $id = $household->getId();
-
-        return $id;
-    }
-
-    /**
      * Add contact to set of households
      *
      * @param array $households
