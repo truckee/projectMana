@@ -84,6 +84,6 @@ $(document).ready(function () {
 
     if ($(".alert").text().indexOf('contacts added') > 0) {
         $("#contact_center").val("");
-        $("#contact_contactDesc").val("");
+        $("#contact_contactdesc").val("");
     }
 })
