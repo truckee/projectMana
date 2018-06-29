@@ -93,6 +93,9 @@ class HouseholdController extends Controller
         if (null !== $session->get('household')) {
             $household = $em->merge($session->get('household'));
             $head = $em->merge($session->get('head'));
+            $id = $this->initializeHousehold($household, $head);
+
+            return $this->redirectToRoute('household_edit', array('id' => $id));
         } else {
             $household = new Household();
             $head = new Member();
@@ -137,17 +140,7 @@ class HouseholdController extends Controller
                 $session->remove('member');
             }
 
-            $relation = $em->getRepository('TruckeeProjectmanaBundle:Relationship')->findOneBy(['relation' => 'Self']);
-            $head->setRelation($relation);
-            $head->setInclude(true);
-            $em->persist($head);
-            $unk = $em->getRepository('TruckeeProjectmanaBundle:FsStatus')->findOneBy(['status' => 'Unknown']);
-            $household->setFoodstamp($unk);
-            $household->addMember($head);
-            $household->setHead($head);
-            $em->persist($household);
-            $em->flush();
-            $id = $household->getId();
+            $id = $this->initializeHousehold($household, $head);
 
             return $this->redirectToRoute('household_edit', array('id' => $id));
         }
@@ -349,5 +342,23 @@ class HouseholdController extends Controller
         );
 
         return $response;
+    }
+
+    private function initializeHousehold($household, $head)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $relation = $em->getRepository('TruckeeProjectmanaBundle:Relationship')->findOneBy(['relation' => 'Self']);
+        $head->setRelation($relation);
+        $head->setInclude(true);
+        $em->persist($head);
+        $unk = $em->getRepository('TruckeeProjectmanaBundle:FsStatus')->findOneBy(['status' => 'Unknown']);
+        $household->setFoodstamp($unk);
+        $household->addMember($head);
+        $household->setHead($head);
+        $em->persist($household);
+        $em->flush();
+        $id = $household->getId();
+
+        return $id;
     }
 }
