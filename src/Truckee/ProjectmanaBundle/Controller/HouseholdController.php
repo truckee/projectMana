@@ -93,7 +93,7 @@ class HouseholdController extends Controller
         if (null !== $session->get('household')) {
             $household = $em->merge($session->get('household'));
             $head = $em->merge($session->get('head'));
-            $id = $this->initializeHousehold($household, $head);
+            $id = $this->initializeHousehold($household, $head, $session);
 
             return $this->redirectToRoute('household_edit', array('id' => $id));
         } else {
@@ -102,7 +102,6 @@ class HouseholdController extends Controller
         }
         $form = $this->createForm(HouseholdRequiredType::class, $household);
         $formHead = $this->createForm(MemberType::class, $head);
-
         $form->handleRequest($request);
         $formHead->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid() && $formHead->isSubmitted() && $formHead->isValid()) {
@@ -133,14 +132,7 @@ class HouseholdController extends Controller
 
                 return $this->render('Member/match_results.html.twig', $match_results);
             }
-
-            //remove session variables no longer needed
-            if (null !== $session->get('household')) {
-                $session->remove('household');
-                $session->remove('member');
-            }
-
-            $id = $this->initializeHousehold($household, $head);
+            $id = $this->initializeHousehold($household, $head, $session);
 
             return $this->redirectToRoute('household_edit', array('id' => $id));
         }
@@ -344,8 +336,13 @@ class HouseholdController extends Controller
         return $response;
     }
 
-    private function initializeHousehold($household, $head)
+    private function initializeHousehold($household, $head, $session)
     {
+        //remove session variables no longer needed
+        if (null !== $session->get('household')) {
+            $session->remove('household');
+            $session->remove('member');
+        }
         $em = $this->getDoctrine()->getManager();
         $relation = $em->getRepository('TruckeeProjectmanaBundle:Relationship')->findOneBy(['relation' => 'Self']);
         $head->setRelation($relation);
