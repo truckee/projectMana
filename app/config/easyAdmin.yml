@@ -47,57 +47,6 @@ easy_admin:
                 title: '%%entity_label%%'
                 fields: [enabled]
                 form_options: { validation_groups: ['Options'] }
-        Organization:
-            class: Truckee\ProjectmanaBundle\Entity\Organization
-            label: Receiving services   
-            list:
-                title: '%%entity_label%%'
-                fields:
-                    - {property: 'organization', label: 'Organization'}
-                    - enabled
-            new:
-                title: '%%entity_label%%'
-                fields:
-                    - {property: 'organization', label: 'Organization'}
-                    - enabled
-                form_options: { validation_groups: ['Options'] }
-            edit:
-                title: '%%entity_label%%'
-                fields: [enabled]
-                form_options: { validation_groups: ['Options'] }
-        Site:
-            class: Truckee\ProjectmanaBundle\Entity\Center
-            label: Sites
-            list:
-                title: '%%entity_label%%'
-                fields:
-                    - {property: 'center', label: 'Site'}
-                    - enabled
-                    - {property: 'county.county', label: 'County'}
-            new:
-                title: '%%entity_label%%'
-                fields:
-                    - {property: 'center', label: 'Site'}
-                    - enabled
-                    - {property: 'county', type: 'entity', type_options: { class: Truckee\ProjectmanaBundle\Entity\County }}
-                form_options: { validation_groups: ['Options'] }
-            edit:
-                title: '%%entity_label%%'
-                fields:
-                fields: [enabled]
-                form_options: { validation_groups: ['Options'] }
-        Ethnicity:
-            class: Truckee\ProjectmanaBundle\Entity\Ethnicity
-            label: Ethnicities
-            list:
-                title: '%%entity_label%%'
-                fields: [ethnicity, abbreviation, enabled]
-            new:
-                title: '%%entity_label%%'
-                fields: [ethnicity, abbreviation, enabled]
-            edit:
-                title: '%%entity_label%%'
-                fields: [enabled]
         ContactType:
             class: Truckee\ProjectmanaBundle\Entity\Contactdesc
             label: Contact types
@@ -127,6 +76,18 @@ easy_admin:
             edit:
                 fields: [enabled]
                 form_options: { validation_groups: ['Options'] }
+        Ethnicity:
+            class: Truckee\ProjectmanaBundle\Entity\Ethnicity
+            label: Ethnicities
+            list:
+                title: '%%entity_label%%'
+                fields: [ethnicity, abbreviation, enabled]
+            new:
+                title: '%%entity_label%%'
+                fields: [ethnicity, abbreviation, enabled]
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
         FoodStampBracket:
             class: Truckee\ProjectmanaBundle\Entity\FsAmount
             label: Foodstamp brackets
@@ -179,18 +140,6 @@ easy_admin:
             edit:
                 title: '%%entity_label%%'
                 fields: [enabled]
-        Notfoodstamp:
-            class: Truckee\ProjectmanaBundle\Entity\Notfoodstamp
-            label: Why not foodstamps
-            list:
-                title: '%%entity_label%%'
-                fields: [notfoodstamp, enabled]
-            new:
-                title: '%%entity_label%%'
-                fields: [notfoodstamp, enabled]
-            edit:
-                title: '%%entity_label%%'
-                fields:  [enabled]
         InsufficientFood:
             class: Truckee\ProjectmanaBundle\Entity\Reason
             label: 'Insufficient food'
@@ -203,6 +152,36 @@ easy_admin:
             edit:
                 title: '%%entity_label%%'
                 fields:  [enabled]
+        Notfoodstamp:
+            class: Truckee\ProjectmanaBundle\Entity\Notfoodstamp
+            label: Why not foodstamps
+            list:
+                title: '%%entity_label%%'
+                fields: [notfoodstamp, enabled]
+            new:
+                title: '%%entity_label%%'
+                fields: [notfoodstamp, enabled]
+            edit:
+                title: '%%entity_label%%'
+                fields:  [enabled]
+        Organization:
+            class: Truckee\ProjectmanaBundle\Entity\Organization
+            label: Receiving services   
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'organization', label: 'Organization'}
+                    - enabled
+            new:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'organization', label: 'Organization'}
+                    - enabled
+                form_options: { validation_groups: ['Options'] }
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
+                form_options: { validation_groups: ['Options'] }
         Relationship:
             class: Truckee\ProjectmanaBundle\Entity\Relationship
             label: Relationship
@@ -219,6 +198,27 @@ easy_admin:
             edit:
                 title: '%%entity_label%%'
                 fields: [enabled]
+        Site:
+            class: Truckee\ProjectmanaBundle\Entity\Center
+            label: Sites
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'center', label: 'Site'}
+                    - enabled
+                    - {property: 'county.county', label: 'County'}
+            new:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'center', label: 'Site'}
+                    - enabled
+                    - {property: 'county', type: 'entity', type_options: { class: Truckee\ProjectmanaBundle\Entity\County }}
+                form_options: { validation_groups: ['Options'] }
+            edit:
+                title: '%%entity_label%%'
+                fields:
+                fields: [enabled]
+                form_options: { validation_groups: ['Options'] }
         State:
             class: Truckee\ProjectmanaBundle\Entity\State
             label: State
@@ -245,7 +245,6 @@ easy_admin:
             edit:
                 title: '%%entity_label%%'
                 fields:  [enabled]
-
         User:
             class: Truckee\ProjectmanaBundle\Entity\User
             list:
