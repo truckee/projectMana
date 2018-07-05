@@ -25,8 +25,6 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function setup()
     {
         $date = new \DateTime();
-        $firstDay = new \DateTime(date_format($date, 'F') . ' 1,' . date_format($date, 'Y'));
-//        $lastMonth = $firstDay->sub(new \DateInterval('P1D'));
         $this->lastMonth = date_format(new \DateTime('last month'), 'F, Y');
         $this->client = static::createClient();
         $this->client->followRedirects();
@@ -39,6 +37,11 @@ class StatisticsControllerTest extends TruckeeWebTestCase
 //        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
     }
 
+    /**
+     * Login & go to Reports page
+     *
+     * @return DOM crawler
+     */
     public function login()
     {
         $crawler = $this->client->request('GET', '/');
@@ -46,6 +49,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $form['_username'] = 'admin';
         $form['_password'] = 'manapw';
         $crawler = $this->client->submit($form);
+        $link = $crawler->selectLink('Reports')->link();
+        $crawler = $this->client->click($link);
 
         return $crawler;
     }
@@ -53,7 +58,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function testGeneralStatistics()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/reports/general');
+        $link = $crawler->selectLink('General Statistics')->link();
+        $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
 
@@ -63,7 +69,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function testDateValidator()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/reports/general');
+        $link = $crawler->selectLink('General Statistics')->link();
+        $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
         $form['report_criteria[startMonth]'] = 1;
         $form['report_criteria[endMonth]'] = 1;
@@ -78,7 +85,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function testCenterGeneralStatistics()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/reports/general');
+        $link = $crawler->selectLink('General Statistics')->link();
+        $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
         $truckee = $this->fixtures->getReference('truckee')->getId();
         $form['report_criteria[center]']->select($truckee);
@@ -91,7 +99,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function testCountyGeneralStatistics()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/reports/general');
+        $link = $crawler->selectLink('General Statistics')->link();
+        $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
         $placer = $this->fixtures->getReference('placer')->getId();
         $form['report_criteria[county]']->select($placer);
@@ -104,7 +113,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function testDetailsStatistics()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/reports/details');
+        $link = $crawler->selectLink('Distribution details')->link();
+        $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
 
@@ -115,7 +125,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function testMultipleContacts()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/reports/multi');
+        $link = $crawler->selectLink('Multiple contacts')->link();
+        $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
         $date = new \DateTime('last month');
@@ -136,7 +147,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function testEmploymentSiteProfile()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/reports/employmentProfile');
+        $link = $crawler->selectLink('Employment')->link();
+        $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
 
@@ -146,7 +158,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function testEmploymentCountyProfile()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/reports/employmentProfile');
+        $link = $crawler->selectLink('Employment')->link();
+        $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
         $form['report_criteria[columnType]']->select('county');
         $crawler = $this->client->submit($form);
@@ -157,7 +170,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function testHousingSiteProfile()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/reports/housingProfile');
+        $link = $crawler->selectLink('Housing')->link();
+        $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
 
@@ -167,7 +181,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function testHousingCountyProfile()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/reports/housingProfile');
+        $link = $crawler->selectLink('Housing')->link();
+        $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
         $form['report_criteria[columnType]']->select('county');
         $crawler = $this->client->submit($form);
@@ -178,7 +193,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function testIncomeSiteProfile()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/reports/incomeProfile');
+        $link = $crawler->selectLink('Income')->link();
+        $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
 
@@ -188,7 +204,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function testIncomeCountyProfile()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/reports/incomeProfile');
+        $link = $crawler->selectLink('Income')->link();
+        $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
         $form['report_criteria[columnType]']->select('county');
         $crawler = $this->client->submit($form);
@@ -199,7 +216,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function testReasonSiteProfile()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/reports/reasonProfile');
+        $link = $crawler->selectLink('Insufficient food')->link();
+        $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
 
@@ -209,7 +227,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function testReasonCountyProfile()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/reports/reasonProfile');
+        $link = $crawler->selectLink('Insufficient food')->link();
+        $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
         $form['report_criteria[columnType]']->select('county');
         $crawler = $this->client->submit($form);
@@ -220,7 +239,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function testSNAPSiteProfile()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/reports/snapProfile');
+        $link = $crawler->selectLink('SNAP')->link();
+        $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
         $crawler = $this->client->submit($form);
 
@@ -232,7 +252,8 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function testSNAPCountyProfile()
     {
         $crawler = $this->login();
-        $crawler = $this->client->request('GET', '/reports/snapProfile');
+        $link = $crawler->selectLink('SNAP')->link();
+        $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
         $form['report_criteria[columnType]']->select('county');
         $crawler = $this->client->submit($form);

@@ -86,24 +86,6 @@ class Crosstab
         ;
     }
 
-    public function mtmAllTimeActiveHouseholdsCrosstabData($criteria, $profileParameters)
-    {
-        $profileType = $criteria['columnType'];
-        $entity = $profileParameters['entity'];
-        $entityField = $profileParameters['entityField'];
-
-        return $this->em->createQueryBuilder()
-                ->select('r.' . $profileType . ' colLabel, alias.' . $entityField . ' rowLabel, COUNT(DISTINCT h.id) N ')
-                ->from('TruckeeProjectmanaBundle:' . ucfirst($entity), 'alias')
-                ->join('alias.households', 'h')
-                ->join('h.contacts', 'c')
-                ->join('c.' . $profileType, 'r')
-                ->where('h.active = TRUE')
-                ->groupBy('colLabel, rowLabel')
-                ->getQuery()->getResult()
-        ;
-    }
-
     public function mtmCrosstabData($criteria, $profileParameters)
     {
         $profileType = $criteria['columnType'];
