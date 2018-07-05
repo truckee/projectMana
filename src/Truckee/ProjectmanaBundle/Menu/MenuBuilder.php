@@ -147,7 +147,7 @@ class MenuBuilder
         $menu->addChild('Income', array(
             'route' => 'income_profile',
         ));
-        $menu->addChild('Insusfficient food', array(
+        $menu->addChild('Insufficient food', array(
             'route' => 'reason_profile',
         ));
         $menu->addChild('SNAP', array(
