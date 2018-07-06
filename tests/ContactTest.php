@@ -171,6 +171,22 @@ class ContactTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("FY to date contacts for Truckee")')->count());
     }
 
+    public function testHouseholdToContactsAndBack()
+    {
+        $crawler = $this->login();
+        $id = $this->fixtures->getReference('house1')->getId();
+        $crawler = $this->client->request('GET', '/household/'.$id.'/show');
+        $link = $crawler->selectLink('Household contacts')->link();
+        $crawler = $this->client->click($link);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("New Contact for Household")')->count());
+
+        $link = $crawler->selectLink('Return to household')->link();
+        $crawler = $this->client->click($link);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Household View")')->count());
+    }
+
     public function tearDown()
     {
         unset($this->client);
