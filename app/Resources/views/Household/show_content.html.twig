@@ -13,7 +13,6 @@
         <div class="row">
             <div class="col-md-10">
                 <b>Food stamps? </b>{{ household.foodstamp.status }}
-                {% if household.fsamount is not null %}<b>If yes, how much?</b>{{ household.fsamount.amount }}{% endif %}
                 {% if household.notfoodstamp is not null %}<b>If no, why not?</b>{{ household.notfoodstamp.notfoodstamp }}{% endif %}
                 <b>Insufficient food:</b> {% set n = household.reasons|length %}
                 {% for reason in household.reasons if n > 0 %}{{reason.reason}}{% if loop.index < n %}; {% endif %}{% endfor %}

@@ -109,26 +109,6 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'fsamount',
-                EntityType::class,
-                array(
-                    'class' => 'TruckeeProjectmanaBundle:FsAmount',
-                    'choice_label' => 'amount',
-                    'label' => 'If foodstamps, how much?',
-                    'placeholder' => '',
-                    'attr' => (in_array('FsAmount', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
-                    'query_builder' => function (EntityRepository $er) use ($options) {
-                        if (false === in_array('FsAmount', $options['disabledOptions'])) {
-                            return $er->createQueryBuilder('alias')
-                                ->where('alias.enabled = 1')
-                                ->orderBy('alias.amount', 'ASC');
-                        } else {
-                            return $er->createQueryBuilder('c')
-                                ->orderBy('alias.amount', 'ASC');
-                        }
-                    })
-            )
-            ->add(
                 'housing',
                 EntityType::class,
                 array(

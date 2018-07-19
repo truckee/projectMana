@@ -20,7 +20,6 @@ use Truckee\ProjectmanaBundle\Entity\Center;
 use Truckee\ProjectmanaBundle\Entity\Contactdesc;
 use Truckee\ProjectmanaBundle\Entity\County;
 use Truckee\ProjectmanaBundle\Entity\Ethnicity;
-use Truckee\ProjectmanaBundle\Entity\FsAmount;
 use Truckee\ProjectmanaBundle\Entity\FsStatus;
 use Truckee\ProjectmanaBundle\Entity\Housing;
 use Truckee\ProjectmanaBundle\Entity\Income;
@@ -181,18 +180,6 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
         $desc1->setEnabled(true);
         $this->setReference('general', $desc1);
         $manager->persist($desc1);
-
-        $fsamount1 = new FsAmount();
-        $fsamount1->setAmount('0 - 200');
-        $fsamount1->setEnabled(true);
-        $this->setReference('fsamount1', $fsamount1);
-        $manager->persist($fsamount1);
-
-        $fsamount2 = new FsAmount();
-        $fsamount2->setAmount('201 - 400');
-        $fsamount2->setEnabled(true);
-        $this->setReference('fsamount2', $fsamount2);
-        $manager->persist($fsamount2);
 
         $addType1 = new AddressType();
         $addType1->setAddresstype('Mailing');

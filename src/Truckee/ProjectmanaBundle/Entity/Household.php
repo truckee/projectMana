@@ -111,16 +111,6 @@ class Household
     protected $foodstamp;
 
     /**
-     * @var \Truckee\ProjectmanaBundle\Entity\FsAmount
-     *
-     * @ORM\ManyToOne(targetEntity="FsAmount", inversedBy="households")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="fsamount_id", referencedColumnName="id")
-     * })
-     */
-    protected $fsamount;
-
-    /**
      * @var object Member as head of household
      * @ORM\OneToOne(targetEntity="Member")
      * @ORM\JoinColumn(name="hoh_id", referencedColumnName="id")
@@ -342,30 +332,6 @@ class Household
     public function getDateAdded()
     {
         return $this->dateAdded;
-    }
-
-    /**
-     * Set fsamount.
-     *
-     * @param \Truckee\ProjectmanaBundle\Entity\FsAmount $fsamount
-     *
-     * @return Contact
-     */
-    public function setFsamount(FsAmount $fsamount = null)
-    {
-        $this->fsamount = $fsamount;
-
-        return $this;
-    }
-
-    /**
-     * Get fsamount.
-     *
-     * @return \Truckee\ProjectmanaBundle\Entity\Fsamount
-     */
-    public function getFsamount()
-    {
-        return $this->fsamount;
     }
 
     /**

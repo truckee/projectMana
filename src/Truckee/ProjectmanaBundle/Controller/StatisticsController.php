@@ -512,8 +512,6 @@ class StatisticsController extends Controller
 
             $yesNo = $this->yesNo($criteria, $crosstab);
             $content = $this->profilerPlain($yesNo, $templateCriteria, $crosstab);
-            $howMuch = $this->howMuch($criteria, $crosstab);
-            $content .= $this->profilerPlain($howMuch, $templateCriteria, $crosstab);
             $not = $this->not($criteria, $crosstab);
             $content .= $this->profilerPlain($not, $templateCriteria, $crosstab);
 
@@ -664,35 +662,6 @@ class StatisticsController extends Controller
                     'specs' => $templateSpecs,
                 ]
         );
-    }
-
-    /**
-     * Gather row & column data for SNAP how much profile
-     *
-     * @param array $criteria
-     *
-     * @return Response
-     */
-    private function howMuch($criteria, $crosstab)
-    {
-        $profileParameters = [
-            'entity' => 'FsAmount',
-            'entityField' => 'amount',
-            'joinField' => 'fsamount',
-        ];
-        $rowLabels = $crosstab->rowLabels($criteria, $profileParameters);
-        $colLabels = $crosstab->colLabels($criteria);
-        $data = $crosstab->crosstabData($criteria, $profileParameters);
-
-        return [
-            'reportTitle' => 'Households receiving SNAP/CalFresh benefits',
-            'reportSubTitle' => 'For the period ',
-            'criteria' => $criteria,
-            'rowHeader' => 'How much',
-            'rowLabels' => $rowLabels,
-            'colLabels' => $colLabels,
-            'data' => $data,
-        ];
     }
 
     /**

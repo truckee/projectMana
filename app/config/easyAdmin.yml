@@ -13,7 +13,6 @@ easy_admin:
                     - { entity: 'Site', params: { sortField: 'center', sortDirection: 'ASC' }}
             - label: 'Households'
               children:
-                    - { entity: 'FoodStampBracket', params: { sortField: 'id', sortDirection: 'ASC'}}
                     - { entity: 'FoodstampStatus', params: { sortField: 'status', sortDirection: 'ASC'}}
                     - { entity: 'Housing', params: { sortField: 'housing', sortDirection: 'ASC'}}
                     - { entity: 'Income', params: { sortField: 'id', sortDirection: 'ASC'}}
@@ -87,18 +86,6 @@ easy_admin:
                 fields: [ethnicity, abbreviation, enabled]
             edit:
                 title: '%%entity_label%%'
-                fields: [enabled]
-        FoodStampBracket:
-            class: Truckee\ProjectmanaBundle\Entity\FsAmount
-            label: Foodstamp brackets
-            list:
-                title: '%%entity_label%%'
-                fields: [bracket, enabled]
-            new:
-                fields:
-                    - {property: amount, label: Bracket}
-                    - enabled
-            edit:
                 fields: [enabled]
         FoodstampStatus:
             class: Truckee\ProjectmanaBundle\Entity\FsStatus

@@ -222,20 +222,15 @@ $(document).ready(function () {
 function foodStampShowHide(option) {
     //Blank option === ""
     if (option === "" || option > "2") {
-        $("label[for=household_fsamount]").parent().hide();
-        $("select#household_fsamount").val("");
         $("label[for=household_notfoodstamp]").parent().hide();
         $("select#household_notfoodstamp").val("");
     }
     //No foodstamps: option === "1"
     if (option === "1") {
         $("label[for=household_notfoodstamp]").parent().show();
-        $("label[for=household_fsamount]").parent().hide();
-        $("select#household_fsamount").val("");
     }
     //Yes option === "2"
     if (option === "2") {
-        $("label[for=household_fsamount]").parent().show();
         $("label[for=household_notfoodstamp]").parent().hide();
         $("select#household_notfoodstamp").val("");
     }

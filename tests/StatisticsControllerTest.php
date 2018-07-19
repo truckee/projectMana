@@ -34,7 +34,6 @@ class StatisticsControllerTest extends TruckeeWebTestCase
                 'Truckee\ProjectmanaBundle\DataFixtures\Test\Households',
                 'Truckee\ProjectmanaBundle\DataFixtures\Test\Contacts',
             ])->getReferenceRepository();
-//        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
     }
 
     /**
@@ -245,7 +244,6 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Receiving benefits")')->count());
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("How much")')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Reason why not")')->count());
     }
 
@@ -259,7 +257,6 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Receiving benefits")')->count());
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("How much")')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Reason why not")')->count());
     }
 
