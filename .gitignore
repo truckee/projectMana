@@ -1,6 +1,6 @@
 /app/config/parameters.yml
 /build/
-/nbproject
+/nbproject/*
 /phpunit.xml
 /var/*
 !/var/cache

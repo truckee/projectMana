@@ -44,7 +44,7 @@ class MemberType extends AbstractType
                 array(
                 'label' => 'Gender:',
                 'placeholder' => 'Select gender',
-                'choices' => array('Male' => 'Male', 'Female' => 'Female'),
+                'choices' => array('Female' => 'Female', 'Male' => 'Male', 'Other' => 'Other'),
             )
             )
             ->add(

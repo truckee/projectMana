@@ -130,7 +130,7 @@ class GeneralStatisticsReport
     private function setAgeGenderDist($data)
     {
         $ageDist = ['Under 6' => 0, '6 - 18' => 0, '19 - 59' => 0, '60+' => 0];
-        $ageGenderDist = ['FC' => 0, 'MC' => 0, 'FA' => 0, 'MA' => 0];
+        $ageGenderDist = ['FC' => 0, 'MC' => 0, 'FA' => 0, 'MA' => 0, 'OC' => 0, 'OA' => 0,];
         foreach ($data as $row) {
             switch (true) {
                 case $row['age'] < 6 && $row['sex'] == 'Female':
@@ -164,6 +164,22 @@ class GeneralStatisticsReport
                 case $row['age'] >= 60 && $row['sex'] == 'Male':
                     $ageDist['60+'] ++;
                     $ageGenderDist['MA'] ++;
+                    break;
+                case $row['age'] < 6 && $row['sex'] == 'Other':
+                    $ageDist['Under 6'] ++;
+                    $ageGenderDist['OC'] ++;
+                    break;
+                case $row['age'] < 19 && $row['sex'] == 'Other':
+                    $ageDist['6 - 18'] ++;
+                    $ageGenderDist['OC'] ++;
+                    break;
+                case $row['age'] < 59 && $row['sex'] == 'Other':
+                    $ageDist['19 - 59'] ++;
+                    $ageGenderDist['OA'] ++;
+                    break;
+                case $row['age'] >= 60 && $row['sex'] == 'Other':
+                    $ageDist['60+'] ++;
+                    $ageGenderDist['OA'] ++;
                     break;
 
                 default:
