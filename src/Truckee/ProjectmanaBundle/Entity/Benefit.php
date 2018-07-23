@@ -1,27 +1,34 @@
 <?php
-
 /*
  * This file is part of the Truckee\Projectmana package.
- *
+ * 
  * (c) George W. Brooks
- *
+ * 
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
+//src/Truckee/ProjectmanaBundle/Entity/Benefit.php
+
 namespace Truckee\ProjectmanaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * FsAmount.
+ * Description of Benefit
+ * @ORM\Table(name="benefit")
+ * @ORM\Entity(repositoryClass="Truckee\ProjectmanaBundle\Entity\BenefitRepository")
  *
- * @ORM\Table(name="fs_amount")
- * @ORM\Entity()
  */
-class FsAmount
+class Benefit
 {
+    public function __construct()
+    {
+        $this->households = new ArrayCollection();
+    }
+
     /**
      * @var int
      *
@@ -32,17 +39,17 @@ class FsAmount
     protected $id;
 
     /**
-     * @var bool
+     * @var string
      *
-     * @ORM\Column(name="amount", type="string", nullable=true)
-     * @Assert\NotBlank(message="Bracket may not be blank")
+     * @ORM\Column(name="benefit", type="string", nullable=false)
+     * @Assert\NotBlank(message="Benefit may not be blank")
      */
-    protected $amount;
+    protected $benefit;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="enabled", type="boolean", nullable=true)
+     * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     protected $enabled;
 
@@ -57,27 +64,27 @@ class FsAmount
     }
 
     /**
-     * Set amount.
+     * Set benefit.
      *
-     * @param int $amount
+     * @param int $benefit
      *
-     * @return amount
+     * @return benefit
      */
-    public function setAmount($amount)
+    public function setBenefit($benefit)
     {
-        $this->fsamount = $amount;
+        $this->benefit = $benefit;
 
         return $this;
     }
 
     /**
-     * Get fsamount.
+     * Get benefit.
      *
      * @return int
      */
-    public function getAmount()
+    public function getBenefit()
     {
-        return $this->amount;
+        return $this->benefit;
     }
 
     /**
@@ -107,7 +114,7 @@ class FsAmount
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Household", mappedBy="fsamount")
+     * @ORM\ManyToMany(targetEntity="Household", mappedBy="benefits")
      */
     protected $households;
 
@@ -119,10 +126,5 @@ class FsAmount
     public function getHouseholds()
     {
         return $this->households;
-    }
-
-    public function bracket()
-    {
-        return $this->amount;
     }
 }

@@ -77,17 +77,6 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Household Edit")')->count());
     }
 
-    public function testFoodStamps()
-    {
-        $crawler = $this->submitNewHousehold();
-        $crawler = $this->client->request('GET', '/');
-        $form = $crawler->filter('#household_search')->form();
-        $form['qtext'] = 'Benny Borko';
-        $crawler = $this->client->submit($form);
-
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Food stamps? Unknown")')->count());
-    }
-
     public function testDuplicateName()
     {
         $crawler = $this->submitNewHousehold();
@@ -179,13 +168,11 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $id = $this->fixtures->getReference('house1')->getId();
         $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
 
-        $foodstamp = $this->fixtures->getReference('fsApplied')->getId();
         $income = $this->fixtures->getReference('medIncome')->getId();
         $truckee = $this->fixtures->getReference('truckee')->getId();
         $future = date_format(new \DateTime('next year'), 'm/d/Y');
 
         $form = $crawler->selectButton('Submit')->form();
-        $form['household[foodstamp]'] = $foodstamp;
         $form['household[income]'] = $income;
         $form['household[center]'] = $truckee;
         $form['household[compliance]'] = '1';
@@ -208,13 +195,11 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $id = $this->fixtures->getReference('house1')->getId();
         $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
 
-        $foodstamp = $this->fixtures->getReference('fsNo')->getId();
         $income = $this->fixtures->getReference('medIncome')->getId();
         $truckee = $this->fixtures->getReference('truckee')->getId();
         $future = date_format(new \DateTime('next year'), 'm/d/Y');
 
         $form = $crawler->selectButton('Submit')->form();
-        $form['household[foodstamp]'] = $foodstamp;
         $form['household[income]'] = $income;
         $form['household[center]'] = $truckee;
         $form['household[shared]'] = '1';

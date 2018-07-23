@@ -25,6 +25,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class HouseholdType extends AbstractType
 {
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -38,8 +39,7 @@ class HouseholdType extends AbstractType
                 'mapped' => false,
             ])
             ->add(
-                'addresses',
-                CollectionType::class,
+                'addresses', CollectionType::class,
                 array(
                     'entry_type' => AddressType::class,
                     'allow_add' => true,
@@ -49,11 +49,10 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'center',
-                EntityType::class,
+                'center', EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:Center',
-                    'label' => 'Site:',
+                    'label' => 'First site:',
                     'choice_label' => 'center',
                     'placeholder' => 'Select site',
                     'attr' => (in_array('Center', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
@@ -70,15 +69,12 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'compliance',
-                NoYesChoiceType::class,
-                array(
+                'compliance', NoYesChoiceType::class, array(
                     'label' => 'Compliance: ',
                 )
             )
             ->add(
-                'complianceDate',
-                DateType::class,
+                'complianceDate', DateType::class,
                 array(
                     'label' => 'Compliance date: ',
                     'widget' => 'single_text',
@@ -87,30 +83,28 @@ class HouseholdType extends AbstractType
                     'format' => 'M/d/y',
                 )
             )
+//            ->add(
+//                'foodstamp', EntityType::class,
+//                array(
+//                    'class' => 'TruckeeProjectmanaBundle:FsStatus',
+//                    'choice_label' => 'status',
+//                    'placeholder' => '',
+//                    'label' => 'Food stamp status: ',
+//                    'attr' => (in_array('Foodstamp', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
+//                    'query_builder' => function (EntityRepository $er) use ($options) {
+//                        if (false === in_array('Foodstamp', $options['disabledOptions'])) {
+//                            return $er->createQueryBuilder('alias')
+//                                ->where('alias.enabled = 1')
+//                                ->orderBy('alias.status', 'ASC');
+//                        } else {
+//                            return $er->createQueryBuilder('alias')
+//                                ->orderBy('alias.status', 'ASC');
+//                        }
+//                    }
+//                )
+//            )
             ->add(
-                'foodstamp',
-                EntityType::class,
-                array(
-                    'class' => 'TruckeeProjectmanaBundle:FsStatus',
-                    'choice_label' => 'status',
-                    'placeholder' => '',
-                    'label' => 'Food stamp status: ',
-                    'attr' => (in_array('Foodstamp', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
-                    'query_builder' => function (EntityRepository $er) use ($options) {
-                        if (false === in_array('Foodstamp', $options['disabledOptions'])) {
-                            return $er->createQueryBuilder('alias')
-                                ->where('alias.enabled = 1')
-                                ->orderBy('alias.status', 'ASC');
-                        } else {
-                            return $er->createQueryBuilder('alias')
-                                ->orderBy('alias.status', 'ASC');
-                        }
-                    }
-                )
-            )
-            ->add(
-                'housing',
-                EntityType::class,
+                'housing', EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:Housing',
                     'choice_label' => 'housing',
@@ -130,8 +124,7 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'income',
-                EntityType::class,
+                'income', EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:Income',
                     'choice_label' => 'income',
@@ -151,8 +144,7 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'notfoodstamp',
-                EntityType::class,
+                'notfoodstamp', EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:Notfoodstamp',
                     'label' => 'If not food stamps, why not? ',
@@ -172,17 +164,13 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'reasons',
-                EntityType::class,
+                'reasons', EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:Reason',
                     'choice_label' => 'reason',
                     'label' => 'Insufficient food: ',
                     'expanded' => true,
                     'multiple' => true,
-//                'attr' => [
-//                    'class' => 'form-inline',
-//                ],
                     'query_builder' => function (EntityRepository $er) use ($options) {
                         if (false === in_array('reasons', $options['disabledOptions'])) {
                             return $er->createQueryBuilder('alias')
@@ -199,8 +187,7 @@ class HouseholdType extends AbstractType
                 'label' => 'Shared: ',
             ))
             ->add(
-                'sharedDate',
-                DateType::class,
+                'sharedDate', DateType::class,
                 array(
                     'label' => 'Shared date: ',
                     'widget' => 'single_text',
@@ -210,8 +197,7 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'assistances',
-                EntityType::class,
+                'assistances', EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:Assistance',
                     'choice_label' => 'assistance',
@@ -229,12 +215,8 @@ class HouseholdType extends AbstractType
                     }
                 )
             )
-            ->add('seeking', TextType::class, [
-                'label' => 'Seeking service:'
-            ])
             ->add(
-                'organizations',
-                EntityType::class,
+                'organizations', EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:Organization',
                     'choice_label' => 'organization',
@@ -252,14 +234,39 @@ class HouseholdType extends AbstractType
                     }
                 )
             )
+            //following two fields for when Other is checked
+            ->add('seeking', TextType::class, [
+                'label' => 'Seeking service:'
+            ])
             ->add('receiving', TextType::class, [
                 'label' => 'Receiving service from:'
             ])
+            ->add(
+                'benefits', EntityType::class,
+                array(
+                    'class' => 'TruckeeProjectmanaBundle:Benefit',
+                    'choice_label' => 'benefit',
+                    'placeholder' => '',
+                    'label' => 'Benefits: ',
+                    'expanded' => true,
+                    'multiple' => true,
+                    'attr' => (in_array('Benefit', $options['disabledOptions']) ? ['disabled' => 'disabled'] : []),
+                    'query_builder' => function (EntityRepository $er) use ($options) {
+                        if (false === in_array('Benefit', $options['disabledOptions'])) {
+                            return $er->createQueryBuilder('alias')
+                                ->where('alias.enabled = 1')
+                                ->orderBy('alias.benefit', 'ASC');
+                        }
+                    }
+                )
+            )
             ->add('areacode', TextType::class, array(
                 'attr' => array('size' => 2),
+                'label' => 'Area code: ',
             ))
             ->add('phoneNumber', TextType::class, array(
                 'attr' => array('size' => 8),
+                'label' => 'Phone: ',
             ))
         ;
     }

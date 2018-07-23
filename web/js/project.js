@@ -1,7 +1,4 @@
 $(document).ready(function () {
-    var foodStampSelect = $("#household_foodstamp");
-
-    foodStampShowHide($("#household_foodstamp option:selected").val());
 
     $("input[type=Submit]").click(function () {
         $("input").removeAttr("disabled");
@@ -74,11 +71,6 @@ $(document).ready(function () {
         } else {
             $("input[type='checkbox']").prop("checked", false);
         }
-    });
-
-    foodStampSelect.change(function () {
-        var option = $("#household_foodstamp option:selected").val();
-        foodStampShowHide(option);
     });
 
     //launch member edit form
@@ -219,19 +211,3 @@ $(document).ready(function () {
 }
 );
 
-function foodStampShowHide(option) {
-    //Blank option === ""
-    if (option === "" || option > "2") {
-        $("label[for=household_notfoodstamp]").parent().hide();
-        $("select#household_notfoodstamp").val("");
-    }
-    //No foodstamps: option === "1"
-    if (option === "1") {
-        $("label[for=household_notfoodstamp]").parent().show();
-    }
-    //Yes option === "2"
-    if (option === "2") {
-        $("label[for=household_notfoodstamp]").parent().hide();
-        $("select#household_notfoodstamp").val("");
-    }
-}

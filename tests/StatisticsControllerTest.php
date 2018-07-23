@@ -143,6 +143,28 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Female Children")')->count());
     }
 
+    public function testAssistanceSiteProfile()
+    {
+        $crawler = $this->login();
+        $link = $crawler->selectLink('Seeking services')->link();
+        $crawler = $this->client->click($link);
+        $form = $crawler->selectButton('Submit')->form();
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Seeking services")')->count());
+    }
+
+    public function testOrganizationSiteProfile()
+    {
+        $crawler = $this->login();
+        $link = $crawler->selectLink('Receiving services')->link();
+        $crawler = $this->client->click($link);
+        $form = $crawler->selectButton('Submit')->form();
+        $crawler = $this->client->submit($form);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Receiving services")')->count());
+    }
+
     public function testEmploymentSiteProfile()
     {
         $crawler = $this->login();

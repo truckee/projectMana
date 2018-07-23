@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Assistance.
  *
  * @ORM\Table(name="assistance")
- * @ORM\Entity(repositoryClass="Truckee\ProjectmanaBundle\Entity\AssistanceRepository")
+ * @ORM\Entity()
  */
 class Assistance
 {

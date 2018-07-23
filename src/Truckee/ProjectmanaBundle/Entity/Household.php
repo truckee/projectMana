@@ -32,11 +32,13 @@ class Household
     {
         $this->addresses = new ArrayCollection();
         $this->assistances = new ArrayCollection();
+        $this->benefits = new ArrayCollection();
         $this->contacts = new ArrayCollection();
         $this->members = new ArrayCollection();
         $this->organizations = new ArrayCollection();
         $this->reasons = new ArrayCollection();
     }
+
     /**
      * @var int
      *
@@ -69,8 +71,21 @@ class Household
      *      joinColumns={@ORM\JoinColumn(name="household_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="assistance_id", referencedColumnName="id")}
      *      ))
+     * @ORM\OrderBy({"assistance" = "ASC"})
      */
     protected $assistances;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Benefit", inversedBy="households", cascade={"persist"})
+     * @ORM\JoinTable(name="household_benefit",
+     *      joinColumns={@ORM\JoinColumn(name="household_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="benefit_id", referencedColumnName="id")}
+     *      ))
+     * @ORM\OrderBy({"benefit" = "ASC"})
+     */
+    protected $benefits;
 
     /**
      * @var bool
@@ -100,15 +115,15 @@ class Household
      * @ORM\Column(name="date_added", type="date", nullable=true)
      */
     protected $dateAdded;
-
-    /**
-     * @var int
-     *
-     * @ORM\ManyToOne(targetEntity="FsStatus", inversedBy="households")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="foodstamp_id", referencedColumnName="id")
-     * })     */
-    protected $foodstamp;
+//
+//    /**
+//     * @var int
+//     *
+//     * @ORM\ManyToOne(targetEntity="FsStatus", inversedBy="households")
+//     * @ORM\JoinColumns({
+//     *   @ORM\JoinColumn(name="foodstamp_id", referencedColumnName="id")
+//     * })     */
+//    protected $foodstamp;
 
     /**
      * @var object Member as head of household
@@ -170,6 +185,7 @@ class Household
      *      joinColumns={@ORM\JoinColumn(name="household_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="organization_id", referencedColumnName="id")}
      *      ))
+     * @ORM\OrderBy({"organization" = "ASC"})
      */
     protected $organizations;
 
@@ -181,6 +197,7 @@ class Household
      *      joinColumns={@ORM\JoinColumn(name="household_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="reason_id", referencedColumnName="id")}
      *      ))
+     * @ORM\OrderBy({"reason" = "ASC"})
      */
     protected $reasons;
 
@@ -333,30 +350,30 @@ class Household
     {
         return $this->dateAdded;
     }
-
-    /**
-     * Set foodstamp.
-     *
-     * @param bool $foodstamp
-     *
-     * @return Household
-     */
-    public function setFoodstamp($foodstamp)
-    {
-        $this->foodstamp = $foodstamp;
-
-        return $this;
-    }
-
-    /**
-     * Get foodstamp.
-     *
-     * @return bool
-     */
-    public function getFoodstamp()
-    {
-        return $this->foodstamp;
-    }
+//
+//    /**
+//     * Set foodstamp.
+//     *
+//     * @param bool $foodstamp
+//     *
+//     * @return Household
+//     */
+//    public function setFoodstamp($foodstamp)
+//    {
+//        $this->foodstamp = $foodstamp;
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * Get foodstamp.
+//     *
+//     * @return bool
+//     */
+//    public function getFoodstamp()
+//    {
+//        return $this->foodstamp;
+//    }
 
     /**
      * Add members.
@@ -473,6 +490,17 @@ class Household
     public function getAssistances()
     {
         return $this->assistances;
+    }
+
+    public function addBenefit(Benefit $benefit)
+    {
+        $benefit->addHousehold($this); // synchronously updating inverse side
+        $this->benefits[] = $benefit;
+    }
+
+    public function getBenefits()
+    {
+        return $this->benefits;
     }
 
     public function addOrganization(Organization $organization)

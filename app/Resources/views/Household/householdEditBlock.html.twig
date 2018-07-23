@@ -6,44 +6,50 @@
             <div class="col-md-2">
                 {{ form_row(form.active) }}
             </div>
-            <div class="col-md-6">
-                <div class="row">
-                        <div class="col-md-2">
-                            {{ form_row(form.areacode) }}
-                        </div>
-                        <div class="col-md-4">
-                            {{ form_row(form.phoneNumber) }}
-                        </div>
-                </div>
+            <div class="col-md-2">
+                {{ form_row(form.areacode) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.phoneNumber) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.center) }}
             </div>
         </div>
         <div class="row">
+            {# Q4 Benefits #}
+            <div class="col-md-3">
+                {{ form_row(form.benefits) }}
+            </div>
+            {# Q5 Why not foodstamps #}
+            <div class="col-md-3">
+                {{ form_row(form.notfoodstamp, {'attr': {'class':'notfoodstamp'}}) }}
+            </div>
+            {# Q6 Income #}
             <div class="col-md-2">
                 {{ form_row(form.income) }}
             </div>
-            <div class="col-md-2">
-                {{ form_row(form.foodstamp) }}
-            </div>
-            <div class="col-md-3">
-                {{ form_row(form.notfoodstamp) }}
-            </div>
+            {# Q7 Housing #}
             <div class="col-md-2">
                 {{ form_row(form.housing) }}
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12"><strong>Check all that apply</strong></div>
+            <div class="col-md-12"><strong>Check all that apply for each column below</strong><hr></div>
         </div>
         <div class="row">
+            {# Q8 Insufficient food #}
             <div class="col-md-4">
                 {{ form_row(form.reasons) }}
             </div>
+            {# Q9 Seeking services #}
             <div class="col-md-4">
                 {{ form_row(form.assistances) }}
                 <div class="row" id="seeking">
                     <div class="col-md-12">{{ form_row(form.seeking) }}</div>
                 </div>
             </div>
+            {# Q9 Receiving services #}
             <div class="col-md-4">
                 {{ form_row(form.organizations) }}
                 <div class="row" id="receiving">
@@ -52,9 +58,6 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-2">
-                {{ form_row(form.center) }}
-            </div>
             <div class="col-md-2">
                 {{ form_row(form.compliance) }}
             </div>

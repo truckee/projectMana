@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Organization.
  *
  * @ORM\Table(name="organization")
- * @ORM\Entity(repositoryClass="Truckee\ProjectmanaBundle\Entity\OrganizationRepository")
+ * @ORM\Entity()
  */
 class Organization
 {

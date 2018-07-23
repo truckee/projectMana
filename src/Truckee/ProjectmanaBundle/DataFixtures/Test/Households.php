@@ -52,10 +52,7 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $household->setHead($member);
         $household->addMember($member);
         $household->addMember($member2);
-        $household->setFoodstamp(1);
         $this->setReference('house1', $household);
-        $fsAppl = $this->getReference('fsApplied');
-        $household->setFoodstamp($fsAppl);
 
         $member3 = new Member();
         $member3->setFname('Single');
@@ -71,7 +68,6 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $household2->setHead($member3);
         $household2->addMember($member3);
         $this->setReference('house2', $household2);
-        $household2->setFoodstamp($fsAppl);
 
         $member4 = new Member();
         $member4->setFname('Some');
@@ -87,8 +83,6 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $household3->setHead($member4);
         $household3->addMember($member4);
         //set household properties for disabled tests
-        $unk = $this->getReference('unk');
-        $household3->setFoodstamp($unk);
         $site = $this->getReference('kb');
         $household3->setCenter($site);
         $site->addHousehold($household3);
@@ -117,8 +111,6 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $house->addAddress($address);
         $house->setAreacode('123');
         $house->setPhoneNumber('123-4567');
-        $fsNo = $this->getReference('fsNo');
-        $fsNo->addHousehold($house);
         $hse = $this->getReference('rent');
         $hse->addHousehold($house);
         $house->setHousing($hse);
@@ -131,8 +123,6 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $house->addReason($reason);
 
         $house2 = $this->getReference('house2');
-        $fsNo = $this->getReference('fsNo');
-        $fsNo->addHousehold($house2);
         $truckee = $this->getReference('truckee');
         $rent = $this->getReference('rent');
         $house2->setHousing($rent);

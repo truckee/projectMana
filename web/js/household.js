@@ -30,8 +30,23 @@ $(document).ready(function () {
         }
     });
 
+    snap = $(document).find('label:contains("SNAP")');
+    if (snap.find('input:checkbox').is(':checked')) {
+        $('.notfoodstamp').parent().hide();
+    } else {
+        $('.notfoodstamp').parent().show();
+    }
 
-    others = $(document).find('label:contains("Other")')
+    $(document).on('change', 'label:contains("SNAP")', function () {
+        var cb = $(this).find('input:checkbox');
+        if (cb.is(':checked')) {
+            $('.notfoodstamp').parent().hide();
+        } else {
+            $('.notfoodstamp').parent().show();
+        }
+    });
+    
+    others = $(document).find('label:contains("Other")');
     $.each(others, function () {
         if (~$(this).attr('for').indexOf('household_assistances')) {
             var cb = $(this).find('input:checkbox');

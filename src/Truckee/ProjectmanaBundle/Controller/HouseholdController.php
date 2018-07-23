@@ -348,8 +348,6 @@ class HouseholdController extends Controller
         $head->setRelation($relation);
         $head->setInclude(true);
         $em->persist($head);
-        $unk = $em->getRepository('TruckeeProjectmanaBundle:FsStatus')->findOneBy(['status' => 'Unknown']);
-        $household->setFoodstamp($unk);
         $household->addMember($head);
         $household->setHead($head);
         $em->persist($household);

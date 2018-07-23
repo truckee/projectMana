@@ -32,7 +32,6 @@ class DisabledOptionsTest extends TruckeeWebTestCase
                 'Truckee\ProjectmanaBundle\DataFixtures\Test\Households',
                 'Truckee\ProjectmanaBundle\DataFixtures\Test\DisabledConstants',
             ])->getReferenceRepository();
-//        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
     }
 
     public function login()
@@ -63,22 +62,6 @@ class DisabledOptionsTest extends TruckeeWebTestCase
 //        $this->assertEquals(12, $crawler->filter('html:contains("disabled")')->count());
     }
 
-    public function testDisabledFsStatusHouseholdEdit()
-    {
-        $crawler = $this->login();
-        $id = $this->fixtures->getReference('house3')->getId();
-        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
-        $field = $crawler->filter('#household_foodstamp');
-        $disabled = $field->attr('disabled');
-        $text = trim($field->filter('option[selected]')->text());
-        $this->assertEquals('disabled', $disabled);
-        $this->assertEquals('Unknown', $text);
-
-        $form = $crawler->selectButton('Submit')->form();
-        $crawler = $this->client->submit($form);
-
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Unknown")')->count());
-    }
 
     public function testDisabledHousingHouseholdEdit()
     {

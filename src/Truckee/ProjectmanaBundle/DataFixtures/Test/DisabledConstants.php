@@ -41,11 +41,6 @@ class DisabledConstants extends AbstractFixture implements OrderedFixtureInterfa
         $county->setEnabled(false);
         $manager->persist($county);
 
-        //FsStatus
-        $fsStatus = $this->getReference('unk');
-        $fsStatus->setEnabled(false);
-        $manager->persist($fsStatus);
-
         //Housing
         $own = $this->getReference('own');
         $own->setEnabled(false);

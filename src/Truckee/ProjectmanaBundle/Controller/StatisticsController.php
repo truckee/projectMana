@@ -509,9 +509,12 @@ class StatisticsController extends Controller
             $templateCriteria = $builder->getTemplateCriteria($criteria);
 
             $criteria['columnType'] = $formCriteria['columnType'];
-
-            $yesNo = $this->yesNo($criteria, $crosstab);
-            $content = $this->profilerPlain($yesNo, $templateCriteria, $crosstab);
+            $wtf = $this->getDoctrine()->getManager()->getRepository('TruckeeProjectmanaBundle:Benefit')->crossTabData($criteria);
+            $benefit = $this->benefit($criteria, $crosstab);
+            $content = $this->profilerPlain($benefit, $templateCriteria, $crosstab);
+//            $yesNo = $this->yesNo($criteria, $crosstab);
+//            $content = $this->profilerPlain($yesNo, $templateCriteria, $crosstab);
+//            dump($benefit, $yesNo);
             $not = $this->not($criteria, $crosstab);
             $content .= $this->profilerPlain($not, $templateCriteria, $crosstab);
 
@@ -687,6 +690,29 @@ class StatisticsController extends Controller
             'reportSubTitle' => 'For the period ',
             'criteria' => $criteria,
             'rowHeader' => 'Reason why not',
+            'rowLabels' => $rowLabels,
+            'colLabels' => $colLabels,
+            'data' => $data,
+        ];
+    }
+
+    private function benefit($criteria, $crosstab)
+    {
+//        $profileParameters = [
+//            'entity' => 'notfoodstamp',
+//            'entityField' => 'notfoodstamp',
+//            'joinField' => 'notfoodstamp',
+//        ];
+        $em = $this->getDoctrine()->getManager();
+        $rowLabels = ['Yes', 'No'];
+        $colLabels = $crosstab->colLabels($criteria);
+        $data = $em->getRepository('TruckeeProjectmanaBundle:Benefit')->crossTabData($criteria);
+
+        return [
+            'reportTitle' => 'Households receiving SNAP/CalFresh benefits',
+            'reportSubTitle' => 'For the period ',
+            'criteria' => $criteria,
+            'rowHeader' => 'Receiving benefits',
             'rowLabels' => $rowLabels,
             'colLabels' => $colLabels,
             'data' => $data,

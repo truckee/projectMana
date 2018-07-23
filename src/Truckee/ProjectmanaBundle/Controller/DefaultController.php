@@ -85,8 +85,8 @@ class DefaultController extends Controller
         $desc = $em->getRepository('TruckeeProjectmanaBundle:Contactdesc')->findBy([], ['contactdesc' => 'ASC']);
         $county = $em->getRepository('TruckeeProjectmanaBundle:County')->findBy([], ['county' => 'ASC']);
         $eth = $em->getRepository('TruckeeProjectmanaBundle:Ethnicity')->findBy([], ['ethnicity' => 'ASC']);
-        $fsa = $em->getRepository('TruckeeProjectmanaBundle:FsAmount')->findBy([], ['id' => 'ASC']);
-        $status = $em->getRepository('TruckeeProjectmanaBundle:FsStatus')->findBy([], ['status' => 'ASC']);
+//        $fsa = $em->getRepository('TruckeeProjectmanaBundle:FsAmount')->findBy([], ['id' => 'ASC']);
+//        $status = $em->getRepository('TruckeeProjectmanaBundle:FsStatus')->findBy([], ['status' => 'ASC']);
         $housing = $em->getRepository('TruckeeProjectmanaBundle:Housing')->findBy([], ['housing' => 'ASC']);
         $income = $em->getRepository('TruckeeProjectmanaBundle:Income')->findBy([], ['income' => 'ASC']);
         $not = $em->getRepository('TruckeeProjectmanaBundle:Notfoodstamp')->findBy([], ['notfoodstamp' => 'ASC']);

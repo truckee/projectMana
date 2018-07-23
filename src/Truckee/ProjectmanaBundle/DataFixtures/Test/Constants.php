@@ -20,7 +20,6 @@ use Truckee\ProjectmanaBundle\Entity\Center;
 use Truckee\ProjectmanaBundle\Entity\Contactdesc;
 use Truckee\ProjectmanaBundle\Entity\County;
 use Truckee\ProjectmanaBundle\Entity\Ethnicity;
-use Truckee\ProjectmanaBundle\Entity\FsStatus;
 use Truckee\ProjectmanaBundle\Entity\Housing;
 use Truckee\ProjectmanaBundle\Entity\Income;
 use Truckee\ProjectmanaBundle\Entity\Notfoodstamp;
@@ -145,29 +144,6 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
         $center3->setCounty($washoe);
         $center3->setEnabled(true);
         $manager->persist($center3);
-
-        $foodstamp = new FsStatus();
-        $foodstamp->setStatus('No');
-        $foodstamp->setEnabled(true);
-        $this->setReference('fsNo', $foodstamp);
-        $manager->persist($foodstamp);
-
-        $foodstamp1 = new FsStatus();
-        $foodstamp1->setStatus('Yes');
-        $foodstamp1->setEnabled(true);
-        $manager->persist($foodstamp1);
-
-        $foodstamp2 = new FsStatus();
-        $foodstamp2->setStatus('Appl');
-        $foodstamp2->setEnabled(true);
-        $this->setReference('fsApplied', $foodstamp2);
-        $manager->persist($foodstamp2);
-
-        $foodstamp3 = new FsStatus();
-        $foodstamp3->setStatus('Unknown');
-        $foodstamp3->setEnabled(true);
-        $this->setReference('unk', $foodstamp3);
-        $manager->persist($foodstamp3);
 
         $desc = new Contactdesc();
         $desc->setContactdesc('FACE');
