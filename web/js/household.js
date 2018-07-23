@@ -31,7 +31,7 @@ $(document).ready(function () {
     });
 
     snap = $(document).find('label:contains("SNAP")');
-    if (snap.find('input:checkbox').is(':checked')) {
+    if (snap.find('input:checkbox').prop('checked')) {
         $('.notfoodstamp').parent().hide();
     } else {
         $('.notfoodstamp').parent().show();

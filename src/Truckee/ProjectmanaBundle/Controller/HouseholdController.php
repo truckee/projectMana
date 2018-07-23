@@ -172,7 +172,7 @@ class HouseholdController extends Controller
         $disabledOptions = $searches->getDisabledOptions($household);
         $metadata = $searches->getMetadata($household);
 
-        $session = $request->getSession();
+//        $session = $request->getSession();
         $addresses = $this->get('mana.addresses');
         $addressTemplates = $addresses->addressTemplates($household);
         $formOptions = [
@@ -195,7 +195,17 @@ class HouseholdController extends Controller
                 $address->setAddressType($type);
                 $household->addAddress($address);
             }
+            $benefits = $form->get('benefits')->getData();
+            //set notfoodstamp property to null if SNAP included in benefits
+            if (null !== $benefits) {
+                foreach ($benefits as $key => $value) {
+                    if ('SNAP' === $value->getBenefit()) {
+                        $household->setNotfoodstamp(null);
+                    }
+                }
+            }
             $em->getRepository('TruckeeProjectmanaBundle:Member')->initialize($household);
+            $em->persist($household);
             $em->flush();
             $flash = $this->get('braincrafted_bootstrap.flash');
             $flash->alert('Household updated');
