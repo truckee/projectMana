@@ -14,46 +14,46 @@
         {# Q4 Benefits #}
         <div class="row">
             <div class="col-md-12">
-                <b>Benefits:</b> {% set a = household.benefits|length %}
+                <b>Q4: Benefits:</b> {% set a = household.benefits|length %}
                 {% for benefit in household.benefits if a > 0 %}{{benefit.benefit}}{% if loop.index < a %}; {% endif %}{% endfor %}
             </div>
         </div>
         {# Q5 Why not foodstamps #}
         <div class="row">
             <div class="col-md-10">
-                {% if household.notfoodstamp is not null %}<b>If no, why not?</b>{{ household.notfoodstamp.notfoodstamp }}{% endif %}
+                {% if household.notfoodstamp is not null %}<b>Q5: If no, why not?</b>{{ household.notfoodstamp.notfoodstamp }}{% endif %}
             </div>
         </div>
         {# Q6 Income #}
         <div class="row">
             <div class="col-md-12">
-                <b>Income: </b>{% if household.income is not null %}{{ household.income.income }}{% endif %}
+                <b>Q6: Income: </b>{% if household.income is not null %}{{ household.income.income }}{% endif %}
             </div>
         </div>
         {# Q7 Housing #}
         <div class="row">
             <div class="col-md-12">
-                <b>Housing: </b>{% if household.housing is not null %}{{ household.housing.housing }}{% endif %}
+                <b>Q7: Housing: </b>{% if household.housing is not null %}{{ household.housing.housing }}{% endif %}
             </div>
         </div>
         {# Q8 Insufficient food #}
         <div class="row">
             <div class="col-md-12">
-                <b>Insufficient food:</b> {% set n = household.reasons|length %}
+                <b>Q8: Insufficient food:</b> {% set n = household.reasons|length %}
                 {% for reason in household.reasons if n > 0 %}{{reason.reason}}{% if loop.index < n %}; {% endif %}{% endfor %}
             </div>
         </div>
         {# Q9 Seeking services #}
         <div class="row">
             <div class="col-md-12">
-                <b>Seeking services:</b> {% set a = household.assistances|length %}
+                <b>Q9: Seeking services:</b> {% set a = household.assistances|length %}
                 {% for assistance in household.assistances if a > 0 %}{{assistance.assistance}}{% if loop.index < a %}; {% endif %}{% endfor %}
             </div>
         </div>
-        {# Q9 Receiving services #}
+        {# Q10 Receiving services #}
         <div class="row">
             <div class="col-md-12">
-                <b>Receiving services:</b> {% set n = household.organizations|length %}
+                <b>Q10: Receiving services:</b> {% set n = household.organizations|length %}
                 {% for organization in household.organizations if n > 0 %}{{organization.organization}}{% if loop.index < n %}; {% endif %}{% endfor %}
             </div>
         </div>
