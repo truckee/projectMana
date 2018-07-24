@@ -115,15 +115,6 @@ class Household
      * @ORM\Column(name="date_added", type="date", nullable=true)
      */
     protected $dateAdded;
-//
-//    /**
-//     * @var int
-//     *
-//     * @ORM\ManyToOne(targetEntity="FsStatus", inversedBy="households")
-//     * @ORM\JoinColumns({
-//     *   @ORM\JoinColumn(name="foodstamp_id", referencedColumnName="id")
-//     * })     */
-//    protected $foodstamp;
 
     /**
      * @var object Member as head of household
@@ -350,30 +341,6 @@ class Household
     {
         return $this->dateAdded;
     }
-//
-//    /**
-//     * Set foodstamp.
-//     *
-//     * @param bool $foodstamp
-//     *
-//     * @return Household
-//     */
-//    public function setFoodstamp($foodstamp)
-//    {
-//        $this->foodstamp = $foodstamp;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get foodstamp.
-//     *
-//     * @return bool
-//     */
-//    public function getFoodstamp()
-//    {
-//        return $this->foodstamp;
-//    }
 
     /**
      * Add members.

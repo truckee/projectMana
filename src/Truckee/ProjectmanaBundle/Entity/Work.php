@@ -34,10 +34,10 @@ class Work
     /**
      * @var bool
      *
-     * @ORM\Column(name="work", type="string", nullable=false)
+     * @ORM\Column(name="job", type="string", nullable=false)
      * @Assert\NotBlank(message="Work may not be blank")
      */
-    protected $work;
+    protected $job;
 
     /**
      * @var bool
@@ -57,27 +57,27 @@ class Work
     }
 
     /**
-     * Set work.
+     * Set job.
      *
-     * @param int $work
+     * @param int $job
      *
-     * @return work
+     * @return job
      */
-    public function setWork($work)
+    public function setJob($job)
     {
-        $this->work = $work;
+        $this->job = $job;
 
         return $this;
     }
 
     /**
-     * Get work.
+     * Get job.
      *
      * @return int
      */
-    public function getWork()
+    public function getJob()
     {
-        return $this->work;
+        return $this->job;
     }
 
     /**
@@ -107,7 +107,7 @@ class Work
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Member", mappedBy="work")
+     * @ORM\ManyToMany(targetEntity="Member", mappedBy="jobs")
      */
     protected $members;
 
@@ -119,5 +119,10 @@ class Work
     public function getMembers()
     {
         return $this->members;
+    }
+
+    public function removeMember(Member $members)
+    {
+        $this->members->removeElement($members);
     }
 }

@@ -238,6 +238,10 @@ class StatisticsController extends Controller
         $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $profileParameters = [
+                'entity' => 'work',
+                'entityField' => 'job',
+            ];
             $formCriteria = $request->request->get('report_criteria');
             $criteria = $builder->getDetailsCriteria($formCriteria);
             $templateCriteria = $builder->getTemplateCriteria($criteria);
@@ -247,7 +251,7 @@ class StatisticsController extends Controller
             $em = $this->getDoctrine()->getManager();
             $rowLabels = $em->getRepository('TruckeeProjectmanaBundle:Work')->rowLabels($criteria);
             $colLabels = $crosstab->colLabels($criteria);
-            $rawData = $em->getRepository('TruckeeProjectmanaBundle:Work')->crossTabData($criteria, $criteria['columnType']);
+            $rawData = $em->getRepository('TruckeeProjectmanaBundle:Work')->crossTabData($criteria);
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
@@ -674,31 +678,6 @@ class StatisticsController extends Controller
         $rowLabels = ['Yes', 'No'];
         $colLabels = $crosstab->colLabels($criteria);
         $data = $em->getRepository('TruckeeProjectmanaBundle:Benefit')->crossTabData($criteria);
-
-        return [
-            'reportTitle' => 'Households receiving SNAP/CalFresh benefits',
-            'reportSubTitle' => 'For the period ',
-            'criteria' => $criteria,
-            'rowHeader' => 'Receiving benefits',
-            'rowLabels' => $rowLabels,
-            'colLabels' => $colLabels,
-            'data' => $data,
-        ];
-    }
-
-    /**
-     * Gather row & column data for SNAP Yes/No profile
-     *
-     * @param array $criteria
-     *
-     * @return Response
-     */
-    private function yesNo($criteria, $crosstab)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $rowLabels = ['Yes', 'No'];
-        $colLabels = $crosstab->colLabels($criteria);
-        $data = $em->getRepository('TruckeeProjectmanaBundle:FsStatus')->crossTabData($criteria, $criteria['columnType']);
 
         return [
             'reportTitle' => 'Households receiving SNAP/CalFresh benefits',

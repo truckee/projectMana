@@ -28,17 +28,20 @@ class WorkRepository extends EntityRepository
      */
     public function rowLabels($criteria)
     {
-        $qb = $this->getEntityManager()->createQuery('SELECT DISTINCT w.work FROM TruckeeProjectmanaBundle:Work w '
-            . 'JOIN TruckeeProjectmanaBundle:Member m WITH m.work = w '
-            . 'JOIN TruckeeProjectmanaBundle:Household h WITH h.head = m '
-            . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = m.household '
-            . 'WHERE c.contactDate between :startDate AND :endDate '
-            . 'ORDER BY w.work')
+        $qb = $this->createQueryBuilder('w')
+            ->select('w.job')
+            ->distinct()
+            ->join('w.members', 'm')
+            ->join('TruckeeProjectmanaBundle:Household', 'h', 'WITH',  'h.head = m')
+            ->join('h.contacts', 'c')
+            ->where($criteria['betweenWhereClause'])
+            ->orderBy('w.job')
             ->setParameters($criteria['betweenParameters'])
-            ->getResult();
+            ->getQuery()->getResult()
+            ;
         $rowLabels = [];
         foreach ($qb as $row) {
-            $rowLabels[] = $row['work'];
+            $rowLabels[] = $row['job'];
         }
 
         return $rowLabels;
@@ -52,22 +55,19 @@ class WorkRepository extends EntityRepository
      *
      * @return array
      */
-    public function crossTabData($criteria, $profileType)
+    public function crossTabData($criteria)
     {
-        $entity = ucfirst($profileType);
-        $dql = 'SELECT r.__TYPE__ colLabel, w.work rowLabel, COUNT(DISTINCT m.id) N '
-            . 'FROM TruckeeProjectmanaBundle:Work w '
-            . 'JOIN TruckeeProjectmanaBundle:Member m WITH m.work = w '
-            . 'JOIN TruckeeProjectmanaBundle:Contact c WITH c.household = m.household '
-            . 'JOIN TruckeeProjectmanaBundle:__ENTITY__ r WITH r = c.__TYPE__ '
-            . 'WHERE c.contactDate between :startDate AND :endDate '
-            . 'AND w.enabled = TRUE  GROUP BY colLabel, rowLabel';
-        $dql = str_replace('__TYPE__', $profileType, $dql);
-        $dql = str_replace('__ENTITY__', $entity, $dql);
-        $qb = $this->getEntityManager()->createQuery($dql)
-            ->setParameters($criteria['betweenParameters'])
-            ->getResult();
+        $profileType = $criteria['columnType'];
 
-        return $qb;
+        return $this->createQueryBuilder('w')
+            ->select('r.' . $profileType . ' colLabel, w.job rowLabel, COUNT(DISTINCT h.id) N ')
+            ->join('w.members', 'm')
+            ->join('TruckeeProjectmanaBundle:Household', 'h', 'WITH',  'h.head = m')
+            ->join('h.contacts', 'c')
+                ->join('c.' . $profileType, 'r')
+                ->where($criteria['betweenWhereClause'])
+                ->groupBy('colLabel, rowLabel')
+                ->setParameters($criteria['betweenParameters'])
+                ->getQuery()->getResult();
     }
 }

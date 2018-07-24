@@ -130,7 +130,7 @@ class MemberControllerTest extends TruckeeWebTestCase
         $relation = $this->fixtures->getReference('related')->getId();
         $work = $this->fixtures->getReference('work')->getId();
         $form['member[relation]'] = $relation;
-        $form['member[work]'] = $work;
+        $form['member[jobs]'][0]->tick();
         $crawler = $this->client->submit($form);
 
         $member2Id = $this->fixtures->getReference('member2')->getId();
@@ -138,7 +138,7 @@ class MemberControllerTest extends TruckeeWebTestCase
         $form = $crawler->filter('form')->form();
         $values = $form->getValues();
         $formRelation = $values['member[relation]'];
-        $formWork = $values['member[work]'];
+        $formWork = $values["member[jobs][0]"];
 
         $this->assertEquals($relation, $formRelation);
         $this->assertEquals($work, $formWork);

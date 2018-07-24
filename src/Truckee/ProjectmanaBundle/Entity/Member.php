@@ -11,6 +11,7 @@
 
 namespace Truckee\ProjectmanaBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Truckee\ProjectmanaBundle\Validator\Constraints as ManaAssert;
@@ -27,6 +28,12 @@ use Truckee\ProjectmanaBundle\Validator\Constraints as ManaAssert;
  */
 class Member
 {
+
+    public function __construct()
+    {
+        $this->jobs = new ArrayCollection();
+    }
+    
     /**
      * @var int
      *
@@ -390,34 +397,47 @@ class Member
     /**
      * @var \Truckee\ProjectmanaBundle\Entity\Work
      *
-     * @ORM\ManyToOne(targetEntity="Work", inversedBy="members")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="work_id", referencedColumnName="id")
-     * })
+     * @ORM\ManyToMany(targetEntity="Work", inversedBy="members")
      */
-    protected $work;
+    protected $jobs;
 
-    /**
-     * Set work.
-     *
-     * @param \Truckee\ProjectmanaBundle\Entity\Work $work
-     *
-     * @return Contact
-     */
-    public function setWork(Work $work = null)
+    public function addJob(Work $job)
     {
-        $this->work = $work;
-
-        return $this;
+        $job->addMember($this);
+        $this->jobs[] = $job;
     }
 
-    /**
-     * Get work.
-     *
-     * @return \Truckee\ProjectmanaBundle\Entity\Work
-     */
-    public function getWork()
+//    /**
+//     * Set work.
+//     *
+//     * @param \Truckee\ProjectmanaBundle\Entity\Work $work
+//     *
+//     * @return Contact
+//     */
+//    public function setWork(Work $work = null)
+//    {
+//        $this->work = $work;
+//
+//        return $this;
+//    }
+
+    public function getJobs()
     {
-        return $this->work;
+        return $this->jobs;
     }
+
+    public function removeJob(Work $job)
+    {
+        $this->jobs->removeElement($job);
+    }
+
+//    /**
+//     * Get work.
+//     *
+//     * @return \Truckee\ProjectmanaBundle\Entity\Work
+//     */
+//    public function getWork()
+//    {
+//        return $this->work;
+//    }
 }

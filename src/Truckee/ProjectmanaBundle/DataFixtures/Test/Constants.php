@@ -243,7 +243,7 @@ class Constants extends AbstractFixture implements OrderedFixtureInterface
 
         $work = new Work();
         $work->setEnabled(true);
-        $work->setWork('work');
+        $work->setJob('work');
         $this->setReference('work', $work);
         $manager->persist($work);
 

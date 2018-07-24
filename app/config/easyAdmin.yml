@@ -13,7 +13,6 @@ easy_admin:
                     - { entity: 'Site', params: { sortField: 'center', sortDirection: 'ASC' }}
             - label: 'Households'
               children:
-                    - { entity: 'FoodstampStatus', params: { sortField: 'status', sortDirection: 'ASC'}}
                     - { entity: 'Housing', params: { sortField: 'housing', sortDirection: 'ASC'}}
                     - { entity: 'Income', params: { sortField: 'id', sortDirection: 'ASC'}}
                     - { entity: 'InsufficientFood', label: 'Insufficient food', params: { sortField: 'reason', sortDirection: 'ASC'}}
@@ -24,7 +23,7 @@ easy_admin:
               children:
                     - { entity: 'Ethnicity', params: { sortField: 'ethnicity', sortDirection: 'ASC' } }
                     - { entity: 'Relationship', params: { sortField: 'relation', sortDirection: 'ASC' } }
-                    - { entity: 'Work', params: { sortField: 'work', sortDirection: 'ASC' } }
+                    - { entity: 'Work', params: { sortField: 'job', sortDirection: 'ASC' } }
             - { entity: 'User', params: { sortField: 'username', sortDirection: 'ASC' } }
             - { label: 'Home', route: 'home' }
     entities:
@@ -84,18 +83,6 @@ easy_admin:
             new:
                 title: '%%entity_label%%'
                 fields: [ethnicity, abbreviation, enabled]
-            edit:
-                title: '%%entity_label%%'
-                fields: [enabled]
-        FoodstampStatus:
-            class: Truckee\ProjectmanaBundle\Entity\FsStatus
-            label: Foodstamp status
-            list:
-                title: '%%entity_label%%'
-                fields: [status, enabled]
-            new:
-                title: '%%entity_label%%'
-                fields: [status, enabled]
             edit:
                 title: '%%entity_label%%'
                 fields: [enabled]
@@ -225,10 +212,10 @@ easy_admin:
             label: 'Work'
             list:
                 title: '%%entity_label%%'
-                fields: [work, enabled]
+                fields: [job, enabled]
             new:
                 title: '%%entity_label%%'
-                fields: [work, enabled]
+                fields: [job, enabled]
             edit:
                 title: '%%entity_label%%'
                 fields:  [enabled]
