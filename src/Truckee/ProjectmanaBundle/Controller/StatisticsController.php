@@ -68,7 +68,7 @@ class StatisticsController extends Controller
                 $templates[] = 'Statistics/frequencyDistributionForMonth.html.twig';
             }
             $report = array(
-                'excel' => 'General',
+//                'excel' => 'General',
                 'specs' => $templateCriteria,
                 'statistics' => $statistics,
                 'title' => 'General statistics',
@@ -117,7 +117,7 @@ class StatisticsController extends Controller
             $templates[] = 'Statistics/details.html.twig';
 
             $report = array(
-                'excel' => 'Details',
+//                'excel' => 'Details',
                 'specs' => $templateCriteria,
                 'details' => $data,
                 'title' => 'Distribution statistics',
@@ -188,39 +188,6 @@ class StatisticsController extends Controller
                     'formPath' => 'multi_contacts',
                 )
         );
-    }
-
-    /**
-     * Export Excel file.
-     *
-     * @param object Request $request
-     *
-     * @return Response
-     *
-     * @Route("/excel", name="stats_excel")
-     */
-    public function excelAction(Request $request)
-    {
-        $session = $request->getSession();
-        $report = $session->get('report');
-        $specs = $report['specs'];
-        $template = $report['excel'];
-        $filename = $template . '_';
-        $center = !empty($specs['center']) ? $specs['center'] : '';
-        $type = !empty($specs['type']) ? $specs['type'] : '';
-        $county = !empty($specs['county']) ? $specs['county'] : '';
-        $startText = $specs['startDate']->format('MY');
-        $endText = $specs['endDate']->format('MY');
-        $filename .= ($startText == $endText) ? $startText : $startText . '-' . $endText;
-        $filename .= $center . $county . $type . '.xls';
-
-        $response = $this->render('Statistics/excel' . $template . '.html.twig', $report);
-        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
-        $response->headers->set('Content-Disposition', 'attachment; filename=' . $filename);
-        $response->headers->set('Pragma', 'public');
-        $response->headers->set('Cache-Control', 'maxage=1');
-
-        return $response;
     }
 
     /**
