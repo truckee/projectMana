@@ -68,7 +68,6 @@ class StatisticsController extends Controller
                 $templates[] = 'Statistics/frequencyDistributionForMonth.html.twig';
             }
             $report = array(
-//                'excel' => 'General',
                 'specs' => $templateCriteria,
                 'statistics' => $statistics,
                 'title' => 'General statistics',
@@ -422,7 +421,7 @@ class StatisticsController extends Controller
             $formCriteria = $request->request->get('report_criteria');
             $criteria = $builder->getDetailsCriteria($formCriteria);
             $templateCriteria = $builder->getTemplateCriteria($criteria);
-            
+
             $criteria['columnType'] = $formCriteria['columnType'];
 
             $rowLabels = $crosstab->mtmRowLabels($criteria, $profileParameters);
@@ -458,9 +457,9 @@ class StatisticsController extends Controller
     }
 
     /**
-     * Set of three SNAP related profiles.
+     * Set of SNAP related profiles.
      *
-     * Contains profile of Yes/No receiving foodstamps, how much, and why not
+     * Contains profile of Yes/No receiving food stamps and why not
      *
      * @param object Request $request
      *
@@ -483,9 +482,6 @@ class StatisticsController extends Controller
             $wtf = $this->getDoctrine()->getManager()->getRepository('TruckeeProjectmanaBundle:Benefit')->crossTabData($criteria);
             $benefit = $this->benefit($criteria, $crosstab);
             $content = $this->profilerPlain($benefit, $templateCriteria, $crosstab);
-//            $yesNo = $this->yesNo($criteria, $crosstab);
-//            $content = $this->profilerPlain($yesNo, $templateCriteria, $crosstab);
-//            dump($benefit, $yesNo);
             $not = $this->not($criteria, $crosstab);
             $content .= $this->profilerPlain($not, $templateCriteria, $crosstab);
 
@@ -613,12 +609,34 @@ class StatisticsController extends Controller
     }
 
     /**
-     * Arranges three SNAP profile reports
-     *
-     * @param array $reportData
-     * @param array $templateSpecs
-     *
-     * @return Response
+     * @Route("/otherServices", name="other_services")
+     */
+    public function otherServicesAction(Request $request, CriteriaBuilder $builder)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $seekingServices = $em->getRepository('TruckeeProjectmanaBundle:Household')->seekingServices();
+        $seeking = [];
+        if (!empty($seekingServices)) {
+            foreach ($seekingServices as $sElement) {
+                $seeking[$sElement['seeking']][] = $sElement['id'];
+            }
+        }
+        $receivingServices = $em->getRepository('TruckeeProjectmanaBundle:Household')->receivingServices();
+        $receiving = [];
+        if (!empty($receivingServices)) {
+            foreach ($receivingServices as $rElement) {
+                $receiving[$rElement['receiving']][] = $rElement['id'];
+            }
+        }
+        
+        return $this->render('Statistics/otherServices.html.twig', [
+                    'seekingServices' => $seeking,
+                    'receivingServices' => $receiving,
+        ]);
+    }
+
+    /**
+     * Arranges SNAP profile reports
      */
     private function profilerPlain($reportData, $templateSpecs, $crosstab)
     {
@@ -640,10 +658,6 @@ class StatisticsController extends Controller
 
     /**
      * Gather row & column data for SNAP why not profile
-     *
-     * @param array $criteria
-     *
-     * @return Response
      */
     private function not($criteria, $crosstab)
     {

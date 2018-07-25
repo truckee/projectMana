@@ -92,13 +92,35 @@ class HouseholdRepository extends EntityRepository
     {
         $parameters = array_merge($criteria['betweenParameters'], $criteria['siteParameters'], $criteria['contactParameters']);
 
-        return $this->createQueryBuilder('i')
-                ->select('i.id')
-                ->join('TruckeeProjectmanaBundle:Contact', 'c', 'WITH', 'c.household = i')
+        return $this->createQueryBuilder('h')
+                ->select('h.id')
+                ->join('h.contacts', 'c')
                 ->where($criteria['betweenWhereClause'])
                 ->andWhere($criteria['siteWhereClause'])
                 ->andWhere($criteria['contactWhereClause'])
                 ->setParameters($parameters)
+                ->getQuery()->getResult()
+        ;
+    }
+
+    public function seekingServices()
+    {
+        return $this->createQueryBuilder('h')
+                ->select('distinct h.id, h.seeking')
+                ->join('h.contacts', 'c')
+                ->where('h.seeking is not null')
+                ->orderBy('h.seeking, h.id')
+                ->getQuery()->getResult()
+        ;
+    }
+
+    public function receivingServices()
+    {
+        return $this->createQueryBuilder('h')
+                ->select('distinct h.id, h.receiving')
+                ->join('h.contacts', 'c')
+                ->where('h.receiving is not null')
+                ->orderBy('h.receiving, h.id')
                 ->getQuery()->getResult()
         ;
     }

@@ -52,6 +52,7 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $household->setHead($member);
         $household->addMember($member);
         $household->addMember($member2);
+        $household->setSeeking('sought');
         $this->setReference('house1', $household);
 
         $member3 = new Member();
@@ -67,6 +68,7 @@ class Households extends AbstractFixture implements OrderedFixtureInterface
         $household2->setDateAdded(new \DateTime('last month'));
         $household2->setHead($member3);
         $household2->addMember($member3);
+        $household2->setReceiving('received');
         $this->setReference('house2', $household2);
 
         $member4 = new Member();

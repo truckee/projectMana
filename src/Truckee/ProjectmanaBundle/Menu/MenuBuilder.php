@@ -195,6 +195,10 @@ class MenuBuilder
             'route' => 'multi_contacts',
         ));
 
+        $menu->addChild('Other services', array(
+            'route' => 'other_services',
+        ));
+
         return $menu;
     }
     
