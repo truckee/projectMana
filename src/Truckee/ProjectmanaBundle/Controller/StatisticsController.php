@@ -259,8 +259,7 @@ class StatisticsController extends Controller
         $builder->setCriteria($criteria);
         $tableCriteria = $builder->getTableCriteria();
         $reportCriteria = $builder->getReportCriteria();
-        $statistics = $general->setGeneralStats($tableCriteria, $reportCriteria);
-        $statistics = $general->getGeneralStats();
+        $statistics = $general->getGeneralStats($tableCriteria, $reportCriteria);
         $ctyStats = $countyStats->getCountyStats();
         $report = array(
             'statistics' => $statistics,
