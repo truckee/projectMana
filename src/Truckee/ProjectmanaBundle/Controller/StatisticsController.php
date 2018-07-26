@@ -237,10 +237,6 @@ class StatisticsController extends Controller
         $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $profileParameters = [
-                'entity' => 'work',
-                'entityField' => 'job',
-            ];
             $formCriteria = $request->request->get('report_criteria');
             $criteria = $builder->getDetailsCriteria($formCriteria);
             $templateCriteria = $builder->getTemplateCriteria($criteria);
@@ -479,7 +475,6 @@ class StatisticsController extends Controller
             $templateCriteria = $builder->getTemplateCriteria($criteria);
 
             $criteria['columnType'] = $formCriteria['columnType'];
-            $wtf = $this->getDoctrine()->getManager()->getRepository('TruckeeProjectmanaBundle:Benefit')->crossTabData($criteria);
             $benefit = $this->benefit($criteria, $crosstab);
             $content = $this->profilerPlain($benefit, $templateCriteria, $crosstab);
             $not = $this->not($criteria, $crosstab);
@@ -683,11 +678,6 @@ class StatisticsController extends Controller
 
     private function benefit($criteria, $crosstab)
     {
-//        $profileParameters = [
-//            'entity' => 'notfoodstamp',
-//            'entityField' => 'notfoodstamp',
-//            'joinField' => 'notfoodstamp',
-//        ];
         $em = $this->getDoctrine()->getManager();
         $rowLabels = ['Yes', 'No'];
         $colLabels = $crosstab->colLabels($criteria);
