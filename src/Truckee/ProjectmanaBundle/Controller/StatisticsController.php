@@ -245,7 +245,7 @@ class StatisticsController extends Controller
      *
      * @Route("/foodbank/{year}/{month}", name="foodbank")
      */
-    public function foodbankAction($month, $year, CriteriaBuilder $builder, General $general, CountyStatistics $countyStats)
+    public function foodbankAction($month, $year, CriteriaBuilder $builder, General $general, CountyStatistics $countyStats, TempTables $tables)
     {
         $criteria = array(
             'startMonth' => $month,
@@ -259,6 +259,7 @@ class StatisticsController extends Controller
         $builder->setCriteria($criteria);
         $tableCriteria = $builder->getTableCriteria();
         $reportCriteria = $builder->getReportCriteria();
+        $tables->makeTempTables($tableCriteria);
         $statistics = $general->getGeneralStats($tableCriteria, $reportCriteria);
         $ctyStats = $countyStats->getCountyStats();
         $report = array(
@@ -456,7 +457,7 @@ class StatisticsController extends Controller
             $content .= $this->profilerPlain($reportData, $templateCriteria);
 
             return $this->render('Statistics/snapProfile.html.twig', [
-                        'content' => $content,
+                    'content' => $content,
             ]);
         }
 
