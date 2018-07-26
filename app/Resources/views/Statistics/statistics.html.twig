@@ -4,6 +4,9 @@
         <button id="menuToggle" class="btn btn-default hidden-print" type="submit" style="margin-top: 10px;">Printable view</button>
     {% endblock %}
     <div class="panel panel-info">
+        <div class="panel-heading text-center">
+            {{ reportHeader|raw }}
+        </div>
         {{ include('Default/templates.html.twig') }}
     </div>
 {% endblock %}

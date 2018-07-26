@@ -3,30 +3,16 @@
     {% block button %}
         <button id="menuToggle" class="btn btn-default hidden-print" type="submit" style="margin-top: 10px;">Printable view</button>
     {% endblock %}
-    <div class="container">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <div class="text-center">
-                    Households seeking services
-                </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <div class="text-center">
+                Other Services Summary
             </div>
-            <div class="panel-body">
-                {{ include( 'Statistics/seekingServices.html.twig') }}
-            </div>
-            
+        </div>
+        <div class="panel-body">
+            {{ include( 'Statistics/seekingServices.html.twig') }}
+            {{ include( 'Statistics/receivingServices.html.twig') }}
         </div>
     </div>
-    <div class="container">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <div class="text-center">
-                    Households receiving services
-                </div>
-            </div>
-            <div class="panel-body">
-                {{ include( 'Statistics/receivingServices.html.twig') }}
-            </div>
-            
-        </div>
-    </div>
+
 {% endblock %}

@@ -289,7 +289,7 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $crawler = $this->client->click($link);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("sought")')->count());
-//        $this->assertGreaterThan(0, $crawler->filter('html:contains("No households receiving other services")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Other Services Summary")')->count());
     }
 
     public function tearDown()

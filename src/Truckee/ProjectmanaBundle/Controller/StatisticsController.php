@@ -611,7 +611,7 @@ class StatisticsController extends Controller
     /**
      * @Route("/otherServices", name="other_services")
      */
-    public function otherServicesAction(Request $request, CriteriaBuilder $builder)
+    public function otherServicesAction()
     {
         $em = $this->getDoctrine()->getManager();
         $seekingServices = $em->getRepository('TruckeeProjectmanaBundle:Household')->seekingServices();
