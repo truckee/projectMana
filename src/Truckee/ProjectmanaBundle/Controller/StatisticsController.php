@@ -52,8 +52,8 @@ class StatisticsController extends Controller
             $reportCriteria = $builder->getReportCriteria();
 
             $tables->makeTempTables($tableCriteria);
-            $general->setGeneralStats($tableCriteria, $reportCriteria);
-            $statistics = $general->getGeneralStats();
+//            $general->setGeneralStats($tableCriteria, $reportCriteria);
+            $statistics = $general->getGeneralStats($tableCriteria, $reportCriteria);
 
             $templateCriteria = $builder->getTemplateCriteria($formCriteria);
             $templateCriteria['reportType'] = 'General Statistics';
