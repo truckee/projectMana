@@ -57,8 +57,8 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $form['member[ethnicity]'] = $eth;
         $tahoe = $this->fixtures->getReference('tahoe')->getId();
         $form['household_required[center]'] = $tahoe;
-        $form['household_required[complianceDate]'] = '2/1/2016';
-        $form['household_required[sharedDate]'] = '2/1/2016';
+//        $form['household_required[complianceDate]'] = '2/1/2016';
+//        $form['household_required[sharedDate]'] = '2/1/2016';
 
         return $this->client->submit($form);
     }
@@ -91,8 +91,8 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $form['member[ethnicity]'] = $eth;
         $tahoe = $this->fixtures->getReference('tahoe')->getId();
         $form['household_required[center]'] = $tahoe;
-        $form['household_required[complianceDate]'] = '2/1/2016';
-        $form['household_required[sharedDate]'] = '2/1/2016';
+//        $form['household_required[complianceDate]'] = '2/1/2016';
+//        $form['household_required[sharedDate]'] = '2/1/2016';
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Add new head of house")')->count());

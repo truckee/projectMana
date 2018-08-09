@@ -164,6 +164,9 @@ class StatisticsController extends Controller
             if (count($multi) == 0) {
                 $flash = $this->get('braincrafted_bootstrap.flash');
                 $flash->alert('No instances of multiple same-date contacts found');
+                if (empty($request->headers->get('referer'))) {
+                    return $this->redirectToRoute('home');
+                }
 
                 return $this->redirect($request->headers->get('referer'));
             }
@@ -623,10 +626,10 @@ class StatisticsController extends Controller
                 $receiving[$rElement['receiving']][] = $rElement['id'];
             }
         }
-        
+
         return $this->render('Statistics/otherServices.html.twig', [
-                    'seekingServices' => $seeking,
-                    'receivingServices' => $receiving,
+                'seekingServices' => $seeking,
+                'receivingServices' => $receiving,
         ]);
     }
 

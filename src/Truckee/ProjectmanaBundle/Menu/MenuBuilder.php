@@ -122,6 +122,9 @@ class MenuBuilder
     {
         $request = $this->requestStack->getCurrentRequest();
         $uri = $request->headers->get('referer');
+        if (empty($request->headers->get('referer'))) {
+            $uri = '/';
+        }
         $menu = $this->factory->createItem('root');
         $title = 'return';
         $menu->addChild($title, [

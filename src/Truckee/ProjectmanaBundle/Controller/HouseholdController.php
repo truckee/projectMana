@@ -241,6 +241,9 @@ class HouseholdController extends Controller
         $qtext = $request->query->get('qtext');
         if ($qtext == '') {
             $flash->alert('No search criteria were entered');
+            if (empty($request->headers->get('referer'))) {
+                return $this->redirectToRoute('home');
+            }
 
             return $this->redirect($request->headers->get('referer'));
         }
@@ -251,6 +254,9 @@ class HouseholdController extends Controller
             $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($qtext);
             if (!$household) {
                 $flash->alert('Sorry, household not found');
+                if (empty($request->headers->get('referer'))) {
+                    return $this->redirectToRoute('home');
+                }
 
                 return $this->redirect($request->headers->get('referer'));
             }
@@ -262,6 +268,9 @@ class HouseholdController extends Controller
             $found = $searches->getMembers($qtext);
             if (count($found) == 0 || !$found) {
                 $flash->alert('Sorry, no households were found');
+                if (empty($request->headers->get('referer'))) {
+                    return $this->redirectToRoute('home');
+                }
 
                 return $this->redirect($request->headers->get('referer'));
             }
