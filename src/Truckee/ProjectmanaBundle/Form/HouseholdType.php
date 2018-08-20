@@ -14,6 +14,8 @@ use Doctrine\ORM\EntityRepository;
 use Truckee\ProjectmanaBundle\Form\Field\NoYesChoiceType;
 use Truckee\ProjectmanaBundle\Form\PhysicalAddressType;
 use Truckee\ProjectmanaBundle\Form\MailingAddressType;
+use Truckee\ProjectmanaBundle\Form\Field\MonthType;
+use Truckee\ProjectmanaBundle\Form\Field\YearType;
 use Truckee\ProjectmanaBundle\Form\Field\YesNoChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -66,6 +68,22 @@ class HouseholdType extends AbstractType
                         }
                     }
                 )
+            )
+            ->add(
+                'arrivalmonth',
+                MonthType::class,
+                array(
+                'placeholder' => false,
+                'label' => 'Arrival month: ',
+            )
+            )
+            ->add(
+                'arrivalyear',
+                YearType::class,
+                array(
+                'placeholder' => false,
+                'label' => 'Arrival year: ',
+            )
             )
             ->add(
                 'center', EntityType::class,

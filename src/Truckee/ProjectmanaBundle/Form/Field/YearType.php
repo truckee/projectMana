@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-// src\Truckee\ProjectmanaBundle\Resources\views\Form\Field\YearType.php
+// src\Truckee\ProjectmanaBundle\Form\Field\YearType.php
 
 namespace Truckee\ProjectmanaBundle\Form\Field;
 

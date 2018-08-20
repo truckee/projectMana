@@ -1,5 +1,10 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head></head>
+    <body>
 {% block body %}
 <table>
+{#  County unique individuals  #}
     <tr>
 	<td>Placer</td>
 	<td>{{ ctyStats['Placer']['UIS'] }}</td>
@@ -12,22 +17,24 @@
 	<td>Washoe</td>
 	<td>{{ ctyStats['Washoe']['UIS'] }}</td>
     </tr>
+{#  Age distribution  #}
     <tr>
-	<td>&lt;6</td>
+	<td>Under6</td>
 	<td>{{ statistics['Under 6'] }}</td>
     </tr>
     <tr>
-	<td>6 to 18</td>
+	<td>SixToEightteen</td>
 	<td>{{ statistics['6 - 18'] }}</td>
     </tr>
     <tr>
-	<td>19 to 59</td>
+	<td>NiineteenToFiftynine</td>
 	<td>{{ statistics['19 - 59'] }}</td>
     </tr>
     <tr>
-	<td>60+</td>
+	<td>SixtyOrMore</td>
 	<td>{{ statistics['60+'] }}</td>
     </tr>
+{#  Gender/Adult/Children distribution  #}
     <tr>
 	<td>Female Children</td>
 	<td>{{ statistics['FC'] }}</td>
@@ -44,6 +51,7 @@
 	<td>Male Adults</td>
 	<td>{{ statistics['MA'] }}</td>
     </tr>
+{# Ethnicity distribution   #}
     <tr>
 	<td>Caucasian</td>
 	<td>{{ statistics['Caucasian'] }}</td>
@@ -72,20 +80,34 @@
 	<td>Other</td>
 	<td>{{ statistics['Other'] }}</td>
     </tr>
+{#  Residency distribution  #}
     <tr>
-	<td>1</td>
+	<td>LessThanOneMo</td>
+	<td>{{ statistics['< 1 month'] }}</td>
+    </tr>
+    <tr>
+	<td>OneTo24Mo</td>
+	<td>{{ statistics['1 mo - 2 yrs'] }}</td>
+    </tr>
+    <tr>
+	<td>MoreThan24Mo</td>
+	<td>{{ statistics['>=2 yrs'] }}</td>
+    </tr>
+{# Distributions in month   #}
+    <tr>
+	<td>Once</td>
 	<td>{{ statistics['1x'] }}</td>
     </tr>
     <tr>
-	<td>2</td>
+	<td>Twice</td>
 	<td>{{ statistics['2x'] }}</td>
     </tr>
     <tr>
-	<td>3</td>
+	<td>ThreeTimes</td>
 	<td>{{ statistics['3x'] }}</td>
     </tr>
     <tr>
-	<td>4+</td>
+	<td>FourOrMore</td>
 	<td>{{ statistics['4x'] }}</td>
     </tr>
     <tr>
@@ -98,3 +120,5 @@
     </tr>
 </table>
 {% endblock %}
+</body>
+</html>

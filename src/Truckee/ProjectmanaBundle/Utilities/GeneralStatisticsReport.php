@@ -42,6 +42,8 @@ class GeneralStatisticsReport
         $ageGenderDist = $this->setAgeGenderDist($ageGenderData);
         $ethDist = $this->setEthDist($ageGenderData);
         $sizeData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->size($criteria);
+        $resData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->residency($criteria);
+        $residencyDist = $this->setResDist($resData);
         $familyDist = $this->setSizeDist($sizeData);
         $freqDist = $this->setFreqDist($criteria);
 
@@ -51,6 +53,7 @@ class GeneralStatisticsReport
             $familyDist,
             $freqDist,
             $ethDist,
+            $residencyDist,
         ];
         foreach ($data as $statArray) {
             foreach ($statArray as $key => $value) {
@@ -123,8 +126,28 @@ class GeneralStatisticsReport
         foreach ($data as $key => $value) {
             $eth[$value['ethnicity']] ++;
         }
-        
+
         return $eth;
+    }
+
+    private function setResDist($data)
+    {
+        $resDist = ['< 1 month' => 0, '1 mo - 2 yrs' => 0, '>=2 yrs' => 0];
+        foreach ($data as $value) {
+            switch ($value) {
+                case $value['N'] < 1:
+                    $resDist['< 1 month'] ++;
+                    break;
+                case 1 <= $value['N'] && 24 > $value['N']:
+                    $resDist['1 mo - 2 yrs'] ++;
+                    break;
+                case 24 <= $value['N']:
+                    $resDist['>=2 yrs'] ++;
+                    break;
+            }
+        }
+        
+        return $resDist;
     }
 
     private function setAgeGenderDist($data)

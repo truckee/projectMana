@@ -88,6 +88,27 @@ class HouseholdRepository extends EntityRepository
         return $sizeData;
     }
 
+    public function residency($criteria)
+    {
+        $parameters = array_merge($criteria['startParameters'], ['hArray' => $this->reportHousehold($criteria)]);
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $startDate = $criteria['startParameters']['startDate'];
+        $testYear = date_format($startDate, 'Y');
+        $testMo = date_format($startDate, 'm');
+
+        return $this->createQueryBuilder('h')
+                ->select("12*($testYear - h.arrivalyear) + $testMo - h.arrivalmonth N")
+                ->join('h.contacts', 'c')
+                ->where($criteria['startWhereClause'])
+                ->andWhere('h.id IN (:hArray)')
+                ->andWhere('h.arrivalyear is not null')
+                ->andWhere('h.arrivalmonth is not null')
+                ->setParameters($parameters)
+                ->getQuery()->getResult()
+        ;
+    }
+
     public function reportHousehold($criteria)
     {
         $parameters = array_merge($criteria['betweenParameters'], $criteria['siteParameters'], $criteria['contactParameters']);

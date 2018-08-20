@@ -64,6 +64,20 @@ class Household
     protected $addresses;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="arrivalMonth", type="integer", nullable=true)
+     */
+    protected $arrivalmonth;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="arrivalYear", type="integer", nullable=true)
+     */
+    protected $arrivalyear;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Assistance", inversedBy="households", cascade={"persist"})
@@ -703,6 +717,54 @@ class Household
     public function getAreacode()
     {
         return $this->areacode;
+    }
+
+    /**
+     * Set arrivalmonth.
+     *
+     * @param int $arrivalmonth
+     *
+     * @return Household
+     */
+    public function setArrivalmonth($arrivalmonth)
+    {
+        $this->arrivalmonth = $arrivalmonth;
+
+        return $this;
+    }
+
+    /**
+     * Get arrivalmonth.
+     *
+     * @return int
+     */
+    public function getArrivalmonth()
+    {
+        return $this->arrivalmonth;
+    }
+
+    /**
+     * Set arrivalyear.
+     *
+     * @param int $arrivalyear
+     *
+     * @return Household
+     */
+    public function setArrivalyear($arrivalyear)
+    {
+        $this->arrivalyear = $arrivalyear;
+
+        return $this;
+    }
+
+    /**
+     * Get arrivalyear.
+     *
+     * @return int
+     */
+    public function getArrivalyear()
+    {
+        return $this->arrivalyear;
     }
 
     /**
