@@ -127,9 +127,12 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $form['household[complianceDate]'] = '6/1/2015';
         $form['household[sharedDate]'] = '6/1/2015';
         $form['household[center]'] = $truckee;
+        $form['household[arrivalmonth]'] = 5; //May
+        $form['household[arrivalyear]'] = 2017;
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Household updated")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("May")')->count());
     }
 
     public function testNoSearchCriteria()
