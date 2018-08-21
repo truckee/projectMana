@@ -58,13 +58,35 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-4">
+                {% set mo = household.arrivalMonth %}
+                <b>Arrival month:</b> {% if mo is not null %}{{ mo|date('2018-' ~ mo ~ '-01')|date('F') }}{% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <b>Arrival year:</b> {{ household.arrivalYear }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
                 <b>Compliance: </b>{% if household.compliance == 1 %}Yes{% else %}No{% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
                 <b>Date: </b>{% if household.complianceDate is not null %}{{ household.complianceDate|date('m/d/Y') }}{% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
                 <b>Shared: </b>{% if household.shared == 1 %}Yes{% else %}No{% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
                 <b>Date: </b>{% if household.sharedDate is not null %}{{ household.sharedDate|date('m/d/Y') }}{% endif %}
             </div>
         </div>
     </div>
 </div>
-
