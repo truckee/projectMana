@@ -16,13 +16,23 @@
                 {{ form_row(form.center) }}
             </div>
         </div>
-        <div class="row">
-            {# Q4 Benefits #}
-            <div class="col-md-3">
+        <div class="row">{# Q2 Residency #}
+            <div class="col-md-2">
+                <b>Q2: Residency: </b>
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.arrivalmonth) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.arrivalyear) }}
+            </div>
+        </div>
+        <div class="row">{# Q4 Benefits #}
+            <div class="col-md-2">
                 {{ form_row(form.benefits) }}
             </div>
             {# Q5 Why not foodstamps #}
-            <div class="col-md-3">
+            <div class="col-md-2">
                 {{ form_row(form.notfoodstamp, {'attr': {'class':'notfoodstamp'}}) }}
             </div>
             {# Q6 Income #}
@@ -58,12 +68,6 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-2">
-                {{ form_row(form.arrivalmonth) }}
-            </div>
-            <div class="col-md-2">
-                {{ form_row(form.arrivalyear) }}
-            </div>
             <div class="col-md-2">
                 {{ form_row(form.compliance) }}
             </div>

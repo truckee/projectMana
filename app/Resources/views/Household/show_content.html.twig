@@ -11,6 +11,19 @@
             </div>
         </div>
         {# Welcome Form page 2 questions #}
+        {# Q2 Residency #}
+        <div class="row">
+            <div class="col-md-2">
+                <b>Q2: Residency:</b>
+            </div>
+            <div class="col-md-2">
+                {% set mo = household.arrivalMonth %}
+                <b>Arrival month:</b> {% if mo is not null %}{{ mo|date('2018-' ~ mo ~ '-01')|date('F') }}{% endif %}
+            </div>
+            <div class="col-md-2">
+                <b>Arrival year:</b> {{ household.arrivalYear }}
+            </div>
+        </div>
         {# Q4 Benefits #}
         <div class="row">
             <div class="col-md-12">
@@ -55,17 +68,6 @@
             <div class="col-md-12">
                 <b>Q10: Receiving services:</b> {% set n = household.organizations|length %}
                 {% for organization in household.organizations if n > 0 %}{{organization.organization}}{% if loop.index < n %}; {% endif %}{% endfor %}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                {% set mo = household.arrivalMonth %}
-                <b>Arrival month:</b> {% if mo is not null %}{{ mo|date('2018-' ~ mo ~ '-01')|date('F') }}{% endif %}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <b>Arrival year:</b> {{ household.arrivalYear }}
             </div>
         </div>
         <div class="row">

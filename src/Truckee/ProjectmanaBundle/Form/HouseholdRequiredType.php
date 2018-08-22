@@ -15,39 +15,58 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Truckee\ProjectmanaBundle\Form\Field\CenterEnabledChoiceType;
+use Truckee\ProjectmanaBundle\Form\Field\MonthType;
 use Truckee\ProjectmanaBundle\Form\Field\NoYesChoiceType;
+use Truckee\ProjectmanaBundle\Form\Field\YearType;
 
 class HouseholdRequiredType extends AbstractType
 {
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('center', CenterEnabledChoiceType::class)
-            ->add('compliance', NoYesChoiceType::class, array(
-            ))
+            ->add('center', CenterEnabledChoiceType::class, [
+                'label' => 'Site:',
+                ])
             ->add(
-                'complianceDate',
-                DateType::class,
-                array(
-                'attr' => [
-                    'placeholder' => 'mm/dd/yyyy',
-                ],
-                'widget' => 'single_text',
-                'format' => 'MM/dd/yyyy',
+                'arrivalmonth', MonthType::class, array(
+                    'placeholder' => false,
+                    'label' => 'Arrival&nbsp;month: ',
+                )
             )
+            ->add(
+                'arrivalyear', YearType::class, array(
+                    'placeholder' => false,
+                    'label' => 'Arrival&nbsp;year: ',
+                    )
+            )
+            ->add(
+                'compliance', NoYesChoiceType::class, array(
+                'label' => 'Compliance: ',
+                )
+            )
+            ->add(
+                'complianceDate', DateType::class,
+                array(
+                    'label' => 'Compliance&nbsp;date: ',
+                    'widget' => 'single_text',
+                    'html5' => false,
+                    'attr' => ['class' => 'js-datepicker'],
+                    'format' => 'M/d/y',
+                )
             )
             ->add('shared', NoYesChoiceType::class, array(
+                'label' => 'Shared: ',
             ))
             ->add(
-                'sharedDate',
-                DateType::class,
+                'sharedDate', DateType::class,
                 array(
-                'attr' => [
-                    'placeholder' => 'mm/dd/yyyy',
-                ],
-                'widget' => 'single_text',
-                'format' => 'MM/dd/yyyy',
-            )
+                    'label' => 'Shared&nbsp;date: ',
+                    'widget' => 'single_text',
+                    'html5' => false,
+                    'attr' => ['class' => 'js-datepicker'],
+                    'format' => 'M/d/y',
+                )
             )
         ;
     }
