@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Truckee\ProjectmanaBundle\Entity\Household;
 use Truckee\ProjectmanaBundle\Entity\Member;
-use Truckee\ProjectmanaBundle\Form\HouseholdRequiredType;
 use Truckee\ProjectmanaBundle\Form\HouseholdType;
 use Truckee\ProjectmanaBundle\Form\MemberType;
 use Truckee\ProjectmanaBundle\Utilities\PdfService;
@@ -100,7 +99,7 @@ class HouseholdController extends Controller
             $household = new Household();
             $head = new Member();
         }
-        $form = $this->createForm(HouseholdRequiredType::class, $household);
+        $form = $this->createForm(HouseholdType::class, $household);
         $formHead = $this->createForm(MemberType::class, $head);
         $form->handleRequest($request);
         $formHead->handleRequest($request);

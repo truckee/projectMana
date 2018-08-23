@@ -56,9 +56,9 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $eth = $this->fixtures->getReference('cau')->getId();
         $form['member[ethnicity]'] = $eth;
         $tahoe = $this->fixtures->getReference('tahoe')->getId();
-        $form['household_required[center]'] = $tahoe;
-//        $form['household_required[complianceDate]'] = '2/1/2016';
-//        $form['household_required[sharedDate]'] = '2/1/2016';
+        $form['household[center]'] = $tahoe;
+        $form['household[arrivalmonth]'] = 5;
+        $form['household[arrivalyear]'] = 2018;
 
         return $this->client->submit($form);
     }
@@ -73,7 +73,7 @@ class HouseholdControllerTest extends TruckeeWebTestCase
     public function testNewHousehold()
     {
         $crawler = $this->submitNewHousehold();
-
+        
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Household Edit")')->count());
     }
 
@@ -90,9 +90,7 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $eth = $this->fixtures->getReference('cau')->getId();
         $form['member[ethnicity]'] = $eth;
         $tahoe = $this->fixtures->getReference('tahoe')->getId();
-        $form['household_required[center]'] = $tahoe;
-//        $form['household_required[complianceDate]'] = '2/1/2016';
-//        $form['household_required[sharedDate]'] = '2/1/2016';
+        $form['household[center]'] = $tahoe;
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Add new head of house")')->count());

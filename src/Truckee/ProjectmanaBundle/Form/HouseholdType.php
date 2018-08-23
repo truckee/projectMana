@@ -70,20 +70,16 @@ class HouseholdType extends AbstractType
                 )
             )
             ->add(
-                'arrivalmonth',
-                MonthType::class,
-                array(
-                'placeholder' => false,
-                'label' => 'Arrival month: ',
-            )
+                'arrivalmonth', MonthType::class, array(
+                    'placeholder' => '',
+                    'label' => 'Arrival&nbsp;month: ',
+                )
             )
             ->add(
-                'arrivalyear',
-                YearType::class,
-                array(
-                'placeholder' => false,
-                'label' => 'Arrival year: ',
-            )
+                'arrivalyear', YearType::class, array(
+                    'placeholder' => '',
+                    'label' => 'Arrival&nbsp;year: ',
+                    )
             )
             ->add(
                 'center', EntityType::class,

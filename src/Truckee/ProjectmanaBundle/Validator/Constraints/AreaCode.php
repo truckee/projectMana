@@ -14,7 +14,7 @@ namespace Truckee\ProjectmanaBundle\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Validates not future date.
+ * require 3 digit area code.
  *
  * @Annotation
  */
