@@ -67,3 +67,11 @@ services:
         alias: Braincrafted\Bundle\BootstrapBundle\Session\FlashMessage
         public: true
 
+    mana.userListener:
+        class: Truckee\ProjectmanaBundle\EventListener\UserListener
+        arguments:
+            - '@doctrine.orm.default_entity_manager'
+            - '@security.password_encoder'
+        tags:
+            - name: kernel.event_listener
+              event: security.interactive_login

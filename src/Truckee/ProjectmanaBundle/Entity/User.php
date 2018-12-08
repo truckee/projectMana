@@ -11,8 +11,9 @@
 
 namespace Truckee\ProjectmanaBundle\Entity;
 
-use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\User as BaseUser;
+use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -21,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="usertable")
  * @ORM\Entity
  */
-class User extends BaseUser
+class User extends BaseUser implements EncoderAwareInterface
 {
     /**
      * @var int
@@ -110,5 +111,20 @@ class User extends BaseUser
             $this->removeRole('ROLE_ADMIN');
         }
         $this->isAdmin = $isAdmin;
+    }
+    
+    /**
+     * @ORM\Column(name="encoder_name", type="string")
+     */
+    private $encoderName = 'new';
+    
+    public function getEncoderName() {
+        return $this->encoderName;
+    }
+    
+    public function setEncoderName($name) {
+        $this->encoderName = $name;
+        
+        return $this;
     }
 }
