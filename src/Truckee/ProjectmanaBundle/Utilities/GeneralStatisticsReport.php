@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Truckee\Projectmana package.
  *
@@ -19,31 +20,28 @@ use Doctrine\ORM\EntityManagerInterface;
  *
  * @author George
  */
-class GeneralStatisticsReport
-{
+class GeneralStatisticsReport {
+
     private $em;
 
-    public function __construct(EntityManagerInterface $em)
-    {
+    public function __construct(EntityManagerInterface $em) {
         $this->em = $em;
     }
 
-    public function getGeneralStats($criteria)
-    {
+    public function getGeneralStats($criteria) {
         $stats = $this->setGeneralStats($criteria);
 
         return $stats;
     }
 
-    private function setGeneralStats($criteria)
-    {
+    private function setGeneralStats($criteria) {
         $statistics = [];
         $ageGenderData = $this->em->getRepository('TruckeeProjectmanaBundle:Member')->ageEthnicityDistribution($criteria);
         $ageGenderDist = $this->setAgeGenderDist($ageGenderData);
         $ethDist = $this->setEthDist($ageGenderData);
         $sizeData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->size($criteria);
-        $resData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->residency($criteria);
-        $residencyDist = $this->setResDist($resData);
+        $householdResData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->householdResidency($criteria);
+        $residencyDist = $this->setResDist($sizeData, $householdResData);
         $familyDist = $this->setSizeDist($sizeData);
         $freqDist = $this->setFreqDist($criteria);
 
@@ -88,8 +86,7 @@ class GeneralStatisticsReport
         return $statistics;
     }
 
-    private function setSizeDist($data)
-    {
+    private function setSizeDist($data) {
         $familyArray = ['Single' => 0, 'Two' => 0, 'Three' => 0, 'Four' => 0, 'Five' => 0, 'Six or more' => 0];
         foreach ($data as $family) {
             switch ($family['size']) {
@@ -117,8 +114,7 @@ class GeneralStatisticsReport
         return $familyArray;
     }
 
-    private function setEthDist($data)
-    {
+    private function setEthDist($data) {
         $ethnicities = $this->em->getRepository('TruckeeProjectmanaBundle:Ethnicity')->findAll();
         foreach ($ethnicities as $object) {
             $eth[$object->getEthnicity()] = 0;
@@ -130,28 +126,31 @@ class GeneralStatisticsReport
         return $eth;
     }
 
-    private function setResDist($data)
-    {
+    private function setResDist($sizeData, $householdResData) {
+        $houseSize = [];
+        foreach ($sizeData as $array) {
+            $houseSize[$array['id']]['N'] = $array['size'];
+        }
+
         $resDist = ['< 1 month' => 0, '1 mo - 2 yrs' => 0, '>=2 yrs' => 0];
-        foreach ($data as $value) {
+        foreach ($householdResData as $key => $value) {
             switch ($value) {
-                case $value['N'] < 1:
-                    $resDist['< 1 month'] ++;
+                case $value['R'] < 1:
+                    $resDist['< 1 month'] += $houseSize[$key]['N'];
                     break;
-                case 1 <= $value['N'] && 24 > $value['N']:
-                    $resDist['1 mo - 2 yrs'] ++;
+                case 1 <= $value['R'] && 24 > $value['R']:
+                    $resDist['1 mo - 2 yrs'] += $houseSize[$key]['N'];
                     break;
-                case 24 <= $value['N']:
-                    $resDist['>=2 yrs'] ++;
+                case 24 <= $value['R']:
+                    $resDist['>=2 yrs'] += $houseSize[$key]['N'];
                     break;
             }
         }
-        
+
         return $resDist;
     }
 
-    private function setAgeGenderDist($data)
-    {
+    private function setAgeGenderDist($data) {
         $ageDist = ['Under 6' => 0, '6 - 18' => 0, '19 - 59' => 0, '60+' => 0];
         $ageGenderDist = ['FC' => 0, 'MC' => 0, 'FA' => 0, 'MA' => 0, 'OC' => 0, 'OA' => 0,];
         foreach ($data as $row) {
@@ -216,8 +215,7 @@ class GeneralStatisticsReport
         ];
     }
 
-    private function setFreqDist($criteria)
-    {
+    private function setFreqDist($criteria) {
         $frequency = ['1x' => 0, '2x' => 0, '3x' => 0, '4x' => 0, '5x' => 0];
         $qbSizes = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->size($criteria);
         foreach ($qbSizes as $row) {
@@ -248,4 +246,5 @@ class GeneralStatisticsReport
 
         return $frequency;
     }
+
 }

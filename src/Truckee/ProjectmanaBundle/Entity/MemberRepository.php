@@ -111,4 +111,5 @@ class MemberRepository extends EntityRepository
                 ->andWhere('c.first = true')
                 ->andWhere($criteria['contactWhereClause']);
     }
+    
 }
