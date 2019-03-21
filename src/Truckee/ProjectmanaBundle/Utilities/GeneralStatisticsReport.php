@@ -131,22 +131,44 @@ class GeneralStatisticsReport {
         foreach ($sizeData as $array) {
             $houseSize[$array['id']]['N'] = $array['size'];
         }
-
+        /**
+         * $houseSize: key = id, value = N
+         * $householdResData: key = id, value = R
+         */
         $resDist = ['< 1 month' => 0, '1 mo - 2 yrs' => 0, '>=2 yrs' => 0];
-        foreach ($householdResData as $key => $value) {
-            switch ($value) {
-                case $value['R'] < 1:
-                    $resDist['< 1 month'] += $houseSize[$key]['N'];
-                    break;
-                case 1 <= $value['R'] && 24 > $value['R']:
-                    $resDist['1 mo - 2 yrs'] += $houseSize[$key]['N'];
-                    break;
-                case 24 <= $value['R']:
-                    $resDist['>=2 yrs'] += $houseSize[$key]['N'];
-                    break;
+
+        if (count($householdResData) <= count($houseSize)) {
+            // when $householdResData has fewer elements than $houseSize
+            foreach ($householdResData as $key => $value) {
+                switch ($value) {
+                    case $value['R'] < 1:
+                        $resDist['< 1 month'] += $houseSize[$key]['N'];
+                        break;
+                    case 1 <= $value['R'] && 24 > $value['R']:
+                        $resDist['1 mo - 2 yrs'] += $houseSize[$key]['N'];
+                        break;
+                    case 24 <= $value['R']:
+                        $resDist['>=2 yrs'] += $houseSize[$key]['N'];
+                        break;
+                }
+            }
+        } else {
+            //when $houseSize has fewer elements than $householdResData
+            foreach ($houseSize as $key => $value) {
+                switch ($householdResData[$key]) {
+                    case $householdResData[$key]['R'] < 1:
+                        $resDist['< 1 month'] += $houseSize[$key]['N'];
+                        break;
+                    case 1 <= $householdResData[$key]['R'] && 24 > $householdResData[$key]['R']:
+                        $resDist['1 mo - 2 yrs'] += $houseSize[$key]['N'];
+                        break;
+                    case 24 <= $householdResData[$key]['R']:
+                        $resDist['>=2 yrs'] += $houseSize[$key]['N'];
+                        break;
+                }
             }
         }
-
+        
         return $resDist;
     }
 
