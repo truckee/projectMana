@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-//src\App\Services\GeneralStatisticsReport.php
+//src\Truckee\ProjectmanaBundle\Utilities\GeneralStatisticsReport.php
 
 namespace Truckee\ProjectmanaBundle\Utilities;
 
@@ -41,9 +41,7 @@ class GeneralStatisticsReport {
         $ethDist = $this->setEthDist($ageGenderData);
         $sizeData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->size($criteria);
         $householdResData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->householdResidency($criteria);
-//        $resData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->residency($criteria);
         $residencyDist = $this->setResDist($sizeData, $householdResData);
-//        $residencyDist = $this->setResDist($resData);
         $familyDist = $this->setSizeDist($sizeData);
         $freqDist = $this->setFreqDist($criteria);
 
@@ -240,7 +238,7 @@ class GeneralStatisticsReport {
     }
 
     private function setFreqDist($criteria) {
-        $frequency = ['1x' => 0, '2x' => 0, '3x' => 0, '4x' => 0];
+        $frequency = ['1x' => 0, '2x' => 0, '3x' => 0, '4x' => 0, '5x' => 0];
         $qbSizes = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->size($criteria);
         foreach ($qbSizes as $row) {
             $sizes[$row['id']] = $row['size'];
@@ -259,8 +257,11 @@ class GeneralStatisticsReport {
                 case 3:
                     $frequency['3x'] += $size;
                     break;
-                default:
+                case 4:
                     $frequency['4x'] += $size;
+                    break;
+                default:
+                    $frequency['5x'] += $size;
                     break;
             }
         }

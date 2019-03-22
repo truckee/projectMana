@@ -18,3 +18,23 @@
 composer.phar
 /.env
 /.php_cs.cache
+
+
+###> symfony v4 ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/public
+.phpunit
+/node_modules/
+npm-debug.log
+yarn-error.log
+/symfony.lock
+/webpack.config.js
+/yarn.lock
+/.env.test
+/templates
+/config
+/translations
+/assets
+###< symfony v4 ###

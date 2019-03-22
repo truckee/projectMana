@@ -75,3 +75,6 @@ services:
         tags:
             - name: kernel.event_listener
               event: security.interactive_login
+              
+    Truckee\ProjectmanaBundle\Utilities\GeneralStatisticsReport:
+        arguments: ['@doctrine.orm.entity_manager']
