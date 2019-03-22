@@ -36,12 +36,12 @@ class GeneralStatisticsReport {
 
     private function setGeneralStats($criteria) {
         $statistics = [];
-        $ageGenderData = $this->em->getRepository('App:Member')->ageEthnicityDistribution($criteria);
+        $ageGenderData = $this->em->getRepository('TruckeeProjectmanaBundle:Member')->ageEthnicityDistribution($criteria);
         $ageGenderDist = $this->setAgeGenderDist($ageGenderData);
         $ethDist = $this->setEthDist($ageGenderData);
-        $sizeData = $this->em->getRepository('App:Household')->size($criteria);
-        $householdResData = $this->em->getRepository('App:Household')->householdResidency($criteria);
-//        $resData = $this->em->getRepository('App:Household')->residency($criteria);
+        $sizeData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->size($criteria);
+        $householdResData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->householdResidency($criteria);
+//        $resData = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->residency($criteria);
         $residencyDist = $this->setResDist($sizeData, $householdResData);
 //        $residencyDist = $this->setResDist($resData);
         $familyDist = $this->setSizeDist($sizeData);
@@ -62,14 +62,14 @@ class GeneralStatisticsReport {
         }
 
         //unique new individuals
-        $statistics['Unique New Individuals'] = $this->em->getRepository('App:Member')->uniqueNewMembers($criteria);
+        $statistics['Unique New Individuals'] = $this->em->getRepository('TruckeeProjectmanaBundle:Member')->uniqueNewMembers($criteria);
 
         //total individuals
-        $tiData = $this->em->getRepository('App:Member')->reportMembers($criteria);
+        $tiData = $this->em->getRepository('TruckeeProjectmanaBundle:Member')->reportMembers($criteria);
         $statistics['TIS'] = count($tiData);
 
         //total households
-        $th = $this->em->getRepository('App:Household')->reportHousehold($criteria);
+        $th = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->reportHousehold($criteria);
         $statistics['THS'] = count($th);
 
         //unique individuals & households
@@ -80,10 +80,10 @@ class GeneralStatisticsReport {
         }
 
         //new by type
-        $statistics['NewByType'] = $this->em->getRepository('App:Contact')->getNewByType($criteria);
+        $statistics['NewByType'] = $this->em->getRepository('TruckeeProjectmanaBundle:Contact')->getNewByType($criteria);
 
         //newHouseholds
-        $statistics['NewHouseholds'] = $this->em->getRepository('App:Contact')->uniqueHouseholds($criteria);
+        $statistics['NewHouseholds'] = $this->em->getRepository('TruckeeProjectmanaBundle:Contact')->uniqueHouseholds($criteria);
 
         return $statistics;
     }
@@ -117,7 +117,7 @@ class GeneralStatisticsReport {
     }
 
     private function setEthDist($data) {
-        $ethnicities = $this->em->getRepository('App:Ethnicity')->findAll();
+        $ethnicities = $this->em->getRepository('TruckeeProjectmanaBundle:Ethnicity')->findAll();
         foreach ($ethnicities as $object) {
             $eth[$object->getEthnicity()] = 0;
         }
@@ -241,11 +241,11 @@ class GeneralStatisticsReport {
 
     private function setFreqDist($criteria) {
         $frequency = ['1x' => 0, '2x' => 0, '3x' => 0, '4x' => 0];
-        $qbSizes = $this->em->getRepository('App:Household')->size($criteria);
+        $qbSizes = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->size($criteria);
         foreach ($qbSizes as $row) {
             $sizes[$row['id']] = $row['size'];
         }
-        $qbFreqs = $this->em->getRepository('App:Contact')->getHouseholdCount($criteria);
+        $qbFreqs = $this->em->getRepository('TruckeeProjectmanaBundle:Contact')->getHouseholdCount($criteria);
         foreach ($qbFreqs as $freq) {
             $household = $freq['id'];
             $size = $sizes[$household];
