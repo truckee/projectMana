@@ -11,7 +11,7 @@
 
 //src\App\Services\GeneralStatisticsReport.php
 
-namespace App\Services;
+namespace Truckee\ProjectmanaBundle\Utilities;
 
 use Doctrine\ORM\EntityManagerInterface;
 
