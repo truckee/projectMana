@@ -1,0 +1,18 @@
+<div class="card-body">
+    <div class="row">
+        <div class="col-sm-3 text-right">
+            <b>Total Households Served</b>
+        </div>
+        <div class="col-sm-3 text-right">
+            <b>Unique Households Served</b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 text-right">
+            {{ statistics.THS|number_format }}
+        </div>
+        <div class="col-sm-3 text-right">
+            {{ statistics.UHS|number_format }}
+        </div>
+    </div>
+</div>

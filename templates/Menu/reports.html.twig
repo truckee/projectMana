@@ -1,0 +1,35 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <div class="card">
+        <div class="card-header bg-primary text-white text-center">
+            Available reports
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-5">
+                    <h4 class="bg-info border p-2">General statistics</h4>
+                    <p><a class="mb-3 px-2" href="{{ path('stats_general') }}">General Statistics</a></p>
+                    <p><a class="mb-3 px-2" href="{{ path('stats_details') }}">Distribution details</a></p>
+                    <p><a class="mb-3 px-2" href="{{ path('latest_contacts', {'source':'Most recent'}) }}">Most recent contacts (PDF)</a></p>
+                    <p><a class="mb-3 px-2" href="{{ path('latest_contacts', {'source':'FY to date'}) }}">Contacts FY to date (PDF)</a></p>
+                    <p><a class="mb-3 px-2" href="{{ path('annual_turkey') }}">Annual Turkey (CY, PDF)</a></p>
+                    <p><a class="mb-3 px-2" href="{{ path('multi_contacts') }}">Multiple contacts</a></p>
+                    <p><a class="mb-3 px-2" href="{{ path('other_services') }}">Other services</a></p>
+                </div>
+                <div class="col-1">
+                </div>
+                <div class="col-5">
+                    <h4 class="bg-info border p-2">Profiles</h4>
+                    <p><a class="mb-3 px-2" href="{{ path('employment_profile') }}">Employment</a></p>
+                    <p><a class="mb-3 px-2" href="{{ path('housing_profile') }}">Housing</a></p>
+                    <p><a class="mb-3 px-2" href="{{ path('income_profile') }}">Income</a></p>
+                    <p><a class="mb-3 px-2" href="{{ path('reason_profile') }}">Insufficient food</a></p>
+                    <p><a class="mb-3 px-2" href="{{ path('snap_profile') }}">SNAP</a></p>
+                    <p><a class="mb-3 px-2" href="{{ path('assistance_profile') }}">Seeking services</a></p>
+                    <p><a class="mb-3 px-2" href="{{ path('organization_profile') }}">Receiving services</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+{% block body %}
+<div class="card" style="width:80%; margin-left: 10%;">
+    <div class="card-header bg-info">Search Results for {{ searchedFor }}<br>
+    * = Household is inactive
+</div>
+<table class="table">
+    <tr>
+        <th>Options
+        <th>ID
+        <th>Name/Head
+        <th>DOB
+        <th>Address
+    </tr>
+{{ include("Member/matchBlock.html.twig") }}
+</table>
+</div>
+{% endblock %}

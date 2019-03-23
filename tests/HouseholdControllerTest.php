@@ -12,33 +12,53 @@
 
 namespace Tests;
 
-use Truckee\ProjectmanaBundle\Tests\TruckeeWebTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * Description of HouseholdControllerTest.
  *
  * @author George Brooks
  */
-class HouseholdControllerTest extends TruckeeWebTestCase
+class HouseholdControllerTest extends WebTestCase
 {
+
+    private $reference;
+    
     public function setup()
     {
         $this->client = static::createClient();
         $this->client->followRedirects();
-        $this->fixtures = $this->loadFixtures([
-                    'Truckee\ProjectmanaBundle\DataFixtures\Test\Users',
-                    'Truckee\ProjectmanaBundle\DataFixtures\Test\Constants',
-                    'Truckee\ProjectmanaBundle\DataFixtures\Test\Households',
-                ])->getReferenceRepository();
+        self::bootKernel();
+
+        // returns the real and unchanged service container
+        $container = self::$kernel->getContainer();
+
+        // gets the special container that allows fetching private services
+        $container = self::$container;
+        $em = self::$container->get('doctrine')->getManager('test');
+        $tables = [
+            'AddressType', 'Assistance', 'Center', 'Contactdesc', 'County', 'Ethnicity',
+            'Housing', 'Income', 'Notfoodstamp', 'Organization', 'Reason', 'Relationship',
+            'State', 'Work', 'Contact', 'Address', 'Household', 'Member', 'User'
+        ];
+        $this->reference = [];
+        foreach ($tables as $value) {
+            $i = 1;
+            $entities = $em->getRepository("App:" . $value)->findAll();
+            foreach ($entities as $entity) {
+                $this->reference[$value . $i] = $entity;
+                $i ++;
+            }
+        }
 //        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
     }
 
     public function login()
     {
-        $crawler = $this->client->request('GET', '/');
-        $form = $crawler->selectButton('Log in')->form();
-        $form['_username'] = 'admin';
-        $form['_password'] = 'manapw';
+        $crawler = $this->client->request('GET', '/login');
+        $form = $crawler->selectButton('Sign in')->form();
+        $form['username'] = 'admin@bogus.info';
+        $form['password'] = 'manapw';
         $crawler = $this->client->submit($form);
 
         return $crawler;
@@ -53,9 +73,9 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $form['member[sname]'] = 'Borko';
         $form['member[dob]'] = '44';
         $form['member[sex]'] = 'Male';
-        $eth = $this->fixtures->getReference('cau')->getId();
+        $eth = $this->reference['Ethnicity1']->getId();
         $form['member[ethnicity]'] = $eth;
-        $tahoe = $this->fixtures->getReference('tahoe')->getId();
+        $tahoe = $this->reference['Center1']->getId();
         $form['household[center]'] = $tahoe;
         $form['household[arrivalmonth]'] = 5;
         $form['household[arrivalyear]'] = 2018;
@@ -63,53 +83,42 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         return $this->client->submit($form);
     }
 
-    public function testLogin()
-    {
-        $crawler = $this->login();
-
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Project MANA")')->count());
-    }
-
-    public function testNewHousehold()
-    {
+    public function testNewHousehold() {
         $crawler = $this->submitNewHousehold();
-        
+
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Household Edit")')->count());
     }
 
-    public function testDuplicateName()
-    {
-        $crawler = $this->submitNewHousehold();
+    public function testDuplicateName() {
+        $crawler = $this->login();
         $crawler = $this->client->request('GET', '/household/new');
-
-        $form = $crawler->selectButton('Submit')->form();
-        $form['member[fname]'] = 'MoreThanOne';
-        $form['member[sname]'] = 'Membrane';
-        $form['member[dob]'] = '44';
-        $form['member[sex]'] = 'Male';
-        $eth = $this->fixtures->getReference('cau')->getId();
-        $form['member[ethnicity]'] = $eth;
-        $tahoe = $this->fixtures->getReference('tahoe')->getId();
-        $form['household[center]'] = $tahoe;
-        $crawler = $this->client->submit($form);
+        $eth = $this->reference['Ethnicity3']->getId();
+        $tahoe = $this->reference['Center3']->getId();
+        $crawler = $this->client->submitForm('submit',
+                [
+                    'member[fname]' => 'MoreThanOne',
+                    'member[sname]' => 'Membrane',
+                    'member[dob]' => '44',
+                    'member[sex]' => 'Male',
+                    'member[ethnicity]' => $eth,
+                    'household[center]' => $tahoe,
+        ]);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Add new head of house")')->count());
     }
 
-    public function testShowHousehold()
-    {
+    public function testShowHousehold() {
         $crawler = $this->login();
-        $id = $this->fixtures->getReference('house1')->getId();
-        $crawler = $this->client->request('GET', '/household/'.$id.'/show');
+        $id = $this->reference['Household1']->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/show');
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Household View")')->count());
     }
 
-    public function testEditHousehold()
-    {
+    public function testEditHousehold() {
         $crawler = $this->login();
-        $id = $this->fixtures->getReference('house1')->getId();
-        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
+        $id = $this->reference['Household1']->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Household Edit")')->count());
 
@@ -121,7 +130,7 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Compliance date required")')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Shared date required")')->count());
 
-        $truckee = $this->fixtures->getReference('truckee')->getId();
+        $truckee = $this->reference['Center3']->getId();
         $form['household[complianceDate]'] = '6/1/2015';
         $form['household[sharedDate]'] = '6/1/2015';
         $form['household[center]'] = $truckee;
@@ -133,44 +142,38 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("May")')->count());
     }
 
-    public function testNoSearchCriteria()
-    {
+    public function testNoSearchCriteria() {
         $crawler = $this->login();
-        $form = $crawler->filter('#household_search')->form();
-        $form['qtext'] = '';
-        $crawler = $this->client->submit($form);
+        $crawler = $this->client->submitForm('_search', []);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("No search criteria were entered")')->count());
     }
 
-    public function testHouseholdNotFound()
-    {
+    public function testHouseholdNotFound() {
         $crawler = $this->login();
-        $form = $crawler->filter('#household_search')->form();
+        $form = $crawler->selectButton('_search')->form();
         $form['qtext'] = '999';
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Sorry, household not found")')->count());
     }
 
-    public function testNoHouseholdsFound()
-    {
+    public function testNoHouseholdsFound() {
         $crawler = $this->login();
-        $form = $crawler->filter('#household_search')->form();
+        $form = $crawler->selectButton('_search')->form();
         $form['qtext'] = 'Alien Creatures';
         $crawler = $this->client->submit($form);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Sorry, no households were found")')->count());
     }
 
-    public function testValidateHousehold()
-    {
+    public function testValidateHousehold() {
         $crawler = $this->login();
-        $id = $this->fixtures->getReference('house1')->getId();
-        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
+        $id = $this->reference['Household1']->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
 
-        $income = $this->fixtures->getReference('medIncome')->getId();
-        $truckee = $this->fixtures->getReference('truckee')->getId();
+        $income = $this->reference['Income2']->getId();
+        $truckee = $this->reference['Center3']->getId();
         $future = date_format(new \DateTime('next year'), 'm/d/Y');
 
         $form = $crawler->selectButton('Submit')->form();
@@ -190,14 +193,13 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $this->assertEquals(1, $crawler->filter('html:contains("Date may not be in future")')->count());
     }
 
-    public function testValidateSharedDate()
-    {
+    public function testValidateSharedDate() {
         $crawler = $this->login();
-        $id = $this->fixtures->getReference('house1')->getId();
-        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
+        $id = $this->reference['Household1']->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
 
-        $income = $this->fixtures->getReference('medIncome')->getId();
-        $truckee = $this->fixtures->getReference('truckee')->getId();
+        $income = $this->reference['Income2']->getId();
+        $truckee = $this->reference['Center3']->getId();
         $future = date_format(new \DateTime('next year'), 'm/d/Y');
 
         $form = $crawler->selectButton('Submit')->form();
@@ -211,33 +213,30 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Date may not be in future")')->count());
     }
 
-    public function testOneAddress()
-    {
+    public function testOneAddress() {
         $crawler = $this->login();
-        $id = $this->fixtures->getReference('house1')->getId();
-        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
-        
+        $id = $this->reference['Household1']->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
+
         $this->assertEquals(2, $crawler->filter('input[type=radio]')->count());
     }
 
-    public function testNoAddress()
-    {
+    public function testNoAddress() {
         $crawler = $this->login();
-        $id = $this->fixtures->getReference('house2')->getId();
-        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
-        
+        $id = $this->reference['Household2']->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
+
         $this->assertEquals(4, $crawler->filter('input[type=radio]')->count());
     }
 
-    public function testAddressSubmit()
-    {
+    public function testAddressSubmit() {
         $crawler = $this->login();
-        $id = $this->fixtures->getReference('house3')->getId();
-        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
+        $id = $this->reference['Household3']->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
         $form = $crawler->selectButton('Submit')->form();
         $form["household[physicalAddress][physical]"]->select("1");
         $form["household[physicalAddress][address][line1]"] = '12 NewLine';
-        $truckee = $this->fixtures->getReference('truckee')->getId();
+        $truckee = $this->reference['Center3']->getId();
         $form['household[center]'] = $truckee;
         $crawler = $this->client->submit($form);
 
@@ -245,14 +244,13 @@ class HouseholdControllerTest extends TruckeeWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("12 NewLine")')->count());
     }
 
-    public function testHouse3NoOptionsDisabled()
-    {
+    public function testHouse3NoOptionsDisabled() {
         $crawler = $this->login();
-        $id = $this->fixtures->getReference('house3')->getId();
-        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
+        $id = $this->reference['Household3']->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
 
         $centerText = trim($crawler->filter("#household_center option:selected")->text());
-        $this->assertEquals('Kings Beach', $centerText);
+        $this->assertEquals('Truckee', $centerText);
         $notText = trim($crawler->filter("#household_notfoodstamp option:selected")->text());
         $this->assertEquals('Not applied', $notText);
         $housingText = trim($crawler->filter("#household_housing option:selected")->text());
@@ -262,24 +260,22 @@ class HouseholdControllerTest extends TruckeeWebTestCase
 //        $this->assertEquals(0, $crawler->filter('html:contains("disabled")')->count());
     }
 
-    public function testServiceRequested()
-    {
+    public function testServiceRequested() {
         $crawler = $this->login();
-        $id = $this->fixtures->getReference('house3')->getId();
-        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
+        $id = $this->reference['Household3']->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
         $form = $crawler->selectButton('Submit')->form();
         $form['household[assistances]'][0]->tick();
         $form['household[seeking]'] = 'Demon chasing';
         $crawler = $this->client->submit($form);
-        
+
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Other")')->count());
     }
 
-    public function testServiceUsed()
-    {
+    public function testServiceUsed() {
         $crawler = $this->login();
-        $id = $this->fixtures->getReference('house3')->getId();
-        $crawler = $this->client->request('GET', '/household/'.$id.'/edit');
+        $id = $this->reference['Household3']->getId();
+        $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
         $form = $crawler->selectButton('Submit')->form();
         $form['household[organizations]'][0]->tick();
         $form['household[receiving]'] = 'Marmot fund';
@@ -291,6 +287,6 @@ class HouseholdControllerTest extends TruckeeWebTestCase
     public function tearDown()
     {
         unset($this->client);
-        unset($this->fixtures);
+        unset($this->reference);
     }
 }

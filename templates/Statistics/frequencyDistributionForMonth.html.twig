@@ -1,0 +1,32 @@
+<div class="card-header bg-info text-center">Frequency Distribution for Month</div>
+<div class="card-body">
+    <div class="row">
+        <div class="col-sm-2 text-right">
+            <b>1x</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>2x</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>3x</b>
+        </div>
+        <div class="col-sm-2 text-right">
+            <b>4x or more</b>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-2 text-right">
+            {{ statistics['1x']|number_format }}
+        </div>
+        <div class="col-sm-2 text-right">
+            {{ statistics['2x']|number_format }}
+        </div>
+        <div class="col-sm-2 text-right">
+            {{ statistics['3x']|number_format }}
+        </div>
+        <div class="col-sm-2 text-right">
+            {{ statistics['4x']|number_format }}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,4 @@
+<p>Hi {{ fname }},</p>
+<p>Here's the link to changing your password.</p>
+<p>Click on this <a href="{{ absolute_url(path('reset_password', {'token':token})) }}">link</a></p>
+<p>Thanks.</p>

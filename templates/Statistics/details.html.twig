@@ -1,0 +1,40 @@
+{% for key,data in details %}
+    <div class="card-header bg-info">{{ key }}</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-3 text-right">
+            </div>
+            <div class="col-sm-2 text-right">
+                Unique Individuals Served
+            </div>
+            <div class="col-sm-2 text-right">
+                Total Individuals Served
+            </div>
+            <div class="col-sm-2 text-right">
+                Unique Households Served
+            </div>
+            <div class="col-sm-2 text-right">
+                Total Households Served
+            </div>
+        </div>
+        {% for desc, type in data %}
+            <div class="row">
+                <div class="col-sm-3 text-right">
+                    {{ desc }}
+                </div>
+                <div id="{{ key|url_encode }}{{ desc|url_encode }}UIS" class="col-sm-2 text-right">
+                    {{ type.UIS }}
+                </div>
+                <div id="{{ key|url_encode }}{{ desc|url_encode }}TIS" class="col-sm-2 text-right">
+                    {{ type.TIS }}
+                </div>
+                <div id="{{ key|url_encode }}{{ desc|url_encode }}UHS" class="col-sm-2 text-right">
+                    {{ type.UHS }}
+                </div>
+                <div id="{{ key|url_encode }}{{ desc|url_encode }}THS" class="col-sm-2 text-right">
+                    {{ type.THS }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endfor %}

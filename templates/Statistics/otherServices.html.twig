@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <div class="card">
+        <div class="card-header bg-info">
+            <div class="text-center">
+                Other Services Summary
+            </div>
+        </div>
+        <div class="card-body">
+            {{ include( 'Statistics/seekingServices.html.twig') }}
+            {{ include( 'Statistics/receivingServices.html.twig') }}
+        </div>
+    </div>
+
+{% endblock %}

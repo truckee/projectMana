@@ -12,15 +12,16 @@
 
 namespace Tests;
 
-use Truckee\ProjectmanaBundle\Tests\TruckeeWebTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * Description of StatisticsControllerTest.
  *
  * @author George Brooks
  */
-class StatisticsControllerTest extends TruckeeWebTestCase
+class StatisticsControllerTest extends WebTestCase
 {
+    private $reference;
 
     public function setup()
     {
@@ -28,12 +29,28 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $this->lastMonth = date_format(new \DateTime('last month'), 'F, Y');
         $this->client = static::createClient();
         $this->client->followRedirects();
-        $this->fixtures = $this->loadFixtures([
-                'Truckee\ProjectmanaBundle\DataFixtures\Test\Users',
-                'Truckee\ProjectmanaBundle\DataFixtures\Test\Constants',
-                'Truckee\ProjectmanaBundle\DataFixtures\Test\Households',
-                'Truckee\ProjectmanaBundle\DataFixtures\Test\Contacts',
-            ])->getReferenceRepository();
+        self::bootKernel();
+
+        // returns the real and unchanged service container
+        $container = self::$kernel->getContainer();
+
+        // gets the special container that allows fetching private services
+        $container = self::$container;
+        $em = self::$container->get('doctrine')->getManager('test');
+        $tables = [
+            'AddressType', 'Assistance', 'Center', 'Contactdesc', 'County', 'Ethnicity',
+            'Housing', 'Income', 'Notfoodstamp', 'Organization', 'Reason', 'Relationship',
+            'State', 'Work', 'Contact', 'Address', 'Household', 'Member', 'User'
+        ];
+        $this->reference = [];
+        foreach ($tables as $value) {
+            $i = 1;
+            $entities = $em->getRepository("App:" . $value)->findAll();
+            foreach ($entities as $entity) {
+                $this->reference[$value . $i] = $entity;
+                $i ++;
+            }
+        }
     }
 
     /**
@@ -43,10 +60,10 @@ class StatisticsControllerTest extends TruckeeWebTestCase
      */
     public function login()
     {
-        $crawler = $this->client->request('GET', '/');
-        $form = $crawler->selectButton('Log in')->form();
-        $form['_username'] = 'admin';
-        $form['_password'] = 'manapw';
+        $crawler = $this->client->request('GET', '/login');
+        $form = $crawler->selectButton('Sign in')->form();
+        $form['username'] = 'admin@bogus.info';
+        $form['password'] = 'manapw';
         $crawler = $this->client->submit($form);
         $link = $crawler->selectLink('Reports')->link();
         $crawler = $this->client->click($link);
@@ -87,7 +104,7 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $link = $crawler->selectLink('General Statistics')->link();
         $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
-        $truckee = $this->fixtures->getReference('truckee')->getId();
+        $truckee = $this->reference['Center3']->getId();
         $form['report_criteria[center]']->select($truckee);
         $crawler = $this->client->submit($form);
 
@@ -101,7 +118,7 @@ class StatisticsControllerTest extends TruckeeWebTestCase
         $link = $crawler->selectLink('General Statistics')->link();
         $crawler = $this->client->click($link);
         $form = $crawler->selectButton('Submit')->form();
-        $placer = $this->fixtures->getReference('placer')->getId();
+        $placer = $this->reference['County1']->getId();
         $form['report_criteria[county]']->select($placer);
         $crawler = $this->client->submit($form);
 
@@ -295,6 +312,6 @@ class StatisticsControllerTest extends TruckeeWebTestCase
     public function tearDown()
     {
         unset($this->client);
-        unset($this->fixtures);
+        unset($this->reference);
     }
 }

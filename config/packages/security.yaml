@@ -1,0 +1,40 @@
+security:
+    encoders:
+#      App\Entity\User:
+#        algorithm: bcrypt
+      old:
+#      FOS\UserBundle\Model\UserInterface:
+            algorithm: md5
+            ignore_case: true
+            encode_as_base64: false
+            iterations: 1
+      new:
+            algorithm: bcrypt
+
+
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: ~
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            logout:
+                path:   app_logout
+                target: home
+
+    access_control:
+        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register/*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/reports/foodbank/*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: ROLE_USER }
+#        - { path: ^/user, roles: ROLE_ADMIN }

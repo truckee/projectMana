@@ -1,0 +1,245 @@
+easy_admin:
+    site_name: 'Manage options'
+    disabled_actions: ['delete']
+    list:
+        max_results: 10
+    design:
+#        color_scheme: 'light'
+        menu:
+            - label: 'Contacts'
+              children:
+                    - { entity: 'ContactType', default: true, params: { sortField: 'contactdesc', sortDirection: 'ASC' }}
+                    - { entity: 'County', params: { sortField: 'county', sortDirection: 'ASC' }}
+                    - { entity: 'Site', params: { sortField: 'center', sortDirection: 'ASC' }}
+            - label: 'Households'
+              children:
+                    - { entity: 'Housing', params: { sortField: 'housing', sortDirection: 'ASC'}}
+                    - { entity: 'Income', params: { sortField: 'id', sortDirection: 'ASC'}}
+                    - { entity: 'InsufficientFood', label: 'Insufficient food', params: { sortField: 'reason', sortDirection: 'ASC'}}
+                    - { entity: 'Assistance', params: { sortField: 'assistance', sortDirection: 'ASC'}}
+                    - { entity: 'Organization', params: { sortField: 'organization', sortDirection: 'ASC'}}
+                    - { entity: 'Notfoodstamp', params: { sortField: 'notfoodstamp', sortDirection: 'ASC'}}
+            - label: 'Members'
+              children:
+                    - { entity: 'Ethnicity', params: { sortField: 'ethnicity', sortDirection: 'ASC' } }
+                    - { entity: 'Relationship', params: { sortField: 'relation', sortDirection: 'ASC' } }
+                    - { entity: 'Work', params: { sortField: 'job', sortDirection: 'ASC' } }
+            - { entity: 'User', params: { sortField: 'sname', sortDirection: 'ASC' } }
+            - { label: 'Home', route: 'home' }
+    entities:
+        Assistance:
+            class: App\Entity\Assistance
+            label: Seeking services
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'assistance', label: 'Assistance'}
+                    - enabled
+            new:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'assistance', label: 'Assistance'}
+                    - enabled
+                form_options: { validation_groups: ['Options'] }
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
+                form_options: { validation_groups: ['Options'] }
+        ContactType:
+            class: App\Entity\Contactdesc
+            label: Contact types
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'contactdesc', label: 'Type'}
+                    - enabled
+            new:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'contactdesc', label: 'Type'}
+                    - enabled
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
+        County:
+            class: App\Entity\County
+            label: Counties
+            list:
+                fields:
+                    - county
+                    - {property: 'enabled', label: 'Enabled'}
+            new:
+                fields: [county, enabled]
+                form_options: { validation_groups: ['Options'] }
+            edit:
+                fields: [enabled]
+                form_options: { validation_groups: ['Options'] }
+        Ethnicity:
+            class: App\Entity\Ethnicity
+            label: Ethnicities
+            list:
+                title: '%%entity_label%%'
+                fields: [ethnicity, abbreviation, enabled]
+            new:
+                title: '%%entity_label%%'
+                fields: [ethnicity, abbreviation, enabled]
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
+        Housing:
+            class: App\Entity\Housing
+            label: Housing
+            list:
+                title: '%%entity_label%%'
+                fields: [housing, enabled]
+            new:
+                title: '%%entity_label%%'
+                fields: [housing, enabled]
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
+        Income:
+            class: App\Entity\Income
+            label: Income brackets
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'income', label: 'Bracket'}
+                    - enabled
+            new:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'income', label: 'Bracket'}
+                    - enabled
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
+        InsufficientFood:
+            class: App\Entity\Reason
+            label: 'Insufficient food'
+            list:
+                title: '%%entity_label%%'
+                fields: [reason, enabled]
+            new:
+                title: '%%entity_label%%'
+                fields: [reason, enabled]
+            edit:
+                title: '%%entity_label%%'
+                fields:  [enabled]
+        Notfoodstamp:
+            class: App\Entity\Notfoodstamp
+            label: Why not foodstamps
+            list:
+                title: '%%entity_label%%'
+                fields: [notfoodstamp, enabled]
+            new:
+                title: '%%entity_label%%'
+                fields: [notfoodstamp, enabled]
+            edit:
+                title: '%%entity_label%%'
+                fields:  [enabled]
+        Organization:
+            class: App\Entity\Organization
+            label: Receiving services   
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'organization', label: 'Organization'}
+                    - enabled
+            new:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'organization', label: 'Organization'}
+                    - enabled
+                form_options: { validation_groups: ['Options'] }
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
+                form_options: { validation_groups: ['Options'] }
+        Relationship:
+            class: App\Entity\Relationship
+            label: Relationship
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: relation, label: 'Relation to head'}
+                    - enabled
+            new:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: relation, label: 'Relation to head'}
+                    - enabled
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
+        Site:
+            class: App\Entity\Center
+            label: Sites
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'center', label: 'Site'}
+                    - enabled
+                    - {property: 'county.county', label: 'County'}
+            new:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'center', label: 'Site'}
+                    - enabled
+                    - {property: 'county', type: 'entity', type_options: { class: App\Entity\County }}
+                form_options: { validation_groups: ['Options'] }
+            edit:
+                title: '%%entity_label%%'
+                fields:
+                fields: [enabled]
+                form_options: { validation_groups: ['Options'] }
+        State:
+            class: App\Entity\State
+            label: State
+            list:
+                title: '%%entity_label%%'
+                fields: [state, enabled]
+            new:
+                title: '%%entity_label%%'
+                fields:
+                    - {property: 'state', type_options: {by_reference: false}}
+                    - enabled
+            edit:
+                title: '%%entity_label%%'
+                fields: [enabled]
+        Work:
+            class: App\Entity\Work
+            label: 'Work'
+            list:
+                title: '%%entity_label%%'
+                fields: [job, enabled]
+            new:
+                title: '%%entity_label%%'
+                fields: [job, enabled]
+            edit:
+                title: '%%entity_label%%'
+                fields:  [enabled]
+        User:
+            class: App\Entity\User
+            disabled_actions: ['new']
+
+            list:
+                fields: 
+                    - {property: 'sname', label: 'Last name'}
+                    - {property: 'fname', label: 'First name'}
+                    - {property: 'username', label: 'Username'}
+                    - {property: 'email', type: 'email'}
+                    - {property: 'hasRoleAdmin', label: 'Is admin?'}
+
+            edit:
+                form_options: { validation_groups: ['edit'] }
+                fields: 
+                    - {property: 'sname', label: 'Last name', type_options: { required: false }}
+                    - {property: 'fname', label: 'First name', type_options: { required: false }}
+                    - property: 'hasRoleAdmin'
+                      label: 'Is admin?'
+                      type: choice
+                      type_options:
+                        choices:
+                            'No': 'No'
+                            'Yes': 'Yes'

@@ -1,0 +1,25 @@
+<div class="card">
+    <div class="card-header bg-info">
+        <div class="text-center">
+            Households receiving services
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row border-bottom">
+            <div class="col-3">Service</div>
+            <div class="col-1 text-right">Count</div>
+            <div class="col-8">Households</div>
+        </div>
+        {% for key, households in receivingServices %}
+            <div class="row {% if loop.index % 5 == 0 %}border-bottom{% endif %}">
+                <div class="col-3">{{ key }}</div>
+                <div class="col-1 text-right">{{ households|length }}</div>
+                <div class="col-8">
+                    {% for household in households %}
+                        {{  household }}, 
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

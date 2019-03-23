@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-xs-8">
+        <meta name="viewport" content="width=device-xs-width, initial-xs-scale=1.0">
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ absolute_url(asset('build/bootstrap.css')) }}">
+            <link rel="stylesheet" href="{{ absolute_url(asset('build/pdf.css')) }}">
+        {% endblock %}
+    </head>
+    <body>
+        <div class="container">
+            <div class="row" style="margin: 1em;">
+                <div class="col-xs-2">
+                    <img src="{{ absolute_url(asset('/build/banner.jpg')) }}">
+                </div>
+                <div class="col-xs-10">
+                    <h3>{{source}} Contacts for {{ center }} on {{ date|date('m/d/Y') }}</h3>
+                </div>
+            </div>
+            <div class="row bordered">
+                <div class="col-xs-2">
+{#                    <img src="{{ absolute_url(asset('/build/images/banner.jpg')) }}">#}
+                </div>
+                <div class="col-xs-5">
+                    Name
+                </div>
+                <div class="col-xs-2 text-right">
+                    ID
+                </div>
+                <div class="col-xs-3">
+                    DOB
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

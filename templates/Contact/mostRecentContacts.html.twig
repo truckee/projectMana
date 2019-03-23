@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-sm-12">
+        <h4>{{ source~' contacts for '~site.center~', '~latestDate|date('m/d/Y') }}</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-1"><input type="checkbox" id="selectAll"></div>
+    <div class="col-sm-1 text-right">ID</div>
+    <div class="col-sm-3">Head</div>
+    {% if source == 'Most recent' %}
+        <div class="col-sm-3">Distribution</div>
+    {% endif %}
+</div>
+<div id="latestContacts" action="{{ path("contacts_add", {'source': source}) }}" method="post">
+    {% for contact in contacts %}
+            <div class="row">
+                <div class="col-sm-1"><input type="checkbox" id="idSelect{{ contact.id }}" name="contact_household[{{ contact.id }}]" value="{{ contact.id }}"></div>
+                <div class="col-sm-1 text-right">{{ contact.id }}</div>
+                <div class="col-sm-3">{{ contact.sname }}, {{ contact.fname }}</div>
+                {% if source == 'Most recent' %}
+                    <div class="col-sm-3">{{ contact.contactdesc }}</div>
+                {% endif %}
+            </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-sm-2"><input class="btn-sm btn-info" id="submitButton" type="submit" name="submit" value="Submit contacts"></div>
+    </div>
+</div>

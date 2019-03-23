@@ -1,0 +1,11 @@
+framework:
+    test: true
+    session:
+        storage_id: session.storage.mock_file
+        name: MOCKSESSION
+    profiler:
+        enabled: false
+        collect: true
+liip_functional_test:
+    command_verbosity: quiet
+    command_decoration: false

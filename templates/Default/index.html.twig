@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+{% endblock body%}
+{% if is_granted('ROLE_USER') %}
+    {% block javascripts %}
+        {{ parent() }}
+        {{ encore_entry_script_tags('highcharts') }}
+        <script type="text/javascript">
+            {{ chart(chart) }}
+        </script>
+        <div id="linechart" style="margin: 0 10em;"></div>
+    {% endblock javascripts %}
+{% endif %}

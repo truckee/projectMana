@@ -1,0 +1,94 @@
+<div class="card">
+    <div class="card-header bg-info">Household</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-10">
+                <b>ID:</b> {{ household.id }}
+                <b>Active?:</b> {% if household.active == 1 %}Yes{% else %}No{% endif %}
+                <b>Date added:</b> {% if household.dateAdded is not null %}{{ household.dateAdded|date('m/d/Y') }}<input type="hidden" name="household[dateAdded]" value="{{ household.dateAdded|date('m/d/Y') }}">{% endif %}
+                <b>First site: </b>{% if household.center is not null %}{{ household.center.center }}{% endif %}
+                <b>Phone: </b>{% if household.phoneNumber is not null %}({{ household.areacode }}) {{household.phoneNumber }}{% endif %}
+            </div>
+        </div>
+        {# Welcome Form page 2 questions #}
+        {# Q2 Residency #}
+        <div class="row">
+            <div class="col-lg-2">
+                <b>Q2: Residency:</b>
+            </div>
+            <div class="col-3">
+                {% set mo = household.arrivalMonth %}
+                <b>Arrival month:</b> {% if mo is not null %}{{ mo|date('2018-' ~ mo ~ '-01')|date('F') }}{% endif %}
+            </div>
+            <div class="col-3">
+                <b>Arrival year:</b> {{ household.arrivalYear }}
+            </div>
+        </div>
+        {# Q4 Benefits #}
+        <div class="row">
+            <div class="col-lg-12">
+                <b>Q4: Benefits:</b> {% set a = household.benefits|length %}
+                {% for benefit in household.benefits if a > 0 %}{{benefit.benefit}}{% if loop.index < a %}; {% endif %}{% endfor %}
+            </div>
+        </div>
+        {# Q5 Why not foodstamps #}
+        <div class="row">
+            <div class="col-lg-10">
+                {% if household.notfoodstamp is not null %}<b>Q5: If no, why not?</b>{{ household.notfoodstamp.notfoodstamp }}{% endif %}
+            </div>
+        </div>
+        {# Q6 Income #}
+        <div class="row">
+            <div class="col-lg-12">
+                <b>Q6: Income: </b>{% if household.income is not null %}{{ household.income.income }}{% endif %}
+            </div>
+        </div>
+        {# Q7 Housing #}
+        <div class="row">
+            <div class="col-lg-12">
+                <b>Q7: Housing: </b>{% if household.housing is not null %}{{ household.housing.housing }}{% endif %}
+            </div>
+        </div>
+        {# Q8 Insufficient food #}
+        <div class="row">
+            <div class="col-lg-12">
+                <b>Q8: Insufficient food:</b> {% set n = household.reasons|length %}
+                {% for reason in household.reasons if n > 0 %}{{reason.reason}}{% if loop.index < n %}; {% endif %}{% endfor %}
+            </div>
+        </div>
+        {# Q9 Seeking services #}
+        <div class="row">
+            <div class="col-lg-12">
+                <b>Q9: Seeking services:</b> {% set a = household.assistances|length %}
+                {% for assistance in household.assistances if a > 0 %}{{assistance.assistance}}{% if loop.index < a %}; {% endif %}{% endfor %}
+            </div>
+        </div>
+        {# Q10 Receiving services #}
+        <div class="row">
+            <div class="col-lg-12">
+                <b>Q10: Receiving services:</b> {% set n = household.organizations|length %}
+                {% for organization in household.organizations if n > 0 %}{{organization.organization}}{% if loop.index < n %}; {% endif %}{% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <b>Compliance: </b>{% if household.compliance == 1 %}Yes{% else %}No{% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <b>Date: </b>{% if household.complianceDate is not null %}{{ household.complianceDate|date('m/d/Y') }}{% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <b>Shared: </b>{% if household.shared == 1 %}Yes{% else %}No{% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <b>Date: </b>{% if household.sharedDate is not null %}{{ household.sharedDate|date('m/d/Y') }}{% endif %}
+            </div>
+        </div>
+    </div>
+</div>

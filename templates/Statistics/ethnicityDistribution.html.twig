@@ -1,0 +1,59 @@
+<div class="card-header bg-info text-center">Member ethnicity Distribution</div>
+<div class="card-body">
+    <div class="row">
+        <div class="col-sm-3 text-right">
+            <b>Caucasian</b>
+        </div>
+        <div class="col-sm-3 text-right">
+            <b>African-American</b>
+        </div>
+        <div class="col-sm-3 text-right">
+            <b>Asian</b>
+        </div>
+        <div class="col-sm-3 text-right">
+            <b>Hispanic</b>
+        </div>
+    </div>
+    <div class="row">
+        <div id="ethCaucasian" class="col-sm-3 text-right">
+            {{ statistics['Caucasian']|number_format }}
+        </div>
+        <div id="ethAfrican-American" class="col-sm-3 text-right">
+            {{ statistics['African-American']|number_format }}
+        </div>
+        <div id="ethAsian" class="col-sm-3 text-right">
+            {{ statistics['Asian']|number_format }}
+        </div>
+        <div id="ethHispanic" class="col-sm-3 text-right">
+            {{ statistics['Hispanic']|number_format }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 text-right">
+            <b>Native American</b>
+        </div>
+        <div class="col-sm-3 text-right">
+            <b>Hawaiian/Pacific Islander</b>
+        </div>
+        <div class="col-sm-3 text-right">
+            <b>Other</b>
+        </div>
+        <div class="col-sm-3 text-right">
+            <b>Unknown</b>
+        </div>
+    </div>
+    <div class="row">
+        <div id="ethNative-American" class="col-sm-3 text-right">
+            {{ statistics['Native American']|number_format }}
+        </div>
+        <div id="ethHawaiian-Pacific Islander" class="col-sm-3 text-right">
+            {{ statistics['Hawaiian/Pacific Islander']|number_format }}
+        </div>
+        <div id="ethOther" class="col-sm-3 text-right">
+            {{ statistics['Other']|number_format }}
+        </div>
+        <div id="ethUnknown" class="col-sm-3 text-right">
+            {{ statistics['Unknown']|number_format }}
+        </div>
+    </div>
+</div>

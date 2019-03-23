@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ absolute_url(asset('build/bootstrap.css')) }}">
+            <link rel="stylesheet" href="{{ absolute_url(asset('build/pdf.css')) }}">
+        {% endblock %}
+    </head>
+    <body>
+        <div class="container">
+            <div class="row" style="margin: 1em;">
+                <div class="col-xs-2">
+                    <img src="{{ absolute_url(asset('/build/banner.jpg')) }}">
+                </div>
+                <div class="col-xs-10" style="padding-top: 5px;">
+                    <h2>Let's Talk Turkey, {{ null|date('Y') }}</h2>
+                </div>
+            </div>
+            <div class="row bordered" >
+                <div class="col-xs-4">
+                    Head
+                </div>
+                <div class="col-xs-3">
+                    Site
+                </div>
+                <div class="col-xs-2 text-right">
+                    ID
+                </div>
+                <div class="col-xs-2 text-right">
+                    DOB
+                </div>
+                <div class="col-xs-1">
+                    Form
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

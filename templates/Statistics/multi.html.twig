@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <div class="card">
+        <div class="card-header bg-info text-center">{{ reportHeader|raw }}</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-1">ID</div>
+                <div class="col-sm-2">Head of household</div>
+                <div class="col-sm-2">Site</div>
+                <div class="col-sm-2">Date</div>
+                <div class="col-sm-4">Contact</div>
+            </div>
+            {% for contact in multi %}
+                <div class="row">
+                    <div class="col-sm-1">{{ contact.id }}</div>
+                    <div class="col-sm-2">{{ contact.fname }} {{ contact.sname }}</div>
+                    <div class="col-sm-2">{{ contact.center }}</div>
+                    <div class="col-sm-2">{{ contact.contactDate|date('m/d/Y') }}</div>
+                    <div class="col-sm-4">{{ contact.contactdesc }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

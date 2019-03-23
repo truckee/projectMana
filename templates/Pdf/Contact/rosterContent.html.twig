@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ absolute_url(asset('build/bootstrap.css')) }}">
+            <link rel="stylesheet" href="{{ absolute_url(asset('build/pdf.css')) }}">
+        {% endblock %}
+    </head>
+    <body>
+        <div class="container">
+            {% for contact in contacts %}
+                <div class="{% if loop.index % 55 == 0 %}new_page{% endif %}">
+                <div class="row {% if loop.index % 5 == 0 %}bottomline{% endif %}">
+                    <div class="col-xs-2 text-right">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-xs-5">
+                        {{ contact.sname }}, {{ contact.fname }}
+                    </div>
+                    <div class="col-xs-2 text-right">
+                        {{ contact.id }}
+                    </div>
+                    <div class="col-xs-3">
+                        {% if contact.dob is not empty %}{{ contact.dob|date('m/d/Y') }}{% else %}___________{% endif %}
+                    </div>
+                </div></div>
+            {% endfor %}
+        </div>
+    </body>
+</html>

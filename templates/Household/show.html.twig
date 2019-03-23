@@ -1,0 +1,13 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <div class="card">
+        {{ include('Household/householdHeading.html.twig') }}
+        <div class="card-body">
+            {{ include('Default/templates.html.twig') }}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('build/household.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,19 @@
+<div class="card-header clearfix bg-primary text-white">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="card-title">
+                {{ title }}<br>
+                ID: {{household.id}}; Head: <span id="household_heading">{{household.head.fname}} {{household.head.sname}}</span>
+                {% if household.dateAdded is not null %}<br> Date added: {{ household.dateAdded|date('m/d/Y') }}{% endif %}
+            </div>
+        </div>
+        <div class="col-2">
+            <a class="nav-link btn btn-info btn-sm border" href="{{ path('contact_new', {'id':household.id}) }}">Household contacts</a>    
+        </div>
+        <div class="col-2">
+            {% if 'household_show' == app.request.get('_route') %}
+                <a class="nav-link btn btn-info btn-sm mb-3 border-primary" href="{{ path('household_edit', {'id':household.id}) }}">Household edit</a>
+            {% endif %}
+        </div>
+    </div>
+</div>

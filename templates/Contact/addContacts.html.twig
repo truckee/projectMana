@@ -1,0 +1,50 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <form action="{{ path("contacts_add", {'source': source}) }}" method="post">
+        <div class="row ml-3">
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-header bg-info text-center">
+                        {{ 'Add contacts from '~source }}
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col">
+                                {{ form_row(form.contactDate) }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                {{ form_row(form.contactdesc) }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                {{ form_row(form.center)}}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                {{ form_row(form.householdId)}}
+                            </div>
+                        </div>
+                        <div id="dialog" title="Collecting data" style="font-size: 10pt;">Please wait while data being gathered</div>              
+                        <div id="householdById">
+                            <p>{{ form_row(form.householdId)}}</p>
+                            <button class="btn-sm btn-info" type="button" id="contact_household_button">Add household</button>
+                            {{ form_row(form._token) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8" id="contact_form">
+            </div>
+        </div>
+    </form>
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('newContacts') }}
+{% endblock %}
+

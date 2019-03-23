@@ -1,0 +1,16 @@
+{% set isHead = false %}
+{% if member.id == hohId %}{% set isHead = true %}{%endif%}
+<div id="row{{member.id}}" class="card-body"{% if isHead %} style="background-color: lightyellow;"{% endif %}>
+    <div class="row">
+        {{ render(controller('App\\Controller\\MemberController::memberHeadShowAction', {'id':member.id})) }}
+        <div class="col-lg-3">
+            <b>First name: </b><span id="fname{{member.id}}">{{ member.fname }}</span>
+        </div>
+        <div class="col-lg-3">
+            <b>Last name: </b> <span id="sname{{member.id}}">{{ member.sname }}</span>
+        </div>
+        <div class="col-lg-3">
+            <b>Date of birth: </b> <span id="dob{{member.id}}">{% if member.dob %}{{ member.dob|date('m/d/Y') }}{% endif %}</span>
+        </div>
+    </div>
+</div>

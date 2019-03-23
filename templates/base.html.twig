@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta Name="description"
+              Content="Project MANA aims to dramatically reduce the incidence of hunger and its effects on the communities on the north and west shores of Lake Tahoe and Truckee. We believe that adequate food for the maintenance of physical, emotional and mental health is a basic human right and in the overall best interest of our community.">
+        <meta Name="keywords"
+              Content="hunger, poverty, homelessness, community gardens, nutrition, Hispanic services, outreach, sustainable agriculture, non-profit, kids cooking, food, volunteering, Lake Tahoe, low-income, food pantry, Truckee, soup kitchen, emergency food relief, meals on wheels, gardening">
+        <title>Project MANA{% if title is defined %}: {{ title|raw }}{% endif %}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">        
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+
+        {% endblock %}
+    </head>
+    <body>
+        <div class="container">
+            <div><img src="{{ asset('build/banner.jpg') }}" alt="Project MANA banner"><span style="font-size: 18pt;">Making Adequate Nutrition Accessible</span>
+            </div>
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{label}}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% if is_granted('ROLE_USER') %}
+                {% block nav %}
+                    {% include 'Menu/main.html.twig' %}
+                {% endblock nav %}
+                <p class="text-center d-print-none">
+                    Welcome to the Project MANA distribution database application.
+                </p>
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{label}}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {% block body %}
+                {% endblock body %}
+            {% endif %}
+            {% block anon %}
+            {% endblock anon %}
+            {% block javascripts %}
+                {{ encore_entry_script_tags('app') }}
+            {% endblock %}
+        </div>
+    </body>
+</html>

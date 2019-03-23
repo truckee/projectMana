@@ -1,0 +1,31 @@
+<div class="card-body">
+    <div class="row">
+        <div class="col-lg-2">
+            {{ form_row(form.physicalAddress.physical) }}
+        </div>
+        <div class="col-lg-10" id="physical">
+            <div class="row">
+                <div class="col-lg-6">
+                    {{ form_row(form.physicalAddress.address.line1) }}
+                </div>
+                <div class="col-lg-6">
+                    {{ form_row(form.physicalAddress.address.line2) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    {{ form_row(form.physicalAddress.address.city) }}
+                </div>
+                <div class="col-lg-3">
+                    {{ form_row(form.physicalAddress.address.county) }}
+                </div>
+                <div class="col-lg-3">
+                    {{ form_row(form.physicalAddress.address.state) }}
+                </div>
+                <div class="col-lg-3">
+                    {{ form_row(form.physicalAddress.address.zip) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

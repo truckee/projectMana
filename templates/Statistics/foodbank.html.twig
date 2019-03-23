@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head></head>
+    <body>
+{% block body %}
+<table>
+{#  County unique individuals  #}
+    <tr>
+	<td>Placer</td>
+	<td>{{ ctyStats['Placer']['UIS'] }}</td>
+    </tr>
+    <tr>
+	<td>Nevada</td>
+	<td>{{ ctyStats['Nevada']['UIS'] }}</td>
+    </tr>
+    <tr>
+	<td>Washoe</td>
+	<td>{{ ctyStats['Washoe']['UIS'] }}</td>
+    </tr>
+{#  Age distribution  #}
+    <tr>
+	<td>Under6</td>
+	<td>{{ statistics['Under 6'] }}</td>
+    </tr>
+    <tr>
+	<td>SixToEightteen</td>
+	<td>{{ statistics['6 - 18'] }}</td>
+    </tr>
+    <tr>
+	<td>NiineteenToFiftynine</td>
+	<td>{{ statistics['19 - 59'] }}</td>
+    </tr>
+    <tr>
+	<td>SixtyOrMore</td>
+	<td>{{ statistics['60+'] }}</td>
+    </tr>
+{#  Gender/Adult/Children distribution  #}
+    <tr>
+	<td>Female Children</td>
+	<td>{{ statistics['FC'] }}</td>
+    </tr>
+    <tr>
+	<td>Male Children</td>
+	<td>{{ statistics['MC'] }}</td>
+    </tr>
+    <tr>
+	<td>Female Adults</td>
+	<td>{{ statistics['FA'] }}</td>
+    </tr>
+    <tr>
+	<td>Male Adults</td>
+	<td>{{ statistics['MA'] }}</td>
+    </tr>
+{# Ethnicity distribution   #}
+    <tr>
+	<td>Caucasian</td>
+	<td>{{ statistics['Caucasian'] }}</td>
+    </tr>
+    <tr>
+	<td>African-American</td>
+	<td>{{ statistics['African-American'] }}</td>
+    </tr>
+    <tr>
+	<td>Asian</td>
+	<td>{{ statistics['Asian'] }}</td>
+    </tr>
+    <tr>
+	<td>Hispanic</td>
+	<td>{{ statistics['Hispanic'] }}</td>
+    </tr>
+    <tr>
+	<td>Native American</td>
+	<td>{{ statistics['Native American'] }}</td>
+    </tr>
+    <tr>
+	<td>Hawaiian/Pacific Islander</td>
+	<td>{{ statistics['Hawaiian/Pacific Islander'] }}</td>
+    </tr>
+    <tr>
+	<td>Other</td>
+	<td>{{ statistics['Other'] }}</td>
+    </tr>
+{#  Residency distribution  #}
+    <tr>
+	<td>LessThanOneMo</td>
+	<td>{{ statistics['< 1 month'] }}</td>
+    </tr>
+    <tr>
+	<td>OneTo24Mo</td>
+	<td>{{ statistics['1 mo - 2 yrs'] }}</td>
+    </tr>
+    <tr>
+	<td>MoreThan24Mo</td>
+	<td>{{ statistics['>=2 yrs'] }}</td>
+    </tr>
+{# Distributions in month   #}
+    <tr>
+	<td>Once</td>
+	<td>{{ statistics['1x'] }}</td>
+    </tr>
+    <tr>
+	<td>Twice</td>
+	<td>{{ statistics['2x'] }}</td>
+    </tr>
+    <tr>
+	<td>ThreeTimes</td>
+	<td>{{ statistics['3x'] }}</td>
+    </tr>
+    <tr>
+	<td>FourOrMore</td>
+	<td>{{ statistics['4x'] }}</td>
+    </tr>
+    <tr>
+	<td>new</td>
+	<td>{{ statistics['Unique New Individuals'] }}</td>
+    </tr>
+    <tr>
+	<td>all</td>
+	<td>{{ statistics['UHS'] }}</td>
+    </tr>
+</table>
+{% endblock %}
+</body>
+</html>
