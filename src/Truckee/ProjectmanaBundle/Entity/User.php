@@ -118,11 +118,13 @@ class User extends BaseUser implements EncoderAwareInterface
      */
     private $encoderName = 'new';
     
-    public function getEncoderName() {
+    public function getEncoderName()
+    {
         return $this->encoderName;
     }
     
-    public function setEncoderName($name) {
+    public function setEncoderName($name)
+    {
         $this->encoderName = $name;
         
         return $this;

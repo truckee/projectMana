@@ -94,7 +94,7 @@ class MemberController extends Controller
 
         return $this->render(
             'Member/edit.html.twig',
-                [
+            [
                 'form' => $form->createView(),
                 'templates' => $templates,
                 'id' => $id,
@@ -150,7 +150,7 @@ class MemberController extends Controller
 
         return $this->render(
             'Member/add.html.twig',
-                [
+            [
                 'form' => $form->createView(),
                 'templates' => $templates,
                 'houseId' => $houseId,

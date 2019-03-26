@@ -32,7 +32,7 @@ class MenuBuilder
      * @param RequestStack $requestStack
      */
     public function __construct(
-    FactoryInterface $factory,
+        FactoryInterface $factory,
         AuthorizationCheckerInterface $checker,
         RequestStack $requestStack
     ) {

@@ -26,7 +26,6 @@ use Truckee\ProjectmanaBundle\Form\Field\YesNoChoiceType;
 
 class MemberType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -40,7 +39,8 @@ class MemberType extends AbstractType
                 'label' => 'DOB or age:',
             ))
             ->add(
-                'sex', ChoiceType::class,
+                'sex',
+                ChoiceType::class,
                 array(
                     'label' => 'Gender:',
                     'placeholder' => 'Select gender',
@@ -48,7 +48,8 @@ class MemberType extends AbstractType
                 )
             )
             ->add(
-                'ethnicity', EntityType::class,
+                'ethnicity',
+                EntityType::class,
                 array(
                     'label' => 'Ethnicity:',
                     'class' => 'TruckeeProjectmanaBundle:Ethnicity',
@@ -74,7 +75,8 @@ class MemberType extends AbstractType
             ->add('excludeDate', DateType::class, array(
             ))
             ->add(
-                'relation', EntityType::class,
+                'relation',
+                EntityType::class,
                 array(
                     'label' => 'Relationship:',
                     'class' => 'TruckeeProjectmanaBundle:Relationship',
@@ -95,13 +97,16 @@ class MemberType extends AbstractType
                 )
             )
             ->add(
-                'isHead', CheckboxType::class, array(
+                'isHead',
+                CheckboxType::class,
+                array(
                     'mapped' => false,
                     'label' => 'Head? ',
                 )
             )
             ->add(
-                'jobs', EntityType::class,
+                'jobs',
+                EntityType::class,
                 array(
                     'class' => 'TruckeeProjectmanaBundle:Work',
                     'choice_label' => 'job',

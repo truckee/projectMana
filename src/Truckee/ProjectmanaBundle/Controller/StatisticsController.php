@@ -81,8 +81,8 @@ class StatisticsController extends Controller
         }
 
         return $this->render(
-                'Statistics/report_criteria.html.twig',
-                array(
+            'Statistics/report_criteria.html.twig',
+            array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'stats_general',
@@ -129,8 +129,8 @@ class StatisticsController extends Controller
         }
 
         return $this->render(
-                'Statistics/report_criteria.html.twig',
-                array(
+            'Statistics/report_criteria.html.twig',
+            array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'title' => 'Report criteria',
@@ -172,8 +172,8 @@ class StatisticsController extends Controller
             }
 
             return $this->render(
-                    'Statistics/multi.html.twig',
-                    array('multi' => $multi,
+                'Statistics/multi.html.twig',
+                array('multi' => $multi,
                         'title' => 'Multiple contacts',
                         'reportHeader' => $this->getReportHeader($templateCriteria),
                     )
@@ -181,8 +181,8 @@ class StatisticsController extends Controller
         }
 
         return $this->render(
-                'Statistics/report_criteria.html.twig',
-                array(
+            'Statistics/report_criteria.html.twig',
+            array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'title' => 'Report criteria',
@@ -253,8 +253,8 @@ class StatisticsController extends Controller
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
-                    'Statistics/profile.html.twig',
-                    [
+                'Statistics/profile.html.twig',
+                [
                         'colLabels' => $colLabels,
                         'date' => new \DateTime(),
                         'profile' => $profile,
@@ -268,8 +268,8 @@ class StatisticsController extends Controller
         }
 
         return $this->render(
-                'Statistics/report_criteria.html.twig',
-                array(
+            'Statistics/report_criteria.html.twig',
+            array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'employment_profile',
@@ -312,8 +312,8 @@ class StatisticsController extends Controller
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
-                    'Statistics/profile.html.twig',
-                    [
+                'Statistics/profile.html.twig',
+                [
                         'colLabels' => $colLabels,
                         'date' => new \DateTime(),
                         'profile' => $profile,
@@ -327,8 +327,8 @@ class StatisticsController extends Controller
         }
 
         return $this->render(
-                'Statistics/report_criteria.html.twig',
-                array(
+            'Statistics/report_criteria.html.twig',
+            array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'housing_profile',
@@ -371,8 +371,8 @@ class StatisticsController extends Controller
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
-                    'Statistics/profile.html.twig',
-                    [
+                'Statistics/profile.html.twig',
+                [
                         'colLabels' => $colLabels,
                         'date' => new \DateTime(),
                         'profile' => $profile,
@@ -386,8 +386,8 @@ class StatisticsController extends Controller
         }
 
         return $this->render(
-                'Statistics/report_criteria.html.twig',
-                array(
+            'Statistics/report_criteria.html.twig',
+            array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'income_profile',
@@ -429,8 +429,8 @@ class StatisticsController extends Controller
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
-                    'Statistics/profile.html.twig',
-                    [
+                'Statistics/profile.html.twig',
+                [
                         'colLabels' => $colLabels,
                         'date' => new \DateTime(),
                         'profile' => $profile,
@@ -444,8 +444,8 @@ class StatisticsController extends Controller
         }
 
         return $this->render(
-                'Statistics/report_criteria.html.twig',
-                array(
+            'Statistics/report_criteria.html.twig',
+            array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'reason_profile',
@@ -489,8 +489,8 @@ class StatisticsController extends Controller
         }
 
         return $this->render(
-                'Statistics/report_criteria.html.twig',
-                array(
+            'Statistics/report_criteria.html.twig',
+            array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'snap_profile',
@@ -527,8 +527,8 @@ class StatisticsController extends Controller
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
-                    'Statistics/profile.html.twig',
-                    [
+                'Statistics/profile.html.twig',
+                [
                         'colLabels' => $colLabels,
                         'date' => new \DateTime(),
                         'profile' => $profile,
@@ -542,8 +542,8 @@ class StatisticsController extends Controller
         }
 
         return $this->render(
-                'Statistics/report_criteria.html.twig',
-                array(
+            'Statistics/report_criteria.html.twig',
+            array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'assistance_profile',
@@ -580,8 +580,8 @@ class StatisticsController extends Controller
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
-                    'Statistics/profile.html.twig',
-                    [
+                'Statistics/profile.html.twig',
+                [
                         'colLabels' => $colLabels,
                         'date' => new \DateTime(),
                         'profile' => $profile,
@@ -595,8 +595,8 @@ class StatisticsController extends Controller
         }
 
         return $this->render(
-                'Statistics/report_criteria.html.twig',
-                array(
+            'Statistics/report_criteria.html.twig',
+            array(
                     'form' => $form->createView(),
                     'criteriaTemplates' => $criteriaTemplates,
                     'formPath' => 'organization_profile',
@@ -641,8 +641,8 @@ class StatisticsController extends Controller
         $profile = $crosstab->crosstabQuery($reportData['data'], $reportData['rowLabels'], $reportData['colLabels']);
 
         return $this->renderView(
-                'Statistics/profile_content.html.twig',
-                ['profile' => $profile,
+            'Statistics/profile_content.html.twig',
+            ['profile' => $profile,
                     'rowHeader' => $reportData['rowHeader'],
                     'rowLabels' => $reportData['rowLabels'],
                     'colLabels' => $reportData['colLabels'],

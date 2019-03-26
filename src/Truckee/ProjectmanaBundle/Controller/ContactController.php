@@ -72,7 +72,7 @@ class ContactController extends Controller
 
         return $this->render(
             'Contact/edit.html.twig',
-                array(
+            array(
                     'form' => $form->createView(),
                     'household' => $household,
                     'title' => 'New Contact',
@@ -119,7 +119,7 @@ class ContactController extends Controller
 
         return $this->render(
             'Contact/edit.html.twig',
-                array(
+            array(
                     'household' => $contact->getHousehold(),
                     'form' => $form->createView(),
                     'contact' => $contact,
@@ -167,7 +167,7 @@ class ContactController extends Controller
 
         return $this->render(
             'Contact/delete.html.twig',
-                array(
+            array(
                     'contact' => $contact,
                     'form' => $form->createView(),
                     'title' => 'Delete Contact',
@@ -215,14 +215,14 @@ class ContactController extends Controller
 
                 return $this->redirectToRoute(
                     'contacts_add',
-                        ['source' => $source]
+                    ['source' => $source]
                 );
             }
         }
 
         return $this->render(
             'Contact/addContacts.html.twig',
-                array(
+            array(
                     'form' => $form->createView(),
                     'title' => 'Add contacts',
                     'source' => $source,
@@ -280,7 +280,7 @@ class ContactController extends Controller
     public function latestReportAction(
         Request $request,
         PdfService $pdf,
-                                       $source
+        $source
     ) {
         $center = new Center();
         $form = $this->createForm(SelectCenterType::class, $center);
@@ -305,13 +305,13 @@ class ContactController extends Controller
 
                 return $this->redirectToRoute(
                     'latest_contacts',
-                        ['source' => $source]
+                    ['source' => $source]
                 );
             }
             $date = new \DateTime($found['latestDate']);
             $filename = str_replace(' ', '', $source . $location) . date_format(
                 $date,
-                    '_Ymd'
+                '_Ymd'
             ) . '.pdf';
             $header = $this->renderView(
                 'Pdf/Contact/rosterHeader.html.twig',
@@ -349,7 +349,7 @@ class ContactController extends Controller
 
         return $this->render(
             'Contact/latestReport.html.twig',
-                array(
+            array(
                     'title' => 'Select center',
                     'form' => $form->createView(),
                     'source' => $source,

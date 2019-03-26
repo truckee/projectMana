@@ -790,5 +790,4 @@ class Household
     {
         return $this->phoneNumber;
     }
-
 }

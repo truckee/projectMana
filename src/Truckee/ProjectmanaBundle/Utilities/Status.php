@@ -72,8 +72,8 @@ class Status
                     $id = $household['id'];
                     $this->conn->update(
                         'household',
-                            array('active' => 1),
-                            array('id' => $id)
+                        array('active' => 1),
+                        array('id' => $id)
                     );
                 }
             } else {
@@ -83,8 +83,8 @@ class Status
                     $id = $household['id'];
                     $this->conn->update(
                         'household',
-                            array('active' => 0),
-                            array('id' => $id)
+                        array('active' => 0),
+                        array('id' => $id)
                     );
                 }
             }

@@ -13,7 +13,8 @@ namespace Truckee\ProjectmanaBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 
-class HouseholdRepository extends EntityRepository {
+class HouseholdRepository extends EntityRepository
+{
 
     /**
      * Add contact to set of households
@@ -21,7 +22,8 @@ class HouseholdRepository extends EntityRepository {
      * @param array $households
      * @param array $contactData
      */
-    public function addContacts($households, $contactData) {
+    public function addContacts($households, $contactData)
+    {
         $em = $this->getEntityManager();
         foreach ($households as $id) {
             $household = $em->getRepository('TruckeeProjectmanaBundle:Household')->find($id);
@@ -45,7 +47,8 @@ class HouseholdRepository extends EntityRepository {
     /**
      * Annual turkey report
      */
-    public function annualTurkey() {
+    public function annualTurkey()
+    {
         $jan1 = new \DateTime('first day of January');
         $jul1 = new \DateTime('first day of July');
 
@@ -67,7 +70,8 @@ class HouseholdRepository extends EntityRepository {
                         ->getResult();
     }
 
-    public function size($criteria) {
+    public function size($criteria)
+    {
         $parameters = array_merge($criteria['startParameters'], $criteria['startParameters'], ['hArray' => $this->reportHousehold($criteria)]);
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -85,7 +89,8 @@ class HouseholdRepository extends EntityRepository {
         return $sizeData;
     }
 
-    public function householdResidency($criteria) {
+    public function householdResidency($criteria)
+    {
         $startDate = $criteria['startParameters']['startDate'];
         $testYear = date_format($startDate, 'Y');
         $testMo = date_format($startDate, 'm');
@@ -106,7 +111,8 @@ class HouseholdRepository extends EntityRepository {
         return $houseRes;
     }
 
-    public function reportHousehold($criteria) {
+    public function reportHousehold($criteria)
+    {
         $parameters = array_merge($criteria['betweenParameters'], $criteria['siteParameters'], $criteria['contactParameters']);
 
         return $this->createQueryBuilder('h')
@@ -120,7 +126,8 @@ class HouseholdRepository extends EntityRepository {
         ;
     }
 
-    public function seekingServices() {
+    public function seekingServices()
+    {
         return $this->createQueryBuilder('h')
                         ->select('distinct h.id, h.seeking')
                         ->join('h.contacts', 'c')
@@ -130,7 +137,8 @@ class HouseholdRepository extends EntityRepository {
         ;
     }
 
-    public function receivingServices() {
+    public function receivingServices()
+    {
         return $this->createQueryBuilder('h')
                         ->select('distinct h.id, h.receiving')
                         ->join('h.contacts', 'c')
@@ -139,5 +147,4 @@ class HouseholdRepository extends EntityRepository {
                         ->getQuery()->getResult()
         ;
     }
-
 }
