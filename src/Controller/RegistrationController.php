@@ -150,6 +150,7 @@ class RegistrationController extends AbstractController {
             $invitee->setFname($user->getFname());
             $invitee->setSname($user->getSname());
             $invitee->setEmail($user->getEmail());
+            $invitee->setUsername($user->getUsername());
             $invitee->setToken($token);
 
             $em->persist($invitee);
