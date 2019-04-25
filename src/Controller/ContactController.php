@@ -28,8 +28,8 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @Route("/contact")
  */
-class ContactController extends AbstractController {
-
+class ContactController extends AbstractController
+{
     use \App\Services\FYFunction;
 
     /**
@@ -41,13 +41,14 @@ class ContactController extends AbstractController {
      *
      * @Route("/{id}/new", name="contact_new")
      */
-    public function newAction(Request $request, $id) {
+    public function newAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('App:Household')->find($id);
         if (!$household) {
             $this->addFlash(
-                    'danger',
-                    'Unable to find Household ' . $id
+                'danger',
+                'Unable to find Household ' . $id
             );
             return $this->redirectToRoute('home');
         }
@@ -68,15 +69,15 @@ class ContactController extends AbstractController {
             $em->persist($household);
             $em->flush();
             $this->addFlash(
-                    'info',
-                    "Contact added for household $id"
+                'info',
+                "Contact added for household $id"
             );
             return $this->redirectToRoute('contact_new', array('id' => $id));
         }
 
         return $this->render(
-                        'Contact/edit.html.twig',
-                        array(
+            'Contact/edit.html.twig',
+            array(
                             'form' => $form->createView(),
                             'household' => $household,
                             'title' => 'New Contact',
@@ -93,22 +94,23 @@ class ContactController extends AbstractController {
      *
      * @Route("/{id}/edit", name="contact_edit")
      */
-    public function editAction(Request $request, Searches $searches, $id) {
+    public function editAction(Request $request, Searches $searches, $id)
+    {
         $em = $this->getDoctrine()->getManager();
         $contact = $em->getRepository('App:Contact')->find($id);
         if (!$contact) {
             $this->addFlash(
-                    'danger',
-                    'Unable to find contact'
+                'danger',
+                'Unable to find contact'
             );
             return $this->redirectToRoute('home');
         }
 //        $searches = $this->get('mana.searches');
         $disabledOptions = $searches->getDisabledOptions($contact);
         $form = $this->createForm(
-                ContactType::class,
-                $contact,
-                ['disabledOptions' => $disabledOptions]
+            ContactType::class,
+            $contact,
+            ['disabledOptions' => $disabledOptions]
         );
         $form->handleRequest($request);
 
@@ -117,15 +119,15 @@ class ContactController extends AbstractController {
             $em->flush();
             $hid = $contact->getHousehold()->getId();
             $this->addFlash(
-                    'info',
-                    'Contact has been updated'
+                'info',
+                'Contact has been updated'
             );
             return $this->redirectToRoute('contact_new', array('id' => $hid));
         }
 
         return $this->render(
-                        'Contact/edit.html.twig',
-                        array(
+            'Contact/edit.html.twig',
+            array(
                             'household' => $contact->getHousehold(),
                             'form' => $form->createView(),
                             'contact' => $contact,
@@ -143,22 +145,23 @@ class ContactController extends AbstractController {
      *
      * @Route("/{id}/delete", name="contact_delete")
      */
-    public function deleteAction(Request $request, Searches $searches, $id) {
+    public function deleteAction(Request $request, Searches $searches, $id)
+    {
         $em = $this->getDoctrine()->getManager();
         $contact = $em->getRepository('App:Contact')->find($id);
         if (null === $contact) {
             $this->addFlash(
-                    'warning',
-                    'Contact does not exist'
+                'warning',
+                'Contact does not exist'
             );
             return $this->redirectToRoute('home');
         }
 //        $searches = $this->get('mana.searches');
         $disabledOptions = $searches->getDisabledOptions($contact);
         $form = $this->createForm(
-                ContactType::class,
-                $contact,
-                ['disabledOptions' => $disabledOptions]
+            ContactType::class,
+            $contact,
+            ['disabledOptions' => $disabledOptions]
         );
         if ($request->isMethod('POST')) {
             $household = $contact->getHousehold();
@@ -167,15 +170,15 @@ class ContactController extends AbstractController {
             $em->persist($household);
             $em->flush();
             $this->addFlash(
-                    'info',
-                    'Contact has been deleted'
+                'info',
+                'Contact has been deleted'
             );
             return $this->redirectToRoute('contact_new', array('id' => $hid));
         }
 
         return $this->render(
-                        'Contact/delete.html.twig',
-                        array(
+            'Contact/delete.html.twig',
+            array(
                             'contact' => $contact,
                             'form' => $form->createView(),
                             'title' => 'Delete Contact',
@@ -195,7 +198,8 @@ class ContactController extends AbstractController {
      *
      * @Route("/addContacts/{source}", name="contacts_add")
      */
-    public function addContactsAction(Request $request, $source) {
+    public function addContactsAction(Request $request, $source)
+    {
         $contact = new Contact();
         $form = $this->createForm(ContactType::class, $contact);
         $form->handleRequest($request);
@@ -212,28 +216,28 @@ class ContactController extends AbstractController {
             $n = count($households);
             if ($n !== 0) {
                 $em->getRepository('App:Household')->addContacts(
-                        $households,
-                        $contactData
+                    $households,
+                    $contactData
                 );
                 $this->addFlash(
-                        'info',
-                        "$n $desc contacts added for $centerName"
+                    'info',
+                    "$n $desc contacts added for $centerName"
                 );
             } else {
                 $this->addFlash(
-                        'warning',
-                        'No contacts were added'
+                    'warning',
+                    'No contacts were added'
                 );
                 return $this->redirectToRoute(
-                                'contacts_add',
-                                ['source' => $source]
+                    'contacts_add',
+                    ['source' => $source]
                 );
             }
         }
 
         return $this->render(
-                        'Contact/addContacts.html.twig',
-                        array(
+            'Contact/addContacts.html.twig',
+            array(
                             'form' => $form->createView(),
                             'title' => 'Add contacts',
                             'source' => $source,
@@ -251,7 +255,8 @@ class ContactController extends AbstractController {
      *
      * @Route("/latest/{site}/{source}")
      */
-    public function mostRecentContactsAction($site, Searches $searches, $source) {
+    public function mostRecentContactsAction($site, Searches $searches, $source)
+    {
         $em = $this->getDoctrine()->getManager();
         $center = $em->getRepository('App:Center')->find($site);
 //        $searches = $this->get('mana.searches');
@@ -264,8 +269,8 @@ class ContactController extends AbstractController {
             $contacts['latestDate'] = new \DateTime();
         }
         $content = $this->renderView(
-                'Contact/mostRecentContacts.html.twig',
-                [
+            'Contact/mostRecentContacts.html.twig',
+            [
                     'contacts' => $contacts['contacts'],
                     'latestDate' => $contacts['latestDate'],
                     'site' => $center,
@@ -288,9 +293,10 @@ class ContactController extends AbstractController {
      * @Route("/latestReport/{source}", name="latest_contacts")
      */
     public function latestReportAction(
-            Request $request, Searches $searches,
-            EnvService $pdf,
-            $source
+        Request $request,
+        Searches $searches,
+        EnvService $pdf,
+        $source
     ) {
         $center = new Center();
         $form = $this->createForm(SelectCenterType::class, $center);
@@ -310,30 +316,30 @@ class ContactController extends AbstractController {
             }
             if (count($found['contacts']) == 0 || empty($found)) {
                 $this->addFlash(
-                        'info',
-                        "No contacts found for $location"
+                    'info',
+                    "No contacts found for $location"
                 );
                 return $this->redirectToRoute(
-                                'latest_contacts',
-                                ['source' => $source]
+                    'latest_contacts',
+                    ['source' => $source]
                 );
             }
             $date = new \DateTime($found['latestDate']);
             $filename = str_replace(' ', '', $source . $location) . date_format(
-                            $date,
-                            '_Ymd'
+                $date,
+                '_Ymd'
                     ) . '.pdf';
             $header = $this->renderView(
-                    'Pdf/Contact/rosterHeader.html.twig',
-                    [
+                'Pdf/Contact/rosterHeader.html.twig',
+                [
                         'date' => $found['latestDate'],
                         'center' => $location,
                         'source' => $source,]
             );
 
             $html = $this->renderView(
-                    'Pdf/Contact/rosterContent.html.twig',
-                    [
+                'Pdf/Contact/rosterContent.html.twig',
+                [
                         'date' => $found['latestDate'],
                         'center' => $location,
                         'source' => $source,
@@ -347,9 +353,9 @@ class ContactController extends AbstractController {
             $snappy->setOption('footer-center', 'Page [page]');
             $content = $snappy->getOutputFromHtml($html);
             $response = new Response(
-                    $content,
-                    200,
-                    [
+                $content,
+                200,
+                [
                 'Content-Type' => 'application/pdf',
                 'Content-Disposition' => 'attachment; filename=' . urlencode($filename) . '.pdf',
                     ]
@@ -359,13 +365,12 @@ class ContactController extends AbstractController {
         }
 
         return $this->render(
-                        'Contact/latestReport.html.twig',
-                        array(
+            'Contact/latestReport.html.twig',
+            array(
                             'title' => 'Select center',
                             'form' => $form->createView(),
                             'source' => $source,
                         )
         );
     }
-
 }

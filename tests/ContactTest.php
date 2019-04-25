@@ -15,17 +15,20 @@ namespace Tests;
 
 //use App\Tests\TruckeeWebTestCase;
 //use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+;
 //use Doctrine\DBAL\Driver\Mysqli;
 
 /**
  * ContactTest.
  */
-class ContactTest extends WebTestCase {
-
+class ContactTest extends WebTestCase
+{
     private $reference;
 
-    public function setup() {
+    public function setup()
+    {
         $this->client = static::createClient();
         $this->client->followRedirects();
 
@@ -53,7 +56,8 @@ class ContactTest extends WebTestCase {
         }
     }
 
-    public function login() {
+    public function login()
+    {
         $crawler = $this->client->request('GET', '/login');
         $form = $crawler->selectButton('Sign in')->form();
         $form['username'] = 'admin@bogus.info';
@@ -63,7 +67,8 @@ class ContactTest extends WebTestCase {
         return $crawler;
     }
 
-    public function testHouse1ContactExists() {
+    public function testHouse1ContactExists()
+    {
         $crawler = $this->login();
         $id = $this->reference['Household1']->getId();
         $crawler = $this->client->request('GET', '/household/' . $id . '/show');
@@ -71,7 +76,8 @@ class ContactTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Placer")')->count());
     }
 
-    public function testHouse3ContactExists() {
+    public function testHouse3ContactExists()
+    {
         $crawler = $this->login();
         $id = $this->reference['Household3']->getId();
         $crawler = $this->client->request('GET', '/household/' . $id . '/show');
@@ -80,7 +86,8 @@ class ContactTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Placer")')->count());
     }
 
-    public function testNewContact() {
+    public function testNewContact()
+    {
         $crawler = $this->login();
         $id = $this->reference['Household1']->getId();
         $crawler = $this->client->request('GET', '/contact/' . $id . '/new');
@@ -97,7 +104,8 @@ class ContactTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Contact added for household")')->count());
     }
 
-    public function testNewContactValidation() {
+    public function testNewContactValidation()
+    {
         $crawler = $this->login();
         $id = $this->reference['Household1']->getId();
         $crawler = $this->client->request('GET', '/contact/' . $id . '/new');
@@ -112,7 +120,8 @@ class ContactTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Site must be selected")')->count());
     }
 
-    public function testEditContact() {
+    public function testEditContact()
+    {
         $crawler = $this->login();
         $id = $id = $this->reference['Contact1']->getId();
         $crawler = $this->client->request('GET', '/contact/' . $id . '/edit');
@@ -127,7 +136,8 @@ class ContactTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Contact has been updated")')->count());
     }
 
-    public function testDeleteContact() {
+    public function testDeleteContact()
+    {
         $crawler = $this->login();
         $id = $id = $this->reference['Contact1']->getId();
         $crawler = $this->client->request('GET', '/contact/' . $id . '/delete');
@@ -144,7 +154,8 @@ class ContactTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Contact does not exist")')->count());
     }
 
-    public function testMostRecentContacts() {
+    public function testMostRecentContacts()
+    {
         $crawler = $this->login();
         $crawler = $this->client->request('GET', '/contact/latestReport/Most recent');
         $truckee = $this->reference['Center2']->getId();
@@ -155,7 +166,8 @@ class ContactTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("No contacts found")')->count());
     }
 
-    public function testFYToDateContacts() {
+    public function testFYToDateContacts()
+    {
         $crawler = $this->login();
         $crawler = $this->client->request('GET', '/contact/latestReport/FY to date');
         $incline = $this->reference['Center2']->getId();
@@ -166,7 +178,8 @@ class ContactTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("No contacts found")')->count());
     }
 
-    public function testMostRecentResponse() {
+    public function testMostRecentResponse()
+    {
         $crawler = $this->login();
         $truckee = $this->reference['Center3']->getId();
         $crawler = $this->client->request('GET', '/contact/latest/' . $truckee . '/Most recent');
@@ -174,7 +187,8 @@ class ContactTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Most recent contacts for Truckee")')->count());
     }
 
-    public function testFYToDateResponse() {
+    public function testFYToDateResponse()
+    {
         $crawler = $this->login();
         $truckee = $this->reference['Center3']->getId();
         $crawler = $this->client->request('GET', '/contact/latest/' . $truckee . '/FY to date');
@@ -182,7 +196,8 @@ class ContactTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("FY to date contacts for Truckee")')->count());
     }
 
-    public function testHouseholdToContactsAndBack() {
+    public function testHouseholdToContactsAndBack()
+    {
         $crawler = $this->login();
         $id = $this->reference['Household1']->getId();
         $crawler = $this->client->request('GET', '/household/' . $id . '/show');
@@ -197,9 +212,9 @@ class ContactTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Household View")')->count());
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         unset($this->client);
         unset($this->reference);
     }
-
 }

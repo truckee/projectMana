@@ -130,7 +130,8 @@ class GeneralStatisticsReport
         return $eth;
     }
 
-    private function setResDist($sizeData, $householdResData) {
+    private function setResDist($sizeData, $householdResData)
+    {
         $houseSize = [];
         foreach ($sizeData as $array) {
             $houseSize[$array['id']]['N'] = $array['size'];

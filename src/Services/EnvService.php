@@ -16,7 +16,6 @@ use Symfony\Component\Dotenv\Dotenv;
 
 class EnvService
 {
-
     public function pdfExecutable()
     {
         $dotenv = new Dotenv();

@@ -23,9 +23,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author George Brooks <truckeesolutions@gmail.com>
  */
-class InvitationType extends AbstractType {
-
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+class InvitationType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder
                 ->add('fname', TextType::class, [
                     'label' => 'First name: ',
@@ -43,18 +44,18 @@ class InvitationType extends AbstractType {
                     'label' => 'Email: ',
                     'label_attr' => ['class' => 'mr-2'],
                 ])
-                ->add('token', HiddenType::class, [
+                ->add('confirmationToken', HiddenType::class, [
                     'data' => md5(uniqid(rand(), true)),
                 ])
                 ->add('submit', SubmitType::class)
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver) {
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'data_class' => Invitation::class,
             'required' => false,
         ));
     }
-
 }

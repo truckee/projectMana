@@ -23,7 +23,8 @@ use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields="email", message="Email already registered")
  */
-class User implements UserInterface, EncoderAwareInterface {
+class User implements UserInterface, EncoderAwareInterface
+{
 
     /**
      * @ORM\Id()
@@ -62,7 +63,7 @@ class User implements UserInterface, EncoderAwareInterface {
      */
     private $sname;
 
-// BEGIN legacy field names retained for backwards compatibility
+    // BEGIN legacy field names retained for backwards compatibility
     /**
      * @ORM\Column(type="string", nullable=false)
      */
@@ -84,41 +85,46 @@ class User implements UserInterface, EncoderAwareInterface {
     private $last_login;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", nullable=true, name="confirmation_token")
      */
-    private $confirmation_token;
+    private $confirmationToken;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(nullable=true, name="password_expires_at", type="datetime")
      */
-    private $password_requested_at;
+    private $passwordExpiresAt;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $salt;
+//    /**
+//     * @ORM\Column(type="string", nullable=true)
+//     */
+//    private $salt;
 
-// END legacy field names
+    // END legacy field names
 
-    public function getId(): ?int {
+    public function getId(): ?int
+    {
         return $this->id;
     }
 
-    public function getEmail(): ?string {
+    public function getEmail(): ?string
+    {
         return $this->email;
     }
 
-    public function setEmail(?string $email): self {
+    public function setEmail(?string $email): self
+    {
         $this->email = $email;
 
         return $this;
     }
 
-    public function getUsername() {
+    public function getUsername()
+    {
         return $this->username;
     }
 
-    public function setUsername($username) {
+    public function setUsername($username)
+    {
         $this->username = $username;
         
         return $this;
@@ -127,7 +133,8 @@ class User implements UserInterface, EncoderAwareInterface {
     /**
      * @see UserInterface
      */
-    public function getRoles(): array {
+    public function getRoles(): array
+    {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
@@ -135,7 +142,8 @@ class User implements UserInterface, EncoderAwareInterface {
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): self {
+    public function setRoles(array $roles): self
+    {
         $this->roles = $roles;
 
         return $this;
@@ -144,11 +152,13 @@ class User implements UserInterface, EncoderAwareInterface {
     /**
      * @see UserInterface
      */
-    public function getPassword(): string {
+    public function getPassword(): string
+    {
         return (string) $this->password;
     }
 
-    public function setPassword(string $password): self {
+    public function setPassword(string $password): self
+    {
         $this->password = $password;
 
         return $this;
@@ -159,11 +169,13 @@ class User implements UserInterface, EncoderAwareInterface {
      *
      * @return string
      */
-    public function getSname() {
+    public function getSname()
+    {
         return $this->sname;
     }
 
-    public function setSname(?string $sname): self {
+    public function setSname(?string $sname): self
+    {
         $this->sname = $sname;
 
         return $this;
@@ -174,21 +186,25 @@ class User implements UserInterface, EncoderAwareInterface {
      *
      * @return string
      */
-    public function getFname() {
+    public function getFname()
+    {
         return $this->fname;
     }
 
-    public function setFname(?string $fname): self {
+    public function setFname(?string $fname): self
+    {
         $this->fname = $fname;
 
         return $this;
     }
 
-    public function hasRoleAdmin() {
+    public function hasRoleAdmin()
+    {
         return (in_array('ROLE_ADMIN', $this->getRoles())) ? 'Yes' : 'No';
     }
 
-    public function setHasRoleAdmin($isAdmin) {
+    public function setHasRoleAdmin($isAdmin)
+    {
         $roles = $this->getRoles();
         if ('Yes' === $isAdmin && 'No' === $this->hasRoleAdmin()) {
             $roles[] = 'ROLE_ADMIN';
@@ -205,11 +221,13 @@ class User implements UserInterface, EncoderAwareInterface {
      */
     private $encoderName = 'new';
 
-    public function getEncoderName() {
+    public function getEncoderName()
+    {
         return $this->encoderName;
     }
 
-    public function setEncoderName($name) {
+    public function setEncoderName($name)
+    {
         $this->encoderName = $name;
 
         return $this;
@@ -226,20 +244,45 @@ class User implements UserInterface, EncoderAwareInterface {
         $this->enabled = (bool) $boolean;
 
         return $this;
-    }    
+    }
 
     public function isEnabled()
     {
         return $this->enabled;
     }
-    
- 
-// required by interface, otherwise irrelevant    
-    
-    public function eraseCredentials() {
-}
 
-    public function getSalt() {
+    public function getConfirmationToken()
+    {
+        return $this->confirmationToken;
     }
 
+    public function getpasswordExpiresAt()
+    {
+        return $this->passwordExpiresAt;
+    }
+
+    public function setConfirmationToken($confirmationToken)
+    {
+        $this->confirmationToken = $confirmationToken;
+
+        return $this;
+    }
+
+    public function setPasswordExpiresAt(\DateTime $date = null)
+    {
+        $this->passwordExpiresAt = $date;
+
+        return $this;
+    }
+    
+ 
+    // required by interface, otherwise irrelevant
+    
+    public function eraseCredentials()
+    {
+    }
+
+    public function getSalt()
+    {
+    }
 }

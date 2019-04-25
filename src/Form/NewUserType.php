@@ -21,9 +21,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author George Brooks <truckeesolutions@gmail.com>
  */
-class NewUserType extends AbstractType {
-
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+class NewUserType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder
                 ->add('plainPassword', RepeatedType::class, array(
                     'type' => PasswordType::class,
@@ -34,11 +35,11 @@ class NewUserType extends AbstractType {
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver) {
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'data_class' => User::class,
             'required' => false,
         ));
     }
-
 }

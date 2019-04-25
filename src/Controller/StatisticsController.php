@@ -27,7 +27,8 @@ use App\Services\GeneralStatisticsReport as General;
  *
  * @Route("/reports")
  */
-class StatisticsController extends AbstractController {
+class StatisticsController extends AbstractController
+{
 
     /**
      * General statistics report.
@@ -38,7 +39,8 @@ class StatisticsController extends AbstractController {
      *
      * @Route("/general", name="stats_general")
      */
-    public function generalAction(Request $request, CountyStatistics $countyStats, CriteriaBuilder $builder, General $general) {
+    public function generalAction(Request $request, CountyStatistics $countyStats, CriteriaBuilder $builder, General $general)
+    {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
         $criteriaTemplates[] = 'Statistics/typeLocationCriteria.html.twig';
@@ -80,8 +82,8 @@ class StatisticsController extends AbstractController {
         }
 
         return $this->render(
-                        'Statistics/report_criteria.html.twig',
-                        array(
+            'Statistics/report_criteria.html.twig',
+            array(
                             'form' => $form->createView(),
                             'criteriaTemplates' => $criteriaTemplates,
                             'formPath' => 'stats_general',
@@ -100,7 +102,8 @@ class StatisticsController extends AbstractController {
      *
      * @Route("/details", name="stats_details")
      */
-    public function detailsAction(Request $request, CriteriaBuilder $builder, Detail $detail) {
+    public function detailsAction(Request $request, CriteriaBuilder $builder, Detail $detail)
+    {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
         $form->handleRequest($request);
@@ -127,8 +130,8 @@ class StatisticsController extends AbstractController {
         }
 
         return $this->render(
-                        'Statistics/report_criteria.html.twig',
-                        array(
+            'Statistics/report_criteria.html.twig',
+            array(
                             'form' => $form->createView(),
                             'criteriaTemplates' => $criteriaTemplates,
                             'title' => 'Report criteria',
@@ -147,7 +150,8 @@ class StatisticsController extends AbstractController {
      *
      * @Route("/multi", name="multi_contacts")
      */
-    public function multiAction(Request $request, CriteriaBuilder $builder) {
+    public function multiAction(Request $request, CriteriaBuilder $builder)
+    {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
         $form->handleRequest($request);
@@ -160,8 +164,8 @@ class StatisticsController extends AbstractController {
             $multi = $em->getRepository('App:Contact')->getMultiContacts($criteria);
             if (count($multi) == 0) {
                 $this->addFlash(
-                        'info',
-                        'No instances of multiple same-date contacts found'
+                    'info',
+                    'No instances of multiple same-date contacts found'
                 );
                 if (empty($request->headers->get('referer'))) {
                     return $this->redirectToRoute('home');
@@ -171,8 +175,8 @@ class StatisticsController extends AbstractController {
             }
 
             return $this->render(
-                            'Statistics/multi.html.twig',
-                            array('multi' => $multi,
+                'Statistics/multi.html.twig',
+                array('multi' => $multi,
                                 'title' => 'Multiple contacts',
                                 'reportHeader' => $this->getReportHeader($templateCriteria),
                             )
@@ -180,8 +184,8 @@ class StatisticsController extends AbstractController {
         }
 
         return $this->render(
-                        'Statistics/report_criteria.html.twig',
-                        array(
+            'Statistics/report_criteria.html.twig',
+            array(
                             'form' => $form->createView(),
                             'criteriaTemplates' => $criteriaTemplates,
                             'title' => 'Report criteria',
@@ -201,7 +205,8 @@ class StatisticsController extends AbstractController {
      *
      * @Route("/foodbank/{year}/{month}", name="foodbank")
      */
-    public function foodbankAction($month, $year, CriteriaBuilder $builder, General $general, CountyStatistics $countyStats) {
+    public function foodbankAction($month, $year, CriteriaBuilder $builder, General $general, CountyStatistics $countyStats)
+    {
         $foodbankCriteria = array(
             'startMonth' => $month,
             'startYear' => $year,
@@ -231,7 +236,8 @@ class StatisticsController extends AbstractController {
      *
      * @Route("/employmentProfile", name="employment_profile")
      */
-    public function employmentProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab) {
+    public function employmentProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab)
+    {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
         $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
@@ -250,8 +256,8 @@ class StatisticsController extends AbstractController {
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
-                            'Statistics/profile.html.twig',
-                            [
+                'Statistics/profile.html.twig',
+                [
                                 'colLabels' => $colLabels,
                                 'date' => new \DateTime(),
                                 'profile' => $profile,
@@ -265,8 +271,8 @@ class StatisticsController extends AbstractController {
         }
 
         return $this->render(
-                        'Statistics/report_criteria.html.twig',
-                        array(
+            'Statistics/report_criteria.html.twig',
+            array(
                             'form' => $form->createView(),
                             'criteriaTemplates' => $criteriaTemplates,
                             'formPath' => 'employment_profile',
@@ -285,7 +291,8 @@ class StatisticsController extends AbstractController {
      *
      * @Route("/housingProfile", name="housing_profile")
      */
-    public function housingProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab) {
+    public function housingProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab)
+    {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
         $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
@@ -308,8 +315,8 @@ class StatisticsController extends AbstractController {
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
-                            'Statistics/profile.html.twig',
-                            [
+                'Statistics/profile.html.twig',
+                [
                                 'colLabels' => $colLabels,
                                 'date' => new \DateTime(),
                                 'profile' => $profile,
@@ -323,8 +330,8 @@ class StatisticsController extends AbstractController {
         }
 
         return $this->render(
-                        'Statistics/report_criteria.html.twig',
-                        array(
+            'Statistics/report_criteria.html.twig',
+            array(
                             'form' => $form->createView(),
                             'criteriaTemplates' => $criteriaTemplates,
                             'formPath' => 'housing_profile',
@@ -343,7 +350,8 @@ class StatisticsController extends AbstractController {
      *
      * @Route("/incomeProfile", name="income_profile")
      */
-    public function incomeProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab) {
+    public function incomeProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab)
+    {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
         $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
@@ -366,8 +374,8 @@ class StatisticsController extends AbstractController {
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
-                            'Statistics/profile.html.twig',
-                            [
+                'Statistics/profile.html.twig',
+                [
                                 'colLabels' => $colLabels,
                                 'date' => new \DateTime(),
                                 'profile' => $profile,
@@ -381,8 +389,8 @@ class StatisticsController extends AbstractController {
         }
 
         return $this->render(
-                        'Statistics/report_criteria.html.twig',
-                        array(
+            'Statistics/report_criteria.html.twig',
+            array(
                             'form' => $form->createView(),
                             'criteriaTemplates' => $criteriaTemplates,
                             'formPath' => 'income_profile',
@@ -401,7 +409,8 @@ class StatisticsController extends AbstractController {
      *
      * @Route("/reasonProfile", name="reason_profile")
      */
-    public function reasonProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab) {
+    public function reasonProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab)
+    {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
         $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
@@ -423,8 +432,8 @@ class StatisticsController extends AbstractController {
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
-                            'Statistics/profile.html.twig',
-                            [
+                'Statistics/profile.html.twig',
+                [
                                 'colLabels' => $colLabels,
                                 'date' => new \DateTime(),
                                 'profile' => $profile,
@@ -438,8 +447,8 @@ class StatisticsController extends AbstractController {
         }
 
         return $this->render(
-                        'Statistics/report_criteria.html.twig',
-                        array(
+            'Statistics/report_criteria.html.twig',
+            array(
                             'form' => $form->createView(),
                             'criteriaTemplates' => $criteriaTemplates,
                             'formPath' => 'reason_profile',
@@ -460,7 +469,8 @@ class StatisticsController extends AbstractController {
      *
      * @Route("/snapProfile", name="snap_profile")
      */
-    public function snapProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab) {
+    public function snapProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab)
+    {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
         $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
@@ -482,8 +492,8 @@ class StatisticsController extends AbstractController {
         }
 
         return $this->render(
-                        'Statistics/report_criteria.html.twig',
-                        array(
+            'Statistics/report_criteria.html.twig',
+            array(
                             'form' => $form->createView(),
                             'criteriaTemplates' => $criteriaTemplates,
                             'formPath' => 'snap_profile',
@@ -496,7 +506,8 @@ class StatisticsController extends AbstractController {
     /**
      * @Route("/assistanceProfile", name="assistance_profile")
      */
-    public function assistanceProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab) {
+    public function assistanceProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab)
+    {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
         $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
@@ -519,8 +530,8 @@ class StatisticsController extends AbstractController {
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
-                            'Statistics/profile.html.twig',
-                            [
+                'Statistics/profile.html.twig',
+                [
                                 'colLabels' => $colLabels,
                                 'date' => new \DateTime(),
                                 'profile' => $profile,
@@ -534,8 +545,8 @@ class StatisticsController extends AbstractController {
         }
 
         return $this->render(
-                        'Statistics/report_criteria.html.twig',
-                        array(
+            'Statistics/report_criteria.html.twig',
+            array(
                             'form' => $form->createView(),
                             'criteriaTemplates' => $criteriaTemplates,
                             'formPath' => 'assistance_profile',
@@ -548,7 +559,8 @@ class StatisticsController extends AbstractController {
     /**
      * @Route("/organizationProfile", name="organization_profile")
      */
-    public function organizationProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab) {
+    public function organizationProfileAction(Request $request, CriteriaBuilder $builder, Crosstab $crosstab)
+    {
         $form = $this->createForm(ReportCriteriaType::class);
         $criteriaTemplates[] = 'Statistics/dateCriteria.html.twig';
         $criteriaTemplates[] = 'Statistics/profileCriteria.html.twig';
@@ -571,8 +583,8 @@ class StatisticsController extends AbstractController {
             $profile = $crosstab->crosstabQuery($rawData, $rowLabels, $colLabels);
 
             return $this->render(
-                            'Statistics/profile.html.twig',
-                            [
+                'Statistics/profile.html.twig',
+                [
                                 'colLabels' => $colLabels,
                                 'date' => new \DateTime(),
                                 'profile' => $profile,
@@ -586,8 +598,8 @@ class StatisticsController extends AbstractController {
         }
 
         return $this->render(
-                        'Statistics/report_criteria.html.twig',
-                        array(
+            'Statistics/report_criteria.html.twig',
+            array(
                             'form' => $form->createView(),
                             'criteriaTemplates' => $criteriaTemplates,
                             'formPath' => 'organization_profile',
@@ -600,7 +612,8 @@ class StatisticsController extends AbstractController {
     /**
      * @Route("/otherServices", name="other_services")
      */
-    public function otherServicesAction() {
+    public function otherServicesAction()
+    {
         $em = $this->getDoctrine()->getManager();
         $seekingServices = $em->getRepository('App:Household')->seekingServices();
         $seeking = [];
@@ -626,12 +639,13 @@ class StatisticsController extends AbstractController {
     /**
      * Arranges SNAP profile reports
      */
-    private function profilerPlain($reportData, $templateSpecs, $crosstab) {
+    private function profilerPlain($reportData, $templateSpecs, $crosstab)
+    {
         $profile = $crosstab->crosstabQuery($reportData['data'], $reportData['rowLabels'], $reportData['colLabels']);
 
         return $this->renderView(
-                        'Statistics/profile_content.html.twig',
-                        ['profile' => $profile,
+            'Statistics/profile_content.html.twig',
+            ['profile' => $profile,
                             'rowHeader' => $reportData['rowHeader'],
                             'rowLabels' => $reportData['rowLabels'],
                             'colLabels' => $reportData['colLabels'],
@@ -646,7 +660,8 @@ class StatisticsController extends AbstractController {
     /**
      * Gather row & column data for SNAP why not profile
      */
-    private function not($criteria, $crosstab) {
+    private function not($criteria, $crosstab)
+    {
         $profileParameters = [
             'entity' => 'notfoodstamp',
             'entityField' => 'notfoodstamp',
@@ -667,7 +682,8 @@ class StatisticsController extends AbstractController {
         ];
     }
 
-    private function benefit($criteria, $crosstab) {
+    private function benefit($criteria, $crosstab)
+    {
         $em = $this->getDoctrine()->getManager();
         $rowLabels = ['Yes', 'No'];
         $colLabels = $crosstab->colLabels($criteria);
@@ -689,7 +705,8 @@ class StatisticsController extends AbstractController {
      *
      * @return string
      */
-    private function getReportHeader($templateCriteria) {
+    private function getReportHeader($templateCriteria)
+    {
         $startDate = date_format($templateCriteria['startDate'], 'F, Y');
         $endDate = date_format($templateCriteria['endDate'], 'F, Y');
         $line1 = $templateCriteria['reportType'] . ' for ' . $startDate;
@@ -699,5 +716,4 @@ class StatisticsController extends AbstractController {
 
         return $line1 . $line2 . $line3;
     }
-
 }

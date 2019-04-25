@@ -18,7 +18,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @UniqueEntity(fields="username", message="Username already exists")
  */
-class Invitation {
+class Invitation
+{
 
     /**
      * @ORM\Id()
@@ -53,19 +54,27 @@ class Invitation {
     private $username;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", nullable=true, name="confirmation_token")
      */
-    private $token;
+    private $confirmationToken;
 
-    public function getId(): ?int {
+    /**
+     * @ORM\Column(type="datetime", nullable=true, name="password_expires_at")
+     */
+    private $passwordExpiresAt;
+
+    public function getId(): ?int
+    {
         return $this->id;
     }
 
-    public function getEmail(): ?string {
+    public function getEmail(): ?string
+    {
         return $this->email;
     }
 
-    public function setEmail(?string $email): self {
+    public function setEmail(?string $email): self
+    {
         $this->email = $email;
 
         return $this;
@@ -76,11 +85,13 @@ class Invitation {
      *
      * @return string
      */
-    public function getSname() {
+    public function getSname()
+    {
         return $this->sname;
     }
 
-    public function setSname(?string $sname): self {
+    public function setSname(?string $sname): self
+    {
         $this->sname = $sname;
 
         return $this;
@@ -91,11 +102,13 @@ class Invitation {
      *
      * @return string
      */
-    public function getUsername() {
+    public function getUsername()
+    {
         return $this->username;
     }
 
-    public function setUsername(?string $username): self {
+    public function setUsername(?string $username): self
+    {
         $this->username = $username;
 
         return $this;
@@ -106,27 +119,55 @@ class Invitation {
      *
      * @return string
      */
-    public function getFname() {
+    public function getFname()
+    {
         return $this->fname;
     }
 
-    public function setFname(?string $fname): self {
+    public function setFname(?string $fname): self
+    {
         $this->fname = $fname;
 
         return $this;
     }
+//
+//    /**
+//     * Get token.
+//     *
+//     * @return string
+//     */
+//    public function getToken()
+//    {
+//        return $this->token;
+//    }
+//
+//    public function setToken(?string $token): self
+//    {
+//        $this->token = $token;
+//
+//        return $this;
+//    }
 
-    /**
-     * Get token.
-     *
-     * @return string
-     */
-    public function getToken() {
-        return $this->token;
+    public function getConfirmationToken()
+    {
+        return $this->confirmationToken;
     }
 
-    public function setToken(?string $token): self {
-        $this->token = $token;
+    public function getpasswordExpiresAt()
+    {
+        return $this->passwordExpiresAt;
+    }
+
+    public function setConfirmationToken($confirmationToken)
+    {
+        $this->confirmationToken = $confirmationToken;
+
+        return $this;
+    }
+
+    public function setPasswordExpiresAt(\DateTime $date = null)
+    {
+        $this->passwordExpiresAt = $date;
 
         return $this;
     }

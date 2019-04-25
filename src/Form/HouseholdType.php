@@ -25,9 +25,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class HouseholdType extends AbstractType {
-
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+class HouseholdType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder
                 ->add('active', ChoiceType::class, array(
                     'label' => 'Active: ',
@@ -39,8 +40,9 @@ class HouseholdType extends AbstractType {
                     'mapped' => false,
                 ])
                 ->add(
-                        'addresses', CollectionType::class,
-                        array(
+                    'addresses',
+                    CollectionType::class,
+                    array(
                             'entry_type' => AddressType::class,
                             'allow_add' => true,
                             'allow_delete' => true,
@@ -49,8 +51,9 @@ class HouseholdType extends AbstractType {
                         )
                 )
                 ->add(
-                        'assistances', EntityType::class,
-                        array(
+                    'assistances',
+                    EntityType::class,
+                    array(
                             'class' => 'App:Assistance',
                             'choice_label' => 'assistance',
                             'placeholder' => '',
@@ -68,18 +71,23 @@ class HouseholdType extends AbstractType {
                         )
                 )
                 ->add(
-                        'arrivalmonth', MonthType::class, array(
+                    'arrivalmonth',
+                    MonthType::class,
+                    array(
                     'placeholder' => 'Arrival month',
                         )
                 )
                 ->add(
-                        'arrivalyear', YearType::class, array(
+                    'arrivalyear',
+                    YearType::class,
+                    array(
                     'placeholder' => 'Arrival year',
                         )
                 )
                 ->add(
-                        'center', EntityType::class,
-                        array(
+                    'center',
+                    EntityType::class,
+                    array(
                             'class' => 'App:Center',
                             'label' => 'First site:',
                             'choice_label' => 'center',
@@ -97,13 +105,17 @@ class HouseholdType extends AbstractType {
                             }
                         )
                 )
-                ->add('compliance', ChoiceType::class, [
+                ->add(
+                    'compliance',
+                    ChoiceType::class,
+                    [
                     'choices' => ['No' => '0', 'Yes' => '1'],
                         ]
                 )
                 ->add(
-                        'complianceDate', DateType::class,
-                        array(
+                    'complianceDate',
+                    DateType::class,
+                    array(
                             'placeholder' => 'Compliance date: ',
                             'widget' => 'single_text',
                             'html5' => false,
@@ -112,8 +124,9 @@ class HouseholdType extends AbstractType {
                         )
                 )
                 ->add(
-                        'benefits', EntityType::class,
-                        array(
+                    'benefits',
+                    EntityType::class,
+                    array(
                             'class' => 'App:Benefit',
                             'choice_label' => 'benefit',
                             'placeholder' => '',
@@ -131,8 +144,9 @@ class HouseholdType extends AbstractType {
                         )
                 )
                 ->add(
-                        'housing', EntityType::class,
-                        array(
+                    'housing',
+                    EntityType::class,
+                    array(
                             'class' => 'App:Housing',
                             'choice_label' => 'housing',
                             'placeholder' => '',
@@ -151,8 +165,9 @@ class HouseholdType extends AbstractType {
                         )
                 )
                 ->add(
-                        'income', EntityType::class,
-                        array(
+                    'income',
+                    EntityType::class,
+                    array(
                             'class' => 'App:Income',
                             'choice_label' => 'income',
                             'placeholder' => '',
@@ -171,8 +186,9 @@ class HouseholdType extends AbstractType {
                         )
                 )
                 ->add(
-                        'notfoodstamp', EntityType::class,
-                        array(
+                    'notfoodstamp',
+                    EntityType::class,
+                    array(
                             'class' => 'App:Notfoodstamp',
                             'label' => 'Q5: If not food stamps, why not? ',
                             'choice_label' => 'notfoodstamp',
@@ -191,8 +207,9 @@ class HouseholdType extends AbstractType {
                         )
                 )
                 ->add(
-                        'organizations', EntityType::class,
-                        array(
+                    'organizations',
+                    EntityType::class,
+                    array(
                             'class' => 'App:Organization',
                             'choice_label' => 'organization',
                             'placeholder' => '',
@@ -210,8 +227,9 @@ class HouseholdType extends AbstractType {
                         )
                 )
                 ->add(
-                        'reasons', EntityType::class,
-                        array(
+                    'reasons',
+                    EntityType::class,
+                    array(
                             'class' => 'App:Reason',
                             'choice_label' => 'reason',
                             'label' => 'Q8: Insufficient food: ',
@@ -233,8 +251,9 @@ class HouseholdType extends AbstractType {
                     'choices' => array('No' => '0', 'Yes' => '1'),
                 ])
                 ->add(
-                        'sharedDate', DateType::class,
-                        array(
+                    'sharedDate',
+                    DateType::class,
+                    array(
                             'label' => 'Shared date: ',
                             'widget' => 'single_text',
                             'html5' => false,
@@ -260,12 +279,12 @@ class HouseholdType extends AbstractType {
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver) {
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'data_class' => 'App\Entity\Household',
             'required' => false,
             'disabledOptions' => [],
         ));
     }
-
 }

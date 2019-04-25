@@ -86,6 +86,19 @@ class InvitationTest extends WebTestCase {
         $this->assertSame(1, $mailCollector->getMessageCount());
     }
 
+    public function testCurrentResetRequest() {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/register/reset/hijkl');
+        $client->followRedirects();
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Set new password")')->count());
+        $crawler = $client->submitForm('Create!', [
+            'new_user[plainPassword][first]' => 'mynameis',
+            'new_user[plainPassword][second]' => 'mynameis',
+        ]);
+
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Your password has been update")')->count());
+    }
+
     public function testForgotPassword() {
         $client = static::createClient();
         $client->followRedirects();
@@ -97,7 +110,7 @@ class InvitationTest extends WebTestCase {
         $crawler = $client->submitForm('Submit', [
             'user_email[email]' => 'fiddle@deedee.org'
         ]);
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Email address not found")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Email sent to address provided")')->count());
 
         //user
         $crawler = $client->request('GET', '/register/forgot');
@@ -108,7 +121,7 @@ class InvitationTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Email sent to address provided")')->count());
     }
 
-    public function testResetPassword() {
+    public function testLoggedInResetPassword() {
         $client = static::createClient();
         $client->followRedirects();
         $crawler = $client->request('GET', '/login');
@@ -126,6 +139,14 @@ class InvitationTest extends WebTestCase {
         ]);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Your password has been update")')->count());
+    }
+
+    public function testExpiredForgottenRequest() {
+        $client = static::createClient();
+        $client->followRedirects();
+        $crawler = $client->request('GET', '/register/reset/abcdefg');
+        file_put_contents("G:\\Documents\\response.html", $client->getResponse()->getContent());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Password forgotten link has expired")')->count());
     }
 
     public function tearDown() {

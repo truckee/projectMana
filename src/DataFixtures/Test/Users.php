@@ -26,31 +26,23 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  *
  * @author George Brooks
  */
-class Users extends Fixture implements OrderedFixtureInterface {
+class Users extends Fixture implements OrderedFixtureInterface
+{
 
     /**
      * @var ContainerInterface
      */
     private $encoder;
 
-    public function __construct(UserPasswordEncoderInterface $encoder) {
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
         $this->encoder = $encoder;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-//    public function setContainer(ContainerInterface $container = null)
-//    {
-//        $this->container = $container;
-//    }
 
-    public function load(ObjectManager $manager) {
-        // Get our userManager, you must implement `ContainerAwareInterface`
-//        $userManager = $this->container->get('fos_user.user_manager');
-
+    public function load(ObjectManager $manager)
+    {
         $admin = new User();
-//        $admin->setUsername('admin');
         $admin->setFname('Benny');
         $admin->setSname('Borko');
         $admin->setUsername('admin');
@@ -58,21 +50,27 @@ class Users extends Fixture implements OrderedFixtureInterface {
         $password = $this->encoder->encodePassword($admin, 'manapw');
         $admin->setPassword($password);
         $admin->setEnabled(true);
+        $admin->setConfirmationToken('hijkl');
+        $time = new \DateTime();
+        $admin->setPasswordExpiresAt($time->add(new \DateInterval('PT3H')));
         $admin->setRoles(array('ROLE_ADMIN'));
 
         // Update the user
         $manager->persist($admin);
 
         $user = new User();
-//        $user->setUsername('dberry');
         $user->setFname('Dingle');
         $user->setSname('Berry');
         $user->setUsername('dberry');
         $user->setEmail('dberry@domain.com');
-        $password = $this->encoder->encodePassword($user, 'password');
-        $user->setPassword($password);
+        $password1 = $this->encoder->encodePassword($user, 'password');
+        $user->setPassword($password1);
         $user->setEnabled(true);
         $user->setRoles(array('ROLE_USER'));
+        $user->setConfirmationToken('abcdefg');
+        // expired forgot pw request
+        $userExpires = new \DateTime();
+        $user->setPasswordExpiresAt($userExpires->sub(new \DateInterval('PT4H')));
 
         // Update the user
         $manager->persist($user);
@@ -83,16 +81,16 @@ class Users extends Fixture implements OrderedFixtureInterface {
         $invite->setSname('Feynmann');
         $invite->setUsername('rfeynmann');
         $invite->setEmail('rfeynmann@bogus.info');
-        $invite->setToken('abcdefg');
+        $invite->setConfirmationToken('abcdefg');
         
         $manager->persist($invite);
         
-        // reset password trial        
+        // reset password trial
         $manager->flush();
     }
 
-    public function getOrder() {
+    public function getOrder()
+    {
         return 1; // the order in which fixtures will be loaded
     }
-
 }

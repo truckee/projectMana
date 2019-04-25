@@ -28,7 +28,6 @@ use App\Validator\Constraints as ManaAssert;
  */
 class Member
 {
-
     public function __construct()
     {
         $this->jobs = new ArrayCollection();

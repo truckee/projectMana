@@ -16,7 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Address service
- * 
+ *
  * Determines which address template(s) to render for a given household
  *
  */

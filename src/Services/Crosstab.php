@@ -180,7 +180,6 @@ class Crosstab
         $profile['total']['total'] = 0;
         foreach ($rows as $row) {
             $profile[$row] = $colKeys;
-            
         }
 
         return $profile;

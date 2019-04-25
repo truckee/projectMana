@@ -23,12 +23,14 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/status")
  */
-class StatusController extends AbstractController {
+class StatusController extends AbstractController
+{
 
     /**
      * @Route("", name="status")
      */
-    public function showAction(Status $status) {
+    public function showAction(Status $status)
+    {
         $statusYears = $status->getYearStatus();
 
         return $this->render('Status/show.html.twig', array(
@@ -40,15 +42,15 @@ class StatusController extends AbstractController {
     /**
      * @Route("/select", name="status_change")
      */
-    public function changeAction(Request $request, Status $status) {
+    public function changeAction(Request $request, Status $status)
+    {
         $em = $this->getDoctrine()->getManager();
         $data = $request->get('status');
         $status->setStatus($data);
         $this->addFlash(
-                'info',
-                'Household status updated'
+            'info',
+            'Household status updated'
         );
         return $this->redirectToRoute('status');
     }
-
 }

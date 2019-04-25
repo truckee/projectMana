@@ -21,7 +21,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 class HouseholdControllerTest extends WebTestCase
 {
-
     private $reference;
     
     public function setup()
@@ -83,31 +82,36 @@ class HouseholdControllerTest extends WebTestCase
         return $this->client->submit($form);
     }
 
-    public function testNewHousehold() {
+    public function testNewHousehold()
+    {
         $crawler = $this->submitNewHousehold();
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Household Edit")')->count());
     }
 
-    public function testDuplicateName() {
+    public function testDuplicateName()
+    {
         $crawler = $this->login();
         $crawler = $this->client->request('GET', '/household/new');
         $eth = $this->reference['Ethnicity3']->getId();
         $tahoe = $this->reference['Center3']->getId();
-        $crawler = $this->client->submitForm('submit',
-                [
+        $crawler = $this->client->submitForm(
+            'submit',
+            [
                     'member[fname]' => 'MoreThanOne',
                     'member[sname]' => 'Membrane',
                     'member[dob]' => '44',
                     'member[sex]' => 'Male',
                     'member[ethnicity]' => $eth,
                     'household[center]' => $tahoe,
-        ]);
+        ]
+        );
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Add new head of house")')->count());
     }
 
-    public function testShowHousehold() {
+    public function testShowHousehold()
+    {
         $crawler = $this->login();
         $id = $this->reference['Household1']->getId();
         $crawler = $this->client->request('GET', '/household/' . $id . '/show');
@@ -115,7 +119,8 @@ class HouseholdControllerTest extends WebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Household View")')->count());
     }
 
-    public function testEditHousehold() {
+    public function testEditHousehold()
+    {
         $crawler = $this->login();
         $id = $this->reference['Household1']->getId();
         $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
@@ -142,14 +147,16 @@ class HouseholdControllerTest extends WebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("May")')->count());
     }
 
-    public function testNoSearchCriteria() {
+    public function testNoSearchCriteria()
+    {
         $crawler = $this->login();
         $crawler = $this->client->submitForm('_search', []);
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("No search criteria were entered")')->count());
     }
 
-    public function testHouseholdNotFound() {
+    public function testHouseholdNotFound()
+    {
         $crawler = $this->login();
         $form = $crawler->selectButton('_search')->form();
         $form['qtext'] = '999';
@@ -158,7 +165,8 @@ class HouseholdControllerTest extends WebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Sorry, household not found")')->count());
     }
 
-    public function testNoHouseholdsFound() {
+    public function testNoHouseholdsFound()
+    {
         $crawler = $this->login();
         $form = $crawler->selectButton('_search')->form();
         $form['qtext'] = 'Alien Creatures';
@@ -167,7 +175,8 @@ class HouseholdControllerTest extends WebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Sorry, no households were found")')->count());
     }
 
-    public function testValidateHousehold() {
+    public function testValidateHousehold()
+    {
         $crawler = $this->login();
         $id = $this->reference['Household1']->getId();
         $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
@@ -193,7 +202,8 @@ class HouseholdControllerTest extends WebTestCase
         $this->assertEquals(1, $crawler->filter('html:contains("Date may not be in future")')->count());
     }
 
-    public function testValidateSharedDate() {
+    public function testValidateSharedDate()
+    {
         $crawler = $this->login();
         $id = $this->reference['Household1']->getId();
         $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
@@ -213,7 +223,8 @@ class HouseholdControllerTest extends WebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Date may not be in future")')->count());
     }
 
-    public function testOneAddress() {
+    public function testOneAddress()
+    {
         $crawler = $this->login();
         $id = $this->reference['Household1']->getId();
         $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
@@ -221,7 +232,8 @@ class HouseholdControllerTest extends WebTestCase
         $this->assertEquals(2, $crawler->filter('input[type=radio]')->count());
     }
 
-    public function testNoAddress() {
+    public function testNoAddress()
+    {
         $crawler = $this->login();
         $id = $this->reference['Household2']->getId();
         $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
@@ -229,7 +241,8 @@ class HouseholdControllerTest extends WebTestCase
         $this->assertEquals(4, $crawler->filter('input[type=radio]')->count());
     }
 
-    public function testAddressSubmit() {
+    public function testAddressSubmit()
+    {
         $crawler = $this->login();
         $id = $this->reference['Household3']->getId();
         $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
@@ -244,7 +257,8 @@ class HouseholdControllerTest extends WebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("12 NewLine")')->count());
     }
 
-    public function testHouse3NoOptionsDisabled() {
+    public function testHouse3NoOptionsDisabled()
+    {
         $crawler = $this->login();
         $id = $this->reference['Household3']->getId();
         $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
@@ -260,7 +274,8 @@ class HouseholdControllerTest extends WebTestCase
 //        $this->assertEquals(0, $crawler->filter('html:contains("disabled")')->count());
     }
 
-    public function testServiceRequested() {
+    public function testServiceRequested()
+    {
         $crawler = $this->login();
         $id = $this->reference['Household3']->getId();
         $crawler = $this->client->request('GET', '/household/' . $id . '/edit');
@@ -272,7 +287,8 @@ class HouseholdControllerTest extends WebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Other")')->count());
     }
 
-    public function testServiceUsed() {
+    public function testServiceUsed()
+    {
         $crawler = $this->login();
         $id = $this->reference['Household3']->getId();
         $crawler = $this->client->request('GET', '/household/' . $id . '/edit');

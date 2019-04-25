@@ -89,7 +89,8 @@ class HouseholdRepository extends EntityRepository
         return $sizeData;
     }
 
-    public function householdResidency($criteria) {
+    public function householdResidency($criteria)
+    {
         $startDate = $criteria['startParameters']['startDate'];
         $testYear = date_format($startDate, 'Y');
         $testMo = date_format($startDate, 'm');

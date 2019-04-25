@@ -50,7 +50,7 @@ class HouseholdController extends AbstractController
         $household = $em->getRepository('App:Household')->find($id);
 
         if (!$household) {
-        $this->addFlash(
+            $this->addFlash(
             'danger',
             'Unable to find Household ' . $id
         );
@@ -63,8 +63,8 @@ class HouseholdController extends AbstractController
         $templates[] = 'Household/contactShowBlock.html.twig';
 
         return $this->render(
-                'Household/show.html.twig',
-                array(
+            'Household/show.html.twig',
+            array(
                     'household' => $household,
                     'hohId' => $household->getHead()->getId(),
                     'title' => 'Household View',
@@ -140,8 +140,8 @@ class HouseholdController extends AbstractController
         }
 
         return $this->render(
-                'Household/new.html.twig',
-                array(
+            'Household/new.html.twig',
+            array(
                     'formType' => 'New Household',
                     'form' => $form->createView(),
                     'formHead' => $formHead->createView(),
@@ -165,7 +165,7 @@ class HouseholdController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('App:Household')->find($id);
         if (!$household) {
-        $this->addFlash(
+            $this->addFlash(
             'danger',
             'Unable to find Household ' . $id
         );
@@ -210,7 +210,7 @@ class HouseholdController extends AbstractController
             $em->getRepository('App:Member')->initialize($household);
             $em->persist($household);
             $em->flush();
-        $this->addFlash(
+            $this->addFlash(
             'info',
             'Household updated'
         );
@@ -218,8 +218,8 @@ class HouseholdController extends AbstractController
         }
 
         return $this->render(
-                'Household/edit.html.twig',
-                array(
+            'Household/edit.html.twig',
+            array(
                     'form' => $form->createView(),
                     'title' => 'Household Edit',
                     'household' => $household,
@@ -243,10 +243,11 @@ class HouseholdController extends AbstractController
     {
         $qtext = $request->query->get('qtext');
         if ($qtext == '') {
-        $this->addFlash(
+            $this->addFlash(
             'warning',
             'No search criteria were entered'
-        );            if (empty($request->headers->get('referer'))) {
+        );
+            if (empty($request->headers->get('referer'))) {
                 return $this->redirectToRoute('home');
             }
 
@@ -258,10 +259,11 @@ class HouseholdController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $household = $em->getRepository('App:Household')->find($qtext);
             if (!$household) {
-        $this->addFlash(
+                $this->addFlash(
             'info',
             'Sorry, household not found'
-        );                if (empty($request->headers->get('referer'))) {
+        );
+                if (empty($request->headers->get('referer'))) {
                     return $this->redirectToRoute('home');
                 }
 
@@ -274,10 +276,11 @@ class HouseholdController extends AbstractController
 //            $searches = $this->get('mana.searches');
             $found = $searches->getMembers($qtext);
             if (count($found) == 0 || !$found) {
-        $this->addFlash(
+                $this->addFlash(
             'warning',
             'Sorry, no households were found'
-        );                if (empty($request->headers->get('referer'))) {
+        );
+                if (empty($request->headers->get('referer'))) {
                     return $this->redirectToRoute('home');
                 }
 
@@ -289,12 +292,13 @@ class HouseholdController extends AbstractController
 
                 return $this->redirectToRoute('household_show', array('id' => $id));
             } else {
-        $this->addFlash(
+                $this->addFlash(
             'success',
             $nFound . ' households found'
-        );                return $this->render(
-                        'Household/search.html.twig',
-                        array(
+        );
+                return $this->render(
+            'Household/search.html.twig',
+            array(
                             'searchedFor' => $qtext,
                             'matched' => $found,
                             'title' => 'Search results',
@@ -325,7 +329,8 @@ class HouseholdController extends AbstractController
             $response = new Response('');
         } else {
             $content = $this->renderView(
-                'Contact/addHouseholdContact.html.twig', [
+                'Contact/addHouseholdContact.html.twig',
+                [
                 'household' => $household,
                 ]
             );
@@ -345,7 +350,8 @@ class HouseholdController extends AbstractController
         $year = date('Y');
         $filename = 'Let\'sTalkTurkey' . $year . '.pdf';
         $html = $this->renderView(
-            'Pdf/Household/turkeyContent.html.twig', [
+            'Pdf/Household/turkeyContent.html.twig',
+            [
             'turkeys' => $turkeys,
             ]
         );
@@ -357,7 +363,9 @@ class HouseholdController extends AbstractController
         $snappy->setOption('footer-center', 'Page [page]');
         $content = $snappy->getOutputFromHtml($html);
         $response = new Response(
-            $content, 200, [
+            $content,
+            200,
+            [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'attachment; filename=' . $filename . '.pdf',
             ]

@@ -7,18 +7,18 @@
  * file that was distributed with this source code.
  */
 
-// src/Repository/UserRepository.php
-
 namespace App\Repository;
 
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Doctrine\ORM\EntityRepository;
 
-class UserRepository extends EntityRepository implements UserLoaderInterface {
+class UserRepository extends EntityRepository implements UserLoaderInterface
+{
 
     // ...
 
-    public function loadUserByUsername($name) {
+    public function loadUserByUsername($name)
+    {
         return $this->createQueryBuilder('u')
                 ->where('u.email = :email')
                 ->orWhere('u.username = :username')
@@ -27,5 +27,4 @@ class UserRepository extends EntityRepository implements UserLoaderInterface {
                 ->getQuery()
                 ->getOneOrNullResult();
     }
-
 }

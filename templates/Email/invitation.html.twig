@@ -1,5 +1,6 @@
 <p>Hi {{ fname }},</p>
 <p>Welcome to the Project MANA team.</p>
 <p>Click on this <a href="{{ absolute_url(path('complete_registration', {'token':token})) }}">link</a> to create
-your database application account.</p>
+your database application account.</p> 
+<p>This link will expire in 3 hours [@ {{ expires|date('g:i A, l, F j') }}].</p>
 <p>Thanks.</p>

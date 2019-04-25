@@ -23,7 +23,7 @@ use Liip\FunctionalTestBundle\Test\WebTestCase;
  */
 class AppWebTestCase extends WebTestCase
 {
-    protected function loadFixtures(array $classNames = [], bool $append = false, ?string $omName = NULL, string $registryName = 'doctrine', ?int $purgeMode = NULL): ?AbstractExecutor
+    protected function loadFixtures(array $classNames = [], bool $append = false, ?string $omName = null, string $registryName = 'doctrine', ?int $purgeMode = null): ?AbstractExecutor
     {
         $this->getContainer()->get('doctrine')->getManager()->getConnection()->query(sprintf('SET FOREIGN_KEY_CHECKS=0'));
         $result = parent::loadFixtures($classNames, $append, $omName, $registryName, $purgeMode);

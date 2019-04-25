@@ -2,9 +2,9 @@
 
 /*
  * This file is part of the Truckee\Projectmana package.
- * 
+ *
  * (c) George W. Brooks
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -18,11 +18,12 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * MemberControllerTest.
  */
-class MemberControllerTest extends WebTestCase {
-
+class MemberControllerTest extends WebTestCase
+{
     private $reference;
 
-    public function setup() {
+    public function setup()
+    {
         $this->client = static::createClient();
         $this->client->followRedirects();
 
@@ -50,7 +51,8 @@ class MemberControllerTest extends WebTestCase {
         }
     }
 
-    public function login() {
+    public function login()
+    {
         $crawler = $this->client->request('GET', '/login');
         $form = $crawler->selectButton('Sign in')->form();
         $form['username'] = 'admin@bogus.info';
@@ -60,7 +62,8 @@ class MemberControllerTest extends WebTestCase {
         return $crawler;
     }
 
-    public function testAddMemberValidation() {
+    public function testAddMemberValidation()
+    {
         $crawler = $this->login();
         $houseId = $this->reference['Household1']->getId();
         $crawler = $this->client->request('GET', '/member/add/' . $houseId);
@@ -73,7 +76,8 @@ class MemberControllerTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Ethnicity may not be blank")')->count());
     }
 
-    public function testAddMember() {
+    public function testAddMember()
+    {
         $crawler = $this->login();
         $houseId = $this->reference['Household1']->getId();
         $eth = $this->reference['Ethnicity3']->getId();
@@ -90,7 +94,8 @@ class MemberControllerTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Vanilli")')->count());
     }
 
-    public function testMemberValidation() {
+    public function testMemberValidation()
+    {
         $crawler = $this->login();
         $memberId = $this->reference['Member1']->getId();
         $crawler = $this->client->request('GET', '/member/edit/' . $memberId);
@@ -104,7 +109,8 @@ class MemberControllerTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Invalid date or age entry")')->count());
     }
 
-    public function testChangeHead() {
+    public function testChangeHead()
+    {
         $crawler = $this->login();
         $member2Id = $this->reference['Member2']->getId();
         $crawler = $this->client->request('GET', '/member/edit/' . $member2Id);
@@ -121,7 +127,8 @@ class MemberControllerTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Head?")')->count());
     }
 
-    public function testExcludeMember() {
+    public function testExcludeMember()
+    {
         $crawler = $this->login();
         $member2Id = $this->reference['Member2']->getId();
         $crawler = $this->client->request('GET', '/member/edit/' . $member2Id);
@@ -135,7 +142,8 @@ class MemberControllerTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Excluded")')->count());
     }
 
-    public function testMemberEdit() {
+    public function testMemberEdit()
+    {
         $crawler = $this->login();
         $member2Id = $this->reference['Member2']->getId();
         $crawler = $this->client->request('GET', '/member/edit/' . $member2Id);
@@ -157,9 +165,9 @@ class MemberControllerTest extends WebTestCase {
         $this->assertEquals($work, $formWork);
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         unset($this->client);
         unset($this->reference);
     }
-
 }

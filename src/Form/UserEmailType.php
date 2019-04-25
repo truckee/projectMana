@@ -13,8 +13,10 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
  *
  * @author George Brooks <truckeesolutions@gmail.com>
  */
-class UserEmailType extends AbstractType {
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+class UserEmailType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder
                 ->add('email', EmailType::class, [
                     'label' => 'Email: ',
@@ -24,7 +26,8 @@ class UserEmailType extends AbstractType {
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver) {
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
 //            'data_class' => Invitation::class,
             'required' => false,

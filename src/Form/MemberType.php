@@ -25,9 +25,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MemberType extends AbstractType {
-
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+class MemberType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder
                 ->add('fname', TextType::class, [
                     'attr' => [
@@ -46,16 +47,18 @@ class MemberType extends AbstractType {
                     'invalid_message' => 'Invalid date or age entry'
                 ])
                 ->add(
-                        'sex', ChoiceType::class,
-                        array(
+                    'sex',
+                    ChoiceType::class,
+                    array(
                             'label' => 'Gender',
                             'placeholder' => 'Select gender',
                             'choices' => array('Female' => 'Female', 'Male' => 'Male', 'Other' => 'Other'),
                         )
                 )
                 ->add(
-                        'ethnicity', EntityType::class,
-                        array(
+                    'ethnicity',
+                    EntityType::class,
+                    array(
                             'label' => 'Ethnicity',
                             'class' => 'App:Ethnicity',
                             'choice_label' => 'abbreviation',
@@ -81,8 +84,9 @@ class MemberType extends AbstractType {
 //                ->add('excludeDate', DateType::class, array(
 //                ))
                 ->add(
-                        'relation', EntityType::class,
-                        array(
+                    'relation',
+                    EntityType::class,
+                    array(
                             'label' => 'Relationship:',
                             'class' => 'App:Relationship',
                             'choice_label' => 'relation',
@@ -102,14 +106,17 @@ class MemberType extends AbstractType {
                         )
                 )
                 ->add(
-                        'isHead', CheckboxType::class, array(
+                    'isHead',
+                    CheckboxType::class,
+                    array(
                     'mapped' => false,
                     'label' => 'Head? ',
                         )
                 )
                 ->add(
-                        'jobs', EntityType::class,
-                        array(
+                    'jobs',
+                    EntityType::class,
+                    array(
                             'class' => 'App:Work',
                             'choice_label' => 'job',
                             'placeholder' => 'Select work',
@@ -134,42 +141,42 @@ class MemberType extends AbstractType {
 
         $builder->get('dob')
                 ->addModelTransformer(new CallbackTransformer(
-                                function ($dobAsObject) {
-                            if (null === $dobAsObject) {
-                                return;
-                            }
-                            return date_format($dobAsObject, 'm/d/Y');
-                        },
-                                function ($dobAsString) {
-                            if (!is_numeric($dobAsString) && substr_count($dobAsString, '/') === 0) {
-                                throw new TransformationFailedException();
-                            }
-                            if (is_numeric($dobAsString) && 0 > $dobAsString) {
-                                throw new TransformationFailedException();
-                            }
-                            if (is_numeric($dobAsString) && $dobAsString > 120) {
-                                throw new TransformationFailedException();
-                            }
-                            if (substr_count($dobAsString, '/') === 0) {
-                                $dob = new \DateTime();
-                                $dob->sub(new \DateInterval('P' . $dobAsString . 'Y'));
-                            } else {
-                                $dob = new \DateTime($dobAsString);
-                            }
-                            $date = new \DateTime();
-                            $lowerLimit = $date->sub(new \DateInterval('P120Y'));
-                            if ($dob < new \DateTime() && $dob > $lowerLimit) {
-
-                                return $dob;
-                            } else {
-                                throw new TransformationFailedException();
-                            }
+                    function ($dobAsObject) {
+                        if (null === $dobAsObject) {
+                            return;
                         }
+                        return date_format($dobAsObject, 'm/d/Y');
+                    },
+                    function ($dobAsString) {
+                        if (!is_numeric($dobAsString) && substr_count($dobAsString, '/') === 0) {
+                            throw new TransformationFailedException();
+                        }
+                        if (is_numeric($dobAsString) && 0 > $dobAsString) {
+                            throw new TransformationFailedException();
+                        }
+                        if (is_numeric($dobAsString) && $dobAsString > 120) {
+                            throw new TransformationFailedException();
+                        }
+                        if (substr_count($dobAsString, '/') === 0) {
+                            $dob = new \DateTime();
+                            $dob->sub(new \DateInterval('P' . $dobAsString . 'Y'));
+                        } else {
+                            $dob = new \DateTime($dobAsString);
+                        }
+                        $date = new \DateTime();
+                        $lowerLimit = $date->sub(new \DateInterval('P120Y'));
+                        if ($dob < new \DateTime() && $dob > $lowerLimit) {
+                            return $dob;
+                        } else {
+                            throw new TransformationFailedException();
+                        }
+                    }
                 ))
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver) {
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'data_class' => 'App\Entity\Member',
             'required' => false,
@@ -177,5 +184,4 @@ class MemberType extends AbstractType {
             'fieldOptions' => [],
         ));
     }
-
 }

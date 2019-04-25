@@ -24,7 +24,8 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @Route("/member")
  */
-class MemberController extends AbstractController {
+class MemberController extends AbstractController
+{
 
     /**
      * Edit household member.
@@ -36,13 +37,14 @@ class MemberController extends AbstractController {
      *
      * @Route("/edit/{id}", name="member_edit")
      */
-    public function editAction(Request $request, Searches $searches, $id) {
+    public function editAction(Request $request, Searches $searches, $id)
+    {
         $em = $this->getDoctrine()->getManager();
         $member = $em->getRepository('App:Member')->find($id);
         if (!$member) {
             $this->addFlash(
-                    'danger',
-                    'Unable to find member'
+                'danger',
+                'Unable to find member'
             );
             return $this->redirectToRoute('home');
         }
@@ -93,8 +95,8 @@ class MemberController extends AbstractController {
         }
 
         return $this->render(
-                        'Member/edit.html.twig',
-                        [
+            'Member/edit.html.twig',
+            [
                             'form' => $form->createView(),
                             'templates' => $templates,
                             'id' => $id,
@@ -114,13 +116,14 @@ class MemberController extends AbstractController {
      *
      * @Route("/add/{houseId}", name="member_add")
      */
-    public function addAction(Request $request, $houseId) {
+    public function addAction(Request $request, $houseId)
+    {
         $em = $this->getDoctrine()->getManager();
         $household = $em->getRepository('App:Household')->find($houseId);
         if (!$household) {
             $this->addFlash(
-                    'danger',
-                    'Unable to find Household ' . $id
+                'danger',
+                'Unable to find Household ' . $id
             );
             return $this->redirectToRoute('home');
         }
@@ -149,8 +152,8 @@ class MemberController extends AbstractController {
         }
 
         return $this->render(
-                        'Member/add.html.twig',
-                        [
+            'Member/add.html.twig',
+            [
                             'form' => $form->createView(),
                             'templates' => $templates,
                             'houseId' => $houseId,
@@ -168,7 +171,8 @@ class MemberController extends AbstractController {
      *
      * @Route("/householdMember/{id}", name="house_member")
      */
-    public function memberHeadShowAction($id) {
+    public function memberHeadShowAction($id)
+    {
         $em = $this->getDoctrine()->getManager();
         $member = $em->getRepository('App:Member')->find($id);
         $include = $member->getInclude();
@@ -186,5 +190,4 @@ class MemberController extends AbstractController {
 
         return $this->render($template, ['member' => $member]);
     }
-
 }

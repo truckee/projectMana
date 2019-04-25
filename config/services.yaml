@@ -26,5 +26,8 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\Services\TestReferences:
-        arguments: ['@doctrine.orm.entity_manager']
+    App\Services\MailLoggerUtil:
+        arguments: ["@logger"]
+        tags:
+          - { name: monolog.logger, channel: mailer }
+          - { name: "swiftmailer.default.plugin" }

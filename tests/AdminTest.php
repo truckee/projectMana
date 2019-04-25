@@ -2,9 +2,9 @@
 
 /*
  * This file is part of the Truckee\Projectmana package.
- * 
+ *
  * (c) George W. Brooks
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -18,11 +18,12 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * AdminControllerTest.
  */
-class AdminTest extends WebTestCase {
-
+class AdminTest extends WebTestCase
+{
     private $reference;
 
-    public function setup() {
+    public function setup()
+    {
         $this->client = static::createClient();
         $this->client->followRedirects();
 
@@ -53,8 +54,8 @@ class AdminTest extends WebTestCase {
 //                ])->getReferenceRepository();
     }
 
-    public function testAdminLogin() {
-
+    public function testAdminLogin()
+    {
         $crawler = $this->client->request('GET', '/login');
         $form = $crawler->selectButton('Sign in')->form();
         $form['username'] = 'admin@bogus.info';
@@ -65,7 +66,8 @@ class AdminTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Admin")')->count());
     }
 
-    public function testUserLogin() {
+    public function testUserLogin()
+    {
         $crawler = $this->client->request('GET', '/login');
         $form = $crawler->selectButton('Sign in')->form();
         $form['username'] = 'dberry@bogus.info';
@@ -76,9 +78,9 @@ class AdminTest extends WebTestCase {
         $this->assertEquals(0, $crawler->filter('html:contains("Admin")')->count());
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         unset($this->client);
         unset($this->reference);
     }
-
 }

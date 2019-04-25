@@ -20,14 +20,15 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 
-class ContactType extends AbstractType {
-
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+class ContactType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder
                 ->add(
-                        'center',
-                        EntityType::class,
-                        array(
+                    'center',
+                    EntityType::class,
+                    array(
                             'class' => 'App:Center',
                             'label' => 'Site:',
                             'choice_label' => 'center',
@@ -46,9 +47,9 @@ class ContactType extends AbstractType {
                         )
                 )
                 ->add(
-                        'contactdesc',
-                        EntityType::class,
-                        array(
+                    'contactdesc',
+                    EntityType::class,
+                    array(
                             'class' => 'App:Contactdesc',
                             'label' => 'Contact type',
                             'choice_label' => 'contactdesc',
@@ -67,9 +68,9 @@ class ContactType extends AbstractType {
                         )
                 )
                 ->add(
-                        'contactDate',
-                        DateType::class,
-                        array(
+                    'contactDate',
+                    DateType::class,
+                    array(
                             'widget' => 'single_text',
                             'html5' => false,
                             'attr' => ['class' => 'js-datepicker'],
@@ -86,12 +87,12 @@ class ContactType extends AbstractType {
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver) {
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'data_class' => 'App\Entity\Contact',
             'required' => false,
             'disabledOptions' => [],
         ));
     }
-
 }

@@ -2,9 +2,9 @@
 
 /*
  * This file is part of the Truckee\Projectmana package.
- * 
+ *
  * (c) George W. Brooks
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -18,11 +18,12 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  *
  * @author George Brooks
  */
-class StatusTest extends WebTestCase {
-
+class StatusTest extends WebTestCase
+{
     private $reference;
 
-    public function setup() {
+    public function setup()
+    {
         $this->client = static::createClient();
         $this->client->followRedirects();
 
@@ -50,7 +51,8 @@ class StatusTest extends WebTestCase {
         }
     }
 
-    public function login() {
+    public function login()
+    {
         $crawler = $this->client->request('GET', '/login');
         $form = $crawler->selectButton('Sign in')->form();
         $form['username'] = 'admin@bogus.info';
@@ -60,10 +62,11 @@ class StatusTest extends WebTestCase {
         return $crawler;
     }
 
-    public function testStatusChange() {
+    public function testStatusChange()
+    {
         $crawler = $this->login();
         $crawler = $this->client->request('GET', '/status');
-file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
+        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
         $form = $crawler->selectButton('Submit')->form();
         $year = date_format(new \DateTime(), 'Y');
         $activeBefore = trim($crawler->filter('#active' . $year)->text());
@@ -81,9 +84,9 @@ file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->
         $this->assertEquals($activeBefore, $activeAfter);
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         unset($this->client);
         unset($this->reference);
     }
-
 }

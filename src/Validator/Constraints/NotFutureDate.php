@@ -18,12 +18,12 @@ use Symfony\Component\Validator\Constraint;
  *
  * @Annotation
  */
-class NotFutureDate extends Constraint {
-
+class NotFutureDate extends Constraint
+{
     public $message = 'Date may not be in future';
 
-    public function validatedBy() {
+    public function validatedBy()
+    {
         return \get_class($this) . 'Validator';
     }
-
 }

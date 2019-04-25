@@ -19,13 +19,14 @@ use Ob\HighchartsBundle\Highcharts\Highchart;
 /**
  * Project MANA statistics.
  */
-class FYChart {
-
+class FYChart
+{
     use \App\Services\FYFunction;
 
     private $em;
 
-    public function __construct(EntityManagerInterface $em) {
+    public function __construct(EntityManagerInterface $em)
+    {
         $this->em = $em;
     }
 
@@ -34,8 +35,8 @@ class FYChart {
      *
      * @return string
      */
-    public function getDistsFYToDate() {
-
+    public function getDistsFYToDate()
+    {
         $fy = $this->fy();
         $month = date_format(new \DateTime(), 'n');
         $chart['fy'] = $fy;
@@ -92,5 +93,4 @@ class FYChart {
 
         return $ob;
     }
-
 }

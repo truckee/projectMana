@@ -11,11 +11,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Invitation;
 use App\Entity\User;
 use App\Form\UserEmailType;
 use App\Form\NewUserType;
-use App\Services\EnvService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,20 +22,22 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 /**
  * @Route("/register")
  */
-class RegistrationController extends AbstractController {
+class RegistrationController extends AbstractController
+{
 
     /**
      * @Route("/invite/{token}", name="complete_registration")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, $token = null) {
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, $token = null)
+    {
         $em = $this->getDoctrine()->getManager();
-        $invited = $em->getRepository('App:Invitation')->findOneBy(['token' => $token]);
+        $invited = $em->getRepository('App:Invitation')->findOneBy(['confirmationToken' => $token]);
 
         // if bogus token data is presented
         if (null === $invited) {
             $this->addFlash(
-                    'danger',
-                    'Invalid registration data'
+                'danger',
+                'Invalid registration data'
             );
 
             return $this->redirectToRoute('home');
@@ -49,8 +49,8 @@ class RegistrationController extends AbstractController {
         //if $invited has already registered
         if (null !== $existingUser) {
             $this->addFlash(
-                    'danger',
-                    'User has already registered'
+                'danger',
+                'User has already registered'
             );
 
             return $this->redirectToRoute('home');
@@ -70,9 +70,9 @@ class RegistrationController extends AbstractController {
 
             // 3) Encode the password (you could also do this via Doctrine listener)
             $user->setPassword(
-                    $passwordEncoder->encodePassword(
-                            $user,
-                            $form->get('plainPassword')->getData()
+                $passwordEncoder->encodePassword(
+                        $user,
+                        $form->get('plainPassword')->getData()
                     )
             );
             $user->setEnabled(true);
@@ -88,72 +88,77 @@ class RegistrationController extends AbstractController {
             // ... do any other work - like sending them an email, etc
             // maybe set a "flash" success message for the user
             $this->addFlash(
-                    'success',
-                    'You are now registered and may log in'
+                'success',
+                'You are now registered and may log in'
             );
 
             return $this->redirectToRoute('home');
         }
 
         return $this->render(
-                        'Registration/register.html.twig',
-                        array('form' => $form->createView(),
+            'Registration/register.html.twig',
+            array('form' => $form->createView(),
                             'headerText' => 'Create new user',
                         )
         );
     }
 
     /**
-     * Render an form to submit email address
-     * 
+     * Render a form to submit email address
+     *
      * @Route("/forgot", name="register_forgot")
      */
-    public function forgotPassword(Request $request, \Swift_Mailer $mailer, EnvService $env) {
+    public function forgotPassword(Request $request, \Swift_Mailer $mailer)
+    {
         $form = $this->createForm(UserEmailType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $request->request->get('user_email')['email'];
             $em = $this->getDoctrine()->getManager();
+            $sender = $this->getParameter('swiftmailer.sender_address');
             $user = $em->getRepository('App:User')->findOneBy(['email' => $email]);
+            $this->addFlash(
+                'success',
+                'Email sent to address provided'
+            );
+
+            // if nonUser
             if (null === $user) {
-                $this->addFlash(
-                        'danger',
-                        'Email address not found'
-                );
+                $nonUserView = $this->renderView('Email/nonUser.html.twig');
+                $message = (new \Swift_Message('Project MANA forgotten password'))
+                        ->setFrom($sender)
+                        ->setTo($email)
+                        ->setBody($nonUserView, 'text/html')
+                ;
+                $mailer->send($message);
 
                 return $this->redirectToRoute('home');
             }
-            $token = md5(uniqid(rand(), true));
 
-            $sender = $this->getParameter('swiftmailer.sender_address');
+            $token = md5(uniqid(rand(), true));
+            $expiry = new \DateTime();
+            $user->setPasswordExpiresAt($expiry->add(new \DateInterval('PT3H')));
+            
+            $forgotView = $this->renderView(
+                'Email/forgotten.html.twig',
+                [
+                        'fname' => $user->getFname(),
+                        'token' => $token,
+                        'expiresAt' => $expiry,
+                        ]
+                    )
+            ;
+            
             $message = (new \Swift_Message('Project MANA forgotten password'))
                     ->setFrom($sender)
                     ->setTo($email)
-                    ->setBody(
-                    $this->renderView(
-                            'Email/forgotten.html.twig',
-                            [
-                                'fname' => $user->getFname(),
-                                'token' => $token,
-                            ]
-                    ),
-                    'text/html'
-                    )
+                    ->setBody($forgotView, 'text/html')
             ;
             $mailer->send($message);
-            $this->addFlash(
-                    'success',
-                    'Email sent to address provided'
-            );
 
-            $invitee = new Invitation();
-            $invitee->setFname($user->getFname());
-            $invitee->setSname($user->getSname());
-            $invitee->setEmail($user->getEmail());
-            $invitee->setUsername($user->getUsername());
-            $invitee->setToken($token);
-
-            $em->persist($invitee);
+            $user->setConfirmationToken($token);
+            $user->setPasswordExpiresAt($expiry->add(new \DateInterval('PT3H')));
+            $em->persist($user);
             $em->flush();
 
             return $this->redirectToRoute('home');
@@ -168,7 +173,8 @@ class RegistrationController extends AbstractController {
     /**
      * @Route("/reset/{token}", name="reset_password")
      */
-    public function resetPassword(Request $request, UserPasswordEncoderInterface $passwordEncoder, $token = null) {
+    public function resetPassword(Request $request, UserPasswordEncoderInterface $passwordEncoder, $token = null)
+    {
         // for when either a logged in user or an unknown person: no token
         $em = $this->getDoctrine()->getManager();
         // make sure we're working with a logged in user
@@ -176,24 +182,35 @@ class RegistrationController extends AbstractController {
             $user = $this->getUser();
             if (null === $user) {
                 $this->addFlash(
-                        'danger',
-                        'User not found'
+                    'danger',
+                    'User not found'
                 );
 
                 return $this->redirectToRoute('home');
             }
         } else {
             // possible forgotten password user with token
-            $person = $em->getRepository('App:Invitation')->findOneBy(['token' => $token]);
+            $person = $em->getRepository('App:User')->findOneBy(['confirmationToken' => $token]);
             if (null === $person) {
                 $this->addFlash(
-                        'danger',
-                        'User not found'
+                    'danger',
+                    'User not found'
                 );
 
                 return $this->redirectToRoute('home');
             }
             $user = $em->getRepository('App:User')->findOneBy(['email' => $person->getEmail()]);
+            $expiresAt = $user->getPasswordExpiresAt();
+            $now = new \DateTime();
+            // has token expired?
+            if ($now > $expiresAt) {
+                $this->addFlash(
+                    'danger',
+                    'Password forgotten link has expired'
+                );
+                
+                return $this->redirectToRoute('home');
+            }
         }
         $form = $this->createForm(NewUserType::class, $user);
         $form->handleRequest($request);
@@ -201,9 +218,9 @@ class RegistrationController extends AbstractController {
 
             // 3) Encode the password (you could also do this via Doctrine listener)
             $user->setPassword(
-                    $passwordEncoder->encodePassword(
-                            $user,
-                            $form->get('plainPassword')->getData()
+                $passwordEncoder->encodePassword(
+                        $user,
+                        $form->get('plainPassword')->getData()
                     )
             );
             $em->persist($user);
@@ -212,8 +229,8 @@ class RegistrationController extends AbstractController {
             // ... do any other work - like sending them an email, etc
             // maybe set a "flash" success message for the user
             $this->addFlash(
-                    'success',
-                    'Your password has been updated'
+                'success',
+                'Your password has been updated'
             );
 
             return $this->redirectToRoute('home');
@@ -224,5 +241,4 @@ class RegistrationController extends AbstractController {
                     'headerText' => 'Set new password',
         ]);
     }
-
 }
