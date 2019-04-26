@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  *
  * @author George Brooks <truckeesolutions@gmail.com>
  */
-class InvitationTest extends WebTestCase {
+class UserInvitationTest extends WebTestCase {
 
     private $reference;
 
