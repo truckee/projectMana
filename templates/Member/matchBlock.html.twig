@@ -9,6 +9,6 @@
         <td>{% if member.dob %}{{ member.dob|date('m/d/Y') }}{% endif %}</td>
         <td>
         {% for address in member.household.addresses %}
-        {{ address.line1 }}{% if address.city %}, {% endif %}{{ address.city }}<br>
+        {{ address.line1 }}{% if address.city %}, {% endif %}{{ address.city }}<br />
         {% endfor %}
 {% endfor %}

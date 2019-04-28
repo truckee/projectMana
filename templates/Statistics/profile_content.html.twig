@@ -2,7 +2,7 @@
     {% set start = specs.startDate|date('F, Y') %}
     {% set end = specs.endDate|date('F, Y') %}
     <div class="card-header bg-info text-center">
-        {{ reportTitle }}<br>
+        {{ reportTitle }}<br />
         {{ reportSubTitle }} {{ start }}{% if (start != end) %} through {{ end }}{% endif %}
     </div>
     <table class="table table-striped table-sm">

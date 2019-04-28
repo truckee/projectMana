@@ -2,9 +2,9 @@
     <div class="row">
         <div class="col-lg-3">
             <div class="card-title">
-                {{ title }}<br>
+                {{ title }}<br />
                 ID: {{household.id}}; Head: <span id="household_heading">{{household.head.fname}} {{household.head.sname}}</span>
-                {% if household.dateAdded is not null %}<br> Date added: {{ household.dateAdded|date('m/d/Y') }}{% endif %}
+                {% if household.dateAdded is not null %}<br /> Date added: {{ household.dateAdded|date('m/d/Y') }}{% endif %}
             </div>
         </div>
         <div class="col-2">
