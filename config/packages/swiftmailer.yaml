@@ -1,12 +1,11 @@
 swiftmailer:
     sender_address: 'support@projectmana.org'
-    
+ 
     transport:        smtp
     username:         admin@bogus.info
     password:         123Abcd
     host:             localhost
-    delivery_addresses: ['admin@bogus.info']
-    
+   
 #    transport:        gmail
 #    username:         support@projectmana.org
 #    password:         Pm@n@2416
