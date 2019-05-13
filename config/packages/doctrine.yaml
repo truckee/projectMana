@@ -21,6 +21,7 @@ doctrine:
             test:
                 driver: 'pdo_mysql'
                 dbname: 'projectmana_test'
+                logging: true
                 user: 'root'
                 password: 'aardvark'
                 host: 'localhost'
@@ -29,8 +30,7 @@ doctrine:
                 default_table_options:
                     charset: utf8mb4
                     collate: utf8mb4_unicode_ci
-#                url: "mysqli://admin:db_password@127.0.0.1:3306/fourone_test"
-#                url: '%env(resolve:DB_MYSQL)%'
+                url: "mysqli://admin:db_password@127.0.0.1:3306/projectmana_test"
     orm:
         auto_generate_proxy_classes: true
         default_entity_manager: default
