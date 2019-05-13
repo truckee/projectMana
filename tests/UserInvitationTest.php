@@ -9,11 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  *
  * @author George Brooks <truckeesolutions@gmail.com>
  */
-class UserInvitationTest extends WebTestCase {
-
+class UserInvitationTest extends WebTestCase
+{
     private $reference;
 
-    public function setup() {
+    public function setup()
+    {
         $this->client = static::createClient();
         $this->client->followRedirects();
 
@@ -41,7 +42,8 @@ class UserInvitationTest extends WebTestCase {
         }
     }
 
-    public function testNewUser() {
+    public function testNewUser()
+    {
         $client = static::createClient();
         $client->followRedirects();
         // submit invitation
@@ -63,7 +65,8 @@ class UserInvitationTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Invalid registration data")')->count());
     }
 
-    public function testAdminSendsInvitation() {
+    public function testAdminSendsInvitation()
+    {
         $client = static::createClient();
         $crawler = $client->request('GET', '/login');
         $crawler = $client->submitForm('Sign in', [
@@ -86,7 +89,8 @@ class UserInvitationTest extends WebTestCase {
         $this->assertSame(1, $mailCollector->getMessageCount());
     }
 
-    public function testCurrentResetRequest() {
+    public function testCurrentResetRequest()
+    {
         $client = static::createClient();
         $crawler = $client->request('GET', '/register/reset/hijkl');
         $client->followRedirects();
@@ -99,7 +103,8 @@ class UserInvitationTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Your password has been update")')->count());
     }
 
-    public function testForgotPassword() {
+    public function testForgotPassword()
+    {
         $client = static::createClient();
         $client->followRedirects();
         $crawler = $client->request('GET', '/login');
@@ -121,7 +126,8 @@ class UserInvitationTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Email sent to address provided")')->count());
     }
 
-    public function testLoggedInResetPassword() {
+    public function testLoggedInResetPassword()
+    {
         $client = static::createClient();
         $client->followRedirects();
         $crawler = $client->request('GET', '/login');
@@ -141,7 +147,8 @@ class UserInvitationTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Your password has been update")')->count());
     }
 
-    public function testExpiredForgottenRequest() {
+    public function testExpiredForgottenRequest()
+    {
         $client = static::createClient();
         $client->followRedirects();
         $crawler = $client->request('GET', '/register/reset/abcdefg');
@@ -149,8 +156,8 @@ class UserInvitationTest extends WebTestCase {
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Password forgotten link has expired")')->count());
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         unset($client);
     }
-
 }

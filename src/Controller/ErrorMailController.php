@@ -19,12 +19,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 /**
  * @Route("/mailtest", name="mailtest")
  * @IsGranted("ROLE_ADMIN")
- * 
+ *
  */
 class ErrorMailController extends AbstractController
 {
     /**
-     * 
+     *
      * @Route("/")
      */
     public function indexAction()
