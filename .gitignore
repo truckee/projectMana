@@ -31,3 +31,5 @@ yarn-error.log
 /app
 /web
 ###< symfony v3 ###
+
+.phpunit.result.cache

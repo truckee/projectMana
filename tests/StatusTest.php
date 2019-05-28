@@ -22,7 +22,7 @@ class StatusTest extends WebTestCase
 {
     private $reference;
 
-    public function setup()
+    public function setup() : void
     {
         $this->client = static::createClient();
         $this->client->followRedirects();
@@ -84,7 +84,7 @@ class StatusTest extends WebTestCase
         $this->assertEquals($activeBefore, $activeAfter);
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         unset($this->client);
         unset($this->reference);

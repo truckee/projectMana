@@ -13,7 +13,7 @@ class UserInvitationTest extends WebTestCase
 {
     private $reference;
 
-    public function setup()
+    public function setup() : void
     {
         $this->client = static::createClient();
         $this->client->followRedirects();
@@ -156,7 +156,7 @@ class UserInvitationTest extends WebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Password forgotten link has expired")')->count());
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         unset($client);
     }

@@ -23,7 +23,7 @@ class StatisticsControllerTest extends WebTestCase
 {
     private $reference;
 
-    public function setup()
+    public function setup() : void
     {
         $date = new \DateTime();
         $this->lastMonth = date_format(new \DateTime('last month'), 'F, Y');
@@ -315,7 +315,7 @@ class StatisticsControllerTest extends WebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Other Services Summary")')->count());
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         unset($this->client);
         unset($this->reference);

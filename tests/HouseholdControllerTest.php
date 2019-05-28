@@ -23,7 +23,7 @@ class HouseholdControllerTest extends WebTestCase
 {
     private $reference;
     
-    public function setup()
+    public function setup() : void
     {
         $this->client = static::createClient();
         $this->client->followRedirects();
@@ -300,7 +300,7 @@ class HouseholdControllerTest extends WebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Other")')->count());
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         unset($this->client);
         unset($this->reference);

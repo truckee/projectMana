@@ -22,7 +22,7 @@ class MemberControllerTest extends WebTestCase
 {
     private $reference;
 
-    public function setup()
+    public function setup() : void
     {
         $this->client = static::createClient();
         $this->client->followRedirects();
@@ -165,7 +165,7 @@ class MemberControllerTest extends WebTestCase
         $this->assertEquals($work, $formWork);
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         unset($this->client);
         unset($this->reference);

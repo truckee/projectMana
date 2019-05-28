@@ -24,23 +24,23 @@
                     </div>
                 {% endfor %}
             {% endfor %}
-            {% if is_granted('ROLE_USER') %}
-                {% block nav %}
+            {% block nav %}
+                {% if is_granted('ROLE_USER') %}
                     {% include 'Menu/main.html.twig' %}
-                {% endblock nav %}
-                <p class="text-center d-print-none">
-                    Welcome to the Project MANA distribution database application.
-                </p>
-                {% for label, messages in app.flashes %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{label}}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
+                {% endif %}
+            {% endblock nav %}
+            <p class="text-center d-print-none">
+                Welcome to the Project MANA distribution database application.
+            </p>
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{label}}">
+                        {{ message }}
+                    </div>
                 {% endfor %}
-                {% block body %}
-                {% endblock body %}
-            {% endif %}
+            {% endfor %}
+            {% block body %}
+            {% endblock body %}
             {% block anon %}
             {% endblock anon %}
             {% block javascripts %}
