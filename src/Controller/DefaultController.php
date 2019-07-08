@@ -31,7 +31,7 @@ class DefaultController extends AbstractController
      */
     public function indexAction(FYChart $fiscalYearChart)
     {
-        $ob = $fiscalYearChart->getDistsFYToDate();
+        $ob = $fiscalYearChart->getPreviousDists();
         
         return $this->render('Default/index.html.twig', [
             'chart' => $ob,
