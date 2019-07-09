@@ -28,7 +28,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <b>Q4: Benefits:</b> {% set a = household.benefits|length %}
-                {% for benefit in household.benefits if a > 0 %}{{benefit.benefit}}{% if loop.index < a %}; {% endif %}{% endfor %}
+                {% for benefit in household.benefits|filter(a => a > 0) %}{{benefit.benefit}}{% if loop.index < a %}; {% endif %}{% endfor %}
             </div>
         </div>
         {# Q5 Why not foodstamps #}
@@ -53,21 +53,21 @@
         <div class="row">
             <div class="col-lg-12">
                 <b>Q8: Insufficient food:</b> {% set n = household.reasons|length %}
-                {% for reason in household.reasons if n > 0 %}{{reason.reason}}{% if loop.index < n %}; {% endif %}{% endfor %}
+                {% for reason in household.reasons|filter(n => n > 0) %}{{reason.reason}}{% if loop.index < n %}; {% endif %}{% endfor %}
             </div>
         </div>
         {# Q9 Seeking services #}
         <div class="row">
             <div class="col-lg-12">
                 <b>Q9: Seeking services:</b> {% set a = household.assistances|length %}
-                {% for assistance in household.assistances if a > 0 %}{{assistance.assistance}}{% if loop.index < a %}; {% endif %}{% endfor %}
+                {% for assistance in household.assistances|filter(a => a > 0) %}{{assistance.assistance}}{% if loop.index < a %}; {% endif %}{% endfor %}
             </div>
         </div>
         {# Q10 Receiving services #}
         <div class="row">
             <div class="col-lg-12">
                 <b>Q10: Receiving services:</b> {% set n = household.organizations|length %}
-                {% for organization in household.organizations if n > 0 %}{{organization.organization}}{% if loop.index < n %}; {% endif %}{% endfor %}
+                {% for organization in household.organizations|filter(n => n > 0) %}{{organization.organization}}{% if loop.index < n %}; {% endif %}{% endfor %}
             </div>
         </div>
         <div class="row">
