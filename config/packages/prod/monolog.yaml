@@ -5,24 +5,23 @@ monolog:
             action_level: critical
             handler:      grouped
         grouped:
-            type:    group
+            type:    'group'
             members: [streamed, deduplicated]
         streamed:
-            type:  stream
+            type:  'stream'
             path:  '%kernel.logs_dir%/%kernel.environment%.log'
-            level: debug
+            level: 'debug'
         deduplicated:
-            type:    deduplication
-            handler: swift
+            type:    'deduplication'
+            handler: 'swift'
         swift:
-            type:       swift_mailer
+            type:       'swift_mailer'
             from_email: 'admin@projectmana.org'
             to_email:   'support@projectmana.org'
             subject:    'Project MANA Error Alert!'
-            level:      dev
-            level:      debug
-            formatter:  monolog.formatter.html
-            content_type: text/html
+            level:      'debug'
+            formatter:  'monolog.formatter.html'
+            content_type: 'text/html'
 ## yaml as delivered:
 #    handlers:
 #        main:
