@@ -17,10 +17,9 @@ monolog:
         swift:
             type:       swift_mailer
             from_email: 'admin@projectmana.org'
-            to_email:   'support@bogus.info'
-#            to_email:   'support@projectmana.org'
+            to_email:   'support@projectmana.org'
             subject:    'Project MANA Error Alert!'
-#            level:      dev
+            level:      dev
             level:      debug
             formatter:  monolog.formatter.html
             content_type: text/html
