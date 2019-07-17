@@ -31,3 +31,7 @@ services:
         tags:
           - { name: monolog.logger, channel: mailer }
           - { name: "swiftmailer.default.plugin" }
+
+    App\EventListener\UserListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }

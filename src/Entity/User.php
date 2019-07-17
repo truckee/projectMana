@@ -80,9 +80,9 @@ class User implements UserInterface, EncoderAwareInterface
     private $email_canonical;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true, name="last_login")
      */
-    private $last_login;
+    private $lastLogin;
 
     /**
      * @ORM\Column(type="string", nullable=true, name="confirmation_token")
@@ -275,6 +275,19 @@ class User implements UserInterface, EncoderAwareInterface
         return $this;
     }
     
+    /**
+     * Used only on successful authentication
+     */
+    public function setLastLogin($time) {
+        //set time to now()
+        $this->lastLogin = $time;
+        
+        return $this;
+    }
+    
+    public function getLastLogin() {
+        return $this->last_login;
+    }
  
     // required by interface, otherwise irrelevant
     
