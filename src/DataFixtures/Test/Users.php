@@ -52,7 +52,8 @@ class Users extends Fixture implements OrderedFixtureInterface
         $admin->setEnabled(true);
         $admin->setConfirmationToken('hijkl');
         $time = new \DateTime();
-        $admin->setPasswordExpiresAt($time->add(new \DateInterval('PT3H')));
+        $admin->setLastLogin($time);
+        $admin->setPasswordExpiresAt($time->add(new \DateInterval('PT4H')));
         $admin->setRoles(array('ROLE_ADMIN'));
 
         // Update the user

@@ -286,7 +286,7 @@ class User implements UserInterface, EncoderAwareInterface
     }
     
     public function getLastLogin() {
-        return $this->last_login;
+        return $this->lastLogin;
     }
  
     // required by interface, otherwise irrelevant

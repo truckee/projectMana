@@ -110,7 +110,7 @@ class UserInvitationTest extends WebTestCase
         $crawler = $client->request('GET', '/login');
         $link = $crawler->filter('a:contains("Forgot password?")')->link();
         $crawler = $client->click($link);
-
+        
         // non-user
         $crawler = $client->submitForm('Submit', [
             'user_email[email]' => 'fiddle@deedee.org'
@@ -152,8 +152,13 @@ class UserInvitationTest extends WebTestCase
         $client = static::createClient();
         $client->followRedirects();
         $crawler = $client->request('GET', '/register/reset/abcdefg');
-        file_put_contents("G:\\Documents\\response.html", $client->getResponse()->getContent());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Password forgotten link has expired")')->count());
+    }
+    
+    public function testUserLoginTime() {
+        $time = $this->reference['User1']->getLastLogin();
+        
+        $this->assertGreaterThan($time, new \DateTime());
     }
 
     public function tearDown() : void

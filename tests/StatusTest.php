@@ -66,7 +66,6 @@ class StatusTest extends WebTestCase
     {
         $crawler = $this->login();
         $crawler = $this->client->request('GET', '/status');
-        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
         $form = $crawler->selectButton('Submit')->form();
         $year = date_format(new \DateTime(), 'Y');
         $activeBefore = trim($crawler->filter('#active' . $year)->text());

@@ -68,7 +68,6 @@ class MemberControllerTest extends WebTestCase
         $houseId = $this->reference['Household1']->getId();
         $crawler = $this->client->request('GET', '/member/add/' . $houseId);
         $crawler = $this->client->submitForm('Submit', []);
-        file_put_contents("G:\\Documents\\response.html", $this->client->getResponse()->getContent());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("First name may not be blank")')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Last name may not be blank")')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Invalid date or age entry")')->count());
