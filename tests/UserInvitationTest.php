@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 class UserInvitationTest extends WebTestCase
 {
+    private $em;
     private $reference;
 
     public function setup() : void
@@ -21,11 +22,11 @@ class UserInvitationTest extends WebTestCase
         self::bootKernel();
 
         // returns the real and unchanged service container
-        $container = self::$kernel->getContainer();
+//        $container = self::$kernel->getContainer();
 
         // gets the special container that allows fetching private services
         $container = self::$container;
-        $em = self::$container->get('doctrine')->getManager('test');
+        $this->em = self::$container->get('doctrine')->getManager('test');
         $tables = [
             'AddressType', 'Assistance', 'Center', 'Contactdesc', 'County', 'Ethnicity',
             'Housing', 'Income', 'Notfoodstamp', 'Organization', 'Reason', 'Relationship',
@@ -34,7 +35,7 @@ class UserInvitationTest extends WebTestCase
         $this->reference = [];
         foreach ($tables as $value) {
             $i = 1;
-            $entities = $em->getRepository("App:" . $value)->findAll();
+            $entities = $this->em->getRepository("App:" . $value)->findAll();
             foreach ($entities as $entity) {
                 $this->reference[$value . $i] = $entity;
                 $i ++;
@@ -65,7 +66,7 @@ class UserInvitationTest extends WebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Invalid registration data")')->count());
     }
 
-    public function testAdminSendsInvitation()
+    public function testLegacyAdminSendsInvitation()
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/login');
@@ -157,8 +158,20 @@ class UserInvitationTest extends WebTestCase
     
     public function testUserLoginTime() {
         $time = $this->reference['User1']->getLastLogin();
+        $now = new \DateTime();
+        $this->assertGreaterThan($time, $now);
+
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/login');
+        $crawler = $client->submitForm('Sign in', [
+            'username' => 'admin@bogus.info',
+            'password' => 'manapw',
+        ]);
         
-        $this->assertGreaterThan($time, new \DateTime());
+        $user = $this->em->getRepository('App:User')->find(1);
+        $login = $user->getLastLogin();
+        
+        $this->assertGreaterThan($now, $login);
     }
 
     public function tearDown() : void

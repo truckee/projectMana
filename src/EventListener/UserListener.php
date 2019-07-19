@@ -31,8 +31,8 @@ class UserListener
     {
         $user = $event->getAuthenticationToken()->getUser();
         $user->setLastLogin(new \DateTime());
+        $user->setPasswordExpiresAt();
         $this->em->persist($user);
-        $this->em->flush();
         
         if ($user->getEncoderName() === 'old') {
             $user->setEncoderName('new');
@@ -40,8 +40,8 @@ class UserListener
             $user->setPassword(
                 $this->encoder->encodePassword($user, $password)
             );
-            $this->em->flush();
         }
+            $this->em->flush();
         
     }
 }
