@@ -101,8 +101,63 @@
     "egulias/email-validator": {
         "version": "2.1.7"
     },
+    "elasticsearch/elasticsearch": {
+        "version": "v6.7.2"
+    },
+    "enqueue/dsn": {
+        "version": "0.9.2"
+    },
+    "enqueue/elastica-bundle": {
+        "version": "0.9.3"
+    },
+    "enqueue/enqueue": {
+        "version": "0.9.12"
+    },
+    "enqueue/enqueue-bundle": {
+        "version": "0.9",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.9",
+            "ref": "a025d0d707c6a7fefb8903f1c9844700dc69ee9d"
+        },
+        "files": [
+            "./config/packages/enqueue.yaml",
+            "./config/packages/test/enqueue.yaml"
+        ]
+    },
+    "enqueue/fs": {
+        "version": "0.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.4",
+            "ref": "4d45d1e6b113832ad13f6d321506c004ed12fe2e"
+        }
+    },
+    "enqueue/null": {
+        "version": "0.9.12"
+    },
     "fig/link-util": {
         "version": "1.0.0"
+    },
+    "friendsofsymfony/elastica-bundle": {
+        "version": "5.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "5.0",
+            "ref": "3f73f240ee0c3719e89f1c994ce66904e2ef84f6"
+        },
+        "files": [
+            "./config/packages/fos_elastica.yaml"
+        ]
+    },
+    "guzzlehttp/ringphp": {
+        "version": "1.1.1"
+    },
+    "guzzlehttp/streams": {
+        "version": "3.0.0"
     },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
@@ -121,6 +176,9 @@
     },
     "liip/functional-test-bundle": {
         "version": "2.0.0-alpha12"
+    },
+    "makasim/temp-file": {
+        "version": "0.2.0"
     },
     "monolog/monolog": {
         "version": "1.24.0"
@@ -160,6 +218,21 @@
     },
     "psr/log": {
         "version": "1.1.0"
+    },
+    "queue-interop/amqp-interop": {
+        "version": "0.8.1"
+    },
+    "queue-interop/queue-interop": {
+        "version": "0.8.0"
+    },
+    "ramsey/uuid": {
+        "version": "3.8.0"
+    },
+    "react/promise": {
+        "version": "v2.7.1"
+    },
+    "ruflin/elastica": {
+        "version": "6.1.1"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
