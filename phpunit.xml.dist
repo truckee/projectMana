@@ -11,10 +11,6 @@
         <ini name="error_reporting" value="-1" />
         <env name="APP_ENV" value="test" />
         <env name="SHELL_VERBOSITY" value="-1" />
-
-        <!-- ###+ enqueue/enqueue-bundle ### -->
-        <env name="ENQUEUE_DSN" value="null://"/>
-        <!-- ###- enqueue/enqueue-bundle ### -->
     </php>
 
     <testsuites>
