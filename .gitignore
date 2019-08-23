@@ -25,7 +25,7 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 /nbproject/private/
-.php_cs.cache
+/.php_cs.cache
 
 ###> symfony v3 ###
 /app
