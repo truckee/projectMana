@@ -145,22 +145,22 @@ class GeneralStatisticsReport {
         if (count($res) <= count($size)) {
             // when $res has same # or fewer elements than $size
             foreach ($res as $key => $value) {
-                if (array_key_exists($key, $size) && 0 === $value * 1) {
+                if (0 === $value * 1) {
                     $resDist['< 1 month'] += $size[$key];
-                } elseif (array_key_exists($key, $size) && 1 <= $value * 1 && $value * 1 < 24) {
+                } elseif (1 <= $value * 1 && $value * 1 < 24) {
                     $resDist['1 mo - 2 yrs'] += $size[$key];
-                } elseif (array_key_exists($key, $size) && 24 < $value * 1) {
+                } elseif (24 < $value * 1) {
                     $resDist['>=2 yrs'] += $size[$key];
                 }
             }
         } else {
             //when $size has fewer elements than $res
             foreach ($size as $key => $value) {
-                if (array_key_exists($key, $res) && 0 === $res[$key] * 1) {
+                if (0 === $res[$key] * 1) {
                     $resDist['< 1 month'] += $size[$key];
-                } elseif (array_key_exists($key, $res) && 1 <= $res[$key] * 1 && $res[$key] * 1 < 24) {
+                } elseif (1 <= $res[$key] * 1 && $res[$key] * 1 < 24) {
                     $resDist['1 mo - 2 yrs'] += $size[$key];
-                } elseif (array_key_exists($key, $res) && 24 < $res[$key] * 1) {
+                } elseif (24 < $res[$key] * 1) {
                     $resDist['>=2 yrs'] += $size[$key];
                 }
             }
