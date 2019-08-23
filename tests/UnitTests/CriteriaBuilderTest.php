@@ -24,8 +24,8 @@ use PHPUnit\Framework\TestCase;
  *
  * @author George Brooks <truckeesolutions@gmail.com>
  */
-class CriteriaBuilderTest extends TestCase {
-
+class CriteriaBuilderTest extends TestCase
+{
     private $incoming;
     private $em;
     private $startDate;
@@ -35,7 +35,8 @@ class CriteriaBuilderTest extends TestCase {
     private $betweenParameters;
     private $repo;
 
-    public function setup(): void {
+    public function setup(): void
+    {
         $this->incoming = [
             'startMonth' => 5,
             'startYear' => 2019,
@@ -53,7 +54,8 @@ class CriteriaBuilderTest extends TestCase {
         $this->repo = $this->createMock(ObjectRepository::class);
     }
 
-    public function testDetailsCriteria() {
+    public function testDetailsCriteria()
+    {
         $builder = new CriteriaBuilder($this->em);
         $criteria = $builder->getDetailsCriteria($this->incoming);
 
@@ -62,7 +64,8 @@ class CriteriaBuilderTest extends TestCase {
         $this->assertEquals($this->startDate, $criteria['startParameters']['startDate']);
     }
 
-    public function testGeneralCriteriaNoSiteNoCountyNoContactDes() {
+    public function testGeneralCriteriaNoSiteNoCountyNoContactDes()
+    {
         $builder = new CriteriaBuilder($this->em);
         $criteria = $builder->getGeneralCriteria($this->incoming);
 
@@ -72,7 +75,8 @@ class CriteriaBuilderTest extends TestCase {
         $this->assertEquals([], $criteria['contactParameters']);
     }
 
-    public function testGeneralCriteriaSiteNoCountyNoContactDes() {
+    public function testGeneralCriteriaSiteNoCountyNoContactDes()
+    {
         $builder = new CriteriaBuilder($this->em);
         $this->incoming['center'] = 1;
         
@@ -93,7 +97,8 @@ class CriteriaBuilderTest extends TestCase {
         $this->assertEquals([], $criteria['contactParameters']);
     }
 
-    public function testGeneralCriteriaNoSiteCountyNoContactDes() {
+    public function testGeneralCriteriaNoSiteCountyNoContactDes()
+    {
         $builder = new CriteriaBuilder($this->em);
         $this->incoming['county'] = 1;
         
@@ -114,7 +119,8 @@ class CriteriaBuilderTest extends TestCase {
         $this->assertEquals([], $criteria['contactParameters']);
     }
 
-    public function testGeneralCriteriaNoSiteNoCountyContactDesc() {
+    public function testGeneralCriteriaNoSiteNoCountyContactDesc()
+    {
         $builder = new CriteriaBuilder($this->em);
         $this->incoming['contactdesc'] = 1;
         
@@ -135,7 +141,8 @@ class CriteriaBuilderTest extends TestCase {
         $this->assertEquals(['contactdesc' => $contactdesc], $criteria['contactParameters']);
     }
 
-    public function testGeneralCriteriaSiteNoCountyContactDesc() {
+    public function testGeneralCriteriaSiteNoCountyContactDesc()
+    {
         $builder = new CriteriaBuilder($this->em);
         $this->incoming['center'] = 1;
         $this->incoming['contactdesc'] = 1;
@@ -157,5 +164,4 @@ class CriteriaBuilderTest extends TestCase {
         $this->assertEquals('c.contactdesc = :contactdesc', $criteria['contactWhereClause']);
         $this->assertEquals(['contactdesc' => $contactdesc], $criteria['contactParameters']);
     }
-
 }
