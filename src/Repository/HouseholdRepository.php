@@ -14,7 +14,8 @@ namespace App\Repository;
 use App\Entity\Contact;
 use Doctrine\ORM\EntityRepository;
 
-class HouseholdRepository extends EntityRepository {
+class HouseholdRepository extends EntityRepository
+{
 
     /**
      * Add contact to set of households
@@ -22,7 +23,8 @@ class HouseholdRepository extends EntityRepository {
      * @param array $households
      * @param array $contactData
      */
-    public function addContacts($households, $contactData) {
+    public function addContacts($households, $contactData)
+    {
         $em = $this->getEntityManager();
         foreach ($households as $id) {
             $household = $em->getRepository('App:Household')->find($id);
@@ -46,7 +48,8 @@ class HouseholdRepository extends EntityRepository {
     /**
      * Annual turkey report
      */
-    public function annualTurkey() {
+    public function annualTurkey()
+    {
         $jan1 = new \DateTime('first day of January');
         $jul1 = new \DateTime('first day of July');
 
@@ -68,8 +71,9 @@ class HouseholdRepository extends EntityRepository {
                         ->getResult();
     }
 
-    public function size($criteria) {
-        $parameters = array_merge($criteria['startParameters'], $criteria['startParameters'], ['hArray' => $this->reportHousehold($criteria)]);
+    public function size($criteria)
+    {
+        $parameters = array_merge($criteria['startParameters'], $criteria['startParameters'], ['hArray' => $this->distinctHouseholds($criteria)]);
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $sizeData = $this->getEntityManager()->createQueryBuilder()
@@ -86,14 +90,15 @@ class HouseholdRepository extends EntityRepository {
         return $sizeData;
     }
 
-    public function householdResidency($criteria) {
-        $parameters = array_merge($criteria['betweenParameters'], ['hArray' => $this->reportHousehold($criteria)]);
+    public function householdResidency($criteria)
+    {
+        $parameters = array_merge($criteria['betweenParameters'], ['hArray' => $this->distinctHouseholds($criteria)]);
 
         $endDate = $criteria['betweenParameters']['endDate'];
         $testYear = date_format($endDate, 'Y');
         $testMo = date_format($endDate, 'm');
-        
-        return  $this->createQueryBuilder('h')
+
+        return $this->createQueryBuilder('h')
                         ->select("distinct h.id, 12*($testYear - h.arrivalyear) + $testMo - h.arrivalmonth R")
                         ->join('h.contacts', 'c')
                         ->where('h.id IN (:hArray)')
@@ -104,23 +109,39 @@ class HouseholdRepository extends EntityRepository {
                         ->getQuery()->getResult()
         ;
     }
-    
-    public function reportHousehold($criteria) {
-        $parameters = array_merge($criteria['betweenParameters'], $criteria['siteParameters'], $criteria['contactParameters']);
 
-        return $this->createQueryBuilder('h')
-                        ->select('distinct h.id')
-                        ->join('h.contacts', 'c')
+    public function distinctHouseholds($criteria)
+    {
+        $qb = $this->createQueryBuilder('h')
+                ->select('distinct h.id');
+        $this->householdQB($qb, $criteria);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function allHouseholds($criteria)
+    {
+        $qb = $this->createQueryBuilder('h')
+                ->select('h.id');
+        $this->householdQB($qb, $criteria);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    private function householdQB($qb, $criteria)
+    {
+        $parameters = array_merge($criteria['betweenParameters'], $criteria['siteParameters'], $criteria['contactParameters']);
+        
+        return $qb->join('h.contacts', 'c')
                         ->where($criteria['betweenWhereClause'])
                         ->andWhere($criteria['siteWhereClause'])
                         ->andWhere($criteria['contactWhereClause'])
                         ->setParameters($parameters)
-                        ->orderBy('h.id')
-                        ->getQuery()->getResult()
-        ;
+                        ->orderBy('h.id');
     }
 
-    public function seekingServices() {
+    public function seekingServices()
+    {
         return $this->createQueryBuilder('h')
                         ->select('distinct h.id, h.seeking')
                         ->join('h.contacts', 'c')
@@ -130,7 +151,8 @@ class HouseholdRepository extends EntityRepository {
         ;
     }
 
-    public function receivingServices() {
+    public function receivingServices()
+    {
         return $this->createQueryBuilder('h')
                         ->select('distinct h.id, h.receiving')
                         ->join('h.contacts', 'c')
@@ -139,5 +161,4 @@ class HouseholdRepository extends EntityRepository {
                         ->getQuery()->getResult()
         ;
     }
-
 }

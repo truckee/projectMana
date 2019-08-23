@@ -50,7 +50,7 @@ class CountyStatistics
             $tiData = $this->em->getRepository('App:Member')->reportMembers($criteria);
             $county[$site->getCounty()]['TIS'] = count($tiData);
             $tisTotal += count($tiData);
-            $thData = $this->em->getRepository('App:Household')->reportHousehold($criteria);
+            $thData = $this->em->getRepository('App:Household')->allHouseholds($criteria);
             $county[$site->getCounty()]['THS'] = count($thData);
             $thsTotal += count($thData);
         }

@@ -67,7 +67,7 @@ class GeneralStatisticsReport {
         $statistics['TIS'] = count($tiData);
 
         //total households
-        $th = $this->em->getRepository('App:Household')->reportHousehold($criteria);
+        $th = $this->em->getRepository('App:Household')->allHouseholds($criteria);
         $statistics['THS'] = count($th);
 
         //unique individuals & households
