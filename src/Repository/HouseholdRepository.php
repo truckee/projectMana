@@ -103,12 +103,8 @@ class HouseholdRepository extends EntityRepository
                         ->setParameters($criteria['betweenParameters'])
                         ->getQuery()->getResult()
         ;
-        $houseRes = [];
-        foreach ($res as $array) {
-            $houseRes[$array['id']]['R'] = $array['R'];
-        }
         
-        return $houseRes;
+        return $res;
     }
 
     public function reportHousehold($criteria)
