@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Truckee\Projectmana package.
  *
@@ -19,24 +20,21 @@ use Doctrine\ORM\EntityManagerInterface;
  *
  * @author George
  */
-class GeneralStatisticsReport
-{
+class GeneralStatisticsReport {
+
     private $em;
 
-    public function __construct(EntityManagerInterface $em)
-    {
+    public function __construct(EntityManagerInterface $em) {
         $this->em = $em;
     }
 
-    public function getGeneralStats($criteria)
-    {
+    public function getGeneralStats($criteria) {
         $stats = $this->setGeneralStats($criteria);
 
         return $stats;
     }
 
-    private function setGeneralStats($criteria)
-    {
+    private function setGeneralStats($criteria) {
         $statistics = [];
         $ageGenderData = $this->em->getRepository('App:Member')->ageEthnicityDistribution($criteria);
         $ageGenderDist = $this->setAgeGenderDist($ageGenderData);
@@ -88,8 +86,7 @@ class GeneralStatisticsReport
         return $statistics;
     }
 
-    private function setSizeDist($data)
-    {
+    private function setSizeDist($data) {
         $familyArray = ['Single' => 0, 'Two' => 0, 'Three' => 0, 'Four' => 0, 'Five' => 0, 'Six or more' => 0];
         foreach ($data as $family) {
             switch ($family['size']) {
@@ -117,8 +114,7 @@ class GeneralStatisticsReport
         return $familyArray;
     }
 
-    private function setEthDist($data)
-    {
+    private function setEthDist($data) {
         $ethnicities = $this->em->getRepository('App:Ethnicity')->findAll();
         foreach ($ethnicities as $object) {
             $eth[$object->getEthnicity()] = 0;
@@ -130,55 +126,50 @@ class GeneralStatisticsReport
         return $eth;
     }
 
-    private function setResDist($sizeData, $householdResData)
-    {
-        $houseSize = [];
+    private function setResDist($sizeData, $householdResData) {
+        $size = [];
         foreach ($sizeData as $array) {
-            $houseSize[$array['id']]['N'] = $array['size'];
+            $size[$array['id']] = $array['size'];
         }
+        $res = [];
+        foreach ($householdResData as $array) {
+            $res[$array['id']] = $array['R'];
+        }
+
         /**
-         * $houseSize: key = id, value = N
-         * $householdResData: key = id, value = R
+         * $size: key = id, value = size
+         * $res: key = id, value = months
          */
         $resDist = ['< 1 month' => 0, '1 mo - 2 yrs' => 0, '>=2 yrs' => 0];
 
-        if (count($householdResData) <= count($houseSize)) {
-            // when $householdResData has fewer elements than $houseSize
-            foreach ($householdResData as $key => $value) {
-                switch ($value) {
-                    case $value['R'] < 1:
-                        $resDist['< 1 month'] += $houseSize[$key]['N'];
-                        break;
-                    case 1 <= $value['R'] && 24 > $value['R']:
-                        $resDist['1 mo - 2 yrs'] += $houseSize[$key]['N'];
-                        break;
-                    case 24 <= $value['R']:
-                        $resDist['>=2 yrs'] += $houseSize[$key]['N'];
-                        break;
+        if (count($res) <= count($size)) {
+            // when $res has same # or fewer elements than $size
+            foreach ($res as $key => $value) {
+                if (array_key_exists($key, $size) && 0 === $value * 1) {
+                    $resDist['< 1 month'] += $size[$key];
+                } elseif (array_key_exists($key, $size) && 1 <= $value * 1 && $value * 1 < 24) {
+                    $resDist['1 mo - 2 yrs'] += $size[$key];
+                } elseif (array_key_exists($key, $size) && 24 < $value * 1) {
+                    $resDist['>=2 yrs'] += $size[$key];
                 }
             }
         } else {
-            //when $houseSize has fewer elements than $householdResData
-            foreach ($houseSize as $key => $value) {
-                switch ($householdResData[$key]) {
-                    case $householdResData[$key]['R'] < 1:
-                        $resDist['< 1 month'] += $houseSize[$key]['N'];
-                        break;
-                    case 1 <= $householdResData[$key]['R'] && 24 > $householdResData[$key]['R']:
-                        $resDist['1 mo - 2 yrs'] += $houseSize[$key]['N'];
-                        break;
-                    case 24 <= $householdResData[$key]['R']:
-                        $resDist['>=2 yrs'] += $houseSize[$key]['N'];
-                        break;
+            //when $size has fewer elements than $res
+            foreach ($size as $key => $value) {
+                if (array_key_exists($key, $res) && 0 === $res[$key] * 1) {
+                    $resDist['< 1 month'] += $size[$key];
+                } elseif (array_key_exists($key, $res) && 1 <= $res[$key] * 1 && $res[$key] * 1 < 24) {
+                    $resDist['1 mo - 2 yrs'] += $size[$key];
+                } elseif (array_key_exists($key, $res) && 24 < $res[$key] * 1) {
+                    $resDist['>=2 yrs'] += $size[$key];
                 }
             }
         }
-        
+
         return $resDist;
     }
 
-    private function setAgeGenderDist($data)
-    {
+    private function setAgeGenderDist($data) {
         $ageDist = ['Under 6' => 0, '6 - 18' => 0, '19 - 59' => 0, '60+' => 0];
         $ageGenderDist = ['FC' => 0, 'MC' => 0, 'FA' => 0, 'MA' => 0, 'OC' => 0, 'OA' => 0,];
         foreach ($data as $row) {
@@ -243,8 +234,7 @@ class GeneralStatisticsReport
         ];
     }
 
-    private function setFreqDist($criteria)
-    {
+    private function setFreqDist($criteria) {
         $frequency = ['1x' => 0, '2x' => 0, '3x' => 0, '4x' => 0];
         $qbSizes = $this->em->getRepository('App:Household')->size($criteria);
         foreach ($qbSizes as $row) {
@@ -272,4 +262,5 @@ class GeneralStatisticsReport
 
         return $frequency;
     }
+
 }
