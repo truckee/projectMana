@@ -80,7 +80,7 @@ class User implements UserInterface, EncoderAwareInterface
     private $email_canonical;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true, name="last_login")
+     * @ORM\Column(type="date", nullable=true, name="last_login")
      */
     private $lastLogin;
 
@@ -90,7 +90,7 @@ class User implements UserInterface, EncoderAwareInterface
     private $confirmationToken;
 
     /**
-     * @ORM\Column(nullable=true, name="password_expires_at", type="datetime")
+     * @ORM\Column(nullable=true, name="password_expires_at", type="date")
      */
     private $passwordExpiresAt;
 
