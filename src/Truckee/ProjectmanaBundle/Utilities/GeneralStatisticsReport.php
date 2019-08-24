@@ -70,7 +70,7 @@ class GeneralStatisticsReport
         $statistics['TIS'] = count($tiData);
 
         //total households
-        $th = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->reportHousehold($criteria);
+        $th = $this->em->getRepository('TruckeeProjectmanaBundle:Household')->allHouseholds($criteria);
         $statistics['THS'] = count($th);
 
         //unique individuals & households
@@ -131,50 +131,46 @@ class GeneralStatisticsReport
         return $eth;
     }
 
-    private function setResDist($sizeData, $householdResData)
-    {
-        $houseSize = [];
+    private function setResDist($sizeData, $householdResData) {
+        $size = [];
         foreach ($sizeData as $array) {
-            $houseSize[$array['id']]['N'] = $array['size'];
+            $size[$array['id']] = $array['size'];
         }
+        $res = [];
+        foreach ($householdResData as $array) {
+            $res[$array['id']] = $array['R'];
+        }
+
         /**
-         * $houseSize: key = id, value = N
-         * $householdResData: key = id, value = R
+         * $size: key = id, value = size
+         * $res: key = id, value = months
          */
         $resDist = ['< 1 month' => 0, '1 mo - 2 yrs' => 0, '>=2 yrs' => 0];
 
-        if (count($householdResData) <= count($houseSize)) {
-            // when $householdResData has fewer elements than $houseSize
-            foreach ($householdResData as $key => $value) {
-                switch ($value) {
-                    case $value['R'] < 1:
-                        $resDist['< 1 month'] += $houseSize[$key]['N'];
-                        break;
-                    case 1 <= $value['R'] && 24 > $value['R']:
-                        $resDist['1 mo - 2 yrs'] += $houseSize[$key]['N'];
-                        break;
-                    case 24 <= $value['R']:
-                        $resDist['>=2 yrs'] += $houseSize[$key]['N'];
-                        break;
+        if (count($res) <= count($size)) {
+            // when $res has same # or fewer elements than $size
+            foreach ($res as $key => $value) {
+                if (0 === $value * 1) {
+                    $resDist['< 1 month'] += $size[$key];
+                } elseif (1 <= $value * 1 && $value * 1 < 24) {
+                    $resDist['1 mo - 2 yrs'] += $size[$key];
+                } elseif (24 < $value * 1) {
+                    $resDist['>=2 yrs'] += $size[$key];
                 }
             }
         } else {
-            //when $houseSize has fewer elements than $householdResData
-            foreach ($houseSize as $key => $value) {
-                switch ($householdResData[$key]) {
-                    case $householdResData[$key]['R'] < 1:
-                        $resDist['< 1 month'] += $houseSize[$key]['N'];
-                        break;
-                    case 1 <= $householdResData[$key]['R'] && 24 > $householdResData[$key]['R']:
-                        $resDist['1 mo - 2 yrs'] += $houseSize[$key]['N'];
-                        break;
-                    case 24 <= $householdResData[$key]['R']:
-                        $resDist['>=2 yrs'] += $houseSize[$key]['N'];
-                        break;
+            //when $size has fewer elements than $res
+            foreach ($size as $key => $value) {
+                if (0 === $res[$key] * 1) {
+                    $resDist['< 1 month'] += $size[$key];
+                } elseif (1 <= $res[$key] * 1 && $res[$key] * 1 < 24) {
+                    $resDist['1 mo - 2 yrs'] += $size[$key];
+                } elseif (24 < $res[$key] * 1) {
+                    $resDist['>=2 yrs'] += $size[$key];
                 }
             }
         }
-        
+
         return $resDist;
     }
 

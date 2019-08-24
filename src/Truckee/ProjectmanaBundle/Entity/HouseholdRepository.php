@@ -72,7 +72,7 @@ class HouseholdRepository extends EntityRepository
 
     public function size($criteria)
     {
-        $parameters = array_merge($criteria['startParameters'], $criteria['startParameters'], ['hArray' => $this->reportHousehold($criteria)]);
+        $parameters = array_merge($criteria['startParameters'], $criteria['startParameters'], ['hArray' => $this->distinctHouseholds($criteria)]);
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $sizeData = $this->getEntityManager()->createQueryBuilder()
@@ -91,39 +91,52 @@ class HouseholdRepository extends EntityRepository
 
     public function householdResidency($criteria)
     {
-        $startDate = $criteria['startParameters']['startDate'];
-        $testYear = date_format($startDate, 'Y');
-        $testMo = date_format($startDate, 'm');
-        $res = $this->createQueryBuilder('h')
-                        ->select("distinct h.id, 12*($testYear - h.arrivalyear) + $testMo - h.arrivalmonth R")
-                        ->join('h.contacts', 'c')
-                        ->where($criteria['betweenWhereClause'])
-                        ->andWhere('h.arrivalyear is not null')
-                        ->andWhere('h.arrivalmonth is not null')
-                        ->setParameters($criteria['betweenParameters'])
-                        ->getQuery()->getResult()
-        ;
-        $houseRes = [];
-        foreach ($res as $array) {
-            $houseRes[$array['id']]['R'] = $array['R'];
-        }
-        
-        return $houseRes;
-    }
+        $parameters = array_merge($criteria['betweenParameters'], ['hArray' => $this->distinctHouseholds($criteria)]);
 
-    public function reportHousehold($criteria)
-    {
-        $parameters = array_merge($criteria['betweenParameters'], $criteria['siteParameters'], $criteria['contactParameters']);
+        $endDate = $criteria['betweenParameters']['endDate'];
+        $testYear = date_format($endDate, 'Y');
+        $testMo = date_format($endDate, 'm');
 
         return $this->createQueryBuilder('h')
-                        ->select('h.id')
+                        ->select("distinct h.id, 12*($testYear - h.arrivalyear) + $testMo - h.arrivalmonth R")
                         ->join('h.contacts', 'c')
+                        ->where('h.id IN (:hArray)')
+                        ->andWhere($criteria['betweenWhereClause'])
+                        ->andWhere('h.arrivalyear is not null')
+                        ->andWhere('h.arrivalmonth is not null')
+                        ->setParameters($parameters)
+                        ->getQuery()->getResult()
+        ;
+    }
+
+    public function distinctHouseholds($criteria)
+    {
+        $qb = $this->createQueryBuilder('h')
+                ->select('distinct h.id');
+        $this->householdQB($qb, $criteria);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function allHouseholds($criteria)
+    {
+        $qb = $this->createQueryBuilder('h')
+                ->select('h.id');
+        $this->householdQB($qb, $criteria);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    private function householdQB($qb, $criteria)
+    {
+        $parameters = array_merge($criteria['betweenParameters'], $criteria['siteParameters'], $criteria['contactParameters']);
+        
+        return $qb->join('h.contacts', 'c')
                         ->where($criteria['betweenWhereClause'])
                         ->andWhere($criteria['siteWhereClause'])
                         ->andWhere($criteria['contactWhereClause'])
                         ->setParameters($parameters)
-                        ->getQuery()->getResult()
-        ;
+                        ->orderBy('h.id');
     }
 
     public function seekingServices()
